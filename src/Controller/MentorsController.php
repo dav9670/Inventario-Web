@@ -23,6 +23,8 @@ class MentorsController extends AppController
         $mentors = $this->paginate($this->Mentors);
 
         $this->set(compact('mentors'));
+
+        $this->set('_serialize','mentors');
     }
 
     /**
