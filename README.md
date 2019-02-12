@@ -55,5 +55,5 @@ custom styles.
 ###Database
 
 Create schema 
-    inventario_dev
-    inventario_test
+1. inventario_dev
+2. inventario_test
