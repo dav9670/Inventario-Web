@@ -88,6 +88,12 @@ Router::scope('/', function (RouteBuilder $routes) {
      * You can remove these routes once you've connected the
      * routes you want in your application.
      */
+
+    $routes->fallbacks(DashedRoute::class);
+});
+
+
+Router::scope('/api', function (RouteBuilder $routes) {
     $routes->setExtensions(['json']);
 
     $routes->fallbacks(DashedRoute::class);
