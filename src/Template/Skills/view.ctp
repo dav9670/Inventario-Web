@@ -54,7 +54,7 @@
                 <td><?= h($mentors->first_name) ?></td>
                 <td><?= h($mentors->last_name) ?></td>
                 <td><?= h($mentors->description) ?></td>
-                <td><?= h($mentors->image) ?></td>
+                <td><img src="<?="data:image/jpeg;base64,".$mentors->image?>" \></td>
                 <td><?= h($mentors->created) ?></td>
                 <td><?= h($mentors->modified) ?></td>
                 <td><?= h($mentors->deleted) ?></td>
