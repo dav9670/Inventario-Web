@@ -53,7 +53,7 @@
     </table>
     <div class="row">
         <h4><?= __('Image') ?></h4>
-        <?= $this->Text->autoParagraph(h($mentor->image)); ?>
+        <img src="data:image/png;base64, <?= $mentor->image?>" alt="Mentor's image"/>
     </div>
     <div class="related">
         <h4><?= __('Related Skills') ?></h4>

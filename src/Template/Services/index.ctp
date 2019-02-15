@@ -4,14 +4,7 @@
  * @var \App\Model\Entity\Service[]|\Cake\Collection\CollectionInterface $services
  */
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('New Service'), ['action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Rooms'), ['controller' => 'Rooms', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Room'), ['controller' => 'Rooms', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
+
 <div class="services index large-9 medium-8 columns content">
     <h3><?= __('Services') ?></h3>
     <table cellpadding="0" cellspacing="0">

@@ -111,4 +111,27 @@ class MentorsController extends AppController
     {
         return $this->Auth->user('admin_status') == 'admin';
     }
+
+    public function search()
+    {
+        $this->request->allowMethod('ajax');
+   
+        $keyword = $this->request->query('keyword');
+        
+
+        if($keyword == '')
+        {
+           $query = $this->Mentors->find('all');
+        }
+        else
+        {
+            $query = $this->Mentors->find('all')
+                ->where(["match (email, first_name, last_name, description) against(:search in boolean mode)"])
+                ->bind(":search", $keyword . '*', 'string');
+        }
+        
+        $this->set('mentors', $this->paginate($query));
+        $this->set('_serialize', ['mentors']);
+    }
+
 }
