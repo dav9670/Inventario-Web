@@ -56,7 +56,7 @@ class AppController extends Controller
 
         preg_match("(\w+)", $url, $matches);
 
-        if($matches[0] == 'api'){
+        if(array_key_exists(0,$matches) && $matches[0] == 'api'){
             $this->loadComponent('Auth', [
                 'authenticate' => [
                     'Basic' => [
@@ -91,8 +91,6 @@ class AppController extends Controller
                 'unauthorizedRedirect' => $this->referer()
             ]);
         }
-
-        
 
         // Allow the display action so our PagesController
         // continues to work. Also enable the read only actions.
