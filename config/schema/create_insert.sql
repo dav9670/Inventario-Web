@@ -498,6 +498,110 @@ values                      (
     (select id from services where name like 'Chairs' limit 0,1)
 );
 
+/*equipments & categories*/
+
+insert into equipments (id, name, description, image)
+values                  (1, 'Computer 1', 'OS: 64-bit Windows 7 or 64-bit Windows 8 (8.1). Processor: AMD CPU AMD FX-8350 4 GHz Graphics: AMD GPU Radeon R9 290 RAM: 6GB Disk space: 400 GB.', ''
+);
+
+insert into equipments (id, name, description, image)
+values                  (2, 'Computer 2', 'OS: 64-bit Windows 7 or 64-bit Windows 8 (8.1). Processor: Intel CPU Core i5 7780 3,4 GHz, AMD CPU AMD FX-8350 4 GHz Graphics: Nvidia GPU GeForce GTX 770 RAM: 6GB Disk space: 400 GB.', ''
+);
+
+insert into equipments (id, name, description, image)
+values                  (3, 'Computer 3', 'OS: 64-bit Windows 7 or 64-bit Windows 8 (8.1). Processor: Intel CPU Core i7 3770 3,4 GHz Graphics: Nvidia GPU GeForce GTX 770 RAM: 6GB Disk space: 400 GB.', ''
+);
+
+insert into equipments (id, name, description, image)
+values                  (4, 'Iphone 1', 'This is an Iphone 8.',''
+); 
+
+insert into equipments (id, name, description, image)
+values                  (5, 'Iphone 2', 'This is an Iphone 8.', ''
+);
+
+insert into equipments (id, name, description, image)
+values                  (6, 'Data integration for dummies', 'This book will learn you how deal with data integration', ''
+);
+
+insert into equipments (id, name, description, image)
+values                  (7, 'Informatica', 'It helps you to learn informatica', ''
+);
+
+insert into categories  (id, name, description, hourly_rate)
+values                  (1, 'Computer', 'An electronical device now use in everyday life.', 15.20);
+
+insert into categories  (id, name, description, hourly_rate)
+values                  (2, 'Phone', 'Used to call someone, phone is now more a micro computer than a phone.', 13.33);
+
+insert into categories  (id, name, description, hourly_rate)
+values                  (3, 'Books', 'Yes books still exists.',5.13);
+
+insert into categories  (id, name, description, hourly_rate)
+values                  (4, 'Electronic', 'All devices that use electronical components.',21.36);
+
+
+insert into equipments_categories  (equipment_id, category_id)
+values                      (
+    (select id from equipments where name like 'Computer 1' limit 0,1),
+    (select id from categories where name like 'Computer' limit 0,1)
+);
+
+insert into equipments_categories  (equipment_id, category_id)
+values                      (
+    (select id from equipments where name like 'Computer 2' limit 0,1),
+    (select id from categories where name like 'Computer' limit 0,1)
+);
+
+insert into equipments_categories  (equipment_id, category_id)
+values                      (
+    (select id from equipments where name like 'Computer 3' limit 0,1),
+    (select id from categories where name like 'Computer' limit 0,1)
+);
+
+insert into equipments_categories  (equipment_id, category_id)
+values                      (
+    (select id from equipments where name like 'Computer 1' limit 0,1),
+    (select id from categories where name like 'Electronic' limit 0,1)
+);
+
+insert into equipments_categories  (equipment_id, category_id)
+values                      (
+    (select id from equipments where name like 'Computer 2' limit 0,1),
+    (select id from categories where name like 'Electronic' limit 0,1)
+);
+
+insert into equipments_categories  (equipment_id, category_id)
+values                      (
+    (select id from equipments where name like 'Computer 3' limit 0,1),
+    (select id from categories where name like 'Electronic' limit 0,1)
+);
+
+insert into equipments_categories  (equipment_id, category_id)
+values                      (
+    (select id from equipments where name like 'Iphone 1' limit 0,1),
+    (select id from categories where name like 'Electronic' limit 0,1)
+);
+
+insert into equipments_categories  (equipment_id, category_id)
+values                      (
+    (select id from equipments where name like 'Iphone 2' limit 0,1),
+    (select id from categories where name like 'Electronic' limit 0,1)
+);
+
+insert into equipments_categories  (equipment_id, category_id)
+values                      (
+    (select id from equipments where name like 'Iphone 1' limit 0,1),
+    (select id from categories where name like 'Phone' limit 0,1)
+);
+
+insert into equipments_categories  (equipment_id, category_id)
+values                      (
+    (select id from equipments where name like 'Iphone 2' limit 0,1),
+    (select id from categories where name like 'Phone' limit 0,1)
+);
+
+
 /*licenses & products*/
 
 insert into licences (id, name, description, key_text, image, start_time, end_time)
@@ -645,79 +749,3 @@ values                      (7,9);
 insert into licences_products  (licence_id, product_id)
 values                      (7,10);
 
-/*equipments & categories*/
-
-
-insert into categories  (id, name, description, hourly_rate)
-values                  (1, 'Computer', 'An electronical device now use in everyday life.', 15.20);
-
-insert into categories  (id, name, description, hourly_rate)
-values                  (2, 'Phone', 'Used to call someone, phone is now more a micro computer than a phone.', 13.33);
-
-insert into categories  (id, name, description, hourly_rate)
-values                  (3, 'Books', 'Yes books still exists.',5.13);
-
-insert into categories  (id, name, description, hourly_rate)
-values                  (4, 'Electronic', 'All devices that use electronical components.',21.36);
-
-/*
-insert into equipments_categories  (equipment_id, category_id)
-values                      (
-    (select id from equipments where name like 'Computer 1' limit 0,1),
-    (select id from categories where name like 'Computer' limit 0,1)
-);
-
-insert into equipments_categories  (equipment_id, category_id)
-values                      (
-    (select id from equipments where name like 'Computer 2' limit 0,1),
-    (select id from categories where name like 'Computer' limit 0,1)
-);
-
-insert into equipments_categories  (equipment_id, category_id)
-values                      (
-    (select id from equipments where name like 'Computer 3' limit 0,1),
-    (select id from categories where name like 'Computer' limit 0,1)
-);
-
-insert into equipments_categories  (equipment_id, category_id)
-values                      (
-    (select id from equipments where name like 'Computer 1' limit 0,1),
-    (select id from categories where name like 'Electronic' limit 0,1)
-);
-
-insert into equipments_categories  (equipment_id, category_id)
-values                      (
-    (select id from equipments where name like 'Computer 2' limit 0,1),
-    (select id from categories where name like 'Electronic' limit 0,1)
-);
-
-insert into equipments_categories  (equipment_id, category_id)
-values                      (
-    (select id from equipments where name like 'Computer 3' limit 0,1),
-    (select id from categories where name like 'Electronic' limit 0,1)
-);
-
-insert into equipments_categories  (equipment_id, category_id)
-values                      (
-    (select id from equipments where name like 'Iphone 1' limit 0,1),
-    (select id from categories where name like 'Electronic' limit 0,1)
-);
-
-insert into equipments_categories  (equipment_id, category_id)
-values                      (
-    (select id from equipments where name like 'Iphone 2' limit 0,1),
-    (select id from categories where name like 'Electronic' limit 0,1)
-);
-
-insert into equipments_categories  (equipment_id, category_id)
-values                      (
-    (select id from equipments where name like 'Iphone 1' limit 0,1),
-    (select id from categories where name like 'Phone' limit 0,1)
-);
-
-insert into equipments_categories  (equipment_id, category_id)
-values                      (
-    (select id from equipments where name like 'Iphone 2' limit 0,1),
-    (select id from categories where name like 'Phone' limit 0,1)
-);
-*/
