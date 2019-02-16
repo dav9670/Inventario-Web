@@ -41,10 +41,15 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             </li>
         </ul>
         <div class="top-bar-section">
-            <!--<ul class="right">
-                <li><a target="_blank" href="https://book.cakephp.org/3.0/">Documentation</a></li>
-                <li><a target="_blank" href="https://api.cakephp.org/3.0/">API</a></li>
-            </ul>-->
+            <ul>
+                <li><?= $this->Html->link( 'Loans', ['controller' => 'Users', 'action' => 'logout']); ?></li>
+            </ul>
+            <ul class="right">
+                <li><?= $this->request->session()->read('Auth.User.email') ?></li>
+                <li><?= $this->Html->link( 'Logout', ['controller' => 'Users', 'action' => 'logout']); ?></li>
+                <li><a href="/fr_CA">Francais</a></li>
+                <li><a href="/en_US">English</a></li>
+            </ul>
         </div>
     </nav>
     <?= $this->Flash->render() ?>

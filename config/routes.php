@@ -91,6 +91,12 @@ Router::scope('/', function (RouteBuilder $routes) {
 
     $routes->connect('/', ['controller' => 'Users', 'action' => 'index']);
 
+    $routes->connect('/:language/*',
+        array('controller' => 'App','action' => 'setLang'),
+        array('language' => '(fr_CA|en_US|es_ES)',
+        'pass' => array('language'))
+    );
+
     $routes->fallbacks(DashedRoute::class);
 });
 

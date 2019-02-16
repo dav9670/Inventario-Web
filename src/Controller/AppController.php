@@ -16,6 +16,9 @@ namespace App\Controller;
 
 use Cake\Controller\Controller;
 use Cake\Event\Event;
+use Cake\I18n\I18n;
+use Cake\Collection\Collection;
+
 
 /**
  * Application Controller
@@ -95,5 +98,35 @@ class AppController extends Controller
         // Allow the display action so our PagesController
         // continues to work. Also enable the read only actions.
         // $this->Auth->allow(['display', 'view']);
+    }
+
+    public function beforeFilter(Event $event){
+        $session = $this->request->getSession();
+        if (!$session->check('Config.language')) {
+          // Config.language existe et n'est pas null.
+          $session->write('Config.language', 'en_US');
+        }
+        I18n::setLocale($session->read('Config.language'));
+    }
+
+    public function setLang($language){
+        $langs= new Collection(['fr_CA','en_US']);
+        if($langs->contains($language))
+        {
+          $session = $this->request->getSession();
+          $session->write('Config.language', $language);
+        }
+        $this->redirect($this->referer());
+    }
+
+    public function isAuthorized($user)
+    {
+        $action = $this->request->getParam('action');
+        if(in_array($action, ['setLang'])) {
+            return true;
+        }
+
+        //By default, deny access.
+        return false;
     }
 }
