@@ -100,16 +100,8 @@ class AppController extends Controller
         // $this->Auth->allow(['display', 'view']);
     }
 
-    public function beforeFilter(Event $event){
-        $session = $this->request->getSession();
-        if (!$session->check('Config.language')) {
-          // Config.language existe et n'est pas null.
-          $session->write('Config.language', 'en_US');
-        }
-        I18n::setLocale($session->read('Config.language'));
-    }
-
-    public function setLang($language){
+    public function setLang($language)
+    {
         $langs= new Collection(['fr_CA','en_US']);
         if($langs->contains($language))
         {
@@ -117,6 +109,16 @@ class AppController extends Controller
           $session->write('Config.language', $language);
         }
         $this->redirect($this->referer());
+    }
+
+    public function beforeFilter(Event $event)
+    {
+        $session = $this->request->getSession();
+        if (!$session->check('Config.language')) {
+          // Config.language existe et n'est pas null.
+          $session->write('Config.language', 'en_US');
+        }
+        I18n::setLocale($session->read('Config.language'));
     }
 
     public function isAuthorized($user)
@@ -127,6 +129,6 @@ class AppController extends Controller
         }
 
         //By default, deny access.
-        return true;
+        return false;
     }
 }

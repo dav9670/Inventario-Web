@@ -89,7 +89,7 @@ Router::scope('/', function (RouteBuilder $routes) {
      * routes you want in your application.
      */
 
-    $routes->connect('/', ['controller' => 'Users', 'action' => 'index']);
+    $routes->connect('/', ['controller' => 'Users', 'action' => 'login']);
 
     $routes->connect('/:language/*',
         array('controller' => 'App','action' => 'setLang'),

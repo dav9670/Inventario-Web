@@ -64,6 +64,15 @@ class UsersController extends AppController
         $this->set('user', $user);
     }
 
+    public function profile()
+    {
+        $user = $this->Users->get($this->Auth->user('id'), [
+            'contain' => ['Loans']
+        ]);
+
+        $this->set('user', $user);
+    }
+
     /**
      * Add method
      *

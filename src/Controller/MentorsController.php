@@ -106,4 +106,9 @@ class MentorsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+    
+    public function isAuthorized($user)
+    {
+        return $this->Auth->user('admin_status') == 'admin';
+    }
 }

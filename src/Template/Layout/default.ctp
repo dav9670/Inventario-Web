@@ -42,11 +42,25 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         </ul>
         <div class="top-bar-section">
             <ul>
-                <li><?= $this->Html->link( 'Loans', ['controller' => 'Users', 'action' => 'logout']); ?></li>
+                <?php if($this->request->session()->read('Auth.User')){ ?>
+                    <?php if($this->request->session()->read('Auth.User.admin_status') == 'admin') { ?>
+                            <li><?= $this->Html->link( 'Loans', ['controller' => 'Loans', 'action' => 'index']); ?></li>
+                            <li><?= $this->Html->link( 'Mentors', ['controller' => 'Mentors', 'action' => 'index']); ?></li>
+                            <li><?= $this->Html->link( 'Rooms', ['controller' => 'Rooms', 'action' => 'index']); ?></li>
+                            <li><?= $this->Html->link( 'Licences', ['controller' => 'Licences', 'action' => 'index']); ?></li>
+                            <li><?= $this->Html->link( 'Equipments', ['controller' => 'Equipments', 'action' => 'index']); ?></li>
+                            <li><?= $this->Html->link( 'Reports', ['controller' => 'Reports', 'action' => 'index']); ?></li>
+                            <li><?= $this->Html->link( 'Users', ['controller' => 'Users', 'action' => 'index']); ?></li>
+                        <?php } else { ?>
+                            <li><?= $this->Html->link( 'Profile', ['controller' => 'Users', 'action' => 'profile']); ?></li>
+                        <?php } ?>
+                    <?php } ?>
             </ul>
             <ul class="right">
-                <li><?= $this->request->session()->read('Auth.User.email') ?></li>
-                <li><?= $this->Html->link( 'Logout', ['controller' => 'Users', 'action' => 'logout']); ?></li>
+                <?php if($this->request->session()->read('Auth.User')) { ?>
+                    <li><?= $this->request->session()->read('Auth.User.email') ?></li>
+                    <li><?= $this->Html->link( 'Logout', ['controller' => 'Users', 'action' => 'logout']); ?></li>
+                <?php } ?>
                 <li><a href="/fr_CA">Francais</a></li>
                 <li><a href="/en_US">English</a></li>
             </ul>

@@ -42,10 +42,10 @@ class LoansTable extends Table
             'foreignKey' => 'user_id',
             'joinType' => 'INNER'
         ]);
-        $this->belongsTo('Items', [
+        /*$this->belongsTo('Items', [
             'foreignKey' => 'item_id',
             'joinType' => 'INNER'
-        ]);
+        ]);*/
     }
 
     /**
@@ -93,7 +93,7 @@ class LoansTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['user_id'], 'Users'));
-        $rules->add($rules->existsIn(['item_id'], 'Items'));
+        //$rules->add($rules->existsIn(['item_id'], 'Items'));
 
         return $rules;
     }
