@@ -4,10 +4,10 @@ namespace App\Test\Fixture;
 use Cake\TestSuite\Fixture\TestFixture;
 
 /**
- * SkillsFixture
+ * CategoriesFixture
  *
  */
-class SkillsFixture extends TestFixture
+class CategoriesFixture extends TestFixture
 {
 
     /**
@@ -20,6 +20,7 @@ class SkillsFixture extends TestFixture
         'id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
         'name' => ['type' => 'string', 'length' => 50, 'null' => false, 'default' => null, 'collate' => 'latin1_swedish_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'description' => ['type' => 'string', 'length' => 255, 'null' => true, 'default' => null, 'collate' => 'latin1_swedish_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
+        'hourly_rate' => ['type' => 'float', 'length' => 4, 'precision' => 2, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => ''],
         '_indexes' => [
             'name_2' => ['type' => 'fulltext', 'columns' => ['name', 'description'], 'length' => []],
         ],
@@ -45,7 +46,8 @@ class SkillsFixture extends TestFixture
             [
                 'id' => 1,
                 'name' => 'Lorem ipsum dolor sit amet',
-                'description' => 'Lorem ipsum dolor sit amet'
+                'description' => 'Lorem ipsum dolor sit amet',
+                'hourly_rate' => 1
             ],
         ];
         parent::init();

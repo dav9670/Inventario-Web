@@ -127,6 +127,6 @@ class AppController extends Controller
         }
 
         //By default, deny access.
-        return false;
+        return true;
     }
 }

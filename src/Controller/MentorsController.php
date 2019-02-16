@@ -23,8 +23,6 @@ class MentorsController extends AppController
         $mentors = $this->paginate($this->Mentors);
 
         $this->set(compact('mentors'));
-
-        $this->set('_serialize','mentors');
     }
 
     /**
@@ -107,10 +105,5 @@ class MentorsController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
-    }
-
-    public function isAuthorized($user)
-    {
-        return true;
     }
 }
