@@ -97,6 +97,8 @@ Router::scope('/', function (RouteBuilder $routes) {
         'pass' => array('language'))
     );
 
+    $routes->setExtensions(['json']);
+
     $routes->fallbacks(DashedRoute::class);
 });
 
