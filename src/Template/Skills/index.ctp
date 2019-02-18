@@ -36,7 +36,7 @@
         </thead>
         <tbody>
             <?php foreach ($skills as $skill): ?>
-                <tr class='clickable-row' data-url='/skills/edit/<?= h($skill->id) ?>'>
+                <tr class='clickable-row' data-url='/skills/<?= h($skill->id) ?>'>
                     <td><a href='/skills/<?= h($skill->id) ?>'><?= h($skill->name) ?></a></td>
                     
                     <td><a href='/skills/<?= h($skill->id) ?>'><?= h($skill->description) ?></a></td>

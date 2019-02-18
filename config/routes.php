@@ -91,7 +91,7 @@ Router::scope('/', function (RouteBuilder $routes) {
 
     $routes->setExtensions(['json']);
     
-    $routes->connect('/', ['controller' => 'Users', 'action' => 'login']);
+    $routes->connect('/', ['controller' => 'Users', 'action' => 'profile']);
 
     $routes->connect('/:language/*',
         array('controller' => 'App','action' => 'setLang'),
