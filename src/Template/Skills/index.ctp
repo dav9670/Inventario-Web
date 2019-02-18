@@ -18,7 +18,7 @@
 
     <div class="search-container">
         <a href="/skills/add">
-            <img class="plus" src="https://image.flaticon.com/icons/png/128/148/148764.png" alt="Plus">
+            <img class="plus" src="/img/plus.png" alt="Plus">
         </a>
 
         <div class="search-bar">
@@ -37,9 +37,9 @@
         <tbody>
             <?php foreach ($skills as $skill): ?>
                 <tr class='clickable-row' data-url='/skills/edit/<?= h($skill->id) ?>'>
-                    <td><?= $this->Html->link(h($skill->name), ['action' => 'edit', $skill->id]) ?></a></td>
+                    <td><a href='/skills/<?= h($skill->id) ?>'><?= h($skill->name) ?></a></td>
                     
-                    <td><a href='/skills/edit/<?= h($skill->id) ?>'><?= h($skill->description) ?></a></td>
+                    <td><a href='/skills/<?= h($skill->id) ?>'><?= h($skill->description) ?></a></td>
                     <td class="actions">
                         <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $skill->id], ['confirm' => __('Are you sure you want to delete # {0}?', $skill->id)]) ?>
                     </td>
@@ -76,8 +76,8 @@
                         var table = $("#table tbody");
                         table.empty();
                         $.each(response.skills, function(idx, elem){
-                            let nameCell = "<td><a href='/skills/edit/" + elem.id + "'>" + elem.name + "</a></td>";
-                            let descriptionCell = "<td><a href='/skills/edit/" + elem.id + "'>" + elem.description + "</a></td>";
+                            let nameCell = "<td><a href='/skills/" + elem.id + "'>" + elem.name + "</a></td>";
+                            let descriptionCell = "<td><a href='/skills/" + elem.id + "'>" + elem.description + "</a></td>";
                             let actionsCell = "<td class=\"actions\">";
 
                             let deleteLink = '<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete # {0}?', -1)]) ?>';

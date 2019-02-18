@@ -4,19 +4,19 @@ a.disabled {
 }
 
 a:hover {
-    color: #15848F;
+    color: #0f71aa;
 }
 
 a {
-    color: #1798A5;
+    color: #1289ce;
 }
 
 .side-nav li a:not(.button) {
-    color: #15848F;
+    color: #0f71aa;
 }
 
 .side-nav li a:not(.button):hover {
-    color: #15848F;
+    color: #0f71aa;
 }
 
 header {
@@ -34,7 +34,7 @@ header .header-title {
 }
 
 legend {
-    color:#15848F;
+    color:#0f71aa;
 }
 
 .row {
@@ -43,13 +43,13 @@ legend {
 
 .actions.columns {
     margin-top:1rem;
-    border-left: 5px solid #15848F;
+    border-left: 5px solid #0f71aa;
     padding-left: 15px;
     padding: 32px 20px;
 }
 
 .actions.columns h3 {
-    color:#15848F;
+    color:#0f71aa;
 }
 
 .related table {
@@ -319,29 +319,29 @@ pre {
 }
 
 .top-bar.expanded .title-area {
-    background: #01545b;
+    background: #1a3856;
 }
 
 .top-bar.expanded, .top-bar,.top-bar-section ul li,.top-bar-section li:not(.has-form) a:not(.button) {
-    background: #116d76;
+    background: #224870;
 }
 
 .top-bar-section li:not(.has-form) a:not(.button):hover {
-    background-color: #308e97;
-    background: #308e97;
+    background-color: #275dad;
+    background: #275dad;
 }
 
 .title-area.right li a:not(.button){
-    background: #01545B;
+    background: #1a3856;
 }
 
 .title-area.right li a:not(.button):hover {
-    background-color: #308e97;
-    background: #308e97;
+    background-color: #275dad;
+    background: #275dad;
 }
 
 .side-nav li.heading {
-    color: #1798A5;
+    color: #1289ce;
     font-size: 0.875rem;
     font-weight: bold;
     text-transform: uppercase;
@@ -376,15 +376,15 @@ table tr {
 }
 
 table thead tr {
-    border-bottom: 1px solid #1798A5;
+    border-bottom: 1px solid #1289ce;
 }
 
 table tr th {
     padding: 0.5625rem 0.625rem;
     font-size: 0.875rem;
-    color: #1798A5;
+    color: #1289ce;
     text-align: left;
-    border-bottom: 2px solid #1798A5;
+    border-bottom: 2px solid #1289ce;
 }
 
 table tr:nth-of-type(even) {
@@ -406,7 +406,7 @@ fieldset {
 }
 
 fieldset legend {
-    border-bottom: 2px solid #1798A5;
+    border-bottom: 2px solid #1289ce;
     width: 100%;
     line-height: 2rem;
 }
@@ -418,12 +418,12 @@ fieldset legend {
 }
 
 .form button:hover, .form button:focus {
-    background: #BE840B;
+    background: #7d22bf;
     box-shadow: none;
 }
 
 button {
-    background: #966600;
+    background: #4e1575;
 }
 
 div.message {
@@ -495,7 +495,7 @@ img.plus {
 .vertical-table th {
     padding: 0.5625rem 0.625rem;
     font-size: 0.875rem;
-    color: #1798A5;
+    color: #1289ce;
     border: none;
     text-align: left;
 }
@@ -532,20 +532,20 @@ img.plus {
 }
 
 .content h3 {
-    color: #be140b;
+    color: #5f20b2;
     padding-bottom: 0.5rem;
     margin-bottom: 20px;
 }
 
 .content h4 {
-    color: #be140b;
+    color: #5f20b2;
     padding-bottom: 0.5rem;
     margin-bottom: 20px;
-    border-bottom: 2px solid #be140b;
+    border-bottom: 2px solid #5f20b2;
 }
 
 .content .related h4 {
-    color: #4d8f97;
+    color: #3e6191;
     padding-bottom: 0.5rem;
     margin-top: 20px;
     margin-bottom: 10px;
