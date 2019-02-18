@@ -37,7 +37,7 @@
     </table>
     <div class="row">
         <h4><?= __('Image') ?></h4>
-        <?= $this->Text->autoParagraph(h($user->image)); ?>
+        <img src="data:image/png;base64, <?= $user->image?>" alt="<?= __("User's image") ?>"/>
     </div>
     <div class="related">
         <h4><?= __('Related Loans') ?></h4>
