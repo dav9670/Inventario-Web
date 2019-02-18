@@ -395,7 +395,7 @@ table tr.clickable-row:hover {
     background: #e0e0e0;
 }
 
-table td a {
+table td:not(.actions) a {
     display: block;
 }
 
