@@ -6,9 +6,26 @@
 ?>
 
 <div class="skills index large-12 medium-11 columns content">
-    <h3><?= __('Skills') ?></h3>
+    
+    <div class="left">
+        <h3><?= __('Skills') ?></h3>
+    </div>
+    <div class="right">
+        <?= $this->Html->link(__('Mentors') . ' 🡆', ['controller' => 'Mentors', 'action' => 'index']) ?>
+    </div>
 
-    <?= $this->Form->control('search');?>
+    <div style="clear: both;"></div>
+
+    <div class="search-container">
+        <a href="/skills/add">
+            <img class="plus" src="https://image.flaticon.com/icons/png/128/148/148764.png" alt="Plus">
+        </a>
+
+        <div class="search-bar">
+            <label for="search"><?= __('Search') ?></label>
+            <input type="text" name="search" id="search">
+        </div>
+    </div>
     <table id="table" cellpadding="0" cellspacing="0">
         <thead>
             <tr>
@@ -19,13 +36,14 @@
         </thead>
         <tbody>
             <?php foreach ($skills as $skill): ?>
-            <tr class='clickable-row' data-url='/skills/edit/<?= h($skill->id) ?>'>
-                <td><a href='/skills/edit/<?= h($skill->id) ?>'><?= h($skill->name) ?></a></td>
-                <td><a href='/skills/edit/<?= h($skill->id) ?>'><?= h($skill->description) ?></a></td>
-                <td class="actions">
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $skill->id], ['confirm' => __('Are you sure you want to delete # {0}?', $skill->id)]) ?>
-                </td>
-            </tr>
+                <tr class='clickable-row' data-url='/skills/edit/<?= h($skill->id) ?>'>
+                    <td><?= $this->Html->link(h($skill->name), ['action' => 'edit', $skill->id]) ?></a></td>
+                    
+                    <td><a href='/skills/edit/<?= h($skill->id) ?>'><?= h($skill->description) ?></a></td>
+                    <td class="actions">
+                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $skill->id], ['confirm' => __('Are you sure you want to delete # {0}?', $skill->id)]) ?>
+                    </td>
+                </tr>
             <?php endforeach; ?>
         </tbody>
     </table>

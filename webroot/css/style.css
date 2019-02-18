@@ -395,7 +395,7 @@ table tr.clickable-row:hover {
     background: #e0e0e0;
 }
 
-table td a {
+table td:not(.actions) a {
     display: block;
 }
 
@@ -476,6 +476,20 @@ div.message.hidden {
 
 div.hidden {
     display: none;
+}
+
+div.search-container {
+    width: 100%;
+}
+
+div.search-bar {
+    width: calc(100% - 75px);
+    float: right;
+}
+
+img.plus {
+    width: 60px;
+    float: left;
 }
 
 .vertical-table th {
