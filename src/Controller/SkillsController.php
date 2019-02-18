@@ -88,6 +88,32 @@ class SkillsController extends AppController
     }
 
     /**
+     * Consult method
+     *
+     * @param string|null $id Skill id.
+     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function consult($id = null)
+    {
+        $skill = $this->Skills->get($id, [
+            'contain' => ['Mentors']
+        ]);
+        if ($this->getRequest()->is(['patch', 'post', 'put'])) {
+            $skill = $this->Skills->patchEntity($skill, $this->getRequest()->getData());
+            if ($this->Skills->save($skill)) {
+                $this->Flash->success(__('The skill has been saved.'));
+
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('The skill could not be saved. Please, try again.'));
+        }
+        $mentors = $this->Skills->Mentors->find('list', ['limit' => 200]);
+        $this->set(compact('skill', 'mentors'));
+    }
+    
+
+    /**
      * Delete method
      *
      * @param string|null $id Skill id.

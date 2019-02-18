@@ -21,7 +21,7 @@
 <div class="skills form large-9 medium-8 columns content"> 
     <?= $this->Form->create($skill) ?>
     <fieldset>
-        <legend><?= __('Edit Skill') ?></legend>
+        <legend><?= __('Skill') ?></legend>
         <?php
             echo $this->Form->control('name');
             echo $this->Form->control('description');
