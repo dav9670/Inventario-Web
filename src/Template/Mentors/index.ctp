@@ -74,18 +74,14 @@
         function searchMentors( keyword ){
             var data = keyword;
 
-        var checkedList = $.map($(':input[name="champ"]'),
-        function(){
-            var $this = $(this);
-            return {
-            name :$this.data('champ'), // You can add the subcatagory as a data dash attribute or any other unique identifier in  html of the checkbox before appending
-            IsSelected  : $this.is(':checked')
-        }});
+            var checkedList = $.map($(':input[name="Champ"]'));
+            var name = $.data('subcatagory'); // You can add the subcatagory as a data dash attribute or any other unique identifier in  html of the checkbox before appending
+            var IsSelected  = name.is(':checked');
 
             $.ajax({
                     method: 'get',
                     url : "/mentors/search.json",
-                    data: {keyword:data, 'champ':checkedList},
+                    data: {keyword:data, checked:checked},
                     success: function( response ){
                         var table = $("#table tbody");
                         table.empty();
