@@ -478,6 +478,20 @@ div.hidden {
     display: none;
 }
 
+div.search-container {
+    width: 100%;
+}
+
+div.search-bar {
+    width: calc(100% - 75px);
+    float: right;
+}
+
+img.plus {
+    width: 60px;
+    float: left;
+}
+
 .vertical-table th {
     padding: 0.5625rem 0.625rem;
     font-size: 0.875rem;
