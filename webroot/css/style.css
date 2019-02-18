@@ -331,6 +331,15 @@ pre {
     background: #308e97;
 }
 
+.title-area.right li a:not(.button){
+    background: #01545B;
+}
+
+.title-area.right li a:not(.button):hover {
+    background-color: #308e97;
+    background: #308e97;
+}
+
 .side-nav li.heading {
     color: #1798A5;
     font-size: 0.875rem;
