@@ -99,8 +99,12 @@ Router::scope('/', function (RouteBuilder $routes) {
         'pass' => array('language'))
     );
 
-    $routes->connect('/:controller/*', ['action' => 'consult'])
-        ->setPatterns(['controller' => 'mentors|skills|rooms|services|licences|products|equipments|categories']);
+    $routes->connect('/:controller/:id', ['action' => 'consult'])
+        ->setPass(['id'])
+        ->setPatterns([
+            'controller' => 'mentors|skills|rooms|services|licences|products|equipments|categories',
+            'id' => '[0-9]+'
+        ]);
 
     $routes->fallbacks(DashedRoute::class);
 });
