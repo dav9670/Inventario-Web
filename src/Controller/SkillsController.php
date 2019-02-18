@@ -107,6 +107,26 @@ class SkillsController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
+    public function search()
+    {
+        $this->request->allowMethod('ajax');
+   
+        $keyword = $this->request->query('keyword');
+        if($keyword == '')
+        {
+            $query = $this->Skills->find('all');
+        }
+        else
+        {
+            $query = $this->Skills->find('all')
+                ->where(["match (name, description) against(:search in boolean mode)"])
+                ->bind(":search", $keyword . '*', 'string');
+        }
+        
+        $this->set('skills', $this->paginate($query));
+        $this->set('_serialize', ['skills']);
+    }
+
     public function isAuthorized($user)
     {
         return $this->Auth->user('admin_status') == 'admin';

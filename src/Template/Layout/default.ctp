@@ -44,8 +44,8 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         </ul>
         <div class="top-bar-section">
             <ul>
-                <?php if($this->request->session()->read('Auth.User')){ ?>
-                    <?php if($this->request->session()->read('Auth.User.admin_status') == 'admin') { ?>
+                <?php if($this->request->getSession()->read('Auth.User')){ ?>
+                    <?php if($this->request->getSession()->read('Auth.User.admin_status') == 'admin') { ?>
                             <li><?= $this->Html->link( 'Loans', ['controller' => 'Loans', 'action' => 'index']); ?></li>
                             <li><?= $this->Html->link( 'Mentors', ['controller' => 'Mentors', 'action' => 'index']); ?></li>
                             <li><?= $this->Html->link( 'Rooms', ['controller' => 'Rooms', 'action' => 'index']); ?></li>
@@ -59,8 +59,8 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                     <?php } ?>
             </ul>
             <ul class="right">
-                <?php if($this->request->session()->read('Auth.User')) { ?>
-                    <li><?= $this->request->session()->read('Auth.User.email') ?></li>
+                <?php if($this->request->getSession()->read('Auth.User')) { ?>
+                    <li><?= $this->request->getSession()->read('Auth.User.email') ?></li>
                     <li><?= $this->Html->link( 'Logout', ['controller' => 'Users', 'action' => 'logout']); ?></li>
                 <?php } ?>
                 <li><a href="/fr_CA">Francais</a></li>
