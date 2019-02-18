@@ -49,8 +49,8 @@ class SkillsController extends AppController
     public function add()
     {
         $skill = $this->Skills->newEntity();
-        if ($this->request->is('post')) {
-            $skill = $this->Skills->patchEntity($skill, $this->request->getData());
+        if ($this->getRequest()->is('post')) {
+            $skill = $this->Skills->patchEntity($skill, $this->getRequest()->getData());
             if ($this->Skills->save($skill)) {
                 $this->Flash->success(__('The skill has been saved.'));
 
@@ -74,8 +74,8 @@ class SkillsController extends AppController
         $skill = $this->Skills->get($id, [
             'contain' => ['Mentors']
         ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $skill = $this->Skills->patchEntity($skill, $this->request->getData());
+        if ($this->getRequest()->is(['patch', 'post', 'put'])) {
+            $skill = $this->Skills->patchEntity($skill, $this->getRequest()->getData());
             if ($this->Skills->save($skill)) {
                 $this->Flash->success(__('The skill has been saved.'));
 
@@ -88,6 +88,32 @@ class SkillsController extends AppController
     }
 
     /**
+     * Consult method
+     *
+     * @param string|null $id Skill id.
+     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function consult($id = null)
+    {
+        $skill = $this->Skills->get($id, [
+            'contain' => ['Mentors']
+        ]);
+        if ($this->getRequest()->is(['patch', 'post', 'put'])) {
+            $skill = $this->Skills->patchEntity($skill, $this->getRequest()->getData());
+            if ($this->Skills->save($skill)) {
+                $this->Flash->success(__('The skill has been saved.'));
+
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('The skill could not be saved. Please, try again.'));
+        }
+        $mentors = $this->Skills->Mentors->find('list', ['limit' => 200]);
+        $this->set(compact('skill', 'mentors'));
+    }
+    
+
+    /**
      * Delete method
      *
      * @param string|null $id Skill id.
@@ -96,7 +122,7 @@ class SkillsController extends AppController
      */
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
+        $this->getRequest()->allowMethod(['post', 'delete']);
         $skill = $this->Skills->get($id);
         if ($this->Skills->delete($skill)) {
             $this->Flash->success(__('The skill has been deleted.'));
@@ -109,10 +135,9 @@ class SkillsController extends AppController
 
     public function search()
     {
-        $this->request->allowMethod('ajax');
+        $this->getRequest()->allowMethod('ajax');
    
-        debug($this->request);
-        $keyword = $this->request->query('keyword');
+        $keyword = $this->getRequest()->getQuery('keyword');
         if($keyword == '')
         {
             $query = $this->Skills->find('all');

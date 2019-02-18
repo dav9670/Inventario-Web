@@ -331,6 +331,15 @@ pre {
     background: #308e97;
 }
 
+.title-area.right li a:not(.button){
+    background: #01545B;
+}
+
+.title-area.right li a:not(.button):hover {
+    background-color: #308e97;
+    background: #308e97;
+}
+
 .side-nav li.heading {
     color: #1798A5;
     font-size: 0.875rem;
@@ -380,6 +389,14 @@ table tr th {
 
 table tr:nth-of-type(even) {
     background: none;
+}
+
+table tr.clickable-row:hover {
+    background: #e0e0e0;
+}
+
+table td:not(.actions) a {
+    display: block;
 }
 
 fieldset {
@@ -457,6 +474,23 @@ div.message.hidden {
     height: 0;
 }
 
+div.hidden {
+    display: none;
+}
+
+div.search-container {
+    width: 100%;
+}
+
+div.search-bar {
+    width: calc(100% - 75px);
+    float: right;
+}
+
+img.plus {
+    width: 60px;
+    float: left;
+}
 
 .vertical-table th {
     padding: 0.5625rem 0.625rem;

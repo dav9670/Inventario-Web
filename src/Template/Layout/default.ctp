@@ -13,7 +13,7 @@
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
-$cakeDescription = 'CakePHP: the rapid development php framework';
+$cakeDescription = 'Inventar.io';
 ?>
 <!DOCTYPE html>
 <html>
@@ -33,11 +33,11 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
 
-    <?= $this->Html->script('http://code.jquery.com/jquery.min.js'); ?>
+    <?= $this->Html->script('jquery-3.3.1.js', array('inline' => false)); ?>
 </head>
 <body>
     <nav class="top-bar expanded" data-topbar role="navigation">
-        <ul class="title-area large-3 medium-4 columns">
+        <ul class="title-area large-2 medium-3 columns">
             <li class="name">
                 <h1><a href=""><?= $this->fetch('title') ?></a></h1>
             </li>
@@ -46,25 +46,27 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             <ul>
                 <?php if($this->request->getSession()->read('Auth.User')){ ?>
                     <?php if($this->request->getSession()->read('Auth.User.admin_status') == 'admin') { ?>
-                            <li><?= $this->Html->link( 'Loans', ['controller' => 'Loans', 'action' => 'index']); ?></li>
-                            <li><?= $this->Html->link( 'Mentors', ['controller' => 'Mentors', 'action' => 'index']); ?></li>
-                            <li><?= $this->Html->link( 'Rooms', ['controller' => 'Rooms', 'action' => 'index']); ?></li>
-                            <li><?= $this->Html->link( 'Licences', ['controller' => 'Licences', 'action' => 'index']); ?></li>
-                            <li><?= $this->Html->link( 'Equipments', ['controller' => 'Equipments', 'action' => 'index']); ?></li>
-                            <li><?= $this->Html->link( 'Reports', ['controller' => 'Reports', 'action' => 'index']); ?></li>
-                            <li><?= $this->Html->link( 'Users', ['controller' => 'Users', 'action' => 'index']); ?></li>
-                        <?php } else { ?>
-                            <li><?= $this->Html->link( 'Profile', ['controller' => 'Users', 'action' => 'profile']); ?></li>
-                        <?php } ?>
+                        <li><?= $this->Html->link( 'Loans', ['controller' => 'Loans', 'action' => 'index']); ?></li>
+                        <li><?= $this->Html->link( 'Mentors', ['controller' => 'Mentors', 'action' => 'index']); ?></li>
+                        <li><?= $this->Html->link( 'Rooms', ['controller' => 'Rooms', 'action' => 'index']); ?></li>
+                        <li><?= $this->Html->link( 'Licences', ['controller' => 'Licences', 'action' => 'index']); ?></li>
+                        <li><?= $this->Html->link( 'Equipments', ['controller' => 'Equipments', 'action' => 'index']); ?></li>
+                        <li><?= $this->Html->link( 'Reports', ['controller' => 'Reports', 'action' => 'index']); ?></li>
+                        <li><?= $this->Html->link( 'Users', ['controller' => 'Users', 'action' => 'index']); ?></li>
+                    <?php } else { ?>
+                        <li><?= $this->Html->link( 'Profile', ['controller' => 'Users', 'action' => 'profile']); ?></li>
                     <?php } ?>
+                <?php } ?>
+            </ul>
+            <ul class="title-area right">
+                <li><a href="/fr_CA">Francais</a></li>
+                <li><a href="/en_US">English</a></li>
             </ul>
             <ul class="right">
                 <?php if($this->request->getSession()->read('Auth.User')) { ?>
-                    <li><?= $this->request->getSession()->read('Auth.User.email') ?></li>
+                    <li><?= $this->Html->link( $this->request->getSession()->read('Auth.User.email'), ['controller' => 'Users', 'action' => 'profile']); ?></li>
                     <li><?= $this->Html->link( 'Logout', ['controller' => 'Users', 'action' => 'logout']); ?></li>
                 <?php } ?>
-                <li><a href="/fr_CA">Francais</a></li>
-                <li><a href="/en_US">English</a></li>
             </ul>
         </div>
     </nav>

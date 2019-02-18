@@ -54,12 +54,9 @@ class AppController extends Controller
          * see https://book.cakephp.org/3.0/en/controllers/components/security.html
          */
         //$this->loadComponent('Security');
+        
 
-        $url = $this->request->getAttribute("here");
-
-        preg_match("(\w+)", $url, $matches);
-
-        if(array_key_exists(0,$matches) && $matches[0] == 'api'){
+        if($this->isApi()){
             $this->loadComponent('Auth', [
                 'authenticate' => [
                     'Basic' => [
@@ -109,6 +106,15 @@ class AppController extends Controller
           $session->write('Config.language', $language);
         }
         $this->redirect($this->referer());
+    }
+
+    public function isApi()
+    {
+        $url = $this->request->getAttribute("here");
+
+        preg_match("(\w+)", $url, $matches);
+
+        return array_key_exists(0,$matches) && $matches[0] == 'api';
     }
 
     public function beforeFilter(Event $event)
