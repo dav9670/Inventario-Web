@@ -18,16 +18,24 @@
         <li><?= $this->Html->link(__('New Mentor'), ['controller' => 'Mentors', 'action' => 'add']) ?></li>
     </ul>
 </nav>
-<div class="skills form large-9 medium-8 columns content">
+<div class="skills form large-9 medium-8 columns content"> 
     <?= $this->Form->create($skill) ?>
     <fieldset>
         <legend><?= __('Edit Skill') ?></legend>
         <?php
             echo $this->Form->control('name');
             echo $this->Form->control('description');
-            echo $this->Form->control('mentors._ids', ['options' => $mentors]);
         ?>
     </fieldset>
+    <button type="button" onClick='setReadOnly(true)'><?=__('View')?></button>
+    <button type="button" onClick='setReadOnly(false)'><?=__('Edit')?></button>
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
 </div>
+
+<script>
+    function setReadOnly(state){
+        $('#name').attr('readOnly', state);
+        $('#description').attr('readOnly', state);
+    }
+</script>
