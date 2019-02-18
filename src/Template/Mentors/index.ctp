@@ -12,10 +12,10 @@
     <a href="#" onclick="toggle_visibility('hid');"><?= __("Filters")?></a>
     <div id="hid" class="hidden" >
         <form action="/action_page.php">
-            <input type="checkbox" name="Champ" value="avialable" Checked>Search Avialable
-            <input type="checkbox" name="Champ"  value="mentor" checked>Search by Mentors<br>
-            <input type="checkbox" name="Champ"  value="unavialable" checked>Search Unavialable
-            <input type="checkbox" name="Champ"  value="skills" >Search by Skills<br>
+            <input type="checkbox" name="Field" value="available" checked>Search Available
+            <input type="checkbox" name="Field"  value="mentor" checked>Search by Mentors<br>
+            <input type="checkbox" name="Field"  value="unavailable" checked>Search Unavailable
+            <input type="checkbox" name="Field"  value="skills" >Search by Skills<br>
         </form>
     </div>
 
@@ -74,13 +74,14 @@
         function searchMentors( keyword ){
             var data = keyword;
 
-            var checkedList = $.map($(':input[name="Champ"]'));
-            var name = $.data('subcatagory'); // You can add the subcatagory as a data dash attribute or any other unique identifier in  html of the checkbox before appending
-            var IsSelected  = name.is(':checked');
+            var values = $("input[name='Field']:checked")
+                .map(function(){return $(this).val();}).get();
+            
+            var json = JSON.stringify(values);
 
             $.ajax({
                     method: 'get',
-                    url : "/mentors/search.json",
+                    url : "/mentors/search.json" + params,
                     data: {keyword:data, checked:checked},
                     success: function( response ){
                         var table = $("#table tbody");
