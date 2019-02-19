@@ -20,7 +20,7 @@ class SkillsController extends AppController
      */
     public function index()
     {
-        $skills = $this->paginate($this->Skills);
+        $skills = $this->paginate($this->Skills->find('all', ['contain' => ['Mentors']]));
 
         $this->set(compact('skills'));
     }
@@ -131,6 +131,21 @@ class SkillsController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    public function unlink()
+    {
+        $this->getRequest()->allowMethod(['post', 'delete']);
+        $skill = $this->Skills->get($this->getRequest()->getQuery('skill'));
+        $mentor = $this->Skills->Mentors->get($this->getRequest()->getQuery('mentor'));
+
+        if ($this->Skills->Mentors->unlink($skill, [$mentor])) {
+            $this->Flash->success(__('The association has been deleted.'));
+        } else {
+            $this->Flash->error(__('The association could not be deleted. Please, try again.'));
+        }
+
+        return $this->redirect(['action' => 'consult', $skill->id]);
     }
 
     public function search()

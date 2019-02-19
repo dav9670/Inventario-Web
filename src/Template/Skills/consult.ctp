@@ -4,20 +4,6 @@
  * @var \App\Model\Entity\Skill $skill
  */
 ?>
-<!--<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><#?= $this->Form->postLink(
-                __('Delete'),
-                ['action' => 'delete', $skill->id],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $skill->id)]
-            )
-        ?></li>
-        <li><#?= $this->Html->link(__('List Skills'), ['action' => 'index']) ?></li>
-        <li><#?= $this->Html->link(__('List Mentors'), ['controller' => 'Mentors', 'action' => 'index']) ?></li>
-        <li><#?= $this->Html->link(__('New Mentor'), ['controller' => 'Mentors', 'action' => 'add']) ?></li>
-    </ul>
-</nav>-->
 <div class="skills form large-12 medium-11 columns content"> 
     <?= $this->Form->create($skill) ?>
     <fieldset>
@@ -36,7 +22,7 @@
     <div class="related">
         <h4><?= __('Related Mentors') ?></h4>
         <?php if (!empty($skill->mentors)): ?>
-        <table cellpadding="0" cellspacing="0">
+        <table id="related" cellpadding="0" cellspacing="0">
             <tr>
                 <th scope="col"><?= __('Email') ?></th>
                 <th scope="col"><?= __('First Name') ?></th>
@@ -59,7 +45,7 @@
                 <td><?= h($mentor->modified) ?></td>
                 <td><?= h($mentor->deleted) ?></td>
                 <td class="actions">
-                    <?= $this->Form->postLink(__('Unlink'), ['controller' => 'mentors', 'action' => 'delete', $mentor->id], ['confirm' => __('Are you sure you want to delete # {0}?', $mentor->id), 'id' => 'unlink_link', 'hidden']) ?>
+                    <?= $this->Form->postLink(__('Unlink'), ['controller' => 'skills', 'action' => 'unlink', '?' => ['skill' => $skill->id, 'mentor' => $mentor->id]], ['confirm' => __('Are you sure you want to delete the association between {0} and {1}?', $mentor->email, $skill->name), 'class' => 'unlink_link', 'hidden']) ?>
                 </td>
             </tr>
             <?php endforeach; ?>
@@ -75,7 +61,7 @@
         if(readOnly){//View
             $('#viewButton').hide();
             $('#submit').hide();
-            $('#unlink_link').hide();
+            $('#related a[class="unlink_link"').hide();
 
             $('#editButton').show();
         }
@@ -84,7 +70,7 @@
 
             $('#viewButton').show();
             $('#submit').show();
-            $('#unlink_link').show();
+            $('#related a[class="unlink_link"').show();
         }
     }
 </script>
