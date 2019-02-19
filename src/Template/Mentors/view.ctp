@@ -53,7 +53,7 @@
     </table>
     <div class="row">
         <h4><?= __('Image') ?></h4>
-        <img src="data:image/png;base64, <?= $mentor->image?>" alt="Mentor's image"/>
+        <img src="data:image/png;base64, <?= h($mentor->image) ?>" alt="<?=__("Mentor's image")?>"/>
     </div>
     <div class="related">
         <h4><?= __('Related Skills') ?></h4>
