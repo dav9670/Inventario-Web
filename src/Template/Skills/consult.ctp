@@ -5,13 +5,12 @@
  */
 ?>
 <div class="skills form large-12 medium-11 columns content"> 
-    <?= $this->Form->create($skill) ?>
+    <?= $this->Form->create($skill, ['id' => 'skill_form']) ?>
     <fieldset>
         <legend><?= __('Skill') ?></legend>
         <?php
             echo $this->Form->control('name', ['readOnly' => 'readOnly']);
             echo $this->Form->control('description', ['readOnly' => 'readOnly']);
-
         ?>
     </fieldset>
     <button type="button" id="viewButton" onClick='setReadOnly(true)' hidden="hidden"><?=__('View')?></button>
@@ -55,17 +54,32 @@
 </div>
 
 <script>
-    function setReadOnly(readOnly){
-        $('#name').attr('readOnly', readOnly);
-        $('#description').attr('readOnly', readOnly);
-        if(readOnly){//View
-            $('#viewButton').hide();
-            $('#submit').hide();
-            $('#related a[class="unlink_link"').hide();
+    $("#skill_form :input").change(function() {
+        $("#skill_form").data("changed",true);
+    });
 
-            $('#editButton').show();
-        }
-        else{//Edit
+    function setReadOnly(readOnly){
+        if(readOnly){
+            //View
+            if ($("#skill_form").data("changed")) {
+                if(confirm("<?=__('Return in view mode and cancel all your changes?')?>")){
+                    location.reload(true);
+                }
+            } else {
+                $('#name').attr('readOnly', readOnly);
+                $('#description').attr('readOnly', readOnly);
+
+                $('#viewButton').hide();
+                $('#submit').hide();
+                $('#related a[class="unlink_link"').hide();
+
+                $('#editButton').show();
+            }
+        }else{
+            //Edit
+            $('#name').attr('readOnly', readOnly);
+            $('#description').attr('readOnly', readOnly);
+
             $('#editButton').hide();
 
             $('#viewButton').show();
