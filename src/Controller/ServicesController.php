@@ -104,13 +104,27 @@ class ServicesController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $service = $this->Services->get($id);
+        $success = false;
         if ($this->Services->delete($service)) {
-            $this->Flash->success(__('The service has been deleted.'));
+            if($this->isApi()){
+                $success = true;
+            }else {
+                $this->Flash->success(__('The service has been deleted.'));
+            }
         } else {
-            $this->Flash->error(__('The service could not be deleted. Please, try again.'));
+            if($this->isApi()){
+                $success = false;
+            }else {
+                $this->Flash->error(__('The service could not be deleted. Please, try again.'));
+            }
         }
 
-        return $this->redirect(['action' => 'index']);
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        }else {
+            return $this->redirect(['action' => 'index']);
+        }
     }
 
     public function isAuthorized($user)
