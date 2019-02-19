@@ -31,6 +31,7 @@
             <tr>
                 <th scope="col"><?= $this->Paginator->sort('name') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('description') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('mentors') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -40,6 +41,9 @@
                     <td><a href='/skills/<?= h($skill->id) ?>'><?= h($skill->name) ?></a></td>
                     
                     <td><a href='/skills/<?= h($skill->id) ?>'><?= h($skill->description) ?></a></td>
+
+                    <td><a href='/skills/<?= h($skill->id) ?>'><?= h($skill->mentors->count()) ?></a></td>
+
                     <td class="actions">
                         <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $skill->id], ['confirm' => __('Are you sure you want to delete # {0}?', $skill->id)]) ?>
                     </td>
