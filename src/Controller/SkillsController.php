@@ -12,6 +12,26 @@ use App\Controller\AppController;
  */
 class SkillsController extends AppController
 {
+    public $paginate = [
+        'Skills' => [
+            'limit' => 15,
+            'order' => [
+                'Skills.name' => 'asc'
+            ]
+        ],
+        'Mentors' => [
+            'limit' => 15,
+            'order' => [
+                'Mentors.email' => 'asc'
+            ]
+        ]
+    ];
+
+    public function initialize()
+    {
+        parent::initialize();
+        $this->loadComponent('Paginator');
+    }
 
     /**
      * Index method
@@ -20,7 +40,7 @@ class SkillsController extends AppController
      */
     public function index()
     {
-        $skills = $this->paginate($this->Skills->find('all', ['contain' => ['Mentors']]));
+        $skills = $this->paginate($this->Skills);
 
         $this->set(compact('skills'));
     }

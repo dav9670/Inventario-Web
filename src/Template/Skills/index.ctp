@@ -31,7 +31,7 @@
             <tr>
                 <th scope="col"><?= $this->Paginator->sort('name') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('description') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('mentors') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('mentor_count') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
