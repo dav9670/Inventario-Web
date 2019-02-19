@@ -37,4 +37,6 @@ class Skill extends Entity
         TableRegistry::get($this->getSource())->loadInto($this, ['Mentors']);
         return count($this->mentors);
     }
+
+    protected $_virtual = ['mentor_count'];
 }
