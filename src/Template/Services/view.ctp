@@ -50,7 +50,7 @@
                 <td><?= h($rooms->id) ?></td>
                 <td><?= h($rooms->name) ?></td>
                 <td><?= h($rooms->description) ?></td>
-                <td><?= h($rooms->image) ?></td>
+                <td><img src="data:image/png;base64, <?= h($rooms->image) ?>" alt="<?=__("Room's image")?>"/></td>
                 <td><?= h($rooms->created) ?></td>
                 <td><?= h($rooms->modified) ?></td>
                 <td><?= h($rooms->deleted) ?></td>
