@@ -43,6 +43,7 @@ class SkillsController extends AppController
         $skills = $this->paginate($this->Skills);
 
         $this->set(compact('skills'));
+        $this->set('_serialize', ['skills']);
     }
 
     /**

@@ -20,9 +20,15 @@ class ServicesController extends AppController
      */
     public function index()
     {
+        $this->paginate = [
+            'order' => [
+              'name' => 'asc'
+            ]
+        ];
         $services = $this->paginate($this->Services);
 
         $this->set(compact('services'));
+        $this->set('_serialize', ['services']);
     }
 
     /**
