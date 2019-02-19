@@ -2,6 +2,7 @@
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use Cake\ORM\TableRegistry;
 
 /**
  * Service Entity
@@ -29,4 +30,13 @@ class Service extends Entity
         'description' => true,
         'rooms' => true
     ];
+
+
+    protected function _getRoomCount()
+    {
+        TableRegistry::get($this->getSource())->loadInto($this, ['Rooms']);
+        return count($this->rooms);
+    }
+
+    protected $_virtual = ['room_count'];
 }

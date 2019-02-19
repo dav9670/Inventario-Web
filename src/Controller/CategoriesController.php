@@ -23,6 +23,7 @@ class CategoriesController extends AppController
         $categories = $this->paginate($this->Categories);
 
         $this->set(compact('categories'));
+        $this->set('_serialize', ['categories']);
     }
 
     /**

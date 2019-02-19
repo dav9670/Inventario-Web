@@ -23,6 +23,7 @@ class ProductsController extends AppController
         $products = $this->paginate($this->Products);
 
         $this->set(compact('products'));
+        $this->set('_serialize', ['products']);
     }
 
     /**
