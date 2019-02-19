@@ -42,7 +42,7 @@
                     
                     <td><a href='/skills/<?= h($skill->id) ?>'><?= h($skill->description) ?></a></td>
 
-                    <td><a href='/skills/<?= h($skill->id) ?>'><?= h($skill->mentors->count()) ?></a></td>
+                    <td><a href='/skills/<?= h($skill->id) ?>'><?= h($skill->mentor_count) ?></a></td>
 
                     <td class="actions">
                         <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $skill->id], ['confirm' => __('Are you sure you want to delete # {0}?', $skill->id)]) ?>

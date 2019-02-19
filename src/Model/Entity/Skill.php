@@ -2,6 +2,7 @@
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use Cake\ORM\TableRegistry;
 
 /**
  * Skill Entity
@@ -29,4 +30,11 @@ class Skill extends Entity
         'description' => true,
         'mentors' => true
     ];
+
+
+    protected function _getMentorCount()
+    {
+        TableRegistry::get($this->source())->loadInto($this, ['Mentors']);
+        return count($this->mentors);
+    }
 }
