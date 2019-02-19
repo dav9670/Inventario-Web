@@ -34,7 +34,7 @@ class Skill extends Entity
 
     protected function _getMentorCount()
     {
-        TableRegistry::get($this->source())->loadInto($this, ['Mentors']);
+        TableRegistry::get($this->getSource())->loadInto($this, ['Mentors']);
         return count($this->mentors);
     }
 }
