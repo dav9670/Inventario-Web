@@ -173,6 +173,8 @@ class SkillsController extends AppController
         $this->getRequest()->allowMethod('ajax');
    
         $keyword = $this->getRequest()->getQuery('keyword');
+        $sort_field = $this->getRequest()->getQuery('sort_field');
+        $sort_dir = $this->getRequest()->getQuery('sort_dir');
         if($keyword == '')
         {
             $query = $this->Skills->find('all');
@@ -183,6 +185,8 @@ class SkillsController extends AppController
                 ->where(["match (name, description) against(:search in boolean mode)"])
                 ->bind(":search", $keyword . '*', 'string');
         }
+
+        $query->order([$sort_field => $sort_dir]);
         
         $this->set('skills', $this->paginate($query));
         $this->set('_serialize', ['skills']);

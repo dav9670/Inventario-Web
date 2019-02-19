@@ -29,9 +29,9 @@
     <table id="table" cellpadding="0" cellspacing="0">
         <thead>
             <tr>
-                <th scope="col"><?= $this->Paginator->sort('name') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('description') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('mentor_count') ?></th>
+                <th scope="col"><a id='name_sort' class='asc'><?= __("Name") ?></a></th>
+                <th scope="col"><a id='description_sort'><?= __("Description") ?></a></th>
+                <th scope="col"><a id='mentor_count_sort'><?= __("Mentor count") ?></a></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -64,36 +64,69 @@
 </div>
 
 <script>
-    $('document').ready(function(){
+    var sort_field = "name";
+    var sort_dir = "asc";
 
+    function searchSkills( keyword ){
+        var data = keyword;
+        $.ajax({
+                method: 'get',
+                url : "/skills/search.json",
+                data: {keyword:data, sort_field: sort_field, sort_dir: sort_dir},
+                success: function( response ){
+                    var table = $("#table tbody");
+                    table.empty();
+                    $.each(response.skills, function(idx, elem){
+                        let nameCell = "<td><a href='/skills/" + elem.id + "'>" + elem.name + "</a></td>";
+                        let descriptionCell = "<td><a href='/skills/" + elem.id + "'>" + elem.description + "</a></td>";
+                        let mentorCountCell = "<td><a href='/skills/" + elem.id + "'>" + elem.mentor_count + "</a></td>";
+                        let actionsCell = "<td class=\"actions\">";
+
+                        let deleteLink = '<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete # {0}?', -1)]) ?>';
+                        deleteLink = deleteLink.replace(/-1/g, elem.id);
+                        
+                        actionsCell = actionsCell.concat(deleteLink);
+                        actionsCell = actionsCell.concat("</td>");
+
+                        table.append("<tr>" + nameCell + descriptionCell + mentorCountCell + actionsCell + "</tr>");
+                    });
+                }
+        });
+    };
+
+    
+    function sort_setter( sort_field_param ){
+        var oldHtmlFieldId = '#' + sort_field +'_sort';
+        var newHtmlFieldId = '#' + sort_field_param +'_sort';
+        
+        $(oldHtmlFieldId).removeClass('asc');
+        $(oldHtmlFieldId).removeClass('desc');
+        $(newHtmlFieldId).removeClass('asc');
+        $(newHtmlFieldId).removeClass('desc');
+
+        sort_dir = sort_field != sort_field_param ? "asc" : sort_dir == "asc" ? "desc" : "asc";
+        sort_field = sort_field_param;
+
+        $(newHtmlFieldId).addClass(sort_dir);
+    }
+
+    $('document').ready(function(){
          $('#search').keyup(function(){
             var searchkey = $(this).val();
             searchSkills( searchkey );
          });
-        function searchSkills( keyword ){
-            var data = keyword;
-            $.ajax({
-                    method: 'get',
-                    url : "/skills/search.json",
-                    data: {keyword:data},
-                    success: function( response ){
-                        var table = $("#table tbody");
-                        table.empty();
-                        $.each(response.skills, function(idx, elem){
-                            let nameCell = "<td><a href='/skills/" + elem.id + "'>" + elem.name + "</a></td>";
-                            let descriptionCell = "<td><a href='/skills/" + elem.id + "'>" + elem.description + "</a></td>";
-                            let actionsCell = "<td class=\"actions\">";
 
-                            let deleteLink = '<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete # {0}?', -1)]) ?>';
-                            deleteLink = deleteLink.replace(/-1/g, elem.id);
-                            
-                            actionsCell = actionsCell.concat(deleteLink);
-                            actionsCell = actionsCell.concat("</td>");
-
-                            table.append("<tr>" + nameCell + descriptionCell + actionsCell + "</tr>");
-                        });
-                    }
-            });
-        };
+         $('#name_sort').click( function(e) {
+            sort_setter('name');
+            $('#search').keyup();
+         });
+         $('#description_sort').click( function(e) {
+            sort_setter('description');
+            $('#search').keyup();
+         });
+         $('#mentor_count_sort').click( function(e) {
+            sort_setter('mentor_count');
+            $('#search').keyup();
+         });
     });
 </script>
