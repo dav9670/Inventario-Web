@@ -34,10 +34,10 @@
     <a href="#" onclick="toggle_visibility('hid');"><?= __("Filters")?></a>
     <div id="hid" class="hidden" >
         <form action="/action_page.php">
-            <input type="checkbox" name="FieldAvai" value="available" checked>Search Available
-            <input type="checkbox" name="FieldLabel"  value="mentor" checked>Search by Mentors<br>
-            <input type="checkbox" name="FieldAvai"  value="unavailable" checked>Search Unavailable
-            <input type="checkbox" name="FieldLabel"  value="skills" >Search by Skills<br>
+            <input type="checkbox" id="FieldAvailable" checked>Search Available
+            <input type="checkbox" id="FieldMentors" checked>Search by Mentors<br>
+            <input type="checkbox" id="FieldUnavailable" checked>Search Unavailable
+            <input type="checkbox" id="FieldSkills">Search by Skills<br>
         </form>
     </div>
     
@@ -66,10 +66,17 @@
     function searchMentors( keyword ){
         var data = keyword;
 
+        var filters = {
+            search_available: $('#FieldAvailable').is(':checked'),
+            search_unavailable: $('#FieldUnavailable').is(':checked'),
+            search_mentors: $('#FieldMentors').is(':checked'),
+            search_skills: $('#FieldSkills').is(':checked')
+        };
+
         $.ajax({
                 method: 'get',
                 url : "/mentors/search.json",
-                data: {keyword:data, sort_field:sort_field, sort_dir:sort_dir},
+                data: {keyword:data, sort_field:sort_field, sort_dir:sort_dir, filters: filters},
                 complete: function(jq, status){
                     console.log(status);
                 },

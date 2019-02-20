@@ -129,11 +129,23 @@ class MentorsController extends AppController
         $keyword = "";
         $sort_field = "";
         $sort_dir = "";
-        
+
+        $search_available = "";
+        $search_unavailable = "";
+        $search_mentors = "";
+        $search_skills = "";
+
         if ($this->getRequest()->is('ajax')){
             $keyword = $this->getRequest()->getQuery('keyword');
             $sort_field = $this->getRequest()->getQuery('sort_field');
             $sort_dir = $this->getRequest()->getQuery('sort_dir');
+            
+            $filters = $this->getRequest()->getQuery('filters');
+            $search_available = $filters['search_available'];
+            $search_unavailable = $filters['search_unavailable'];
+            $search_mentors = $filters['search_mentors'];
+            $search_skills = $filters['search_skills'];
+        
         } else if ($this->getRequest()->is('post')){
             $jsonData = $this->getRequest()->input('json_decode', true);
             $keyword = $jsonData['keyword'];
@@ -151,6 +163,8 @@ class MentorsController extends AppController
                 ->where(["match (email, first_name, last_name, description) against(:search in boolean mode)"])
                 ->bind(":search", $keyword . '*', 'string');
         }
+
+        
 
         $query->order([$sort_field => $sort_dir]);
         
