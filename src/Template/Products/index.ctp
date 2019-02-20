@@ -5,42 +5,119 @@
  */
 ?>
 
-<div class="products index large-9 medium-8 columns content">
-    <h3><?= __('Products') ?></h3>
-    <table cellpadding="0" cellspacing="0">
+<div class="products index large-12 medium-11 columns content">
+    
+    <div class="left">
+        <h3><?= __('Products') ?></h3>
+    </div>
+    <div class="right">
+        <?= $this->Html->link(__('Licences') . ' 🡆', ['controller' => 'Licences', 'action' => 'index']) ?>
+    </div>
+
+    <div style="clear: both;"></div>
+
+    <div class="search-container">
+        <a href="/products/add">
+            <img class="plus" src="/img/plus.png" alt="Plus">
+        </a>
+
+        <div class="search-bar">
+            <label for="search"><?= __('Search') ?></label>
+            <input type="text" name="search" id="search">
+        </div>
+    </div>
+    <table id="table" cellpadding="0" cellspacing="0">
         <thead>
             <tr>
-                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('name') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('platform') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('description') ?></th>
+                <th scope="col"><a id='name_sort' class='asc'><?= __("Name") ?></a></th>
+                <th scope="col"><a id='platform_sort'><?= __("Platform") ?></a></th>
+                <th scope="col"><a id='description_sort'><?= __("Description") ?></a></th>
+                <th scope="col"><?= __("Licence count") ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($products as $product): ?>
-            <tr>
-                <td><?= $this->Number->format($product->id) ?></td>
-                <td><?= h($product->name) ?></td>
-                <td><?= h($product->platform) ?></td>
-                <td><?= h($product->description) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $product->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $product->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $product->id], ['confirm' => __('Are you sure you want to delete # {0}?', $product->id)]) ?>
-                </td>
-            </tr>
-            <?php endforeach; ?>
         </tbody>
     </table>
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
-        </ul>
-        <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
-    </div>
 </div>
+
+<script>
+    var sort_field = "name";
+    var sort_dir = "asc";
+
+    function searchProducts( keyword ){
+        var data = keyword;
+        $.ajax({
+                method: 'get',
+                url : "/products/search.json",
+                data: {keyword:data, sort_field: sort_field, sort_dir: sort_dir},
+                success: function( response ){
+                    var table = $("#table tbody");
+                    table.empty();
+                    $.each(response.products, function(idx, elem){
+                        let nameCell = "<td><a href='/products/" + elem.id + "'>" + elem.name + "</a></td>";
+                        let platformCell = "<td><a href='/products/" + elem.id + "'>" + elem.platform + "</a></td>";
+                        let descriptionCell = "<td><a href='/products/" + elem.id + "'>" + elem.description + "</a></td>";
+                        let licenceCountCell = "<td><a href='/products/" + elem.id + "'>" + elem.licence_count + "</a></td>";
+                        let actionsCell = "<td class=\"actions\">";
+                        var deleteLink = "";
+                        if(elem.licence_count == 0){
+                            deleteLink = '<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete {0}?', -1)]) ?>';
+                        } else {
+                            deleteLink = '<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete {0}? {1} items are associated with it.', -1, -2)]) ?>';
+                            deleteLink = deleteLink.replace(/-2/g, elem.licence_count);
+                        }
+                         
+                        deleteLink = deleteLink.replace(/-1/g, elem.name);
+                        
+                        actionsCell = actionsCell.concat(deleteLink);
+                        actionsCell = actionsCell.concat("</td>");
+
+                        table.append("<tr>" + nameCell + platformCell + descriptionCell + licenceCountCell + actionsCell + "</tr>");
+                    });
+                }
+        });
+    };
+
+    
+    function sort_setter( sort_field_param ){
+        var oldHtmlFieldId = '#' + sort_field +'_sort';
+        var newHtmlFieldId = '#' + sort_field_param +'_sort';
+        
+        $(oldHtmlFieldId).removeClass('asc');
+        $(oldHtmlFieldId).removeClass('desc');
+        $(newHtmlFieldId).removeClass('asc');
+        $(newHtmlFieldId).removeClass('desc');
+
+        sort_dir = sort_field != sort_field_param ? "asc" : sort_dir == "asc" ? "desc" : "asc";
+        sort_field = sort_field_param;
+
+        $(newHtmlFieldId).addClass(sort_dir);
+    }
+
+    $('document').ready(function(){
+         $('#search').keyup(function(){
+            var searchkey = $(this).val();
+            searchProducts( searchkey );
+         });
+
+         $('#name_sort').click( function(e) {
+            sort_setter('name');
+            $('#search').keyup();
+         });
+         $('#platform_sort').click( function(e) {
+            sort_setter('name');
+            $('#search').keyup();
+         });
+         $('#description_sort').click( function(e) {
+            sort_setter('description');
+            $('#search').keyup();
+         });
+         /*$('#mentor_count_sort').click( function(e) {
+            sort_setter('mentor_count');
+            $('#search').keyup();
+         });*/
+
+         $('#search').keyup();
+    });
+</script>
