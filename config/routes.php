@@ -89,7 +89,9 @@ Router::scope('/', function (RouteBuilder $routes) {
      * routes you want in your application.
      */
 
-    $routes->connect('/', ['controller' => 'Users', 'action' => 'login']);
+    $routes->setExtensions(['json']);
+    
+    $routes->connect('/', ['controller' => 'Users', 'action' => 'profile']);
 
     $routes->connect('/:language/*',
         array('controller' => 'App','action' => 'setLang'),
@@ -97,7 +99,12 @@ Router::scope('/', function (RouteBuilder $routes) {
         'pass' => array('language'))
     );
 
-    $routes->setExtensions(['json']);
+    $routes->connect('/:controller/:id', ['action' => 'consult'])
+        ->setPass(['id'])
+        ->setPatterns([
+            'controller' => 'mentors|skills|rooms|services|licences|products|equipments|categories',
+            'id' => '[0-9]+'
+        ]);
 
     $routes->fallbacks(DashedRoute::class);
 });

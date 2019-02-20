@@ -22,11 +22,25 @@ class UsersController extends AppController
     {
         if ($this->request->is('post')) {
             $user = $this->Auth->identify();
-            if ($user) {
+            if ($user) 
+            {
                 $this->Auth->setUser($user);
-                return $this->redirect($this->Auth->redirectUrl());
+                
+                if($this->isApi())
+                {
+                    $this->set('user', $user);
+                    $this->set('_serialize', 'user');
+                    return;
+                }
+                else
+                {
+                    return $this->redirect($this->Auth->redirectUrl());
+                }
             }
-            $this->Flash->error('Your username or password is incorrect.');
+            else
+            {
+                $this->Flash->error('Your username or password is incorrect.');
+            }
         }
     }
 

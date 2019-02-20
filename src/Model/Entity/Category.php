@@ -2,6 +2,7 @@
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use Cake\ORM\TableRegistry;
 
 /**
  * Category Entity
@@ -31,4 +32,13 @@ class Category extends Entity
         'hourly_rate' => true,
         'equipments' => true
     ];
+
+
+    protected function _getEquipmentCount()
+    {
+        TableRegistry::get($this->getSource())->loadInto($this, ['Equipments']);
+        return count($this->equipments);
+    }
+
+    protected $_virtual = ['equipment_count'];
 }

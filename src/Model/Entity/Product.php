@@ -2,6 +2,7 @@
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use Cake\ORM\TableRegistry;
 
 /**
  * Product Entity
@@ -31,4 +32,13 @@ class Product extends Entity
         'description' => true,
         'licences' => true
     ];
+
+
+    protected function _getLicenceCount()
+    {
+        TableRegistry::get($this->getSource())->loadInto($this, ['Licences']);
+        return count($this->licences);
+    }
+
+    protected $_virtual = ['licence_count'];
 }

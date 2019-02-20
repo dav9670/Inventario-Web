@@ -13,6 +13,12 @@ use App\Controller\AppController;
 class SkillsController extends AppController
 {
 
+    public function initialize()
+    {
+        parent::initialize();
+        $this->loadComponent('Paginator');
+    }
+
     /**
      * Index method
      *
@@ -20,9 +26,8 @@ class SkillsController extends AppController
      */
     public function index()
     {
-        $skills = $this->paginate($this->Skills);
-
-        $this->set(compact('skills'));
+        $this->set('skills', $this->Skills->find('all'));
+        $this->set('_serialize', ['skills']);
     }
 
     /**
@@ -49,8 +54,8 @@ class SkillsController extends AppController
     public function add()
     {
         $skill = $this->Skills->newEntity();
-        if ($this->request->is('post')) {
-            $skill = $this->Skills->patchEntity($skill, $this->request->getData());
+        if ($this->getRequest()->is('post')) {
+            $skill = $this->Skills->patchEntity($skill, $this->getRequest()->getData());
             if ($this->Skills->save($skill)) {
                 $this->Flash->success(__('The skill has been saved.'));
 
@@ -74,8 +79,8 @@ class SkillsController extends AppController
         $skill = $this->Skills->get($id, [
             'contain' => ['Mentors']
         ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $skill = $this->Skills->patchEntity($skill, $this->request->getData());
+        if ($this->getRequest()->is(['patch', 'post', 'put'])) {
+            $skill = $this->Skills->patchEntity($skill, $this->getRequest()->getData());
             if ($this->Skills->save($skill)) {
                 $this->Flash->success(__('The skill has been saved.'));
 
@@ -88,6 +93,32 @@ class SkillsController extends AppController
     }
 
     /**
+     * Consult method
+     *
+     * @param string|null $id Skill id.
+     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function consult($id = null)
+    {
+        $skill = $this->Skills->get($id, [
+            'contain' => ['Mentors']
+        ]);
+        if ($this->getRequest()->is(['patch', 'post', 'put'])) {
+            $skill = $this->Skills->patchEntity($skill, $this->getRequest()->getData());
+            if ($this->Skills->save($skill)) {
+                $this->Flash->success(__('The skill has been saved.'));
+
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('The skill could not be saved. Please, try again.'));
+        }
+        $mentors = $this->Skills->Mentors->find('list', ['limit' => 200]);
+        $this->set(compact('skill', 'mentors'));
+    }
+    
+
+    /**
      * Delete method
      *
      * @param string|null $id Skill id.
@@ -96,7 +127,7 @@ class SkillsController extends AppController
      */
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
+        $this->getRequest()->allowMethod(['post', 'delete']);
         $skill = $this->Skills->get($id);
         if ($this->Skills->delete($skill)) {
             $this->Flash->success(__('The skill has been deleted.'));
@@ -107,11 +138,44 @@ class SkillsController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
-    public function search()
+    public function unlink()
     {
-        $this->request->allowMethod('ajax');
+        $this->getRequest()->allowMethod(['post', 'delete']);
+        $skill = $this->Skills->get($this->getRequest()->getQuery('skill'));
+        $mentor = $this->Skills->Mentors->get($this->getRequest()->getQuery('mentor'));
+
+        if ($this->Skills->Mentors->unlink($skill, [$mentor])) {
+            $this->Flash->success(__('The association has been deleted.'));
+        } else {
+            $this->Flash->error(__('The association could not be deleted. Please, try again.'));
+        }
+
+        return $this->redirect(['action' => 'consult', $skill->id]);
+    }
+
+    public function search()
+    {   
+        if($this->isApi()){
+            $this->getRequest()->allowMethod('post');
+        }else {
+            $this->getRequest()->allowMethod('ajax');
+        }
    
-        $keyword = $this->request->query('keyword');
+        $keyword = "";
+        $sort_field = "";
+        $sort_dir = "";
+        
+        if ($this->getRequest()->is('ajax')){
+            $keyword = $this->getRequest()->getQuery('keyword');
+            $sort_field = $this->getRequest()->getQuery('sort_field');
+            $sort_dir = $this->getRequest()->getQuery('sort_dir');
+        } else if ($this->getRequest()->is('post')){
+            $jsonData = $this->getRequest()->input('json_decode', true);
+            $keyword = $jsonData['keyword'];
+            $sort_field = $jsonData['sort_field'];
+            $sort_dir = $jsonData['sort_dir'];
+        }
+        
         if($keyword == '')
         {
             $query = $this->Skills->find('all');
@@ -122,6 +186,8 @@ class SkillsController extends AppController
                 ->where(["match (name, description) against(:search in boolean mode)"])
                 ->bind(":search", $keyword . '*', 'string');
         }
+
+        $query->order([$sort_field => $sort_dir]);
         
         $this->set('skills', $this->paginate($query));
         $this->set('_serialize', ['skills']);
