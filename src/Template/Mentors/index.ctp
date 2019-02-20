@@ -34,96 +34,10 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($mentors as $mentor): ?>
-            <tr>
-                <td><?= $this->Number->format($mentor->id) ?></td>
-                <td><?= h($mentor->email) ?></td>
-                <td><?= h($mentor->first_name) ?></td>
-                <td><?= h($mentor->last_name) ?></td>
-                <td><?= h($mentor->description) ?></td>
-                <td><?= h($mentor->created) ?></td>
-                <td><?= h($mentor->modified) ?></td>
-                <td><?= h($mentor->deleted) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $mentor->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $mentor->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $mentor->id], ['confirm' => __('Are you sure you want to delete # {0}?', $mentor->id)]) ?>
-                </td>
-            </tr>
-            <?php endforeach; ?>
         </tbody>
     </table>
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
-        </ul>
-        <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
-    </div>
 </div>
 
-<script>
-    $('document').ready(function(){
-         $('#search').keyup(function(){
-            var searchkey = $(this).val();
-            searchMentors( searchkey );
-         });
-        function searchMentors( keyword ){
-            var data = keyword;
-
-            //récupère les valeur des checkbox available et unavailable si elles sont cochées.
-            var values = $("input[name='FieldAvai']:checked")
-                .map(function(){return $(this).val();}).get();
-            var jsonAvai = JSON.stringify(values);
-
-            //récupère les valeur des checkbox mentors et competencies si elles sont cochées.
-            var value = $("input[name='FieldLabel']:checked")
-                .map(function(){return $(this).val();}).get();
-            
-            var jsonLabel = JSON.stringify(value);
-
-            $.ajax({
-                    method: 'get',
-                    url : "/mentors/search.json",
-                    data: {keyword:data, fieldsAvai:jsonAvai, fieldsLabel:jsonLabel},
-                    success: function( response ){
-                        var table = $("#table tbody");
-                        table.empty();
-                        $.each(response.mentors, function(idx, elem){
-                            let idCell = "<td>" + elem.id + "</td>";
-                            let emailCell = "<td>" + elem.email + "</td>";
-                            let first_nameCell = "<td>" + elem.first_name + "</td>";
-                            let last_nameCell = "<td>" + elem.last_name + "</td>";
-                            let descriptionCell = "<td>" + elem.description + "</td>";
-                            let createdCell = "<td>" + elem.created + "</td>";
-                            let modifiedCell = "<td>" + elem.modified + "</td>";
-                            let deletedCell = "<td>" + elem.deleted + "</td>";
-                            
-                            let actionsCell = "<td class=\"actions\">";
-                            let viewLink = '<?= $this->Html->link(__('View'), ['action' => 'view', -1]) ?>';
-                            viewLink = viewLink.replace("-1", elem.id);
-                            let editLink = '<?= $this->Html->link(__('Edit'), ['action' => 'edit', -1]) ?>';
-                            editLink = editLink.replace("-1", elem.id);
-                            let deleteLink = '<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete # {0}?', -1)]) ?>';
-                            deleteLink = deleteLink.replace(/-1/g, elem.id);
-                            
-                            actionsCell = actionsCell.concat(viewLink);
-                            actionsCell = actionsCell.concat(" ");
-                            actionsCell = actionsCell.concat(editLink);
-                            actionsCell = actionsCell.concat(" ");
-                            actionsCell = actionsCell.concat(deleteLink);
-                            actionsCell = actionsCell.concat("</td>");
-
-                            table.append("<tr>" + idCell + emailCell + first_nameCell + last_nameCell + descriptionCell + createdCell + modifiedCell + deletedCell + actionsCell + "</tr>");
-                        });
-                    }
-            });
-        };
-    });
-</script>
 <script>
     function toggle_visibility(id) {
         var e = document.getElementById(id);
@@ -132,4 +46,61 @@
         else
             e.style.display = 'block';
     }
+
+    function searchMentors( keyword ){
+        var data = keyword;
+
+        var sort_field = "email";
+        var sort_dir = "asc";
+
+
+
+        $.ajax({
+                method: 'get',
+                url : "/mentors/search.json",
+                data: {keyword:data, sort_field: sort_field, sort_dir: sort_dir},
+                complete: function( jqxhr, status){
+                    console.log(status);
+                },
+                success: function( response ){
+                    var table = $("#table tbody");
+                    table.empty();
+                    $.each(response.mentors, function(idx, elem){
+                        let idCell = "<td>" + elem.id + "</td>";
+                        let emailCell = "<td>" + elem.email + "</td>";
+                        let first_nameCell = "<td>" + elem.first_name + "</td>";
+                        let last_nameCell = "<td>" + elem.last_name + "</td>";
+                        let descriptionCell = "<td>" + elem.description + "</td>";
+                        let createdCell = "<td>" + elem.created + "</td>";
+                        let modifiedCell = "<td>" + elem.modified + "</td>";
+                        let deletedCell = "<td>" + elem.deleted + "</td>";
+                        
+                        let actionsCell = "<td class=\"actions\">";
+                        let viewLink = '<?= $this->Html->link(__('View'), ['action' => 'view', -1]) ?>';
+                        viewLink = viewLink.replace("-1", elem.id);
+                        let editLink = '<?= $this->Html->link(__('Edit'), ['action' => 'edit', -1]) ?>';
+                        editLink = editLink.replace("-1", elem.id);
+                        let deleteLink = '<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete # {0}?', -1)]) ?>';
+                        deleteLink = deleteLink.replace(/-1/g, elem.id);
+                        
+                        actionsCell = actionsCell.concat(viewLink);
+                        actionsCell = actionsCell.concat(" ");
+                        actionsCell = actionsCell.concat(editLink);
+                        actionsCell = actionsCell.concat(" ");
+                        actionsCell = actionsCell.concat(deleteLink);
+                        actionsCell = actionsCell.concat("</td>");
+
+                        table.append("<tr>" + idCell + emailCell + first_nameCell + last_nameCell + descriptionCell + createdCell + modifiedCell + deletedCell + actionsCell + "</tr>");
+                    });
+                }
+        });
+    }
+
+    $('document').ready(function(){
+         $('#search').keyup(function(){
+            var searchkey = $(this).val();
+            searchMentors( searchkey );
+         });
+         $('#search').keyup();
+    });
 </script>
