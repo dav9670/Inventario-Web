@@ -114,7 +114,7 @@
                         var deleteLink = "";
                         deleteLink = '<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete {0}?', -1)]) ?>';
                         
-                        deleteLink = deleteLink.replace(/-1/g, elem.first_name + elem.last_name);
+                        deleteLink = deleteLink.replace(/-1/g, elem.first_name + " " + elem.last_name);
                         
                         actionsCell = actionsCell.concat(deleteLink);
                         actionsCell = actionsCell.concat("</td>");
@@ -160,6 +160,19 @@
          });
          $('#description_sort').click( function(e) {
             sort_setter('description');
+            $('#search').keyup();
+         });
+
+         $('#FieldAvailable').click( function(e) {
+            $('#search').keyup();
+         });
+         $('#FieldUnavailable').click( function(e) {
+            $('#search').keyup();
+         });
+         $('#FieldMentors').click( function(e) {
+            $('#search').keyup();
+         });
+         $('#FieldSkills').click( function(e) {
             $('#search').keyup();
          });
 

@@ -24,28 +24,37 @@
         <?php if (!empty($skill->mentors)): ?>
         <table id="related" cellpadding="0" cellspacing="0">
             <tr>
+                <th scope="col"></th>
                 <th scope="col"><?= __('Email') ?></th>
                 <th scope="col"><?= __('First Name') ?></th>
                 <th scope="col"><?= __('Last Name') ?></th>
                 <th scope="col"><?= __('Description') ?></th>
-                <th scope="col"><?= __('Image') ?></th>
-                <th scope="col"><?= __('Created') ?></th>
-                <th scope="col"><?= __('Modified') ?></th>
-                <th scope="col"><?= __('Deleted') ?></th>
+                <th scope="col"><?= __("Skills") ?></th>
+                <th scope="col"><?= __("Available") ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
             <?php foreach ($skill->mentors as $mentor): ?>
-            <tr>
-                <td><?= $this->Html->link(h($mentor->email), ['controller' => 'mentors', 'action' => 'consult', $mentor->id]) ?></td>
-                <td><?= h($mentor->first_name) ?></td>
-                <td><?= h($mentor->last_name) ?></td>
-                <td><?= h($mentor->description) ?></td>
-                <td><img src="data:image/png;base64, <?= h($mentor->image) ?>" alt="<?=__("Mentor's image")?>"/></td>
-                <td><?= h($mentor->created) ?></td>
-                <td><?= h($mentor->modified) ?></td>
-                <td><?= h($mentor->deleted) ?></td>
+            <tr class="clickable-row">
+                <td><a href='/mentors/<?= h($mentor->id) ?>'><img src="data:image/png;base64, <?= h($mentor->image) ?>" alt="<?= h($mentor->first_name) ?> <?= h($mentor->last_name) ?>" width=100/></a></td>
+                <td><a href='/mentors/<?= h($mentor->id) ?>'><?= h($mentor->email) ?></a></td>
+                <td><a href='/mentors/<?= h($mentor->id) ?>'><?= h($mentor->first_name) ?></a></td>
+                <td><a href='/mentors/<?= h($mentor->id) ?>'><?= h($mentor->last_name) ?></a></td>
+                <td><a href='/mentors/<?= h($mentor->id) ?>'><?= h($mentor->description) ?></a></td>
+
+                <?php if (count($mentor->skills_list) > 3): ?>
+                    <td><a href='/mentors/<?= h($mentor->id) ?>'><?= h(implode(", ", array_slice($mentor->skills_list,0,3)) . "...") ?></a></td>
+                <?php else: ?>
+                    <td><a href='/mentors/<?= h($mentor->id) ?>'><?= h(implode(", ", array_slice($mentor->skills_list,0,3))) ?></a></td>
+                <?php endif; ?>
+
+                <?php if ($mentor->available): ?>
+                    <td><a href='/mentors/<?= h($mentor->id) ?>'><img src='/img/good.png' alt='Available' width=20 height=20></a></td>
+                <?php else: ?>
+                    <td><a href='/mentors/<?= h($mentor->id) ?>'><img src='/img/bad.png' alt='Not Available' width=20 height=20></a></td>
+                <?php endif; ?>
+
                 <td class="actions">
-                    <?= $this->Form->postLink(__('Unlink'), ['controller' => 'skills', 'action' => 'unlink', '?' => ['skill' => $skill->id, 'mentor' => $mentor->id]], ['confirm' => __('Are you sure you want to delete the association between {0} and {1}?', $mentor->email, $skill->name), 'class' => 'unlink_link', 'hidden']) ?>
+                    <?= $this->Form->postLink(__('Unlink'), ['controller' => 'skills', 'action' => 'unlink', '?' => ['skill' => $skill->id, 'mentor' => $mentor->id]], ['confirm' => __('Are you sure you want to delete the association between {0} and {1}?', $mentor->first_name . " " . $mentor->last_name, $skill->name), 'class' => 'unlink_link', 'hidden']) ?>
                 </td>
             </tr>
             <?php endforeach; ?>
@@ -63,7 +72,7 @@
         if(readOnly){
             //View
             if ($("#skill_form").data("changed")) {
-                if(confirm("<?=__('Return in view mode and cancel all your changes?')?>")){
+                if(confirm("<?=__('Return to view mode and cancel all your changes?')?>")){
                     location.reload(true);
                 }
             } else {
