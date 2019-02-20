@@ -44,9 +44,53 @@ class ServicesFixture extends TestFixture
         $this->records = [
             [
                 'id' => 1,
-                'name' => 'Lorem ipsum dolor sit amet',
-                'description' => 'Lorem ipsum dolor sit amet'
+                'name' => 'Projector',
+                'description' => 'BENQ projector, can be opened by pressing a button at the entrance of the room'
             ],
+            [
+                'id' => 2,
+                'name' => 'Whiteboard',
+                'description' => 'Pencil and eraser included'
+            ],
+            [
+                'id' => 3,
+                'name' => 'Computers Windows',
+                'description' => 'Include Office 365, Visual Studio, VMware, photoshop'
+            ],
+            [
+                'id' => 4,
+                'name' => 'Lab Linux',
+                'description' => '30 computer on Linux'
+            ],
+            [
+                'id' => 5,
+                'name' => 'Lab Mac',
+                'description' => '35 Mac Mini for programming on Xcode'
+            ],
+            [
+                'id' => 6,
+                'name' => 'Office chairs',
+                'description' => 'Office chairs for more comfort'
+            ],
+            [
+                'id' => 7,
+                'name' => 'Basic chairs'
+            ],
+            [
+                'id' => 8,
+                'name' => 'Big Tables',
+                'description' => 'Tables for 8 persons'
+            ],
+            [
+                'id' => 9,
+                'name' => 'Basic tables',
+                'description' => 'Table for 1 or 2 persons'
+            ],
+            [
+                'id' => 10,
+                'name' => 'Phone',
+                'description' => 'Place next to the front door'
+            ]
         ];
         parent::init();
     }

@@ -45,10 +45,76 @@ class ProductsFixture extends TestFixture
         $this->records = [
             [
                 'id' => 1,
-                'name' => 'Lorem ipsum dolor sit amet',
-                'platform' => 'Lorem ipsum dolor sit amet',
-                'description' => 'Lorem ipsum dolor sit amet'
+                'name' => 'MS Access',
+                'platform' => 'Mac',
+                'description' => 'Database software developed by Microsoft, for Mac.'
             ],
+            [
+                'id' => 2,
+                'name' => 'MS Excel',
+                'platform' => 'Mac',
+                'description' => 'Spreadsheet software developed by Microsoft, for Mac.'
+            ],
+            [
+                'id' => 3,
+                'name' => 'MS PowerPoint',
+                'platform' => 'Mac',
+                'description' => 'Slideshow software developed by Microsoft, for Mac.'
+            ],
+            [
+                'id' => 4,
+                'name' => 'MS Word',
+                'platform' => 'Mac',
+                'description' => 'Document writing software developed by Microsoft, for Mac.'
+            ],
+            [
+                'id' => 5,
+                'name' => 'MS Access',
+                'platform' => 'Windows 10',
+                'description' => 'Database software developed by Microsoft, for Windows 10.'
+            ],
+            [
+                'id' => 6,
+                'name' => 'MS Excel',
+                'platform' => 'Windows 10',
+                'description' => 'Spreadsheet software developed by Microsoft, for Windows 10.'
+            ],
+            [
+                'id' => 7,
+                'name' => 'MS PowerPoint',
+                'platform' => 'Windows 10',
+                'description' => 'Slideshow software developed by Microsoft, for Windows 10.'
+            ],
+            [
+                'id' => 8,
+                'name' => 'MS Word',
+                'platform' => 'Windows 10',
+                'description' => 'Document writing software developed by Microsoft, for Windows 10.'
+            ],
+            [
+                'id' => 9,
+                'name' => 'Mockups',
+                'platform' => 'Mac',
+                'description' => 'Mockup software developed by Balsamiq, for Mac.'
+            ],
+            [
+                'id' => 10,
+                'name' => 'Wireframes',
+                'platform' => 'Mac',
+                'description' => 'Wireframing software developed by Balsamiq, for Mac.'
+            ],
+            [
+                'id' => 11,
+                'name' => 'Mockups',
+                'platform' => 'Windows 10',
+                'description' => 'Mockup software developed by Balsamiq, for Windows 10.'
+            ],
+            [
+                'id' => 12,
+                'name' => 'Wireframes',
+                'platform' => 'Windows 10',
+                'description' => 'Wireframing software developed by Balsamiq, for Windows 10.'
+            ]
         ];
         parent::init();
     }

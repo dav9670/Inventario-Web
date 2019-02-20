@@ -45,9 +45,63 @@ class CategoriesFixture extends TestFixture
         $this->records = [
             [
                 'id' => 1,
-                'name' => 'Lorem ipsum dolor sit amet',
-                'description' => 'Lorem ipsum dolor sit amet',
-                'hourly_rate' => 1
+                'name' => 'Computer',
+                'description' => 'An electronical device now use in everyday life.',
+                'hourly_rate' => 15.20
+            ],
+            [
+                'id' => 2,
+                'name' => 'Phone',
+                'description' => 'Used to call someone, phone is now more a micro computer than a phone.',
+                'hourly_rate' => 13.33
+            ],
+            [
+                'id' => 3,
+                'name' => 'Books',
+                'description' => 'Yes books still exists.',
+                'hourly_rate' => 5.13
+            ],
+            [
+                'id' => 4,
+                'name' => 'Electronic',
+                'description' => 'All devices that use electronical components.',
+                'hourly_rate' => 21.36
+            ],
+            [
+                'id' => 5,
+                'name' => 'Electric',
+                'description' => 'Use electricity to function',
+                'hourly_rate' => 15.20
+            ],
+            [
+                'id' => 6,
+                'name' => 'Manual',
+                'description' => 'Must be used through human strength',
+                'hourly_rate' => 7.00
+            ],
+            [
+                'id' => 7,
+                'name' => 'Wireless',
+                'description' => 'Uses a battery, can be recharged',
+                'hourly_rate' => 10.50
+            ],
+            [
+                'id' => 8,
+                'name' => 'Wired',
+                'description' => 'Must be plugged into an outlet to function',
+                'hourly_rate' => 5.00
+            ],
+            [
+                'id' => 9,
+                'name' => '4K',
+                'description' => 'Screen resolution of 3840 x 2160 pixels',
+                'hourly_rate' => 14.00
+            ],
+            [
+                'id' => 10,
+                'name' => 'RGB',
+                'description' => 'Reconfigurable lighting',
+                'hourly_rate' => 2.00
             ],
         ];
         parent::init();

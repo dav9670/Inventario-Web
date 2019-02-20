@@ -44,9 +44,53 @@ class SkillsFixture extends TestFixture
         $this->records = [
             [
                 'id' => 1,
-                'name' => 'Lorem ipsum dolor sit amet',
-                'description' => 'Lorem ipsum dolor sit amet'
+                'name' => 'Html',
+                'description' => 'Hypertext Markup Language. Used to make the graphic structure of a website.'
             ],
+            [
+                'id' => 2,
+                'name' => 'Javascript',
+                'description' => 'Scripting language used mainly in web development. Can also be used to develop desktop applications.'
+            ],
+            [
+                'id' => 3,
+                'name' => 'Swift',
+                'description' => 'Successor to Objective C, used to develop inside the MacOS / iOS environment.'
+            ],
+            [
+                'id' => 4,
+                'name' => 'Php',
+                'description' => 'Porgramming language used in website backend.'
+            ],
+            [
+                'id' => 5,
+                'name' => 'Electrical engineering'
+            ],
+            [
+                'id' => 6,
+                'name' => 'First aid',
+                'description' => 'Being able to react in an emergency situation involving bodily harm'
+            ],
+            [
+                'id' => 7,
+                'name' => 'Chemistry',
+                'description' => 'The science of reactions that occurs between different elements'
+            ],
+            [
+                'id' => 8,
+                'name' => 'Haskell',
+                'description' => 'Hypertext Markup Language. Used to make the graphic structure of a website.'
+            ],
+            [
+                'id' => 9,
+                'name' => 'Painting',
+                'description' => 'Drawing using paint'
+            ],
+            [
+                'id' => 10,
+                'name' => 'Physics',
+                'description' => 'The science of forces'
+            ]
         ];
         parent::init();
     }
