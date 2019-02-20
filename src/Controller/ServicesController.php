@@ -55,17 +55,31 @@ class ServicesController extends AppController
     public function add()
     {
         $service = $this->Services->newEntity();
+        $success = false;
         if ($this->request->is('post')) {
             $service = $this->Services->patchEntity($service, $this->request->getData());
             if ($this->Services->save($service)) {
-                $this->Flash->success(__('The service has been saved.'));
+                if($this->isApi()){
+                    $success = true;
+                }else {
+                    $this->Flash->success(__('The service has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                    return $this->redirect(['action' => 'index']);
+                }
+            } else if($this->isApi()){
+                $success = false;
+            }else {
+                $this->Flash->error(__('The service could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The service could not be saved. Please, try again.'));
         }
-        $rooms = $this->Services->Rooms->find('list', ['limit' => 200]);
-        $this->set(compact('service', 'rooms'));
+
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        }else {
+            $rooms = $this->Services->Rooms->find('list', ['limit' => 200]);
+            $this->set(compact('service', 'rooms'));
+        }
     }
 
     /**
