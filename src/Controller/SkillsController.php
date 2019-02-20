@@ -44,6 +44,7 @@ class SkillsController extends AppController
         ]);
 
         $this->set('skill', $skill);
+        $this->set('_serialize', 'skill');
     }
 
     /**
@@ -54,17 +55,30 @@ class SkillsController extends AppController
     public function add()
     {
         $skill = $this->Skills->newEntity();
+        $success = false;
         if ($this->getRequest()->is('post')) {
             $skill = $this->Skills->patchEntity($skill, $this->getRequest()->getData());
             if ($this->Skills->save($skill)) {
-                $this->Flash->success(__('The skill has been saved.'));
+                if($this->isApi()){
+                    $success = true;
+                } else {
+                    $this->Flash->success(__('The skill has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                    return $this->redirect(['action' => 'index']);
+                }
+            } else if($this->isApi()){
+                $success = false;
+            } else {
+                $this->Flash->error(__('The skill could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The skill could not be saved. Please, try again.'));
         }
-        $mentors = $this->Skills->Mentors->find('list', ['limit' => 200]);
-        $this->set(compact('skill', 'mentors'));
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        } else {
+            $mentors = $this->Skills->Mentors->find('list', ['limit' => 200]);
+            $this->set(compact('skill', 'mentors'));
+        }
     }
 
     /**
@@ -82,14 +96,26 @@ class SkillsController extends AppController
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             $skill = $this->Skills->patchEntity($skill, $this->getRequest()->getData());
             if ($this->Skills->save($skill)) {
-                $this->Flash->success(__('The skill has been saved.'));
+                if($this->isApi()){
+                    $success = true;
+                } else {
+                    $this->Flash->success(__('The skill has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                    return $this->redirect(['action' => 'index']);
+                }
+            } else if($this->isApi()){
+                $success = false;
+            } else {
+                $this->Flash->error(__('The skill could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The skill could not be saved. Please, try again.'));
         }
-        $mentors = $this->Skills->Mentors->find('list', ['limit' => 200]);
-        $this->set(compact('skill', 'mentors'));
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        } else {
+            $mentors = $this->Skills->Mentors->find('list', ['limit' => 200]);
+            $this->set(compact('skill', 'mentors'));
+        }
     }
 
     /**
@@ -129,35 +155,72 @@ class SkillsController extends AppController
     {
         $this->getRequest()->allowMethod(['post', 'delete']);
         $skill = $this->Skills->get($id);
+        $success = false;
         if ($this->Skills->delete($skill)) {
-            $this->Flash->success(__('The skill has been deleted.'));
+            if($this->isApi()){
+                $success = true;
+            } else {
+                $this->Flash->success(__('The skill has been deleted.'));
+            }
         } else {
-            $this->Flash->error(__('The skill could not be deleted. Please, try again.'));
+            if($this->isApi()){
+                $success = false;
+            } else {
+                $this->Flash->error(__('The skill could not be deleted. Please, try again.'));
+            }
         }
 
-        return $this->redirect(['action' => 'index']);
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        } else {
+            return $this->redirect(['action' => 'index']);
+        }
     }
 
     public function unlink()
     {
         $this->getRequest()->allowMethod(['post', 'delete']);
-        $skill = $this->Skills->get($this->getRequest()->getQuery('skill'));
-        $mentor = $this->Skills->Mentors->get($this->getRequest()->getQuery('mentor'));
+
+        $skill = "";
+        $mentor = "";
+        if($this->isApi()){
+            $jsonData = $this->getRequest()->input('json_decode', true);
+            $skill = $this->Services->get($jsonData['skill']);
+            $mentor = $this->Services->Rooms->get($jsonData['mentor']);
+        } else {
+            $skill = $this->Skills->get($this->getRequest()->getQuery('skill'));
+            $mentor = $this->Skills->Mentors->get($this->getRequest()->getQuery('mentor'));
+        }
+        
 
         if ($this->Skills->Mentors->unlink($skill, [$mentor])) {
-            $this->Flash->success(__('The association has been deleted.'));
+            if($this->isApi()){
+                $success = true;
+            } else {
+                $this->Flash->success(__('The association has been deleted.'));
+            }
         } else {
-            $this->Flash->error(__('The association could not be deleted. Please, try again.'));
+            if($this->isApi()){
+                $success = false;
+            } else {
+                $this->Flash->error(__('The association could not be deleted. Please, try again.'));
+            }
         }
 
-        return $this->redirect(['action' => 'consult', $skill->id]);
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        } else {
+            return $this->redirect(['action' => 'consult', $skill->id]);
+        }
     }
 
     public function search()
     {   
         if($this->isApi()){
             $this->getRequest()->allowMethod('post');
-        }else {
+        } else {
             $this->getRequest()->allowMethod('ajax');
         }
    
