@@ -35,7 +35,11 @@ class Service extends Entity
     protected function _getRoomCount()
     {
         TableRegistry::get($this->getSource())->loadInto($this, ['Rooms']);
-        return count($this->rooms);
+        if (is_array($this->rooms))
+        {
+            return count($this->rooms);
+        }
+        return 0;
     }
 
     protected $_virtual = ['room_count'];
