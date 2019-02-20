@@ -2,6 +2,7 @@
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use Cake\ORM\TableRegistry;
 
 /**
  * Equipment Entity
@@ -38,5 +39,16 @@ class Equipment extends Entity
         'categories' => true
     ];
 
+    protected function _getAvailable()
+    {
+        $loans = TableRegistry::get('Loans');
+        $myloans = $loans->find('all', ['contains' => ['Equipments']])
+            ->where('Loans.item_id = :id and Loans.start_time <= NOW() and Loans.returned is not null')
+            ->bind(':id', $this->id);
+        $nbloans = $myloans->count();
+        
+        return $nbloans > 0;
+    }
 
+    protected $_virtual = ['available'];
 }
