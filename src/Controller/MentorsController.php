@@ -177,6 +177,7 @@ class MentorsController extends AppController
                 $query
                     ->where(["match (Skills.name, Skills.description) against(:search in boolean mode)"])
                     ->bind(":search", $keyword . '*', 'string');
+                debug($query->sql());
             }
             if($search_mentors && $search_skills)
             {
