@@ -160,20 +160,34 @@ class MentorsController extends AppController
         }
         else
         {
-            if($search_mentors)
+            if($search_mentors && $search_skills || $this->isApi())
+            {
+                $queryMentors = $this->Mentors->find('all')
+                    ->where(["match (Mentors.email, Mentors.first_name, Mentors.last_name, Mentors.description) against(:search in boolean mode)"])
+                    ->bind(":search", $keyword . '*', 'string');
+                $querySkills = $this->Mentors->find('all')
+                    ->innerJoinWith('Skills')
+                    ->where(["match (Skills.name, Skills.description) against(:search in boolean mode)"])
+                    ->bind(":search", $keyword . '*', 'string');
+
+                $queryMentors->union($querySkills);
+                $query = $queryMentors;
+            }
+            else if($search_mentors)
             {
                 $query = $this->Mentors->find('all')
                     ->where(["match (Mentors.email, Mentors.first_name, Mentors.last_name, Mentors.description) against(:search in boolean mode)"])
                     ->bind(":search", $keyword . '*', 'string');
             }
-
-            if($search_skills)
+            else if($search_skills)
             {
                 $query = $this->Mentors->find('all')
                     ->innerJoinWith('Skills')
                     ->where(["match (Skills.name, Skills.description) against(:search in boolean mode)"])
                     ->bind(":search", $keyword . '*', 'string');
             }
+
+            
         }
 
         $query->order([$sort_field => $sort_dir]);
