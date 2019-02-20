@@ -47,7 +47,7 @@ class Equipment extends Entity
             ->bind(':id', $this->id);
         $nbloans = $myloans->count();
         
-        return $nbloans > 0;
+        return $nbloans > 0 && is_null($this->deleted);
     }
 
     protected $_virtual = ['available'];
