@@ -37,4 +37,6 @@ class Equipment extends Entity
         'deleted' => true,
         'categories' => true
     ];
+
+
 }

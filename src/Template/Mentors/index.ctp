@@ -12,10 +12,10 @@
     <a href="#" onclick="toggle_visibility('hid');"><?= __("Filters")?></a>
     <div id="hid" class="hidden" >
         <form action="/action_page.php">
-            <input type="checkbox" name="Field" value="available" checked>Search Available
-            <input type="checkbox" name="Field"  value="mentor" checked>Search by Mentors<br>
-            <input type="checkbox" name="Field"  value="unavailable" checked>Search Unavailable
-            <input type="checkbox" name="Field"  value="skills" >Search by Skills<br>
+            <input type="checkbox" name="FieldAvai" value="available" checked>Search Available
+            <input type="checkbox" name="FieldLabel"  value="mentor" checked>Search by Mentors<br>
+            <input type="checkbox" name="FieldAvai"  value="unavailable" checked>Search Unavailable
+            <input type="checkbox" name="FieldLabel"  value="skills" >Search by Skills<br>
         </form>
     </div>
 
@@ -74,15 +74,21 @@
         function searchMentors( keyword ){
             var data = keyword;
 
-            var values = $("input[name='Field']:checked")
+            //récupère les valeur des checkbox available et unavailable si elles sont cochées.
+            var values = $("input[name='FieldAvai']:checked")
+                .map(function(){return $(this).val();}).get();
+            var jsonAvai = JSON.stringify(values);
+
+            //récupère les valeur des checkbox mentors et competencies si elles sont cochées.
+            var value = $("input[name='FieldLabel']:checked")
                 .map(function(){return $(this).val();}).get();
             
-            var json = JSON.stringify(values);
+            var jsonLabel = JSON.stringify(value);
 
             $.ajax({
                     method: 'get',
-                    url : "/mentors/search.json" + params,
-                    data: {keyword:data, checked:checked},
+                    url : "/mentors/search.json",
+                    data: {keyword:data, fieldsAvai:jsonAvai, fieldsLabel:jsonLabel},
                     success: function( response ){
                         var table = $("#table tbody");
                         table.empty();

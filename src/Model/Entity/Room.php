@@ -37,4 +37,6 @@ class Room extends Entity
         'deleted' => true,
         'services' => true
     ];
+
+
 }

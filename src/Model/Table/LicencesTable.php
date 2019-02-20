@@ -46,6 +46,12 @@ class LicencesTable extends Table
             'targetForeignKey' => 'product_id',
             'joinTable' => 'licences_products'
         ]);
+
+        $this->hasMany('Loans', [
+                'className' => 'Loans', 
+                'foreignKey' => 'item_id', 
+                'conditions' => ['Loans.item_type' => 'Licences']
+        ]);
     }
 
     /**

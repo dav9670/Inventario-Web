@@ -46,6 +46,12 @@ class MentorsTable extends Table
             'targetForeignKey' => 'skill_id',
             'joinTable' => 'mentors_skills'
         ]);
+
+        $this->hasMany('Loans', [
+                'className' => 'Loans', 
+                'foreignKey' => 'item_id', 
+                'conditions' => ['Loans.item_type' => 'Mentors']
+        ]);
     }
 
     /**

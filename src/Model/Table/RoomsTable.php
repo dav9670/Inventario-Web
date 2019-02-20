@@ -46,6 +46,12 @@ class RoomsTable extends Table
             'targetForeignKey' => 'service_id',
             'joinTable' => 'rooms_services'
         ]);
+
+        $this->hasMany('Loans', [
+                'className' => 'Loans', 
+                'foreignKey' => 'item_id', 
+                'conditions' => ['Loans.item_type' => 'Rooms']
+        ]);
     }
 
     /**
