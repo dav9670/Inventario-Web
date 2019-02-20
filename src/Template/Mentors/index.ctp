@@ -90,9 +90,8 @@
                         let last_nameCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.last_name + "</a></td>";
                         let descriptionCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.description + "</a></td>";
                         let skillsCell = "<td><a href='/mentors/" + elem.id + "'>" + "insert skills" + "</a></td>";
-                        let availableCell = "<td><a href='/mentors/" + elem.id + "'>" + "available here" + "</a></td>";
                         //let skillsCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.skills_list + "</a></td>";
-                        //let availableCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.available + "</a></td>";
+                        let availableCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.available + "</a></td>";
                         
                         let actionsCell = "<td class=\"actions\">";
                         var deleteLink = "";

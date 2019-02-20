@@ -153,18 +153,37 @@ class MentorsController extends AppController
             $sort_dir = $jsonData['sort_dir'];
         }
         
-        if($keyword == '')
+
+        if($search_mentors)
         {
             $query = $this->Mentors->find('all');
         }
-        else
+
+        if($search_skills)
         {
-            $query = $this->Mentors->find('all')
-                ->where(["match (email, first_name, last_name, description) against(:search in boolean mode)"])
-                ->bind(":search", $keyword . '*', 'string');
+            $query = $this->Mentors->find('all', ['contain' => ['Skills']]);
         }
 
-        
+        if($keyword != '')
+        {
+            if($search_mentors)
+            {
+                $query
+                    ->where(["match (Mentors.email, Mentors.first_name, Mentors.last_name, Mentors.description) against(:search in boolean mode)"])
+                    ->bind(":search", $keyword . '*', 'string');
+            }
+            if($search_skills)
+            {
+                $query
+                    ->where(["match (Skills.name, Skills.description) against(:search in boolean mode)"])
+                    ->bind(":search", $keyword . '*', 'string');
+            }
+            if($search_mentors && $search_skills)
+            {
+                //union des 2
+            }
+        }
+
 
         $query->order([$sort_field => $sort_dir]);
         
