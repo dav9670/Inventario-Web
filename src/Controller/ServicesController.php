@@ -55,17 +55,31 @@ class ServicesController extends AppController
     public function add()
     {
         $service = $this->Services->newEntity();
+        $success = false;
         if ($this->request->is('post')) {
             $service = $this->Services->patchEntity($service, $this->request->getData());
             if ($this->Services->save($service)) {
-                $this->Flash->success(__('The service has been saved.'));
+                if($this->isApi()){
+                    $success = true;
+                }else {
+                    $this->Flash->success(__('The service has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                    return $this->redirect(['action' => 'index']);
+                }
+            } else if($this->isApi()){
+                $success = false;
+            }else {
+                $this->Flash->error(__('The service could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The service could not be saved. Please, try again.'));
         }
-        $rooms = $this->Services->Rooms->find('list', ['limit' => 200]);
-        $this->set(compact('service', 'rooms'));
+
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        }else {
+            $rooms = $this->Services->Rooms->find('list', ['limit' => 200]);
+            $this->set(compact('service', 'rooms'));
+        }
     }
 
     /**
@@ -104,13 +118,27 @@ class ServicesController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $service = $this->Services->get($id);
+        $success = false;
         if ($this->Services->delete($service)) {
-            $this->Flash->success(__('The service has been deleted.'));
+            if($this->isApi()){
+                $success = true;
+            }else {
+                $this->Flash->success(__('The service has been deleted.'));
+            }
         } else {
-            $this->Flash->error(__('The service could not be deleted. Please, try again.'));
+            if($this->isApi()){
+                $success = false;
+            }else {
+                $this->Flash->error(__('The service could not be deleted. Please, try again.'));
+            }
         }
 
-        return $this->redirect(['action' => 'index']);
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        }else {
+            return $this->redirect(['action' => 'index']);
+        }
     }
 
     public function isAuthorized($user)
