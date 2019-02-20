@@ -163,6 +163,19 @@
             $('#search').keyup();
          });
 
+         $('#FieldAvailable').click( function(e) {
+            $('#search').keyup();
+         });
+         $('#FieldUnavailable').click( function(e) {
+            $('#search').keyup();
+         });
+         $('#FieldMentors').click( function(e) {
+            $('#search').keyup();
+         });
+         $('#FieldSkills').click( function(e) {
+            $('#search').keyup();
+         });
+
          $('#search').keyup();
     });
 
