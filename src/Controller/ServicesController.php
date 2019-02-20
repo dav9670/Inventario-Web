@@ -154,6 +154,44 @@ class ServicesController extends AppController
         }
     }
 
+    public function unlink()
+    {
+        $this->getRequest()->allowMethod(['post', 'delete']);
+
+        $service = "";
+        $room = "";
+        $success = false;
+        if ($this->getRequest()->is('ajax')){
+            $service = $this->Services->get($this->getRequest()->getQuery('service'));
+            $room = $this->Services->Rooms->get($this->getRequest()->getQuery('room'));
+        } else if ($this->getRequest()->is('post')){
+            $jsonData = $this->getRequest()->input('json_decode', true);
+            $service = $this->Services->get($jsonData['service']);
+            $room = $this->Services->Rooms->get($jsonData['room']);
+        }
+
+        if ($this->Services->Rooms->unlink($service, [$room])) {
+            if($this->isApi()){
+                $success = true;
+            }else {
+                $this->Flash->success(__('The association has been deleted.'));
+            }
+        } else {
+            if($this->isApi()){
+                $success = false;
+            }else {
+                $this->Flash->error(__('The association could not be deleted. Please, try again.'));
+            }
+        }
+
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        }else {
+            return $this->redirect(['action' => 'consult', $skill->id]);
+        }
+    }
+
     public function search()
     {
         if($this->isApi()){
