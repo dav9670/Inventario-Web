@@ -39,4 +39,5 @@ class Loan extends Entity
         'user' => true,
         'item' => true
     ];
+
 }

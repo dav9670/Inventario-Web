@@ -46,6 +46,12 @@ class EquipmentsTable extends Table
             'targetForeignKey' => 'category_id',
             'joinTable' => 'equipments_categories'
         ]);
+
+        $this->hasMany('Loans', [
+                'className' => 'Loans', 
+                'foreignKey' => 'item_id', 
+                'conditions' => ['Loans.item_type' => 'Equipments']
+        ]);
     }
 
     /**

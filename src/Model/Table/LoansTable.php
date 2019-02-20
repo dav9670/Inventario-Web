@@ -42,6 +42,26 @@ class LoansTable extends Table
             'foreignKey' => 'user_id',
             'joinType' => 'INNER'
         ]);
+
+        $this->belongsTo('Mentors', [
+                'foreignKey' => 'item_id', 
+                'conditions' => ['Loans.item_type' => 'Mentors']
+            ]);
+        
+            $this->belongsTo('Licences', [
+                'foreignKey' => 'item_id', 
+                'conditions' => ['Loans.item_type' => 'Licences']
+            ]);
+
+            $this->belongsTo('Rooms', [
+                'foreignKey' => 'item_id', 
+                'conditions' => ['Loans.item_type' => 'Rooms']
+            ]);
+
+            $this->belongsTo('Users', [
+                'foreignKey' => 'item_id', 
+                'conditions' => ['Loans.item_type' => 'Equipments']
+            ]);
         /*$this->belongsTo('Items', [
             'foreignKey' => 'item_id',
             'joinType' => 'INNER'
