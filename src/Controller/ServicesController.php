@@ -13,6 +13,12 @@ use App\Controller\AppController;
 class ServicesController extends AppController
 {
 
+    public function initialize()
+    {
+        parent::initialize();
+        $this->loadComponent('Paginator');
+    }
+
     /**
      * Index method
      *
@@ -20,14 +26,7 @@ class ServicesController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'order' => [
-              'name' => 'asc'
-            ]
-        ];
-        $services = $this->paginate($this->Services);
-
-        $this->set(compact('services'));
+        $this->set('services', $this->Services->find('all'));
         $this->set('_serialize', ['services']);
     }
 
@@ -45,6 +44,7 @@ class ServicesController extends AppController
         ]);
 
         $this->set('service', $service);
+        $this->set('_serialize', ['services']);
     }
 
     /**
@@ -56,8 +56,8 @@ class ServicesController extends AppController
     {
         $service = $this->Services->newEntity();
         $success = false;
-        if ($this->request->is('post')) {
-            $service = $this->Services->patchEntity($service, $this->request->getData());
+        if ($this->getRequest()->is('post')) {
+            $service = $this->Services->patchEntity($service, $this->getRequest()->getData());
             if ($this->Services->save($service)) {
                 if($this->isApi()){
                     $success = true;
@@ -94,8 +94,8 @@ class ServicesController extends AppController
         $service = $this->Services->get($id, [
             'contain' => ['Rooms']
         ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $service = $this->Services->patchEntity($service, $this->request->getData());
+        if ($this->getRequest()->is(['patch', 'post', 'put'])) {
+            $service = $this->Services->patchEntity($service, $this->getRequest()->getData());
             if ($this->Services->save($service)) {
                 $this->Flash->success(__('The service has been saved.'));
 
@@ -116,7 +116,7 @@ class ServicesController extends AppController
      */
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
+        $this->getRequest()->allowMethod(['post', 'delete']);
         $service = $this->Services->get($id);
         $success = false;
         if ($this->Services->delete($service)) {
