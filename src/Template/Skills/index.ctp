@@ -31,36 +31,13 @@
             <tr>
                 <th scope="col"><a id='name_sort' class='asc'><?= __("Name") ?></a></th>
                 <th scope="col"><a id='description_sort'><?= __("Description") ?></a></th>
-                <th scope="col"><a id='mentor_count_sort'><?= __("Mentor count") ?></a></th>
+                <th scope="col"><?= __("Mentor count") ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($skills as $skill): ?>
-                <tr class='clickable-row' data-url='/skills/<?= h($skill->id) ?>'>
-                    <td><a href='/skills/<?= h($skill->id) ?>'><?= h($skill->name) ?></a></td>
-                    
-                    <td><a href='/skills/<?= h($skill->id) ?>'><?= h($skill->description) ?></a></td>
-
-                    <td><a href='/skills/<?= h($skill->id) ?>'><?= h($skill->mentor_count) ?></a></td>
-
-                    <td class="actions">
-                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $skill->id], ['confirm' => __('Are you sure you want to delete # {0}?', $skill->id)]) ?>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
         </tbody>
     </table>
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
-        </ul>
-        <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
-    </div>
 </div>
 
 <script>
@@ -124,9 +101,11 @@
             sort_setter('description');
             $('#search').keyup();
          });
-         $('#mentor_count_sort').click( function(e) {
+         /*$('#mentor_count_sort').click( function(e) {
             sort_setter('mentor_count');
             $('#search').keyup();
-         });
+         });*/
+
+         $('#search').keyup();
     });
 </script>

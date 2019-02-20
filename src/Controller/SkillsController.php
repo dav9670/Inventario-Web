@@ -12,20 +12,6 @@ use App\Controller\AppController;
  */
 class SkillsController extends AppController
 {
-    public $paginate = [
-        'Skills' => [
-            'limit' => 15,
-            'order' => [
-                'Skills.name' => 'asc'
-            ]
-        ],
-        'Mentors' => [
-            'limit' => 15,
-            'order' => [
-                'Mentors.email' => 'asc'
-            ]
-        ]
-    ];
 
     public function initialize()
     {
@@ -40,9 +26,7 @@ class SkillsController extends AppController
      */
     public function index()
     {
-        $skills = $this->paginate($this->Skills);
-
-        $this->set(compact('skills'));
+        $this->set('skills', $this->Skills->find('all'));
         $this->set('_serialize', ['skills']);
     }
 
