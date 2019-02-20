@@ -58,9 +58,15 @@
                         let descriptionCell = "<td><a href='/skills/" + elem.id + "'>" + elem.description + "</a></td>";
                         let mentorCountCell = "<td><a href='/skills/" + elem.id + "'>" + elem.mentor_count + "</a></td>";
                         let actionsCell = "<td class=\"actions\">";
-
-                        let deleteLink = '<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete # {0}?', -1)]) ?>';
-                        deleteLink = deleteLink.replace(/-1/g, elem.id);
+                        var deleteLink = "";
+                        if(elem.mentor_count == 0){
+                            deleteLink = '<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete {0}?', -1)]) ?>';
+                        } else {
+                            deleteLink = '<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete {0}? {1} items are associated with it.', -1, -2)]) ?>';
+                            deleteLink = deleteLink.replace(/-2/g, elem.mentor_count);
+                        }
+                         
+                        deleteLink = deleteLink.replace(/-1/g, elem.name);
                         
                         actionsCell = actionsCell.concat(deleteLink);
                         actionsCell = actionsCell.concat("</td>");

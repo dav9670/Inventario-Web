@@ -4,8 +4,10 @@
  * @var \App\Model\Entity\Skill $skill
  */
 ?>
-<div class="skills form large-12 medium-11 columns content"> 
+<div class="skills form large-12 medium-11 columns content">
     <?= $this->Form->create($skill, ['id' => 'skill_form']) ?>
+    <button type="button" class="right" id="viewButton" style="width: 75px; text-align: center; padding: 10px;" onClick='setReadOnly(true)' hidden="hidden"><?=__('View')?></button>
+    <button type="button" class="right" id="editButton" style="width: 75px; text-align: center; padding: 10px;" onClick='setReadOnly(false)'><?=__('Edit')?></button> 
     <fieldset>
         <legend><?= __('Skill') ?></legend>
         <?php
@@ -13,8 +15,7 @@
             echo $this->Form->control('description', ['readOnly' => 'readOnly']);
         ?>
     </fieldset>
-    <button type="button" id="viewButton" onClick='setReadOnly(true)' hidden="hidden"><?=__('View')?></button>
-    <button type="button" id="editButton" onClick='setReadOnly(false)'><?=__('Edit')?></button>
+    <?= $this->Html->link('Delete skill', ['controller' => 'Skills', 'action' => 'delete', $skill->id], ['confirm' => __('Are you sure you want to delete {0}?', $skill->name)]);?>
     <?= $this->Form->button(__('Submit'), ['id' => 'submit', 'hidden']) ?>
     <?= $this->Form->end() ?>
 
