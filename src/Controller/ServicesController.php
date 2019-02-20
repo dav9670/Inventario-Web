@@ -26,7 +26,7 @@ class ServicesController extends AppController
      */
     public function index()
     {
-        $this->set('services', $this->Services->find('all'));
+        $this->set('services', $this->Services->find('all')->order(['name' => 'asc']));
         $this->set('_serialize', ['services']);
     }
 
@@ -94,17 +94,30 @@ class ServicesController extends AppController
         $service = $this->Services->get($id, [
             'contain' => ['Rooms']
         ]);
+        $success = false;
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             $service = $this->Services->patchEntity($service, $this->getRequest()->getData());
             if ($this->Services->save($service)) {
-                $this->Flash->success(__('The service has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+                if($this->isApi()){
+                    $success = true;
+                }else {
+                    $this->Flash->success(__('The service has been saved.'));
+    
+                    return $this->redirect(['action' => 'index']);
+                }
+            }else if($this->isApi()){
+                $success = false;
+            }else {
+                $this->Flash->error(__('The service could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The service could not be saved. Please, try again.'));
         }
-        $rooms = $this->Services->Rooms->find('list', ['limit' => 200]);
-        $this->set(compact('service', 'rooms'));
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        }else {
+            $rooms = $this->Services->Rooms->find('list', ['limit' => 200]);
+            $this->set(compact('service', 'rooms'));
+        }
     }
 
     /**

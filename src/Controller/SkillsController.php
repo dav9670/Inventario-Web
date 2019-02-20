@@ -26,7 +26,7 @@ class SkillsController extends AppController
      */
     public function index()
     {
-        $this->set('skills', $this->Skills->find('all'));
+        $this->set('skills', $this->Skills->find('all')->order(['name' => 'asc']));
         $this->set('_serialize', ['skills']);
     }
 

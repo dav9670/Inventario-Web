@@ -91,7 +91,15 @@
                         let descriptionCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.description + "</a></td>";
                         let skillsCell = "<td><a href='/mentors/" + elem.id + "'>" + "insert skills" + "</a></td>";
                         //let skillsCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.skills_list + "</a></td>";
-                        let availableCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.available + "</a></td>";
+
+                        var imgTag = "";
+                        if (elem.available) {
+                            imgTag = "<img src='/img/good.png' alt='Available' width=20 height=20>";
+                        } else {
+                            imgTag = "<img src='/img/bad.png' alt='Not Available' width=20 height=20>";
+                        }
+                        let availableCell = "<td><a href='/mentors/" + elem.id + "'>" + imgTag + "</a></td>";
+                        
                         
                         let actionsCell = "<td class=\"actions\">";
                         var deleteLink = "";
