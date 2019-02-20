@@ -84,13 +84,22 @@
                     var table = $("#table tbody");
                     table.empty();
                     $.each(response.mentors, function(idx, elem){
-                        let picCell = "<td><a href='/mentors/" + elem.id + "'>" + "insert image here" + "</a></td>";
+                        let pic = "<img src='data:image/png;base64," + elem.image + "' alt='" + elem.first_name + " " + elem.last_name + "' width=100/>";
+                        let picCell = "<td><a href='/mentors/" + elem.id + "'>" + pic + "</a></td>";
+
                         let emailCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.email + "</a></td>";
                         let first_nameCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.first_name + "</a></td>";
                         let last_nameCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.last_name + "</a></td>";
                         let descriptionCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.description + "</a></td>";
-                        let skillsCell = "<td><a href='/mentors/" + elem.id + "'>" + "insert skills" + "</a></td>";
-                        //let skillsCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.skills_list + "</a></td>";
+
+                        var skills_list = "";
+                        var three_skills = elem.skills_list.slice(0,3);
+                        if (elem.skills_list.length > 3) {
+                            skills_list = three_skills.join(", ") + "...";
+                        } else {
+                            skills_list = three_skills.join(", ");
+                        }
+                        let skillsCell = "<td><a href='/mentors/" + elem.id + "'>" + skills_list + "</a></td>";
 
                         var imgTag = "";
                         if (elem.available) {

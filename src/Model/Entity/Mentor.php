@@ -54,5 +54,21 @@ class Mentor extends Entity
         return $nbloans > 0 && is_null($this->deleted);
     }
 
-    protected $_virtual = ['available'];
+    protected function _getSkillsList()
+    {
+        TableRegistry::get($this->getSource())->loadInto($this, ['Skills']);
+        if (is_array($this->skills))
+        {
+            $skillnames = array();
+            foreach ($this->skills as $skill)
+            {
+                $skillnames[] = $skill->name;
+            }
+
+            return $skillnames;
+        }
+        return array();
+    }
+
+    protected $_virtual = ['available', 'skills_list'];
 }
