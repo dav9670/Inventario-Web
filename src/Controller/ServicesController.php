@@ -44,7 +44,7 @@ class ServicesController extends AppController
         ]);
 
         $this->set('service', $service);
-        $this->set('_serialize', ['services']);
+        $this->set('_serialize', ['service']);
     }
 
     /**
@@ -143,7 +143,6 @@ class ServicesController extends AppController
 
     public function search()
     {
-        
         if($this->isApi()){
             $this->getRequest()->allowMethod('post');
         }else {
