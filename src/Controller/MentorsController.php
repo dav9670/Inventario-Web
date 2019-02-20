@@ -130,10 +130,10 @@ class MentorsController extends AppController
         $sort_field = "";
         $sort_dir = "";
 
-        $search_available = "";
-        $search_unavailable = "";
-        $search_mentors = "";
-        $search_skills = "";
+        $search_available = false;
+        $search_unavailable = false;
+        $search_mentors = false;
+        $search_skills = false;
 
         if ($this->getRequest()->is('ajax')){
             $keyword = $this->getRequest()->getQuery('keyword');
@@ -141,10 +141,10 @@ class MentorsController extends AppController
             $sort_dir = $this->getRequest()->getQuery('sort_dir');
             
             $filters = $this->getRequest()->getQuery('filters');
-            $search_available = $filters['search_available'];
-            $search_unavailable = $filters['search_unavailable'];
-            $search_mentors = $filters['search_mentors'];
-            $search_skills = $filters['search_skills'];
+            $search_available = $filters['search_available'] == 'true';
+            $search_unavailable = $filters['search_unavailable'] == 'true';
+            $search_mentors = $filters['search_mentors'] == 'true';
+            $search_skills = $filters['search_skills'] == 'true';
         
         } else if ($this->getRequest()->is('post')){
             $jsonData = $this->getRequest()->input('json_decode', true);
@@ -153,38 +153,42 @@ class MentorsController extends AppController
             $sort_dir = $jsonData['sort_dir'];
         }
         
-
-        if($search_mentors)
+        if($keyword == '')
         {
             $query = $this->Mentors->find('all');
+            //debug("keyword is empty");
         }
-
-        if($search_skills)
+        else
         {
-            $query = $this->Mentors->find('all', ['contain' => ['Skills']]);
-        }
-
-        if($keyword != '')
-        {
-            if($search_mentors)
+            if($search_mentors && $search_skills || $this->isApi())
             {
-                $query
+                $queryMentors = $this->Mentors->find('all')
+                    ->where(["match (Mentors.email, Mentors.first_name, Mentors.last_name, Mentors.description) against(:search in boolean mode)"])
+                    ->bind(":search", $keyword . '*', 'string');
+                $querySkills = $this->Mentors->find('all')
+                    ->innerJoinWith('Skills')
+                    ->where(["match (Skills.name, Skills.description) against(:search in boolean mode)"])
+                    ->bind(":search", $keyword . '*', 'string');
+
+                $queryMentors->union($querySkills);
+                $query = $queryMentors;
+            }
+            else if($search_mentors)
+            {
+                $query = $this->Mentors->find('all')
                     ->where(["match (Mentors.email, Mentors.first_name, Mentors.last_name, Mentors.description) against(:search in boolean mode)"])
                     ->bind(":search", $keyword . '*', 'string');
             }
-            if($search_skills)
+            else if($search_skills)
             {
-                $query
+                $query = $this->Mentors->find('all')
+                    ->innerJoinWith('Skills')
                     ->where(["match (Skills.name, Skills.description) against(:search in boolean mode)"])
                     ->bind(":search", $keyword . '*', 'string');
-                debug($query->sql());
             }
-            if($search_mentors && $search_skills)
-            {
-                //union des 2
-            }
-        }
 
+            
+        }
 
         $query->order([$sort_field => $sort_dir]);
         
