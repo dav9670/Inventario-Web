@@ -154,12 +154,28 @@ class SkillsController extends AppController
     }
 
     public function search()
-    {
-        $this->getRequest()->allowMethod('ajax');
+    {   
+        if($this->isApi()){
+            $this->getRequest()->allowMethod('post');
+        }else {
+            $this->getRequest()->allowMethod('ajax');
+        }
    
-        $keyword = $this->getRequest()->getQuery('keyword');
-        $sort_field = $this->getRequest()->getQuery('sort_field');
-        $sort_dir = $this->getRequest()->getQuery('sort_dir');
+        $keyword = "";
+        $sort_field = "";
+        $sort_dir = "";
+        
+        if ($this->getRequest()->is('ajax')){
+            $keyword = $this->getRequest()->getQuery('keyword');
+            $sort_field = $this->getRequest()->getQuery('sort_field');
+            $sort_dir = $this->getRequest()->getQuery('sort_dir');
+        } else if ($this->getRequest()->is('post')){
+            $jsonData = $this->getRequest()->input('json_decode', true);
+            $keyword = $jsonData['keyword'];
+            $sort_field = $jsonData['sort_field'];
+            $sort_dir = $jsonData['sort_dir'];
+        }
+        
         if($keyword == '')
         {
             $query = $this->Skills->find('all');

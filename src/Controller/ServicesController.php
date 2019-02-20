@@ -141,6 +141,47 @@ class ServicesController extends AppController
         }
     }
 
+    public function search()
+    {
+        
+        if($this->isApi()){
+            $this->getRequest()->allowMethod('post');
+        }else {
+            $this->getRequest()->allowMethod('ajax');
+        }
+
+        $keyword = "";
+        $sort_field = "";
+        $sort_dir = "";
+        
+        if ($this->getRequest()->is('ajax')){
+            $keyword = $this->getRequest()->getQuery('keyword');
+            $sort_field = $this->getRequest()->getQuery('sort_field');
+            $sort_dir = $this->getRequest()->getQuery('sort_dir');
+        } else if ($this->getRequest()->is('post')){
+            $jsonData = $this->getRequest()->input('json_decode', true);
+            $keyword = $jsonData['keyword'];
+            $sort_field = $jsonData['sort_field'];
+            $sort_dir = $jsonData['sort_dir'];
+        }
+        
+        if($keyword == '')
+        {
+            $query = $this->Services->find('all');
+        }
+        else
+        {
+            $query = $this->Services->find('all')
+                ->where(["match (name, description) against(:search in boolean mode)"])
+                ->bind(":search", $keyword . '*', 'string');
+        }
+
+        $query->order([$sort_field => $sort_dir]);
+        
+        $this->set('services', $this->paginate($query));
+        $this->set('_serialize', ['services']);
+    }
+
     public function isAuthorized($user)
     {
         return $this->Auth->user('admin_status') == 'admin';
