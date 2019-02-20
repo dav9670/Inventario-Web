@@ -20,7 +20,7 @@ class MentorsController extends AppController
      */
     public function index()
     {
-    
+
         $mentors = $this->paginate($this->Mentors);
         $this->set(compact('mentors'));
     }
@@ -135,14 +135,15 @@ class MentorsController extends AppController
         if($keyword == '' && sizeof($fieldAvai) == 2)
         {
             //si les deux available et unavailable sont cochés et que le text est vide on retourne tout.
-            $query = $this->Mentors->find('all');
+            $query = $this->Mentors->find('all')->where(['deleted'=> 'null']);
         }
         elseif($keyword == '' && $fieldAvai[0] == "available")
         {
             //si le text est vide et que available est coché, on retourne les mentors qui n'ont pas de loans en ce moment.
             $query = $this->Mentors->find('all')->matching('Loans', function ($q) {
-                return $q->where(['Loans.start_time <=' => Time::now(), 'Loans.end_time >=' => Time::now()]);
+                return $q->where(['Loans.start_time <=' => Time::now(), 'Loans.end_time >=' => Time::now(),'Loans.deleted'=>'null',]);
            });
+           $query->where(['Mentors.deleted'=>'null']);
         }elseif($keyword == '' && $fieldAvai[0] == "unavailable")
         {
             //si unavailable est coché on retourne les mentors qui ont un loans en ce moment. La query n'est pas fonctionnelle, elle ne retourne pas tous les cas. Voir comment les OR fonctionnent.
