@@ -37,7 +37,11 @@ class Category extends Entity
     protected function _getEquipmentCount()
     {
         TableRegistry::get($this->getSource())->loadInto($this, ['Equipments']);
-        return count($this->equipments);
+        if (is_array($this->equipments))
+        {
+            return count($this->equipments);
+        }
+        return 0;
     }
 
     protected $_virtual = ['equipment_count'];

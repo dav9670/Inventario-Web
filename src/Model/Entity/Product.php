@@ -37,7 +37,11 @@ class Product extends Entity
     protected function _getLicenceCount()
     {
         TableRegistry::get($this->getSource())->loadInto($this, ['Licences']);
-        return count($this->licences);
+        if (is_array($this->licences))
+        {
+            return count($this->licences);
+        }
+        return 0;
     }
 
     protected $_virtual = ['licence_count'];

@@ -20,8 +20,7 @@ class MentorsController extends AppController
      */
     public function index()
     {
-
-        $mentors = $this->paginate($this->Mentors);
+        $mentors = $this->Mentors->find('all');
         $this->set(compact('mentors'));
     }
 
@@ -120,46 +119,73 @@ class MentorsController extends AppController
     public function search()
     {
         $this->request->allowMethod('ajax');
-   
-        $keyword = $this->request->query('keyword');
-        $fieldAvai = json_decode($this->request->query('fieldsAvai'));
-        $fieldLabel = $this->request->query('fieldsLabel');
-        /**
-        * On traite en fonction des paramètres reçu.
-        * fieldAvai correspond aux deux checkbox pour available.
-        * fieldLabel correspond aux checkbox Mentors et Competencies
-        * 
-        * Il faut exclure les mentors qui ont été "supprimés" car ça n'est pas encore implémenté.
-        */
 
-        if($keyword == '' && sizeof($fieldAvai) == 2)
-        {
-            //si les deux available et unavailable sont cochés et que le text est vide on retourne tout.
-            $query = $this->Mentors->find('all')->where(['deleted'=> 'null']);
+        if($this->isApi()){
+            $this->getRequest()->allowMethod('post');
+        }else {
+            $this->getRequest()->allowMethod('ajax');
         }
-        elseif($keyword == '' && $fieldAvai[0] == "available")
-        {
-            //si le text est vide et que available est coché, on retourne les mentors qui n'ont pas de loans en ce moment.
-            $query = $this->Mentors->find('all')->matching('Loans', function ($q) {
-                return $q->where(['Loans.start_time <=' => Time::now(), 'Loans.end_time >=' => Time::now(),'Loans.deleted'=>'null',]);
-           });
-           $query->where(['Mentors.deleted'=>'null']);
-        }elseif($keyword == '' && $fieldAvai[0] == "unavailable")
-        {
-            //si unavailable est coché on retourne les mentors qui ont un loans en ce moment. La query n'est pas fonctionnelle, elle ne retourne pas tous les cas. Voir comment les OR fonctionnent.
-            $query = $this->Mentors->find('all')->matching('Loans', function ($q) {
-                return $q->where(['OR'=>['Loans.start_time >=' => Time::now(), 'Loans.end_time >=' => Time::now()], 'OR' =>['Loans.start_time <=' => Time::now(), 'Loans.end_time <=' => Time::now()]]);
-           });
-           //trouver le moyen de faire un distinct.
+   
+        $keyword = "";
+        $sort_field = "";
+        $sort_dir = "";
+
+        $search_available = "";
+        $search_unavailable = "";
+        $search_mentors = "";
+        $search_skills = "";
+
+        if ($this->getRequest()->is('ajax')){
+            $keyword = $this->getRequest()->getQuery('keyword');
+            $sort_field = $this->getRequest()->getQuery('sort_field');
+            $sort_dir = $this->getRequest()->getQuery('sort_dir');
+            
+            $filters = $this->getRequest()->getQuery('filters');
+            $search_available = $filters['search_available'];
+            $search_unavailable = $filters['search_unavailable'];
+            $search_mentors = $filters['search_mentors'];
+            $search_skills = $filters['search_skills'];
+        
+        } else if ($this->getRequest()->is('post')){
+            $jsonData = $this->getRequest()->input('json_decode', true);
+            $keyword = $jsonData['keyword'];
+            $sort_field = $jsonData['sort_field'];
+            $sort_dir = $jsonData['sort_dir'];
         }
-        else
+        
+
+        if($search_mentors)
         {
-            //si du texte est passé en paramètre on retourne les mentors correspondant idépendament des checkbox
-            //faire en fonction des checkboxes par la suite.
-            $query = $this->Mentors->find('all')
-                ->where(["match (email, first_name, last_name, description) against(:search in boolean mode)"])
-                ->bind(":search", $keyword . '*', 'string');
+            $query = $this->Mentors->find('all');
         }
+
+        if($search_skills)
+        {
+            $query = $this->Mentors->find('all', ['contain' => ['Skills']]);
+        }
+
+        if($keyword != '')
+        {
+            if($search_mentors)
+            {
+                $query
+                    ->where(["match (Mentors.email, Mentors.first_name, Mentors.last_name, Mentors.description) against(:search in boolean mode)"])
+                    ->bind(":search", $keyword . '*', 'string');
+            }
+            if($search_skills)
+            {
+                $query
+                    ->where(["match (Skills.name, Skills.description) against(:search in boolean mode)"])
+                    ->bind(":search", $keyword . '*', 'string');
+            }
+            if($search_mentors && $search_skills)
+            {
+                //union des 2
+            }
+        }
+
+
+        $query->order([$sort_field => $sort_dir]);
         
         $this->set('mentors', $this->paginate($query));
         $this->set('_serialize', ['mentors']);

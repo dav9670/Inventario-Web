@@ -34,10 +34,10 @@
     <a href="#" onclick="toggle_visibility('hid');"><?= __("Filters")?></a>
     <div id="hid" class="hidden" >
         <form action="/action_page.php">
-            <input type="checkbox" name="FieldAvai" value="available" checked>Search Available
-            <input type="checkbox" name="FieldLabel"  value="mentor" checked>Search by Mentors<br>
-            <input type="checkbox" name="FieldAvai"  value="unavailable" checked>Search Unavailable
-            <input type="checkbox" name="FieldLabel"  value="skills" >Search by Skills<br>
+            <input type="checkbox" id="FieldAvailable" checked>Search Available
+            <input type="checkbox" id="FieldMentors" checked>Search by Mentors<br>
+            <input type="checkbox" id="FieldUnavailable" checked>Search Unavailable
+            <input type="checkbox" id="FieldSkills">Search by Skills<br>
         </form>
     </div>
     
@@ -60,28 +60,26 @@
 </div>
 
 <script>
-
-    var sort_field = "name";
+    var sort_field = "email";
     var sort_dir = "asc";
 
     function searchMentors( keyword ){
         var data = keyword;
 
-        //récupère les valeur des checkbox available et unavailable si elles sont cochées.
-        var values = $("input[name='FieldAvai']:checked")
-            .map(function(){return $(this).val();}).get();
-        var jsonAvai = JSON.stringify(values);
-
-        //récupère les valeur des checkbox mentors et competencies si elles sont cochées.
-        var value = $("input[name='FieldLabel']:checked")
-            .map(function(){return $(this).val();}).get();
-        
-        var jsonLabel = JSON.stringify(value);
+        var filters = {
+            search_available: $('#FieldAvailable').is(':checked'),
+            search_unavailable: $('#FieldUnavailable').is(':checked'),
+            search_mentors: $('#FieldMentors').is(':checked'),
+            search_skills: $('#FieldSkills').is(':checked')
+        };
 
         $.ajax({
                 method: 'get',
                 url : "/mentors/search.json",
-                data: {keyword:data, fieldsAvai:jsonAvai, fieldsLabel:jsonLabel, sort_field:sort_field, sort_dir:sort_dir},
+                data: {keyword:data, sort_field:sort_field, sort_dir:sort_dir, filters: filters},
+                complete: function(jq, status){
+                    console.log(status);
+                },
                 success: function( response ){
                     var table = $("#table tbody");
                     table.empty();
@@ -92,9 +90,8 @@
                         let last_nameCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.last_name + "</a></td>";
                         let descriptionCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.description + "</a></td>";
                         let skillsCell = "<td><a href='/mentors/" + elem.id + "'>" + "insert skills" + "</a></td>";
-                        let availableCell = "<td><a href='/mentors/" + elem.id + "'>" + "available here" + "</a></td>";
                         //let skillsCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.skills_list + "</a></td>";
-                        //let availableCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.available + "</a></td>";
+                        let availableCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.available + "</a></td>";
                         
                         let actionsCell = "<td class=\"actions\">";
                         var deleteLink = "";
@@ -129,7 +126,7 @@
     $('document').ready(function(){
          $('#search').keyup(function(){
             var searchkey = $(this).val();
-            searchSkills( searchkey );
+            searchMentors( searchkey );
          });
 
          $('#email_sort').click( function(e) {
@@ -151,8 +148,7 @@
 
          $('#search').keyup();
     });
-</script>
-<script>
+
     function toggle_visibility(id) {
         var e = document.getElementById(id);
         if(e.style.display == 'block')
