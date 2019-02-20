@@ -43,7 +43,7 @@ class ServicesController extends AppController
             'contain' => ['Rooms']
         ]);
 
-        $this->set('service', $service);
+        $this->set(compact('service'));
         $this->set('_serialize', ['service']);
     }
 
