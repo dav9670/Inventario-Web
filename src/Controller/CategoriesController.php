@@ -8,10 +8,16 @@ use App\Controller\AppController;
  *
  * @property \App\Model\Table\CategoriesTable $Categories
  *
- * @method \App\Model\Entity\Category[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @method \App\Model\Entity\Skill[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class CategoriesController extends AppController
 {
+
+    public function initialize()
+    {
+        parent::initialize();
+        $this->loadComponent('Paginator');
+    }
 
     /**
      * Index method
@@ -20,16 +26,14 @@ class CategoriesController extends AppController
      */
     public function index()
     {
-        $categories = $this->paginate($this->Categories);
-
-        $this->set(compact('categories'));
+        $this->set('categories', $this->Categories->find('all')->order(['name' => 'asc']));
         $this->set('_serialize', ['categories']);
     }
 
     /**
      * View method
      *
-     * @param string|null $id Category id.
+     * @param string|null $id Skill id.
      * @return \Cake\Http\Response|void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
@@ -40,6 +44,7 @@ class CategoriesController extends AppController
         ]);
 
         $this->set('category', $category);
+        $this->set('_serialize', 'category');
     }
 
     /**
@@ -50,23 +55,36 @@ class CategoriesController extends AppController
     public function add()
     {
         $category = $this->Categories->newEntity();
-        if ($this->request->is('post')) {
-            $category = $this->Categories->patchEntity($category, $this->request->getData());
+        $success = false;
+        if ($this->getRequest()->is('post')) {
+            $category = $this->Categories->patchEntity($category, $this->getRequest()->getData());
             if ($this->Categories->save($category)) {
-                $this->Flash->success(__('The category has been saved.'));
+                if($this->isApi()){
+                    $success = true;
+                } else {
+                    $this->Flash->success(__('The category has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                    return $this->redirect(['action' => 'index']);
+                }
+            } else if($this->isApi()){
+                $success = false;
+            } else {
+                $this->Flash->error(__('The category could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The category could not be saved. Please, try again.'));
         }
-        $equipments = $this->Categories->Equipments->find('list', ['limit' => 200]);
-        $this->set(compact('category', 'equipments'));
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        } else {
+            $equipments = $this->Categories->Equipments->find('list', ['limit' => 200]);
+            $this->set(compact('category', 'equipments'));
+        }
     }
 
     /**
      * Edit method
      *
-     * @param string|null $id Category id.
+     * @param string|null $id Skill id.
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
@@ -75,8 +93,45 @@ class CategoriesController extends AppController
         $category = $this->Categories->get($id, [
             'contain' => ['Equipments']
         ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $category = $this->Categories->patchEntity($category, $this->request->getData());
+        if ($this->getRequest()->is(['patch', 'post', 'put'])) {
+            $category = $this->Categories->patchEntity($category, $this->getRequest()->getData());
+            if ($this->Categories->save($category)) {
+                if($this->isApi()){
+                    $success = true;
+                } else {
+                    $this->Flash->success(__('The category has been saved.'));
+
+                    return $this->redirect(['action' => 'index']);
+                }
+            } else if($this->isApi()){
+                $success = false;
+            } else {
+                $this->Flash->error(__('The category could not be saved. Please, try again.'));
+            }
+        }
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        } else {
+            $equipments = $this->Categories->Equipments->find('list', ['limit' => 200]);
+            $this->set(compact('category', 'equipments'));
+        }
+    }
+
+    /**
+     * Consult method
+     *
+     * @param string|null $id Skill id.
+     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function consult($id = null)
+    {
+        $category = $this->Categories->get($id, [
+            'contain' => ['Equipments']
+        ]);
+        if ($this->getRequest()->is(['patch', 'post', 'put'])) {
+            $category = $this->Categories->patchEntity($category, $this->getRequest()->getData());
             if ($this->Categories->save($category)) {
                 $this->Flash->success(__('The category has been saved.'));
 
@@ -87,25 +142,78 @@ class CategoriesController extends AppController
         $equipments = $this->Categories->Equipments->find('list', ['limit' => 200]);
         $this->set(compact('category', 'equipments'));
     }
+    
 
     /**
      * Delete method
      *
-     * @param string|null $id Category id.
+     * @param string|null $id Skill id.
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
+        $this->getRequest()->allowMethod(['post', 'delete']);
         $category = $this->Categories->get($id);
+        $success = false;
         if ($this->Categories->delete($category)) {
-            $this->Flash->success(__('The category has been deleted.'));
+            if($this->isApi()){
+                $success = true;
+            } else {
+                $this->Flash->success(__('The category has been deleted.'));
+            }
         } else {
-            $this->Flash->error(__('The category could not be deleted. Please, try again.'));
+            if($this->isApi()){
+                $success = false;
+            } else {
+                $this->Flash->error(__('The category could not be deleted. Please, try again.'));
+            }
         }
 
-        return $this->redirect(['action' => 'index']);
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        } else {
+            return $this->redirect(['action' => 'index']);
+        }
+    }
+
+    public function unlink()
+    {
+        $this->getRequest()->allowMethod(['post', 'delete']);
+
+        $category = "";
+        $equipment = "";
+        if($this->isApi()){
+            $jsonData = $this->getRequest()->input('json_decode', true);
+            $category = $this->Services->get($jsonData['category']);
+            $equipment = $this->Services->Rooms->get($jsonData['equipment']);
+        } else {
+            $category = $this->Categories->get($this->getRequest()->getQuery('category'));
+            $equipment = $this->Categories->Equipments->get($this->getRequest()->getQuery('equipment'));
+        }
+        
+
+        if ($this->Categories->Equipments->unlink($category, [$equipment])) {
+            if($this->isApi()){
+                $success = true;
+            } else {
+                $this->Flash->success(__('The association has been deleted.'));
+            }
+        } else {
+            if($this->isApi()){
+                $success = false;
+            } else {
+                $this->Flash->error(__('The association could not be deleted. Please, try again.'));
+            }
+        }
+
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        } else {
+            return $this->redirect(['action' => 'consult', $category->id]);
+        }
     }
 
     public function search()

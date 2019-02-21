@@ -20,9 +20,15 @@ class EquipmentsController extends AppController
      */
     public function index()
     {
-        $equipments = $this->paginate($this->Equipments);
-
-        $this->set(compact('equipments'));
+        ini_set('memory_limit', '-1');
+        $equipments = $this->Equipments->find('all', [
+            'contain' => ['Categories']
+        ])->where(['deleted IS' => null])->orWhere(['deleted IS' => ""])->order(['name' => 'asc']);
+        $archivedEquipments = $this->Equipments->find('all', [
+            'contain' => ['Categories']
+        ])->where(['deleted IS NOT' => ""])->order(['name' => 'asc']);
+        $this->set(compact('equipments', 'archivedEquipments'));
+        $this->set('_serialize', ['equipments', 'archivedEquipments']);
     }
 
     /**
@@ -110,5 +116,116 @@ class EquipmentsController extends AppController
     public function isAuthorized($user)
     {
         return $this->Auth->user('admin_status') == 'admin';
+    }
+
+    /**
+     * fonction search qui est appelée par la ajax request de la page equipments/index
+     * en fonction des requetes ajax retourne différentes liste de equipments
+     */
+
+    public function search()
+    {
+        ini_set('memory_limit', '-1');
+
+        if($this->isApi()){
+            $this->getRequest()->allowMethod('post');
+        }else {
+            $this->getRequest()->allowMethod('ajax');
+        }
+   
+        $keyword = "";
+        $sort_field = "";
+        $sort_dir = "";
+
+        $search_available = false;
+        $search_unavailable = false;
+        $search_equipments = false;
+        $search_categories = false;
+
+        if ($this->getRequest()->is('ajax')){
+            $keyword = $this->getRequest()->getQuery('keyword');
+            $sort_field = $this->getRequest()->getQuery('sort_field');
+            $sort_dir = $this->getRequest()->getQuery('sort_dir');
+            
+            $filters = $this->getRequest()->getQuery('filters');
+            $search_available = $filters['search_available'] == 'true';
+            $search_unavailable = $filters['search_unavailable'] == 'true';
+            $search_equipments = $filters['search_equipments'] == 'true';
+            $search_categories = $filters['search_categories'] == 'true';
+        
+        } else if ($this->getRequest()->is('post')){
+            $jsonData = $this->getRequest()->input('json_decode', true);
+            $keyword = $jsonData['keyword'];
+            $sort_field = $jsonData['sort_field'];
+            $sort_dir = $jsonData['sort_dir'];
+        }
+        
+        if($keyword == '')
+        {
+            $query = $this->Equipments->find('all');
+        }
+        else
+        {
+            if ($this->isApi()){
+                $queryEquipments = $this->Equipments->find('all', [
+                    'contain' => ['Categories']
+                ])
+                    ->where(["match (Equipments.name, Equipments.description) against(:search in boolean mode)"])
+                    ->bind(":search", $keyword . '*', 'string');
+                $queryCategories = $this->Equipments->find('all', [
+                    'contain' => ['Categories']
+                ])
+                    ->innerJoinWith('Categories')
+                    ->where(["match (Categories.name, Categories.description) against(:search in boolean mode)"])
+                    ->bind(":search", $keyword . '*', 'string');
+
+                $queryEquipments->union($queryCategories);
+                $query = $queryEquipments;
+            }
+            else if($search_equipments && $search_categories)
+            {
+                $queryEquipments = $this->Equipments->find('all')
+                    ->where(["match (Equipments.name, Equipments.description) against(:search in boolean mode)"])
+                    ->bind(":search", $keyword . '*', 'string');
+                $queryCategories = $this->Equipments->find('all')
+                    ->innerJoinWith('Categories')
+                    ->where(["match (Categories.name, Categories.description) against(:search in boolean mode)"])
+                    ->bind(":search", $keyword . '*', 'string');
+
+                $queryEquipments->union($queryCategories);
+                $query = $queryEquipments;
+            }
+            else if($search_equipments)
+            {
+                $query = $this->Equipments->find('all')
+                    ->where(["match (Equipments.name, Equipments.description) against(:search in boolean mode)"])
+                    ->bind(":search", $keyword . '*', 'string');
+            }
+            else if($search_categories)
+            {
+                $query = $this->Equipments->find('all')
+                    ->innerJoinWith('Categories')
+                    ->where(["match (Categories.name, Categories.description) against(:search in boolean mode)"])
+                    ->bind(":search", $keyword . '*', 'string');
+            }
+
+            
+        }
+
+        $query->order([$sort_field => $sort_dir]);
+        
+        $equipments = [];
+        $archivedEquipments = [];
+        $allEquipments = $this->paginate($query);
+        foreach ($allEquipments as $equipment){
+            if ($equipment->deleted != null && $equipment->deleted != "") {
+                array_push($archivedEquipments, $equipment);
+            } else {
+                array_push($equipments, $equipment);
+            }
+        }
+        
+        $this->set(compact('equipments', 'archivedEquipments'));
+        $this->set('_serialize', ['equipments', 'archivedEquipments']);
     }
 }
