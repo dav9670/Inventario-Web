@@ -35,10 +35,8 @@
             <?php foreach ($category->equipments as $equipment): ?>
             <tr class="clickable-row">
                 <td><a href='/equipments/<?= h($equipment->id) ?>'><img src="data:image/png;base64, <?= h($equipment->image) ?>" alt="<?= h($equipment->name) ?>" width=100/></a></td>
-                <td><a href='/equipments/<?= h($equipment->id) ?>'><?= h($equipment->email) ?></a></td>
                 <td><a href='/equipments/<?= h($equipment->id) ?>'><?= h($equipment->name) ?></a></td>
                 <td><a href='/equipments/<?= h($equipment->id) ?>'><?= h($equipment->description) ?></a></td>
-
                 <?php if (count($equipment->categories_list) > 3): ?>
                     <td><a href='/equipments/<?= h($equipment->id) ?>'><?= h(implode(", ", array_slice($equipment->categories_list,0,3)) . "...") ?></a></td>
                 <?php else: ?>
@@ -52,7 +50,7 @@
                 <?php endif; ?>
 
                 <td class="actions">
-                    <?= $this->Form->postLink(__('Unlink'), ['controller' => 'categories', 'action' => 'unlink', '?' => ['category' => $category->id, 'equipment' => $equipment->id]], ['confirm' => __('Are you sure you want to delete the association between {0} and {1}?', $equipment->first_name . " " . $equipment->last_name, $category->name), 'class' => 'unlink_link', 'hidden']) ?>
+                    <?= $this->Form->postLink(__('Unlink'), ['controller' => 'categories', 'action' => 'unlink', '?' => ['category' => $category->id, 'equipment' => $equipment->id]], ['confirm' => __('Are you sure you want to delete the association between {0} and {1}?', $equipment->name , $category->name), 'class' => 'unlink_link', 'hidden']) ?>
                 </td>
             </tr>
             <?php endforeach; ?>
@@ -75,7 +73,7 @@
                 }
             } else {
                 $('#name').attr('readOnly', readOnly);
-                $('#hourly_rate').attr('readOnly', readOnly);
+                $('#hourly-rate').attr('readOnly', readOnly);
                 $('#description').attr('readOnly', readOnly);
 
                 $('#viewButton').hide();
@@ -87,7 +85,7 @@
         }else{
             //Edit
             $('#name').attr('readOnly', readOnly);
-            $('#hourly_rate').attr('readOnly', readOnly);
+            $('#hourly-rate').attr('readOnly', readOnly);
             $('#description').attr('readOnly', readOnly);
 
             $('#editButton').hide();

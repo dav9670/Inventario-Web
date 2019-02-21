@@ -42,7 +42,7 @@ class Equipment extends Entity
     protected function _getAvailable()
     {
         $loans = TableRegistry::get('Loans');
-        $myloans = $loans->find('all', ['contains' => ['Mentors']])
+        $myloans = $loans->find('all', ['contains' => ['Equipments']])
             ->where('Loans.item_id = :id and Loans.start_time <= NOW() and Loans.returned is not null')
             ->bind(':id', $this->id);
         $nbloans = $myloans->count();
@@ -50,22 +50,22 @@ class Equipment extends Entity
         return $nbloans > 0 && is_null($this->deleted);
     }
 
-    protected function _getSkillsList()
+    protected function _getCategoriesList()
     {
-        TableRegistry::get($this->getSource())->loadInto($this, ['Skills']);
-        if (is_array($this->skills))
+        TableRegistry::get($this->getSource())->loadInto($this, ['Categories']);
+        if (is_array($this->categories))
         {
-            $skillnames = array();
-            foreach ($this->skills as $skill)
+            $categorynames = array();
+            foreach ($this->categories as $category)
             {
-                $skillnames[] = $skill->name;
+                $categorynames[] = $category->name;
             }
 
-            return $skillnames;
+            return $categorynames;
         }
         return array();
     }
 
-    protected $_virtual = ['available', 'skills_list'];
+    protected $_virtual = ['available', 'categories_List'];
 
 }

@@ -8,7 +8,7 @@ use App\Controller\AppController;
  *
  * @property \App\Model\Table\CategoriesTable $Categories
  *
- * @method \App\Model\Entity\Skill[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @method \App\Model\Entity\Category[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class CategoriesController extends AppController
 {
@@ -33,7 +33,7 @@ class CategoriesController extends AppController
     /**
      * View method
      *
-     * @param string|null $id Skill id.
+     * @param string|null $id Category id.
      * @return \Cake\Http\Response|void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
@@ -84,7 +84,7 @@ class CategoriesController extends AppController
     /**
      * Edit method
      *
-     * @param string|null $id Skill id.
+     * @param string|null $id Category id.
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
@@ -121,7 +121,7 @@ class CategoriesController extends AppController
     /**
      * Consult method
      *
-     * @param string|null $id Skill id.
+     * @param string|null $id Category id.
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
@@ -147,7 +147,7 @@ class CategoriesController extends AppController
     /**
      * Delete method
      *
-     * @param string|null $id Skill id.
+     * @param string|null $id Category id.
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
