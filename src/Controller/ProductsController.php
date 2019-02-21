@@ -66,7 +66,6 @@ class ProductsController extends AppController
 
                     return $this->redirect(['action' => 'index']);
                 }
-            }
             } else if($this->isApi()){
                 $success = false;
             } else {
@@ -94,6 +93,7 @@ class ProductsController extends AppController
         $product = $this->Products->get($id, [
             'contain' => ['Licences']
         ]);
+        $success = false;
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             $product = $this->Products->patchEntity($product, $this->getRequest()->getData());
             if ($this->Products->save($product)) {
@@ -154,7 +154,7 @@ class ProductsController extends AppController
      */
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
+        $this->getRequest()->allowMethod(['post', 'delete']);
         $product = $this->Products->get($id);
         $success = false;
         if ($this->Products->delete($product)) {
@@ -185,6 +185,7 @@ class ProductsController extends AppController
 
         $product = "";
         $licence = "";
+        $success = false;
         if($this->isApi()){
             $jsonData = $this->getRequest()->input('json_decode', true);
             $product = $this->Products->get($jsonData['product']);

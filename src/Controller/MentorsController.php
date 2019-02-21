@@ -20,9 +20,6 @@ class MentorsController extends AppController
      */
     public function index()
     {
-        $mentors = $this->Mentors->find('all');
-        $this->set(compact('mentors'));
-
         ini_set('memory_limit', '-1');
         $mentors = $this->Mentors->find('all', [
             'contain' => ['Skills']
