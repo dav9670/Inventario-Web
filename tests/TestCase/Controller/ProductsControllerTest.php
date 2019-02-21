@@ -47,6 +47,42 @@ class ProductsControllerTest extends TestCase
     }
 
     /**
+     * Test search method
+     *
+     * @return void
+     */
+    public function testSearch()
+    {
+        //Positive test
+
+        $productsTable = TableRegistry::get('Products');
+        $expectedProducts = $productsTable->find('all')
+            ->where('id = 1 or id = 5')
+            ->order(['name' => 'asc'])
+            ->toList();
+
+        $this->get('/products/search.json?keyword=acce&sort_field=name&sort_dir=asc');
+
+        $receivedProductsDecoded = json_decode((string)$this->_response->getBody());
+        $receivedProducts = [];
+
+        foreach($receivedProductsDecoded->products as $product){
+            array_push($receivedProducts, $productsTable->get($product->id));
+        }
+
+        $this->assertEquals($expectedProducts, $receivedProducts);
+
+        //Negative test
+        $productsTable = TableRegistry::get('Products');
+
+        $this->get('/products/search.json?keyword=zzzzzzzzzzzzzzzzz&sort_field=name&sort_dir=asc');
+
+        $receivedProductsDecoded = json_decode((string)$this->_response->getBody());
+
+        $this->assertCount(0, $receivedProductsDecoded->products);
+    }
+
+    /**
      * Test add method
      *
      * @return void
