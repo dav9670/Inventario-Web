@@ -170,13 +170,13 @@ class LicencesController extends AppController
                 $queryLicences = $this->Licences->find('all', [
                     'contain' => ['Products']
                 ])
-                    ->where(["match (Licences.nam, Licences.description) against(:search in boolean mode)"])
+                    ->where(["match (Licences.name, Licences.description) against(:search in boolean mode)"])
                     ->bind(":search", $keyword . '*', 'string');
-                $queryProducts = $this->Licencers->find('all', [
+                $queryProducts = $this->Licences->find('all', [
                     'contain' => ['Products']
                 ])
                     ->innerJoinWith('Products')
-                    ->where(["match (Products.name, Products.description) against(:search in boolean mode)"])
+                    ->where(["match (Products.name, Products.platform, Products.description) against(:search in boolean mode)"])
                     ->bind(":search", $keyword . '*', 'string');
 
                 $queryLicences->union($queryProducts);
@@ -189,7 +189,7 @@ class LicencesController extends AppController
                     ->bind(":search", $keyword . '*', 'string');
                 $queryProducts = $this->Licences->find('all')
                     ->innerJoinWith('Products')
-                    ->where(["match (Products.name, Products.description) against(:search in boolean mode)"])
+                    ->where(["match (Products.name, Products.platform, Products.description) against(:search in boolean mode)"])
                     ->bind(":search", $keyword . '*', 'string');
 
                 $queryLicences->union($queryProducts);
@@ -205,7 +205,7 @@ class LicencesController extends AppController
             {
                 $query = $this->Licences->find('all')
                     ->innerJoinWith('Products')
-                    ->where(["match (Products.name, Products.description) against(:search in boolean mode)"])
+                    ->where(["match (Products.name, Products.platform, Products.description) against(:search in boolean mode)"])
                     ->bind(":search", $keyword . '*', 'string');
             }
 
