@@ -184,10 +184,11 @@ class SkillsController extends AppController
 
         $skill = "";
         $mentor = "";
+        $success = false;
         if($this->isApi()){
             $jsonData = $this->getRequest()->input('json_decode', true);
-            $skill = $this->Services->get($jsonData['skill']);
-            $mentor = $this->Services->Rooms->get($jsonData['mentor']);
+            $skill = $this->Skills->get($jsonData['skill']);
+            $mentor = $this->Skills->Mentors->get($jsonData['mentor']);
         } else {
             $skill = $this->Skills->get($this->getRequest()->getQuery('skill'));
             $mentor = $this->Skills->Mentors->get($this->getRequest()->getQuery('mentor'));
