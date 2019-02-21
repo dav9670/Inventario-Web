@@ -154,7 +154,7 @@ class ServicesController extends AppController
      */
     public function delete($id = null)
     {
-        $this->getRequest()->allowMethod(['post', 'delete']);
+        $this->getRequest()->allowMethod(['get', 'post', 'delete']);
         $service = $this->Services->get($id);
         $success = false;
         if ($this->Services->delete($service)) {
