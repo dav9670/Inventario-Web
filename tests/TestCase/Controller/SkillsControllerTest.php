@@ -21,7 +21,8 @@ class SkillsControllerTest extends TestCase
     public $fixtures = [
         'app.Skills',
         'app.Mentors',
-        'app.MentorsSkills'
+        'app.MentorsSkills',
+        'app.Loans'
     ];
 
 
