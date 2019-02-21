@@ -78,8 +78,7 @@ class SkillsFixture extends TestFixture
             ],
             [
                 'id' => 8,
-                'name' => 'Haskell',
-                'description' => 'Hypertext Markup Language. Used to make the graphic structure of a website.'
+                'name' => 'Haskell'
             ],
             [
                 'id' => 9,

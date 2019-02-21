@@ -40,28 +40,37 @@
             <input type="checkbox" id="FieldSkills">Search by Skills<br>
         </form>
     </div>
-    
-    <table id="table" cellpadding="0" cellspacing="0">
-        <thead>
-            <tr>
-                <th scope="col"></th>
-                <th scope="col"><a id='email_sort' class='asc'><?= __("Email") ?></a></th>
-                <th scope="col"><a id='first_name_sort'><?= __("First Name") ?></a></th>
-                <th scope="col"><a id='last_name_sort'><?= __("Last Name") ?></a></th>
-                <th scope="col"><a id='description_sort'><?= __("Description") ?></a></th>
-                <th scope="col"><?= __("Skills") ?></th>
-                <th scope="col"><?= __("Available") ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+    <div class="tab">
+        <button id='table_activated_button' class="tablinks active" onclick="show_table('table_activated')">Activated</button>
+        <button id='table_archived_button' class="tablinks" onclick="show_table('table_archived')">Archived</button>
+    </div>
+    <div class="tabcontent">
+        <table cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col"><a id='email_sort' class='asc'><?= __("Email") ?></a></th>
+                    <th scope="col"><a id='first_name_sort'><?= __("First Name") ?></a></th>
+                    <th scope="col"><a id='last_name_sort'><?= __("Last Name") ?></a></th>
+                    <th scope="col"><a id='description_sort'><?= __("Description") ?></a></th>
+                    <th scope="col"><?= __("Skills") ?></th>
+                    <th scope="col"><?= __("Available") ?></th>
+                    <th scope="col" class="actions"><?= __('Actions') ?></th>
+                </tr>
+            </thead>
+            <tbody id="table_activated">
+            </tbody>
+            <tbody id="table_archived" hidden="hidden">
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script>
     var sort_field = "email";
     var sort_dir = "asc";
+
+    var current_table = "table_activated";
 
     function searchMentors( keyword ){
         var data = keyword;
@@ -81,49 +90,72 @@
                     console.log(status);
                 },
                 success: function( response ){
-                    var table = $("#table tbody");
-                    table.empty();
-                    $.each(response.mentors, function(idx, elem){
-                        let pic = "<img src='data:image/png;base64," + elem.image + "' alt='" + elem.first_name + " " + elem.last_name + "' width=100/>";
-                        let picCell = "<td><a href='/mentors/" + elem.id + "'>" + pic + "</a></td>";
-
-                        let emailCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.email + "</a></td>";
-                        let first_nameCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.first_name + "</a></td>";
-                        let last_nameCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.last_name + "</a></td>";
-                        let descriptionCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.description + "</a></td>";
-
-                        var skills_list = "";
-                        var three_skills = elem.skills_list.slice(0,3);
-                        if (elem.skills_list.length > 3) {
-                            skills_list = three_skills.join(", ") + "...";
-                        } else {
-                            skills_list = three_skills.join(", ");
+                    
+                    for(var i=0; i<2; i++){
+                        var table_name = "";
+                        var array_name = "";
+                        if(i == 0){
+                            table_name = "table_activated";
+                            array_name = "mentors";
+                        } else if(i == 1){
+                            table_name = "table_archived";
+                            array_name = "archivedMentors";
                         }
-                        let skillsCell = "<td><a href='/mentors/" + elem.id + "'>" + skills_list + "</a></td>";
+                        var table = $("#" + table_name);
+                        table.empty();
 
-                        var imgTag = "";
-                        if (elem.available) {
-                            imgTag = "<img src='/img/good.png' alt='Available' width=20 height=20>";
-                        } else {
-                            imgTag = "<img src='/img/bad.png' alt='Not Available' width=20 height=20>";
-                        }
-                        let availableCell = "<td><a href='/mentors/" + elem.id + "'>" + imgTag + "</a></td>";
-                        
-                        
-                        let actionsCell = "<td class=\"actions\">";
-                        var deleteLink = "";
-                        deleteLink = '<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete {0}?', -1)]) ?>';
-                        
-                        deleteLink = deleteLink.replace(/-1/g, elem.first_name + " " + elem.last_name);
-                        
-                        actionsCell = actionsCell.concat(deleteLink);
-                        actionsCell = actionsCell.concat("</td>");
+                        mentorsArray = response[array_name];
+                        $.each(mentorsArray, function(idx, elem){
+                            let pic = "<img src='data:image/png;base64," + elem.image + "' alt='" + elem.first_name + " " + elem.last_name + "' width=100/>";
+                            let picCell = "<td><a href='/mentors/" + elem.id + "'>" + pic + "</a></td>";
 
-                        table.append("<tr>" + picCell + emailCell + first_nameCell + last_nameCell + descriptionCell + skillsCell + availableCell + actionsCell + "</tr>");
-                    });
+                            let emailCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.email + "</a></td>";
+                            let first_nameCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.first_name + "</a></td>";
+                            let last_nameCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.last_name + "</a></td>";
+                            let descriptionCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.description + "</a></td>";
+
+                            var skills_list = "";
+                            var three_skills = elem.skills_list.slice(0,3);
+                            if (elem.skills_list.length > 3) {
+                                skills_list = three_skills.join(", ") + "...";
+                            } else {
+                                skills_list = three_skills.join(", ");
+                            }
+                            let skillsCell = "<td><a href='/mentors/" + elem.id + "'>" + skills_list + "</a></td>";
+
+                            var imgTag = "";
+                            if (elem.available) {
+                                imgTag = "<img src='/img/good.png' alt='Available' width=20 height=20>";
+                            } else {
+                                imgTag = "<img src='/img/bad.png' alt='Not Available' width=20 height=20>";
+                            }
+                            let availableCell = "<td><a href='/mentors/" + elem.id + "'>" + imgTag + "</a></td>";
+                            
+                            
+                            let actionsCell = "<td class=\"actions\">";
+                            var deleteLink = "";
+                            deleteLink = '<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete {0}?', -1)]) ?>';
+                            
+                            deleteLink = deleteLink.replace(/-1/g, elem.first_name + " " + elem.last_name);
+                            
+                            actionsCell = actionsCell.concat(deleteLink);
+                            actionsCell = actionsCell.concat("</td>");
+
+                            table.append("<tr>" + picCell + emailCell + first_nameCell + last_nameCell + descriptionCell + skillsCell + availableCell + actionsCell + "</tr>");
+                        });
+                    }
+                    
                 }
         });
     };
+
+    function show_table(table_name){
+        $('#' + current_table).hide();
+        $('#' + current_table + '_button').removeClass('active');
+        current_table = table_name;
+        $('#' + current_table).show();
+        $('#' + current_table + '_button').addClass('active');
+    }
 
     function sort_setter( sort_field_param ){
         var oldHtmlFieldId = '#' + sort_field +'_sort';
@@ -160,6 +192,19 @@
          });
          $('#description_sort').click( function(e) {
             sort_setter('description');
+            $('#search').keyup();
+         });
+
+         $('#FieldAvailable').click( function(e) {
+            $('#search').keyup();
+         });
+         $('#FieldUnavailable').click( function(e) {
+            $('#search').keyup();
+         });
+         $('#FieldMentors').click( function(e) {
+            $('#search').keyup();
+         });
+         $('#FieldSkills').click( function(e) {
             $('#search').keyup();
          });
 

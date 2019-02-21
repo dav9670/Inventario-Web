@@ -43,7 +43,7 @@ class ServicesController extends AppController
             'contain' => ['Rooms']
         ]);
 
-        $this->set('service', $service);
+        $this->set(compact('service'));
         $this->set('_serialize', ['service']);
     }
 
@@ -61,7 +61,7 @@ class ServicesController extends AppController
             if ($this->Services->save($service)) {
                 if($this->isApi()){
                     $success = true;
-                }else {
+                } else {
                     $this->Flash->success(__('The service has been saved.'));
 
                     return $this->redirect(['action' => 'index']);
@@ -76,7 +76,7 @@ class ServicesController extends AppController
         if($this->isApi()){
             $this->set(compact('success'));
             $this->set('_serialize', ['success']);
-        }else {
+        } else {
             $rooms = $this->Services->Rooms->find('list', ['limit' => 200]);
             $this->set(compact('service', 'rooms'));
         }
@@ -100,21 +100,21 @@ class ServicesController extends AppController
             if ($this->Services->save($service)) {
                 if($this->isApi()){
                     $success = true;
-                }else {
+                } else {
                     $this->Flash->success(__('The service has been saved.'));
     
                     return $this->redirect(['action' => 'index']);
                 }
-            }else if($this->isApi()){
+            } else if($this->isApi()){
                 $success = false;
-            }else {
+            } else {
                 $this->Flash->error(__('The service could not be saved. Please, try again.'));
             }
         }
         if($this->isApi()){
             $this->set(compact('success'));
             $this->set('_serialize', ['success']);
-        }else {
+        } else {
             $rooms = $this->Services->Rooms->find('list', ['limit' => 200]);
             $this->set(compact('service', 'rooms'));
         }
@@ -135,13 +135,13 @@ class ServicesController extends AppController
         if ($this->Services->delete($service)) {
             if($this->isApi()){
                 $success = true;
-            }else {
+            } else {
                 $this->Flash->success(__('The service has been deleted.'));
             }
         } else {
             if($this->isApi()){
                 $success = false;
-            }else {
+            } else {
                 $this->Flash->error(__('The service could not be deleted. Please, try again.'));
             }
         }
@@ -149,8 +149,46 @@ class ServicesController extends AppController
         if($this->isApi()){
             $this->set(compact('success'));
             $this->set('_serialize', ['success']);
-        }else {
+        } else {
             return $this->redirect(['action' => 'index']);
+        }
+    }
+
+    public function unlink()
+    {
+        $this->getRequest()->allowMethod(['post', 'delete']);
+
+        $service = "";
+        $room = "";
+        $success = false;
+        if ($this->isApi()){
+            $jsonData = $this->getRequest()->input('json_decode', true);
+            $service = $this->Services->get($jsonData['service']);
+            $room = $this->Services->Rooms->get($jsonData['room']);
+        } else {
+            $service = $this->Services->get($this->getRequest()->getQuery('service'));
+            $room = $this->Services->Rooms->get($this->getRequest()->getQuery('room'));
+        }
+
+        if ($this->Services->Rooms->unlink($service, [$room])) {
+            if($this->isApi()){
+                $success = true;
+            } else {
+                $this->Flash->success(__('The association has been deleted.'));
+            }
+        } else {
+            if($this->isApi()){
+                $success = false;
+            } else {
+                $this->Flash->error(__('The association could not be deleted. Please, try again.'));
+            }
+        }
+
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        } else {
+            return $this->redirect(['action' => 'consult', $service->id]);
         }
     }
 
