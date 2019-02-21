@@ -41,41 +41,29 @@
         </form>
     </div>
     <div class="tab">
-        <button onclick="show_table('table_activated')">Activated</button>
-        <button onclick="show_table('table_archived')">Archived</button>
+        <button id='table_activated_button' class="tablinks active" onclick="show_table('table_activated')">Activated</button>
+        <button id='table_archived_button' class="tablinks" onclick="show_table('table_archived')">Archived</button>
     </div>
-    <table id="table_activated" cellpadding="0" cellspacing="0">
-        <thead>
-            <tr>
-                <th scope="col"></th>
-                <th scope="col"><a id='email_sort' class='asc'><?= __("Email") ?></a></th>
-                <th scope="col"><a id='first_name_sort'><?= __("First Name") ?></a></th>
-                <th scope="col"><a id='last_name_sort'><?= __("Last Name") ?></a></th>
-                <th scope="col"><a id='description_sort'><?= __("Description") ?></a></th>
-                <th scope="col"><?= __("Skills") ?></th>
-                <th scope="col"><?= __("Available") ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-    <table id="table_archived" cellpadding="0" cellspacing="0" hidden='hidden'>
-        <thead>
-            <tr>
-                <th scope="col"></th>
-                <th scope="col"><a id='email_sort' class='asc'><?= __("Email") ?></a></th>
-                <th scope="col"><a id='first_name_sort'><?= __("First Name") ?></a></th>
-                <th scope="col"><a id='last_name_sort'><?= __("Last Name") ?></a></th>
-                <th scope="col"><a id='description_sort'><?= __("Description") ?></a></th>
-                <th scope="col"><?= __("Skills") ?></th>
-                <th scope="col"><?= __("Available") ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+    <div class="tabcontent">
+        <table cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col"><a id='email_sort' class='asc'><?= __("Email") ?></a></th>
+                    <th scope="col"><a id='first_name_sort'><?= __("First Name") ?></a></th>
+                    <th scope="col"><a id='last_name_sort'><?= __("Last Name") ?></a></th>
+                    <th scope="col"><a id='description_sort'><?= __("Description") ?></a></th>
+                    <th scope="col"><?= __("Skills") ?></th>
+                    <th scope="col"><?= __("Available") ?></th>
+                    <th scope="col" class="actions"><?= __('Actions') ?></th>
+                </tr>
+            </thead>
+            <tbody id="table_activated">
+            </tbody>
+            <tbody id="table_archived" hidden="hidden">
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script>
@@ -113,7 +101,7 @@
                             table_name = "table_archived";
                             array_name = "archivedMentors";
                         }
-                        var table = $("#" + table_name + " tbody");
+                        var table = $("#" + table_name);
                         table.empty();
 
                         mentorsArray = response[array_name];
@@ -163,8 +151,10 @@
 
     function show_table(table_name){
         $('#' + current_table).hide();
+        $('#' + current_table + '_button').removeClass('active');
         current_table = table_name;
         $('#' + current_table).show();
+        $('#' + current_table + '_button').addClass('active');
     }
 
     function sort_setter( sort_field_param ){
