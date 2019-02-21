@@ -140,10 +140,10 @@ class MentorsController extends AppController
         $sort_field = "";
         $sort_dir = "";
 
-        $search_available = false;
-        $search_unavailable = false;
-        $search_mentors = false;
-        $search_skills = false;
+        $search_available = true;
+        $search_unavailable = true;
+        $search_mentors = true;
+        $search_skills = true;
 
         if ($this->getRequest()->is('ajax')){
             $keyword = $this->getRequest()->getQuery('keyword');
@@ -221,10 +221,13 @@ class MentorsController extends AppController
         $archivedMentors = [];
         $allMentors = $this->paginate($query);
         foreach ($allMentors as $mentor){
-            if ($mentor->deleted != null && $mentor->deleted != "") {
-                array_push($archivedMentors, $mentor);
-            } else {
-                array_push($mentors, $mentor);
+            if($search_available && $mentor->available || $search_unavailable && !$mentor->available){
+                if ($mentor->deleted != null && $mentor->deleted != "") {
+                
+                    array_push($archivedMentors, $mentor);
+                } else {
+                    array_push($mentors, $mentor);
+                }
             }
         }
         

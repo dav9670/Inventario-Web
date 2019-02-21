@@ -133,12 +133,15 @@
                             
                             
                             let actionsCell = "<td class=\"actions\">";
-                            var deleteLink = "";
-                            deleteLink = '<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete {0}?', -1)]) ?>';
-                            
-                            deleteLink = deleteLink.replace(/-1/g, elem.first_name + " " + elem.last_name);
-                            
-                            actionsCell = actionsCell.concat(deleteLink);
+                            var link = ""
+                            if(elem.deleted == null){
+                                link = '<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete {0}?', -1)]) ?>';
+                                link = link.replace(/-1/g, elem.email);
+                            } else {
+                                link = '<?= $this->Form->postLink(__('Reactivate'), ['action' => 'reactivate', -1], ['confirm' => __('Are you sure you want to reactivate {0}?', -1)]) ?>';
+                                link = link.replace(/-1/g, elem.email);
+                            }
+                            actionsCell = actionsCell.concat(link);
                             actionsCell = actionsCell.concat("</td>");
 
                             table.append("<tr>" + picCell + emailCell + first_nameCell + last_nameCell + descriptionCell + skillsCell + availableCell + actionsCell + "</tr>");

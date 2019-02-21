@@ -15,10 +15,11 @@
             echo $this->Form->control('description', ['readOnly' => 'readOnly']);
         ?>
     </fieldset>
-    <?= $this->Html->link('Delete skill', ['controller' => 'Skills', 'action' => 'delete', $skill->id], ['confirm' => __('Are you sure you want to delete {0}?', $skill->name)]);?>
     <?= $this->Form->button(__('Submit'), ['id' => 'submit', 'hidden']) ?>
     <?= $this->Form->end() ?>
-
+    <?= $this->Form->postLink(__('Delete skill'), ['controller' => 'Skills', 'action' => 'delete', $skill->id], ['confirm' => __('Are you sure you want to delete {0}?', $skill->name)]);?>
+    
+    
     <div class="related">
         <h4><?= __('Related Mentors') ?></h4>
         <?php if (!empty($skill->mentors)): ?>
