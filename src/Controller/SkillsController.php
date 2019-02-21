@@ -153,7 +153,7 @@ class SkillsController extends AppController
      */
     public function delete($id = null)
     {
-        $this->getRequest()->allowMethod(['post', 'delete']);
+        $this->getRequest()->allowMethod(['get', 'post', 'delete']);
         $skill = $this->Skills->get($id);
         $success = false;
         if ($this->Skills->delete($skill)) {
