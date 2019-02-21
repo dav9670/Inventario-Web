@@ -66,6 +66,6 @@ class Equipment extends Entity
         return array();
     }
 
-    protected $_virtual = ['available', 'categories_List'];
+    protected $_virtual = ['available', 'categories_list'];
 
 }

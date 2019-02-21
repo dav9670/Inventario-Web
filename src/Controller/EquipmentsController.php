@@ -137,10 +137,10 @@ class EquipmentsController extends AppController
         $sort_field = "";
         $sort_dir = "";
 
-        $search_available = false;
-        $search_unavailable = false;
-        $search_equipments = false;
-        $search_categories = false;
+        $search_available = true;
+        $search_unavailable = true;
+        $search_equipments = true;
+        $search_categories = true;
 
         if ($this->getRequest()->is('ajax')){
             $keyword = $this->getRequest()->getQuery('keyword');
@@ -218,14 +218,16 @@ class EquipmentsController extends AppController
         $archivedEquipments = [];
         $allEquipments = $this->paginate($query);
         foreach ($allEquipments as $equipment){
-            if ($equipment->deleted != null && $equipment->deleted != "") {
-                array_push($archivedEquipments, $equipment);
-            } else {
-                array_push($equipments, $equipment);
+            if($search_available && $equipment->available || $search_unavailable && !$equipment->available){
+                if ($equipment->deleted != null && $equipment->deleted != "") {
+                    array_push($archivedEquipments, $equipment);
+                } else {
+                    array_push($equipments, $equipment);
+                }
             }
         }
-        
         $this->set(compact('equipments', 'archivedEquipments'));
         $this->set('_serialize', ['equipments', 'archivedEquipments']);
+        
     }
 }

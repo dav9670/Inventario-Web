@@ -16,9 +16,9 @@
             echo $this->Form->control('description', ['readOnly' => 'readOnly']);
         ?>
     </fieldset>
-    <?= $this->Html->link('Delete category', ['controller' => 'Categories', 'action' => 'delete', $category->id], ['confirm' => __('Are you sure you want to delete {0}?', $category->name)]);?>
     <?= $this->Form->button(__('Submit'), ['id' => 'submit', 'hidden']) ?>
     <?= $this->Form->end() ?>
+    <?= $this->Form->postLink(__('Delete category'), ['controller' => 'categories', 'action' => 'delete', $category->id], ['confirm' => __('Are you sure you want to delete {0}?', $category->name)]);?>
 
     <div class="related">
         <h4><?= __('Related Equipments') ?></h4>
