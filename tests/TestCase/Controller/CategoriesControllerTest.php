@@ -4,6 +4,7 @@ namespace App\Test\TestCase\Controller;
 use App\Controller\CategoriesController;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
+use Cake\ORM\TableRegistry;
 
 /**
  * App\Controller\CategoriesController Test Case
@@ -20,27 +21,29 @@ class CategoriesControllerTest extends TestCase
     public $fixtures = [
         'app.Categories',
         'app.Equipments',
-        'app.EquipmentsCategories'
+        'app.EquipmentsCategories',
+        'app.Loans'
     ];
 
-    /**
-     * Test index method
-     *
-     * @return void
-     */
-    public function testIndex()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
 
-    /**
-     * Test view method
-     *
-     * @return void
-     */
-    public function testView()
+    public function setUp()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        parent::setUp();
+
+        $this->enableCsrfToken();
+        $this->enableSecurityToken();
+
+        // Set session data
+        $this->session([
+            'Auth' => [
+                'User' => [
+                    'id' => 1,
+                    'email' => 'david@gmail.com',
+                    'password' => '$2y$10$Cx3OagaMhBWn64l.MiHpRu36oBdp7J3GCg/cjHpKfTY8CVBxWzloy',
+                    'admin_status' => 'admin'
+                ]
+            ]
+        ]);
     }
 
     /**
@@ -50,17 +53,99 @@ class CategoriesControllerTest extends TestCase
      */
     public function testAdd()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        //Positive test
+        $post = [
+            'id' => 11,
+            'name' => 'Tablet',
+            'description' => 'A phone but bigger.',
+            'hourly_rate' => 4.00
+        ];
+
+        $categories = TableRegistry::get('Categories');
+        $category = $categories->find()->where(['id' => 11])->first();
+        $this->assertNull($category);
+
+        $this->post('/categories/add', $post);
+
+        $categories = TableRegistry::get('Categories');
+        $category = $categories->find()->where(['id' => 11])->first();
+        $this->assertNotNull($category);
+
+
+        //Negative test
+        $post = [
+            'id' => 12,
+            'name' => 'Electric',
+            'description' => 'This is a name that is already taken.',
+            'hourly_rate' => 4.00
+        ];
+
+        $categories = TableRegistry::get('Categories');
+        $category = $categories->find()->where(['id' => 12])->first();
+        $this->assertNull($category);
+
+        $this->post('/categories/add', $post);
+
+        $categories = TableRegistry::get('Categories');
+        $category = $categories->find()->where(['id' => 12])->first();
+        $this->assertNull($category);
     }
 
     /**
-     * Test edit method
+     * Test consult method
      *
      * @return void
      */
-    public function testEdit()
+    public function testConsult()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        //Positive test
+        $post = [
+            'id' => 1,
+            'name' => 'Tablet',
+            'description' => 'A phone but bigger.',
+            'hourly_rate' => 4.00
+        ];
+
+        $categories = TableRegistry::get('Categories');
+        $category = $categories->find()->where(['id' => 1])->first();
+        $this->assertNotNull($category);
+        $this->assertEquals('Computer', $category->name);
+        $this->assertEquals('An electronical device now use in everyday life.', $category->description);
+        $this->assertEquals(15.20, $category->hourly_rate);
+
+        $this->post('/categories/1', $post);
+
+        $categories = TableRegistry::get('Categories');
+        $category = $categories->find()->where(['id' => 1])->first();
+        $this->assertNotNull($category);
+        $this->assertEquals('Tablet', $category->name);
+        $this->assertEquals('A phone but bigger.', $category->description);
+        $this->assertEquals(4.00, $category->hourly_rate);
+
+
+        //Negative test
+        $post = [
+            'id' => 2,
+            'name' => 'Electric',
+            'description' => 'This is a name that is already taken.',
+            'hourly_rate' => 4.00
+        ];
+
+        $categories = TableRegistry::get('Categories');
+        $category = $categories->find()->where(['id' => 1])->first();
+        $this->assertNotNull($category);
+        $this->assertEquals('Phone', $category->name);
+        $this->assertEquals('Used to call someone, phone is now more a micro computer than a phone.', $category->description);
+        $this->assertEquals(13.33, $category->hourly_rate);
+
+        $this->post('/categories/2', $post);
+
+        $categories = TableRegistry::get('Categories');
+        $category = $categories->find()->where(['id' => 1])->first();
+        $this->assertNotNull($category);
+        $this->assertEquals('Phone', $category->name);
+        $this->assertEquals('Used to call someone, phone is now more a micro computer than a phone.', $category->description);
+        $this->assertEquals(13.33, $category->hourly_rate);
     }
 
     /**
@@ -70,6 +155,37 @@ class CategoriesControllerTest extends TestCase
      */
     public function testDelete()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        //Positive test
+        $post = [
+            'id' => 1
+        ];
+
+        $categories = TableRegistry::get('Categories');
+        $category = $categories->find()->where(['id' => 1])->first();
+        $this->assertNotNull($category);
+
+        $this->post('/categories/delete/1', $post);
+
+        $categories = TableRegistry::get('Categories');
+        $category = $categories->find()->where(['id' => 1])->first();
+        $this->assertNull($category);
+
+
+        //Negative test
+        $post = [
+            'id' => -1
+        ];
+
+        $categories = TableRegistry::get('Categories');
+        $category = $categories->find()->where(['id' => -1])->first();
+        $this->assertNull($category);
+
+        $this->post('/categories/delete/-1', $post);
+
+        $categories = TableRegistry::get('Categories');
+        $category = $categories->find()->where(['id' => -1])->first();
+        $this->assertNull($category);
+
+        $this->assertResponseError();
     }
 }
