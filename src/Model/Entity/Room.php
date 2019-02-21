@@ -50,5 +50,21 @@ class Room extends Entity
         return $nbloans > 0 && is_null($this->deleted);
     }
 
-    protected $_virtual = ['available'];
+    protected function _getServicesList()
+    {
+        TableRegistry::get($this->getSource())->loadInto($this, ['Services']);
+        if (is_array($this->services))
+        {
+            $servicenames = array();
+            foreach ($this->services as $service)
+            {
+                $servicenames[] = $service->name;
+            }
+
+            return $servicenames;
+        }
+        return array();
+    }
+
+    protected $_virtual = ['available', 'services_list'];
 }

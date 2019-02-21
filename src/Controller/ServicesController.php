@@ -121,6 +121,31 @@ class ServicesController extends AppController
     }
 
     /**
+     * Consult method
+     *
+     * @param string|null $id Service id.
+     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function consult($id = null)
+    {
+        $service = $this->Services->get($id, [
+            'contain' => ['Rooms']
+        ]);
+        if ($this->getRequest()->is(['patch', 'post', 'put'])) {
+            $service = $this->Services->patchEntity($service, $this->getRequest()->getData());
+            if ($this->Services->save($service)) {
+                $this->Flash->success(__('The service has been saved.'));
+
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('The service could not be saved. Please, try again.'));
+        }
+        $mentors = $this->Services->Rooms->find('list', ['limit' => 200]);
+        $this->set(compact('service', 'mentors'));
+    }
+
+    /**
      * Delete method
      *
      * @param string|null $id Service id.
