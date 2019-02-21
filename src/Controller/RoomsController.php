@@ -117,4 +117,115 @@ class RoomsController extends AppController
     {
         return $this->Auth->user('admin_status') == 'admin';
     }
+
+    /**
+     * fonction search qui est appelée par la ajax request de la page rooms/index
+     * en fonction des requetes ajax retourne différentes liste de rooms
+     */
+
+    public function search()
+    {
+        ini_set('memory_limit', '-1');
+
+        if($this->isApi()){
+            $this->getRequest()->allowMethod('post');
+        }else {
+            $this->getRequest()->allowMethod('ajax');
+        }
+   
+        $keyword = "";
+        $sort_field = "";
+        $sort_dir = "";
+
+        $search_available = false;
+        $search_unavailable = false;
+        $search_rooms = false;
+        $search_services = false;
+
+        if ($this->getRequest()->is('ajax')){
+            $keyword = $this->getRequest()->getQuery('keyword');
+            $sort_field = $this->getRequest()->getQuery('sort_field');
+            $sort_dir = $this->getRequest()->getQuery('sort_dir');
+            
+            $filters = $this->getRequest()->getQuery('filters');
+            $search_available = $filters['search_available'] == 'true';
+            $search_unavailable = $filters['search_unavailable'] == 'true';
+            $search_rooms = $filters['search_rooms'] == 'true';
+            $search_services = $filters['search_services'] == 'true';
+        
+        } else if ($this->getRequest()->is('post')){
+            $jsonData = $this->getRequest()->input('json_decode', true);
+            $keyword = $jsonData['keyword'];
+            $sort_field = $jsonData['sort_field'];
+            $sort_dir = $jsonData['sort_dir'];
+        }
+        
+        if($keyword == '')
+        {
+            $query = $this->Rooms->find('all');
+        }
+        else
+        {
+            if ($this->isApi()){
+                $queryRooms = $this->Rooms->find('all', [
+                    'contain' => ['Services']
+                ])
+                    ->where(["match (Rooms.name, Rooms.description) against(:search in boolean mode)"])
+                    ->bind(":search", $keyword . '*', 'string');
+                $queryServices = $this->Rooms->find('all', [
+                    'contain' => ['Services']
+                ])
+                    ->innerJoinWith('Services')
+                    ->where(["match (Services.name, Services.description) against(:search in boolean mode)"])
+                    ->bind(":search", $keyword . '*', 'string');
+
+                $queryRooms->union($queryServices);
+                $query = $queryRooms;
+            }
+            else if($search_rooms && $search_services)
+            {
+                $queryRooms = $this->Rooms->find('all')
+                    ->where(["match (Rooms.name, Rooms.description) against(:search in boolean mode)"])
+                    ->bind(":search", $keyword . '*', 'string');
+                $queryServices = $this->Rooms->find('all')
+                    ->innerJoinWith('Services')
+                    ->where(["match (Services.name, Services.description) against(:search in boolean mode)"])
+                    ->bind(":search", $keyword . '*', 'string');
+
+                $queryRooms->union($queryServices);
+                $query = $queryRooms;
+            }
+            else if($search_rooms)
+            {
+                $query = $this->Rooms->find('all')
+                    ->where(["match (Rooms.name, Rooms.description) against(:search in boolean mode)"])
+                    ->bind(":search", $keyword . '*', 'string');
+            }
+            else if($search_services)
+            {
+                $query = $this->Rooms->find('all')
+                    ->innerJoinWith('Services')
+                    ->where(["match (Services.name, Services.description) against(:search in boolean mode)"])
+                    ->bind(":search", $keyword . '*', 'string');
+            }
+
+            
+        }
+
+        $query->order([$sort_field => $sort_dir]);
+        
+        $rooms = [];
+        $archivedRooms = [];
+        $allRooms = $this->paginate($query);
+        foreach ($allRooms as $room){
+            if ($room->deleted != null && $room->deleted != "") {
+                array_push($archivedRooms, $room);
+            } else {
+                array_push($rooms, $room);
+            }
+        }
+        
+        $this->set(compact('rooms', 'archivedRooms'));
+        $this->set('_serialize', ['rooms', 'archivedRooms']);
+    }
 }
