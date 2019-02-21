@@ -20,8 +20,13 @@ class RoomsController extends AppController
      */
     public function index()
     {
-        $rooms = $this->Rooms->find('all')->where(['deleted IS' => null])->orWhere(['deleted IS' => ""])->order(['name' => 'asc']);
-        $archivedRooms = $this->Rooms->find('all')->where(['deleted IS NOT' => ""])->order(['name' => 'asc']);
+        ini_set('memory_limit', '-1');
+        $rooms = $this->Rooms->find('all', [
+            'contain' => ['Services']
+        ])->where(['deleted IS' => null])->orWhere(['deleted IS' => ""])->order(['name' => 'asc']);
+        $archivedRooms = $this->Rooms->find('all', [
+            'contain' => ['Services']
+        ])->where(['deleted IS NOT' => ""])->order(['name' => 'asc']);
         $this->set(compact('rooms', 'archivedRooms'));
         $this->set('_serialize', ['rooms', 'archivedRooms']);
     }
