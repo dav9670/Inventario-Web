@@ -22,6 +22,16 @@ class MentorsController extends AppController
     {
         $mentors = $this->Mentors->find('all');
         $this->set(compact('mentors'));
+
+        ini_set('memory_limit', '-1');
+        $mentors = $this->Mentors->find('all', [
+            'contain' => ['Skills']
+        ])->where('deleted is null')->order(['name' => 'asc']);
+        $archivedMentors = $this->Mentors->find('all', [
+            'contain' => ['Skills']
+        ])->where('deleted is not null')->order(['name' => 'asc']);
+        $this->set(compact('mentors', 'archivedMentors'));
+        $this->set('_serialize', ['mentors', 'archivedMentors']);
     }
 
     /**
@@ -118,7 +128,7 @@ class MentorsController extends AppController
 
     public function search()
     {
-        $this->request->allowMethod('ajax');
+        ini_set('memory_limit', '-1');
 
         if($this->isApi()){
             $this->getRequest()->allowMethod('post');
@@ -130,10 +140,10 @@ class MentorsController extends AppController
         $sort_field = "";
         $sort_dir = "";
 
-        $search_available = false;
-        $search_unavailable = false;
-        $search_mentors = false;
-        $search_skills = false;
+        $search_available = true;
+        $search_unavailable = true;
+        $search_mentors = true;
+        $search_skills = true;
 
         if ($this->getRequest()->is('ajax')){
             $keyword = $this->getRequest()->getQuery('keyword');
@@ -156,11 +166,26 @@ class MentorsController extends AppController
         if($keyword == '')
         {
             $query = $this->Mentors->find('all');
-            //debug("keyword is empty");
         }
         else
         {
-            if($search_mentors && $search_skills || $this->isApi())
+            if ($this->isApi()){
+                $queryMentors = $this->Mentors->find('all', [
+                    'contain' => ['Skills']
+                ])
+                    ->where(["match (Mentors.email, Mentors.first_name, Mentors.last_name, Mentors.description) against(:search in boolean mode)"])
+                    ->bind(":search", $keyword . '*', 'string');
+                $querySkills = $this->Mentors->find('all', [
+                    'contain' => ['Skills']
+                ])
+                    ->innerJoinWith('Skills')
+                    ->where(["match (Skills.name, Skills.description) against(:search in boolean mode)"])
+                    ->bind(":search", $keyword . '*', 'string');
+
+                $queryMentors->union($querySkills);
+                $query = $queryMentors;
+            }
+            else if($search_mentors && $search_skills)
             {
                 $queryMentors = $this->Mentors->find('all')
                     ->where(["match (Mentors.email, Mentors.first_name, Mentors.last_name, Mentors.description) against(:search in boolean mode)"])
@@ -192,8 +217,22 @@ class MentorsController extends AppController
 
         $query->order([$sort_field => $sort_dir]);
         
-        $this->set('mentors', $this->paginate($query));
-        $this->set('_serialize', ['mentors']);
+        $mentors = [];
+        $archivedMentors = [];
+        $allMentors = $this->paginate($query);
+        foreach ($allMentors as $mentor){
+            if($search_available && $mentor->available || $search_unavailable && !$mentor->available){
+                if ($mentor->deleted != null && $mentor->deleted != "") {
+                
+                    array_push($archivedMentors, $mentor);
+                } else {
+                    array_push($mentors, $mentor);
+                }
+            }
+        }
+        
+        $this->set(compact('mentors', 'archivedMentors'));
+        $this->set('_serialize', ['mentors', 'archivedMentors']);
     }
 
 }

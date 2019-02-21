@@ -44,7 +44,7 @@ class SkillsController extends AppController
         ]);
 
         $this->set('skill', $skill);
-        $this->set('_serialize', 'skill');
+        $this->set('_serialize', ['skill']);
     }
 
     /**
