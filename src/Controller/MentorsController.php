@@ -26,10 +26,11 @@ class MentorsController extends AppController
         ini_set('memory_limit', '-1');
         $mentors = $this->Mentors->find('all', [
             'contain' => ['Skills']
-        ])->where('deleted is null')->order(['name' => 'asc']);
+        ])->where('deleted is null')->order(['email' => 'asc']);
         $archivedMentors = $this->Mentors->find('all', [
             'contain' => ['Skills']
-        ])->where('deleted is not null')->order(['name' => 'asc']);
+        ])->where('deleted is not null')->order(['email' => 'asc']);
+
         $this->set(compact('mentors', 'archivedMentors'));
         $this->set('_serialize', ['mentors', 'archivedMentors']);
     }
@@ -137,8 +138,8 @@ class MentorsController extends AppController
         }
    
         $keyword = "";
-        $sort_field = "";
-        $sort_dir = "";
+        $sort_field = "email";
+        $sort_dir = "asc";
 
         $search_available = true;
         $search_unavailable = true;
