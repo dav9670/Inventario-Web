@@ -67,10 +67,8 @@ class SkillsControllerTest extends TestCase
         $receivedSkills = [];
 
         foreach($receivedSkillsDecoded->skills as $skill){
-            debug($skill);
             array_push($receivedSkills, $skillsTable->get($skill->id));
         }
-
 
         $this->assertEquals($expectedSkills, $receivedSkills);
 
@@ -80,7 +78,6 @@ class SkillsControllerTest extends TestCase
         $this->get('/skills/search.json?keyword=zzzzzzzzzzzzzzzzz&sort_field=name&sort_dir=asc');
 
         $receivedSkillsDecoded = json_decode((string)$this->_response->getBody());
-
 
         $this->assertCount(0, $receivedSkillsDecoded->skills);
     }
