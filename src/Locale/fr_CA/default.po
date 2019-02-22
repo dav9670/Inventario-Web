@@ -1322,3 +1322,24 @@ msgstr "Novembre"
 msgid "December"
 msgstr "Décembre"
 
+
+msgid "Reports"
+msgstr "Rapports"
+
+msgid "Logout"
+msgstr "Déconnexion"
+
+msgid "Login"
+msgstr "Connexion"
+
+msgid "You are now logged out."
+msgstr "Vous êtes maintenant déconnecté(e)."
+
+msgid "Your email and/or password is incorrect."
+msgstr "Votre adresse courriel et/ou mot de passe est incorrect(e)."
+
+msgid "Search by Equipments"
+msgstr "Rechercher dans les Équipements"
+
+msgid "Search by Categories"
+msgstr "Rechercher dans les Catégories"

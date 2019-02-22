@@ -39,14 +39,14 @@ class UsersController extends AppController
             }
             else
             {
-                $this->Flash->error('Your username or password is incorrect.');
+                $this->Flash->error(__('Your email and/or password is incorrect.'));
             }
         }
     }
 
     public function logout()
     {
-        $this->Flash->success('You are now logged out.');
+        $this->Flash->success(__('You are now logged out.'));
         return $this->redirect($this->Auth->logout());
     }
 

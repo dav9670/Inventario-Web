@@ -22,7 +22,7 @@ $cakeDescription = 'Inventar.io';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
         <?= $cakeDescription ?>:
-        <?= $this->fetch('title') ?>
+        <?= __($this->fetch('title')) ?>
     </title>
     <?= $this->Html->meta('icon') ?>
 
@@ -39,33 +39,33 @@ $cakeDescription = 'Inventar.io';
     <nav class="top-bar expanded" data-topbar role="navigation">
         <ul class="title-area large-2 medium-3 columns">
             <li class="name">
-                <h1><a href=""><?= $this->fetch('title') ?></a></h1>
+                <h1><a href=""><?= __($this->fetch('title')) ?></a></h1>
             </li>
         </ul>
         <div class="top-bar-section">
             <ul>
                 <?php if($this->request->getSession()->read('Auth.User')){ ?>
                     <?php if($this->request->getSession()->read('Auth.User.admin_status') == 'admin') { ?>
-                        <li><?= $this->Html->link( 'Loans', ['controller' => 'Loans', 'action' => 'index']); ?></li>
-                        <li><?= $this->Html->link( 'Mentors', ['controller' => 'Mentors', 'action' => 'index']); ?></li>
-                        <li><?= $this->Html->link( 'Rooms', ['controller' => 'Rooms', 'action' => 'index']); ?></li>
-                        <li><?= $this->Html->link( 'Licences', ['controller' => 'Licences', 'action' => 'index']); ?></li>
-                        <li><?= $this->Html->link( 'Equipments', ['controller' => 'Equipments', 'action' => 'index']); ?></li>
-                        <li><?= $this->Html->link( 'Reports', ['controller' => 'Reports', 'action' => 'index']); ?></li>
-                        <li><?= $this->Html->link( 'Users', ['controller' => 'Users', 'action' => 'index']); ?></li>
+                        <li><?= $this->Html->link( __('Loans'), ['controller' => 'Loans', 'action' => 'index']); ?></li>
+                        <li><?= $this->Html->link( __('Mentors'), ['controller' => 'Mentors', 'action' => 'index']); ?></li>
+                        <li><?= $this->Html->link( __('Rooms'), ['controller' => 'Rooms', 'action' => 'index']); ?></li>
+                        <li><?= $this->Html->link( __('Licences'), ['controller' => 'Licences', 'action' => 'index']); ?></li>
+                        <li><?= $this->Html->link( __('Equipments'), ['controller' => 'Equipments', 'action' => 'index']); ?></li>
+                        <li><?= $this->Html->link( __('Reports'), ['controller' => 'Reports', 'action' => 'index']); ?></li>
+                        <li><?= $this->Html->link( __('Users'), ['controller' => 'Users', 'action' => 'index']); ?></li>
                     <?php } else { ?>
-                        <li><?= $this->Html->link( 'Profile', ['controller' => 'Users', 'action' => 'profile']); ?></li>
+                        <li><?= $this->Html->link( __('Profile'), ['controller' => 'Users', 'action' => 'profile']); ?></li>
                     <?php } ?>
                 <?php } ?>
             </ul>
             <ul class="title-area right">
-                <li><a href="/fr_CA">Francais</a></li>
+                <li><a href="/fr_CA">Français</a></li>
                 <li><a href="/en_US">English</a></li>
             </ul>
             <ul class="right">
                 <?php if($this->request->getSession()->read('Auth.User')) { ?>
                     <li><?= $this->Html->link( $this->request->getSession()->read('Auth.User.email'), ['controller' => 'Users', 'action' => 'profile']); ?></li>
-                    <li><?= $this->Html->link( 'Logout', ['controller' => 'Users', 'action' => 'logout']); ?></li>
+                    <li><?= $this->Html->link( __('Logout'), ['controller' => 'Users', 'action' => 'logout']); ?></li>
                 <?php } ?>
             </ul>
         </div>

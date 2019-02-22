@@ -41,8 +41,8 @@
         </form>
     </div>
     <div class="tab">
-        <button id='table_activated_button' class="tablinks active" onclick="show_table('table_activated')">Activated</button>
-        <button id='table_archived_button' class="tablinks" onclick="show_table('table_archived')">Archived</button>
+        <button id='table_activated_button' class="tablinks active" onclick="show_table('table_activated')"><?= __("Activated") ?></button>
+        <button id='table_archived_button' class="tablinks" onclick="show_table('table_archived')"><?= __("Archived") ?></button>
     </div>
     <div class="tabcontent">
         <table cellpadding="0" cellspacing="0">

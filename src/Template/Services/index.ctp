@@ -63,7 +63,7 @@
                             deleteLink = '<?= $this->Html->link(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete {0}?', -2)]) ?>';
                         } else {
                             deleteLink = '<?= $this->Html->link(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete {0}? {1} items are associated with it.', -2, -3)]) ?>';
-                            deleteLink = deleteLink.replace(/-3/g, elem.mentor_count);
+                            deleteLink = deleteLink.replace(/-3/g, elem.room_count);
                         }
                          
                         deleteLink = deleteLink.replace(/-1/g, elem.id);
