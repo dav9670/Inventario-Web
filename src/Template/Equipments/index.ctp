@@ -89,7 +89,6 @@
                     console.log(status);
                 },
                 success: function( response ){
-                    console.log("succes");
                     for(var i=0; i<2; i++){
                         var table_name = "";
                         var array_name = "";
@@ -104,7 +103,6 @@
                         table.empty();
 
                         equipmentsArray = response[array_name];
-                        console.log(equipmentsArray);
                         $.each(equipmentsArray, function(idx, elem){
                             let pic = "<img src='data:image/png;base64," + elem.image + "' alt='" + elem.name + "' width=100/>";
                             let picCell = "<td><a href='/equipments/" + elem.id + "'>" + pic + "</a></td>";
@@ -113,7 +111,6 @@
                             let descriptionCell = "<td><a href='/equipments/" + elem.id + "'>" + elem.description + "</a></td>";
 
                             var categories_list = "";
-                            console.log(elem.categories_list);
                             var three_categories = elem.categories_list.slice(0,3);
                             if (elem.categories_list.length > 3) {
                                 categories_list = three_categories.join(", ") + "...";
