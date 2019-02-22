@@ -214,7 +214,7 @@ class RoomsController extends AppController
 
         if(!is_null($query))
         {
-            $query->order(['Rooms.'.$sort_field => 'asc']);
+            $query->order(['Rooms.'.$sort_field => $sort_dir]);
         }
         
         $rooms = [];
