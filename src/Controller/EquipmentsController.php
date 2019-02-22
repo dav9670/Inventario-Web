@@ -23,10 +23,10 @@ class EquipmentsController extends AppController
         ini_set('memory_limit', '-1');
         $equipments = $this->Equipments->find('all', [
             'contain' => ['Categories']
-        ])->where(['deleted IS' => null])->orWhere(['deleted IS' => ""])->order(['name' => 'asc']);
+        ])->where('deleted is null')->order(['name' => 'asc']);
         $archivedEquipments = $this->Equipments->find('all', [
             'contain' => ['Categories']
-        ])->where(['deleted IS NOT' => ""])->order(['name' => 'asc']);
+        ])->where('deleted is not null')->order(['name' => 'asc']);
         $this->set(compact('equipments', 'archivedEquipments'));
         $this->set('_serialize', ['equipments', 'archivedEquipments']);
     }
@@ -212,7 +212,10 @@ class EquipmentsController extends AppController
             
         }
 
-        $query->order([$sort_field => $sort_dir]);
+        if (!is_null($query))
+        {
+            $query->order(["Equipments.".$sort_field => $sort_dir]);
+        }
         
         $equipments = [];
         $archivedEquipments = [];
@@ -220,9 +223,16 @@ class EquipmentsController extends AppController
         foreach ($allEquipments as $equipment){
             if($search_available && $equipment->available || $search_unavailable && !$equipment->available){
                 if ($equipment->deleted != null && $equipment->deleted != "") {
-                    array_push($archivedEquipments, $equipment);
+                    
+                    if (!in_array($equipment,$archivedEquipments))
+                    {
+                        array_push($archivedEquipments, $equipment);
+                    }
                 } else {
-                    array_push($equipments, $equipment);
+                    if (!in_array($equipment,$equipments))
+                    {
+                        array_push($equipments, $equipment);
+                    }
                 }
             }
         }

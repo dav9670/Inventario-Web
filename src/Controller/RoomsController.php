@@ -134,13 +134,13 @@ class RoomsController extends AppController
         }
    
         $keyword = "";
-        $sort_field = "";
-        $sort_dir = "";
+        $sort_field = "name";
+        $sort_dir = "asc";
 
-        $search_available = false;
-        $search_unavailable = false;
-        $search_rooms = false;
-        $search_services = false;
+        $search_available = true;
+        $search_unavailable = true;
+        $search_rooms = true;
+        $search_services = true;
 
         if ($this->getRequest()->is('ajax')){
             $keyword = $this->getRequest()->getQuery('keyword');
@@ -212,16 +212,27 @@ class RoomsController extends AppController
             
         }
 
-        $query->order([$sort_field => $sort_dir]);
+        if(!is_null($query))
+        {
+            $query->order(['Rooms.'.$sort_field => $sort_dir]);
+        }
         
         $rooms = [];
         $archivedRooms = [];
         $allRooms = $this->paginate($query);
         foreach ($allRooms as $room){
-            if ($room->deleted != null && $room->deleted != "") {
-                array_push($archivedRooms, $room);
-            } else {
-                array_push($rooms, $room);
+            if($search_available && $room->available || $search_unavailable && !$room->available){
+                if ($room->deleted != null && $room->deleted != "") {
+                    if (!in_array($room,$archivedRooms))
+                    {
+                        array_push($archivedRooms, $room);
+                    }
+                } else {
+                    if (!in_array($room,$rooms))
+                    {
+                        array_push($rooms, $room);
+                    }
+                }
             }
         }
         

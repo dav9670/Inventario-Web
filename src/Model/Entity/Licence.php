@@ -3,6 +3,7 @@ namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
 use Cake\ORM\TableRegistry;
+use Cake\I18n\Time;
 
 /**
  * Licence Entity
@@ -56,5 +57,42 @@ class Licence extends Entity
         return $nbloans > 0 && is_null($this->deleted);;
     }
 
-    protected $_virtual = ['available'];
+    protected function _getProductsList()
+    {
+        TableRegistry::get($this->getSource())->loadInto($this, ['Products']);
+        if (is_array($this->products))
+        {
+            $productnames = array();
+            foreach ($this->products as $product)
+            {
+                $productnames[] = $product->name;
+            }
+
+            return $productnames;
+        }
+        return array();
+    }
+
+    protected function _getStatus()
+    {
+        $now = Time::now();
+        if ($this->start_time > $now)
+        {
+            return __("Not yet active");
+        }
+        else if ($this->start_time < $now && $this->end_time > $now)
+        {
+            return __("Ongoing");
+        }
+        else if (is_null($this->end_time))
+        {
+            return __("Infinite");
+        }
+        else
+        {
+            return __("Expired");
+        }
+    }
+
+    protected $_virtual = ['available', 'products_list', 'status'];
 }

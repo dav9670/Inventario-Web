@@ -47,6 +47,42 @@ class CategoriesControllerTest extends TestCase
     }
 
     /**
+     * Test search method
+     *
+     * @return void
+     */
+    public function testSearch()
+    {
+        //Positive test
+
+        $categoriesTable = TableRegistry::get('Categories');
+        $expectedCategories = $categoriesTable->find('all')
+            ->where('name like "Computer" or name like "Electronic"')
+            ->order(['name' => 'asc'])
+            ->toList();
+
+        $this->get('/categories/search.json?keyword=electro&sort_field=name&sort_dir=asc');
+
+        $receivedCategoriesDecoded = json_decode((string)$this->_response->getBody());
+        $receivedCategories = [];
+
+        foreach($receivedCategoriesDecoded->categories as $category){
+            array_push($receivedCategories, $categoriesTable->get($category->id));
+        }
+
+        $this->assertEquals($expectedCategories, $receivedCategories);
+
+        //Negative test
+        $categoriesTable = TableRegistry::get('Categories');
+
+        $this->get('/categories/search.json?keyword=zzzzzzzzzzzzzzzzz&sort_field=name&sort_dir=asc');
+
+        $receivedCategoriesDecoded = json_decode((string)$this->_response->getBody());
+
+        $this->assertCount(0, $receivedCategoriesDecoded->categories);
+    }
+
+    /**
      * Test add method
      *
      * @return void
@@ -132,7 +168,7 @@ class CategoriesControllerTest extends TestCase
         ];
 
         $categories = TableRegistry::get('Categories');
-        $category = $categories->find()->where(['id' => 1])->first();
+        $category = $categories->find()->where(['id' => 2])->first();
         $this->assertNotNull($category);
         $this->assertEquals('Phone', $category->name);
         $this->assertEquals('Used to call someone, phone is now more a micro computer than a phone.', $category->description);
@@ -141,7 +177,7 @@ class CategoriesControllerTest extends TestCase
         $this->post('/categories/2', $post);
 
         $categories = TableRegistry::get('Categories');
-        $category = $categories->find()->where(['id' => 1])->first();
+        $category = $categories->find()->where(['id' => 2])->first();
         $this->assertNotNull($category);
         $this->assertEquals('Phone', $category->name);
         $this->assertEquals('Used to call someone, phone is now more a micro computer than a phone.', $category->description);

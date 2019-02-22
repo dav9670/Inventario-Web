@@ -103,7 +103,7 @@ class MentorsController extends AppController
      */
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
+        $this->request->allowMethod(['get', 'post', 'delete']);
         $mentor = $this->Mentors->get($id);
         if ($this->Mentors->delete($mentor)) {
             $this->Flash->success(__('The mentor has been deleted.'));
@@ -213,7 +213,10 @@ class MentorsController extends AppController
             
         }
 
-        $query->order([$sort_field => $sort_dir]);
+        if (!is_null($query))
+        {
+            $query->order(["Mentors.".$sort_field => $sort_dir]);
+        }
         
         $mentors = [];
         $archivedMentors = [];
@@ -221,10 +224,16 @@ class MentorsController extends AppController
         foreach ($allMentors as $mentor){
             if($search_available && $mentor->available || $search_unavailable && !$mentor->available){
                 if ($mentor->deleted != null && $mentor->deleted != "") {
-                
-                    array_push($archivedMentors, $mentor);
+
+                    if (!in_array($mentor,$archivedMentors))
+                    {
+                        array_push($archivedMentors, $mentor);
+                    }
                 } else {
-                    array_push($mentors, $mentor);
+                    if (!in_array($mentor,$mentors))
+                    {
+                        array_push($mentors, $mentor);
+                    }
                 }
             }
         }

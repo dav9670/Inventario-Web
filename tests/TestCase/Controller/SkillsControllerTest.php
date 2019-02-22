@@ -47,6 +47,42 @@ class SkillsControllerTest extends TestCase
     }
 
     /**
+     * Test search method
+     *
+     * @return void
+     */
+    public function testSearch()
+    {
+        //Positive test
+
+        $skillsTable = TableRegistry::get('Skills');
+        $expectedSkills = $skillsTable->find('all')
+            ->where('name like "First aid" or name like "Haskell"')
+            ->order(['name' => 'asc'])
+            ->toList();
+
+        $this->get('/skills/search.json?keyword=ha&sort_field=name&sort_dir=asc');
+
+        $receivedSkillsDecoded = json_decode((string)$this->_response->getBody());
+        $receivedSkills = [];
+
+        foreach($receivedSkillsDecoded->skills as $skill){
+            array_push($receivedSkills, $skillsTable->get($skill->id));
+        }
+
+        $this->assertEquals($expectedSkills, $receivedSkills);
+
+        //Negative test
+        $skillsTable = TableRegistry::get('Skills');
+
+        $this->get('/skills/search.json?keyword=zzzzzzzzzzzzzzzzz&sort_field=name&sort_dir=asc');
+
+        $receivedSkillsDecoded = json_decode((string)$this->_response->getBody());
+
+        $this->assertCount(0, $receivedSkillsDecoded->skills);
+    }
+
+    /**
      * Test add method
      *
      * @return void
