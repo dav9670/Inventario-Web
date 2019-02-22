@@ -212,7 +212,7 @@ class RoomsController extends AppController
             
         }
 
-        $query->order([$sort_field => $sort_dir]);
+        $query->order(['Rooms.'.$sort_field => 'asc']);
         
         $rooms = [];
         $archivedRooms = [];
