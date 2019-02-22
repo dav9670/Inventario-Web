@@ -47,6 +47,43 @@ class ServicesControllerTest extends TestCase
     }
 
     /**
+     * Test search method
+     *
+     * @return void
+     */
+    public function testSearch()
+    {
+        //Positive test
+
+        $servicessTable = TableRegistry::get('Services');
+        $expectedServices = $servicessTable->find('all')
+            ->where('name like "Basic chairs" or name like "Basic tables"')
+            ->order(['name' => 'asc'])
+            ->toList();
+
+        $this->get('/services/search.json?keyword=ba&sort_field=name&sort_dir=asc');
+
+        $receivedServicesDecoded = json_decode((string)$this->_response->getBody());
+        $receivedServices = [];
+
+        foreach($receivedServicesDecoded->services as $service){
+            array_push($receivedServices, $servicessTable->get($service->id));
+        }
+
+        $this->assertEquals($expectedServices, $receivedServices);
+
+        //Negative test
+        $servicessTable = TableRegistry::get('Services');
+
+        $this->get('/services/search.json?keyword=zzzzzzzzzzzzzzzzz&sort_field=name&sort_dir=asc');
+
+        $receivedServicesDecoded = json_decode((string)$this->_response->getBody());
+
+
+        $this->assertCount(0, $receivedServicesDecoded->services);
+    }
+
+    /**
      * Test add method
      *
      * @return void

@@ -154,7 +154,7 @@ class ServicesController extends AppController
      */
     public function delete($id = null)
     {
-        $this->getRequest()->allowMethod(['post', 'delete']);
+        $this->getRequest()->allowMethod(['get', 'post', 'delete']);
         $service = $this->Services->get($id);
         $success = false;
         if ($this->Services->delete($service)) {
@@ -221,23 +221,23 @@ class ServicesController extends AppController
     {
         if($this->isApi()){
             $this->getRequest()->allowMethod('post');
-        }else {
-            $this->getRequest()->allowMethod('ajax');
+        } else {
+            $this->getRequest()->allowMethod(['ajax', 'get']);
         }
-
+   
         $keyword = "";
         $sort_field = "";
         $sort_dir = "";
-        
-        if ($this->getRequest()->is('ajax')){
-            $keyword = $this->getRequest()->getQuery('keyword');
-            $sort_field = $this->getRequest()->getQuery('sort_field');
-            $sort_dir = $this->getRequest()->getQuery('sort_dir');
-        } else if ($this->getRequest()->is('post')){
+
+        if ($this->isApi()){
             $jsonData = $this->getRequest()->input('json_decode', true);
-            $keyword = $jsonData['keyword'];
-            $sort_field = $jsonData['sort_field'];
-            $sort_dir = $jsonData['sort_dir'];
+            $keyword = $jsonData['keyword'] != null ? $jsonData['keyword'] : '';
+            $sort_field = $jsonData['sort_field'] != null ? $jsonData['sort_field'] : 'name';
+            $sort_dir = $jsonData['sort_dir'] != null ? $jsonData['sort_dir'] : 'asc';
+        } else {
+            $keyword = $this->getRequest()->getQuery('keyword') != null ? $this->getRequest()->getQuery('keyword') : '';
+            $sort_field = $this->getRequest()->getQuery('sort_field') != null ? $this->getRequest()->getQuery('sort_field') : 'name';
+            $sort_dir = $this->getRequest()->getQuery('sort_dir') != null ? $this->getRequest()->getQuery('sort_dir') : 'asc';
         }
         
         if($keyword == '')
@@ -253,7 +253,7 @@ class ServicesController extends AppController
 
         $query->order([$sort_field => $sort_dir]);
         
-        $this->set('services', $this->paginate($query));
+        $this->set('services', $query);
         $this->set('_serialize', ['services']);
     }
 

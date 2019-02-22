@@ -103,7 +103,7 @@ class MentorsController extends AppController
      */
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
+        $this->request->allowMethod(['get', 'post', 'delete']);
         $mentor = $this->Mentors->get($id);
         if ($this->Mentors->delete($mentor)) {
             $this->Flash->success(__('The mentor has been deleted.'));
