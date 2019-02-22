@@ -50,5 +50,22 @@ class Equipment extends Entity
         return $nbloans > 0 && is_null($this->deleted);
     }
 
-    protected $_virtual = ['available'];
+    protected function _getCategoriesList()
+    {
+        TableRegistry::get($this->getSource())->loadInto($this, ['Categories']);
+        if (is_array($this->categories))
+        {
+            $categorynames = array();
+            foreach ($this->categories as $category)
+            {
+                $categorynames[] = $category->name;
+            }
+
+            return $categorynames;
+        }
+        return array();
+    }
+
+    protected $_virtual = ['available', 'categories_list'];
+
 }

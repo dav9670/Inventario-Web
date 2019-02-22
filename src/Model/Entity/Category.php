@@ -10,7 +10,7 @@ use Cake\ORM\TableRegistry;
  * @property int $id
  * @property string $name
  * @property string|null $description
- * @property float|null $hourly_rate
+ * @property float $hourly_rate
  *
  * @property \App\Model\Entity\Equipment[] $equipments
  */

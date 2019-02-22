@@ -70,7 +70,7 @@ class CategoriesTable extends Table
 
         $validator
             ->numeric('hourly_rate')
-            ->allowEmptyString('hourly_rate');
+            ->requirePresence('hourly_rate','create');
 
         return $validator;
     }
