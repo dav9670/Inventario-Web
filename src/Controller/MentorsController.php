@@ -213,7 +213,7 @@ class MentorsController extends AppController
             
         }
 
-        $query->order([$sort_field => $sort_dir]);
+        $query->order(['Mentors' . $sort_field => $sort_dir]);
         
         $mentors = [];
         $archivedMentors = [];
