@@ -252,7 +252,7 @@ class ProductsController extends AppController
                 ->bind(":search", $keyword . '*', 'string');
         }
 
-        $query->order(['Licences.'.$sort_field => $sort_dir]);
+        $query->order([$sort_field => $sort_dir]);
         
         $this->set('products', $this->paginate($query));
         $this->set('_serialize', ['products']);

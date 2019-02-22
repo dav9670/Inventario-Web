@@ -212,7 +212,10 @@ class RoomsController extends AppController
             
         }
 
-        $query->order(['Rooms.'.$sort_field => 'asc']);
+        if(!is_null($query))
+        {
+            $query->order(['Rooms.'.$sort_field => 'asc']);
+        }
         
         $rooms = [];
         $archivedRooms = [];
@@ -220,9 +223,15 @@ class RoomsController extends AppController
         foreach ($allRooms as $room){
             if($search_available && $room->available || $search_unavailable && !$room->available){
                 if ($room->deleted != null && $room->deleted != "") {
-                    array_push($archivedRooms, $room);
+                    if (!in_array($room,$archivedRooms))
+                    {
+                        array_push($archivedRooms, $room);
+                    }
                 } else {
-                    array_push($rooms, $room);
+                    if (!in_array($room,$rooms))
+                    {
+                        array_push($rooms, $room);
+                    }
                 }
             }
         }

@@ -134,8 +134,8 @@ class LicencesController extends AppController
         }
    
         $keyword = "";
-        $sort_field = "";
-        $sort_dir = "";
+        $sort_field = "name";
+        $sort_dir = "asc";
 
         $search_available = true;
         $search_unavailable = true;
@@ -212,7 +212,10 @@ class LicencesController extends AppController
             
         }
 
-        $query->order([$sort_field => $sort_dir]);
+        if(!is_null($query))
+        {
+            $query->order(['Licences.'.$sort_field => $sort_dir]);
+        }
         
         $licences = [];
         $archivedLicences = [];
@@ -220,10 +223,18 @@ class LicencesController extends AppController
         foreach ($allLicences as $licence){
             if($search_available && $licence->available || $search_unavailable && !$licence->available){
                 if ($licence->deleted != null && $licence->deleted != "") {
-                
-                    array_push($archivedLicences, $licence);
+                    
+                    if (!in_array($licence,$archivedLicences))
+                    {
+                        array_push($archivedLicences, $licence);
+                    }
+                    
                 } else {
-                    array_push($licences, $licence);
+                    
+                    if (!in_array($licence,$licences))
+                    {
+                        array_push($licences, $licence);
+                    }
                 }
             }
         }
