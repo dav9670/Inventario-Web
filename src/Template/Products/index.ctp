@@ -107,7 +107,7 @@
             $('#search').keyup();
          });
          $('#platform_sort').click( function(e) {
-            sort_setter('name');
+            sort_setter('plaform');
             $('#search').keyup();
          });
          $('#description_sort').click( function(e) {
