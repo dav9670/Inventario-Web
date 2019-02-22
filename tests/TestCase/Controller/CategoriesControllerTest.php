@@ -168,7 +168,7 @@ class CategoriesControllerTest extends TestCase
         ];
 
         $categories = TableRegistry::get('Categories');
-        $category = $categories->find()->where(['id' => 1])->first();
+        $category = $categories->find()->where(['id' => 2])->first();
         $this->assertNotNull($category);
         $this->assertEquals('Phone', $category->name);
         $this->assertEquals('Used to call someone, phone is now more a micro computer than a phone.', $category->description);
@@ -177,7 +177,7 @@ class CategoriesControllerTest extends TestCase
         $this->post('/categories/2', $post);
 
         $categories = TableRegistry::get('Categories');
-        $category = $categories->find()->where(['id' => 1])->first();
+        $category = $categories->find()->where(['id' => 2])->first();
         $this->assertNotNull($category);
         $this->assertEquals('Phone', $category->name);
         $this->assertEquals('Used to call someone, phone is now more a micro computer than a phone.', $category->description);
