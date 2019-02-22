@@ -23,10 +23,10 @@ class EquipmentsController extends AppController
         ini_set('memory_limit', '-1');
         $equipments = $this->Equipments->find('all', [
             'contain' => ['Categories']
-        ])->where(['deleted IS' => null])->orWhere(['deleted IS' => ""])->order(['name' => 'asc']);
+        ])->where('deleted is null')->order(['name' => 'asc']);
         $archivedEquipments = $this->Equipments->find('all', [
             'contain' => ['Categories']
-        ])->where(['deleted IS NOT' => ""])->order(['name' => 'asc']);
+        ])->where('deleted is not null')->order(['name' => 'asc']);
         $this->set(compact('equipments', 'archivedEquipments'));
         $this->set('_serialize', ['equipments', 'archivedEquipments']);
     }

@@ -43,9 +43,10 @@ class CategoriesController extends AppController
             'contain' => ['Equipments']
         ]);
 
-        $this->set('category', $category);
-        $this->set('_serialize', 'category');
+        $this->set(compact('category'));
+        $this->set('_serialize', ['category']);
     }
+    
 
     /**
      * Add method
@@ -186,8 +187,8 @@ class CategoriesController extends AppController
         $equipment = "";
         if($this->isApi()){
             $jsonData = $this->getRequest()->input('json_decode', true);
-            $category = $this->Services->get($jsonData['category']);
-            $equipment = $this->Services->Rooms->get($jsonData['equipment']);
+            $category = $this->Categories->get($jsonData['category']);
+            $equipment = $this->Categories->Equipments->get($jsonData['equipment']);
         } else {
             $category = $this->Categories->get($this->getRequest()->getQuery('category'));
             $equipment = $this->Categories->Equipments->get($this->getRequest()->getQuery('equipment'));
