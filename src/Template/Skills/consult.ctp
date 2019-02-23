@@ -65,11 +65,6 @@
 </div>
 
 <script>
-    $("#skill_form :input").on('change paste keyup', (function() {
-        $("#skill_form").data("changed",true);
-        $('#cancelButton').show();
-    }));
-
     function doneEditing(){
         if ($("#skill_form").data("changed")){
             var confirmed = true;
@@ -112,4 +107,11 @@
             $('#related a[class="unlink_link"').show();
         }
     }
+
+    $('document').ready(function(){
+        $("#skill_form :input").on('change paste keyup', (function() {
+            $("#skill_form").data("changed",true);
+            $('#cancelButton').show();
+        }));
+    });
 </script>

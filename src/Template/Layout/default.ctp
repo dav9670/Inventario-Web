@@ -28,12 +28,14 @@ $cakeDescription = 'Inventar.io';
 
     <?= $this->Html->css('base.css') ?>
     <?= $this->Html->css('style.css') ?>
+    <?= $this->Html->css('jquery-ui.css') ?>
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
 
     <?= $this->Html->script('jquery-3.3.1.js', array('inline' => false)); ?>
+    <?= $this->Html->script('jquery-ui.js', array('inline' => false)); ?>
 </head>
 <body>
     <nav class="top-bar expanded" data-topbar role="navigation">
