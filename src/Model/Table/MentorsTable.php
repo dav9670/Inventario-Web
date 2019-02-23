@@ -70,7 +70,7 @@ class MentorsTable extends Table
             ->email('email')
             ->requirePresence('email', 'create')
             ->allowEmptyString('email', false)
-            ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+            ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table', 'message' => 'Email must be unique']);
 
         $validator
             ->scalar('first_name')
