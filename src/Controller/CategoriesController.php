@@ -128,6 +128,7 @@ class CategoriesController extends AppController
      */
     public function consult($id = null)
     {
+        $data ='';
         $category = $this->Categories->get($id, [
             'contain' => ['Equipments']
         ]);
@@ -135,13 +136,19 @@ class CategoriesController extends AppController
             $category = $this->Categories->patchEntity($category, $this->getRequest()->getData());
             if ($this->Categories->save($category)) {
                 $this->Flash->success(__('The category has been saved.'));
+                $data = 'view';
 
                 return $this->redirect(['action' => 'consult', $category->id]);
+               
             }
-            $this->Flash->error(__('The category could not be saved. Please, try again.'));
+            else{
+                $this->Flash->error(__('The category could not be saved. Please, try again.'));
+                $data = 'edit';
+
+            }
         }
         $equipments = $this->Categories->Equipments->find('list', ['limit' => 200]);
-        $this->set(compact('category', 'equipments'));
+        $this->set(compact('category', 'equipments','data'));
     }
     
 

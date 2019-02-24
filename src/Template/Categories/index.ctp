@@ -31,7 +31,7 @@
             <tr>
                 <th scope="col"><a id='name_sort' class='asc'><?= __("Name") ?></a></th>
                 <th scope="col"><a id='description_sort'><?= __("Description") ?></a></th>
-                <th scope="col"><a id='hourly_rate_sort'><?= __("Hourly Rate") ?></a></th>
+                <th scope="col"><?= __("Hourly Rate") ?></th>
                 <th scope="col"><?= __("Equipment count") ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>

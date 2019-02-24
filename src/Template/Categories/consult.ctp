@@ -3,7 +3,9 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Category $category
  */
+
 ?>
+<p><?=$data?></p>
 <div class="categories form large-12 medium-11 columns content">
     <?= $this->Form->create($category, ['id' => 'category_form']) ?>
     <button type="button" id="editButton" class='right editdone' onClick='setReadOnly(false)'><?=__('Edit')?></button>
@@ -79,6 +81,7 @@
         }
     }
 
+
     function cancel(){
         if(confirm("<?=__('Cancel all your changes?')?>")){
             location.reload(true);
@@ -108,5 +111,15 @@
             $('#submit').show();
             $('#related a[class="unlink_link"').show();
         }
+    
     }
+
+    $('document').ready(function(){
+        if("<?=$data?>" == 'edit'){
+            setReadOnly(false);
+        }else{
+            setReadOnly(true);
+        }
+        });
+        
 </script>
