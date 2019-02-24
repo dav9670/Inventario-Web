@@ -57,10 +57,11 @@ class RoomsController extends AppController
         $room = $this->Rooms->newEntity();
         if ($this->request->is('post')) {
             $room = $this->Rooms->patchEntity($room, $this->request->getData());
+            debug($this->request->getData());
             if ($this->Rooms->save($room)) {
                 $this->Flash->success(__('The room has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                //return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The room could not be saved. Please, try again.'));
         }
