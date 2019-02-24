@@ -593,3 +593,14 @@ table td {
     border: 1px solid #ccc;
     border-top: none;
   } 
+
+  textarea {
+      resize: vertical;
+  }
+
+  .editdone {
+    width: 75px; 
+    text-align: center; 
+    padding: 10px;
+    text-transform: none !important;
+  }

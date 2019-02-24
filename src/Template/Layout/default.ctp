@@ -28,18 +28,20 @@ $cakeDescription = 'Inventar.io';
 
     <?= $this->Html->css('base.css') ?>
     <?= $this->Html->css('style.css') ?>
+    <?= $this->Html->css('jquery-ui.css') ?>
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
 
     <?= $this->Html->script('jquery-3.3.1.js', array('inline' => false)); ?>
+    <?= $this->Html->script('jquery-ui.js', array('inline' => false)); ?>
 </head>
 <body>
     <nav class="top-bar expanded" data-topbar role="navigation">
         <ul class="title-area large-2 medium-3 columns">
             <li class="name">
-                <h1><a href=""><?= __($this->fetch('title')) ?></a></h1>
+                <h1><?= $this->Html->link(__($this->getRequest()->params['controller']), ['controller' => $this->getRequest()->params['controller'], 'action' => 'index']); ?></h1>
             </li>
         </ul>
         <div class="top-bar-section">

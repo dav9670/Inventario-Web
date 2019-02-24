@@ -94,6 +94,24 @@ class MentorsController extends AppController
         $this->set(compact('mentor', 'skills'));
     }
 
+    public function consult($id = null)
+    {
+        $mentor = $this->Mentors->get($id, [
+            'contain' => ['Skills']
+        ]);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $mentor = $this->Mentors->patchEntity($mentor, $this->request->getData());
+            if ($this->Mentors->save($mentor)) {
+                $this->Flash->success(__('The mentor has been saved.'));
+
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('The mentor could not be saved. Please, try again.'));
+        }
+        $skills = $this->Mentors->Skills->find('list', ['limit' => 200]);
+        $this->set(compact('mentor', 'skills'));
+    }
+
     /**
      * Delete method
      *

@@ -34,7 +34,14 @@ class UsersController extends AppController
                 }
                 else
                 {
-                    return $this->redirect($this->Auth->redirectUrl());
+                    if($this->Auth->redirectUrl() == "/")
+                    {
+                        return $this->redirect(['action' => 'profile']);
+                    }
+                    else
+                    {
+                        return $this->redirect($this->Auth->redirectUrl());
+                    }
                 }
             }
             else
