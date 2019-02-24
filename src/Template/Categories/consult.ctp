@@ -6,19 +6,19 @@
 ?>
 <div class="categories form large-12 medium-11 columns content">
     <?= $this->Form->create($category, ['id' => 'category_form']) ?>
-    <button type="button" class="right" id="viewButton" style="width: 75px; text-align: center; padding: 10px;" onClick='setReadOnly(true)' hidden="hidden"><?=__('View')?></button>
-    <button type="button" class="right" id="editButton" style="width: 75px; text-align: center; padding: 10px;" onClick='setReadOnly(false)'><?=__('Edit')?></button> 
+    <button type="button" id="editButton" class='right editdone' onClick='setReadOnly(false)'><?=__('Edit')?></button>
+    <button type="button" id="doneButton" class='right editdone' onClick='doneEditing()' hidden='hidden'><?=__('Done')?></button>
     <fieldset>
         <legend><?= __('Category') ?></legend>
         <?php
             echo $this->Form->control('name', ['readOnly' => 'readOnly']);
             echo $this->Form->control('hourly_rate', ['readOnly' => 'readOnly']);
-            echo $this->Form->control('description', ['readOnly' => 'readOnly']);
+            echo $this->Form->control('description', ['type' => 'textarea', 'readOnly' => 'readOnly']);
         ?>
     </fieldset>
-    <?= $this->Form->button(__('Submit'), ['id' => 'submit', 'hidden']) ?>
+    <button type="button" class="right editdone" id="cancelButton" class='editdone' onClick='cancel()' hidden="hidden"><?=__('Cancel')?></button>
     <?= $this->Form->end() ?>
-    <?= $this->Form->postLink(__('Delete category'), ['controller' => 'categories', 'action' => 'delete', $category->id], ['confirm' => __('Are you sure you want to delete {0}?', $category->name)]);?>
+    <?= $this->Html->link(__('Delete skill'), ['controller' => 'Skills', 'action' => 'delete', $category->id], ['confirm' => $category->equipment_count == 0 ? __('Are you sure you want to delete {0}?', $category->name) : __('Are you sure you want to delete {0}? {1} equipments are associated with it.', $category->name, $category->equipment_count)]);?>
 
     <div class="related">
         <h4><?= __('Related Equipments') ?></h4>
@@ -60,28 +60,42 @@
 </div>
 
 <script>
-    $("#category_form :input").change(function() {
+    $("#category_form :input").on('change paste keyup', (function() {
         $("#category_form").data("changed",true);
-    });
+        $('#cancelButton').show();
+    }));
+
+    function doneEditing(){
+        if ($("#category_form").data("changed")){
+            var confirmed = true;
+            <?php if($category->equipment_count > 0) { ?>
+                confirmed = confirm('<?= __('Are you sure you want to modify {0}? {1} items are associated with it.', $category->name, $category->equipment_count) ?>');
+            <?php } ?>
+            if(confirmed){
+                $('#category_form').submit();
+            }
+        } else {
+            setReadOnly(true);
+        }
+    }
+
+    function cancel(){
+        if(confirm("<?=__('Cancel all your changes?')?>")){
+            location.reload(true);
+        }
+    }
 
     function setReadOnly(readOnly){
         if(readOnly){
             //View
-            if ($("#category_form").data("changed")) {
-                if(confirm("<?=__('Return to view mode and cancel all your changes?')?>")){
-                    location.reload(true);
-                }
-            } else {
-                $('#name').attr('readOnly', readOnly);
-                $('#hourly-rate').attr('readOnly', readOnly);
-                $('#description').attr('readOnly', readOnly);
+            $('#name').attr('readOnly', readOnly);
+            $('#description').attr('readOnly', readOnly);
+            $('#hourly-rate').attr('readOnly', readOnly);
 
-                $('#viewButton').hide();
-                $('#submit').hide();
-                $('#related a[class="unlink_link"').hide();
+            $('#doneButton').hide();
+            $('#related a[class="unlink_link"').hide();
 
-                $('#editButton').show();
-            }
+            $('#editButton').show();
         }else{
             //Edit
             $('#name').attr('readOnly', readOnly);
@@ -90,7 +104,7 @@
 
             $('#editButton').hide();
 
-            $('#viewButton').show();
+            $('#doneButton').show();
             $('#submit').show();
             $('#related a[class="unlink_link"').show();
         }

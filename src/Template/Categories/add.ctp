@@ -10,10 +10,10 @@
         <legend><?= __('Add Category') ?></legend>
         <?php
             echo $this->Form->control('name');
-            echo $this->Form->control('description');
+            echo $this->Form->control('description', ['type' => 'textarea']);
             echo $this->Form->control('hourly_rate');
         ?>
     </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
+    <?= $this->Form->button(__('Save')) ?>
     <?= $this->Form->end() ?>
 </div>
