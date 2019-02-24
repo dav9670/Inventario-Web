@@ -5,7 +5,7 @@
  */
 ?>
 <div class="mentors form large-12 medium-11 columns content">
-    <?= $this->Form->create($mentor) ?>
+    <?= $this->Form->create($mentor, ['type' => 'file']) ?>
     <fieldset>
         <legend><?= __('Add Mentor') ?></legend>
         <?php
@@ -20,6 +20,7 @@
     </fieldset>
     <h3><?=__('Skills')?></h3>
     <input id='autocomplete' type ='text'>
+    <input type='hidden' name='skills[_ids]' value=""/>
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
@@ -77,7 +78,7 @@
                 let table = $('#skills_table_body');
                 let elem = ui.item.data;
 
-                let input = "<input type='hidden' name='skills[]' value='" + elem.id + "'/>";
+                let input = "<input type='hidden' name='skills[_ids][]' value='" + elem.id + "'/>";
 
                 let nameCell = "<td><a href='/skills/" + elem.id + "'>" + elem.name + "</a></td>";
                 let descriptionCell = "<td><a href='/skills/" + elem.id + "'>" + elem.description + "</a></td>";

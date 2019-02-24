@@ -57,8 +57,17 @@ class MentorsController extends AppController
     {
         $mentor = $this->Mentors->newEntity();
         if ($this->request->is('post')) {
+
+            $data = $this->request->getData();
+            $image = $data['image'];
+            if($image['tmp_name'] != '') {
+                $imageData  = file_get_contents($image['tmp_name']);
+                $b64   = base64_encode($imageData);
+                $data['image'] = $b64;
+            }
+            $mentor = $this->Mentors->patchEntity($mentor, $data);
             
-            $mentor = $this->Mentors->patchEntity($mentor, $this->request->getData());
+            
             if ($this->Mentors->save($mentor)) {
                 $this->Flash->success(__('The mentor has been saved.'));
                 
