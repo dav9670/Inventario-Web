@@ -135,7 +135,7 @@ class SkillsController extends AppController
             if ($this->Skills->save($skill)) {
                 $this->Flash->success(__('The skill has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'consult', $skill->id]);
             }
             $this->Flash->error(__('The skill could not be saved. Please, try again.'));
         }
