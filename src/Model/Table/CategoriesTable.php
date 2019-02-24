@@ -61,7 +61,7 @@ class CategoriesTable extends Table
             ->maxLength('name', 50)
             ->requirePresence('name', 'create')
             ->allowEmptyString('name', false)
-            ->add('name', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+            ->add('name', 'unique', ['rule' => 'validateUnique', 'provider' => 'table'], ['message' => 'This category name is already taken.']);
 
         $validator
             ->scalar('description')
@@ -69,8 +69,12 @@ class CategoriesTable extends Table
             ->allowEmptyString('description');
 
         $validator
-            ->numeric('hourly_rate')
-            ->requirePresence('hourly_rate','create');
+            ->numeric('hourly_rate',['message' => 'Please enter a number like 3.14'])
+            ->requirePresence('hourly_rate','create')
+            ->add('hourly_rate', 'validFormat',[
+                'rule' => array('custom', '/^[0-9]{1,2}$|^[0-9]{1,2}(\.\d{1,2})?$/'),
+                'message' => 'Please enter a number like 3.14']);
+            
 
         return $validator;
     }
