@@ -11,9 +11,9 @@
         <?php
             echo $this->Form->control('name');
             echo $this->Form->control('platform');
-            echo $this->Form->control('description');
+            echo $this->Form->control('description', ['type' => 'textarea']);
         ?>
     </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
+    <?= $this->Form->button(__('Save')) ?>
     <?= $this->Form->end() ?>
 </div>
