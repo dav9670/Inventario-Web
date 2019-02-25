@@ -168,7 +168,36 @@ class EquipmentsController extends AppController
         }
     }
 
+    /**
+     * function reactivate
+     * reactive un equipement, set sa valeur deleted à null.
+     */
+    public function reactivate($id = null){
+        $this->getRequest()->allowMethod(['get', 'post', 'deactivate']);
+        $equipment = $this->Equipments->get($id);
+        $equipment->deleted = null;
+        $success = false;
+        if ($this->Equipments->save($equipment)) {
+            if($this->isApi()){
+                $success = true;
+            } else {
+                $this->Flash->success(__('The category has been reactivated.'));
+            }
+        } else {
+            if($this->isApi()){
+                $success = false;
+            } else {
+                $this->Flash->error(__('The category could not be reactivated. Please, try again.'));
+            }
+        }
 
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        } else {
+            return $this->redirect(['action' => 'index']);
+        }
+    }
 
 
     /**

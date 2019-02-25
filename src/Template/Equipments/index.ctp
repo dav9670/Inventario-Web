@@ -139,7 +139,7 @@
                                         link = link.replace(/-1/g, elem.id); 
                                 }
                             } else {
-                                link = '<?= $this->Form->postLink(__('Reactivate'), ['action' => 'reactivate', -1], ['confirm' => __('Are you sure you want to reactivate {0}?', -1)]) ?>';
+                                link = '<?= $this->Html->link(__('Reactivate'), ['action' => 'reactivate', -1], ['confirm' => __('Are you sure you want to reactivate {1}?', -1)]) ?>';
                                 link = link.replace(/-1/g, elem.id);
                             }
                             actionsCell = actionsCell.concat(link);
