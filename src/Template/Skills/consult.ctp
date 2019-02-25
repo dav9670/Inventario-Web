@@ -17,7 +17,7 @@
     </fieldset>
     <button type="button" class="right editdone" id="cancelButton" class='editdone' onClick='cancel()' hidden="hidden"><?=__('Cancel')?></button>
     <?= $this->Form->end() ?>
-    <?= $this->Html->link(__('Delete skill'), ['controller' => 'Skills', 'action' => 'delete', $skill->id], ['confirm' => $skill->mentor_count == 0 ? __('Are you sure you want to delete {0}?', $skill->name) : __('Are you sure you want to delete {0}? {1} items are associated with it.', $skill->name, $skill->mentor_count)]);?>
+    <?= $this->Html->link(__('Delete skill'), ['controller' => 'Skills', 'action' => 'delete', $skill->id], ['class' => 'delete-link', 'confirm' => $skill->mentor_count == 0 ? __('Are you sure you want to delete {0}?', $skill->name) : __('Are you sure you want to delete {0}? {1} items are associated with it.', $skill->name, $skill->mentor_count)]);?>
     
     
     <div class="related">
@@ -55,7 +55,7 @@
                 <?php endif; ?>
 
                 <td class="actions">
-                    <?= $this->Form->postLink(__('Unlink'), ['controller' => 'skills', 'action' => 'unlink', '?' => ['skill' => $skill->id, 'mentor' => $mentor->id]], ['confirm' => __('Are you sure you want to delete the association between {0} and {1}?', $mentor->first_name . " " . $mentor->last_name, $skill->name), 'class' => 'unlink_link', 'hidden']) ?>
+                    <?= $this->Form->postLink(__('Unlink'), ['controller' => 'skills', 'action' => 'unlink', '?' => ['skill' => $skill->id, 'mentor' => $mentor->id]], ['confirm' => __('Are you sure you want to delete the association between {0} and {1}?', $mentor->first_name . " " . $mentor->last_name, $skill->name), 'class' => 'unlink_link delete-link', 'hidden']) ?>
                 </td>
             </tr>
             <?php endforeach; ?>
@@ -92,7 +92,7 @@
             $('#description').attr('readOnly', readOnly);
 
             $('#doneButton').hide();
-            $('#related a[class="unlink_link"').hide();
+            $('.unlink_link').hide();
 
             $('#editButton').show();
         }else{
@@ -104,7 +104,7 @@
 
             $('#doneButton').show();
             $('#submit').show();
-            $('#related a[class="unlink_link"').show();
+            $('.unlink_link').show();
         }
     }
 

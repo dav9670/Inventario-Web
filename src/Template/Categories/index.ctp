@@ -62,9 +62,9 @@
                         let actionsCell = "<td class=\"actions\">";
                         var deleteLink = "";
                         if(elem.equipment_count == 0){
-                            deleteLink = '<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete {0}?', -1)]) ?>';
+                            deleteLink = '<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', -1], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to delete {0}?', -1)]) ?>';
                         } else {
-                            deleteLink = '<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete {0}? {1} items are associated with it.', -1, -2)]) ?>';
+                            deleteLink = '<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', -1], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to delete {0}? {1} items are associated with it.', -1, -2)]) ?>';
                             deleteLink = deleteLink.replace(/-2/g, elem.equipment_count);
                         }
                          
