@@ -11,6 +11,14 @@ a {
     color: #1289ce;
 }
 
+a:hover.delete-link {
+    color: #d62e28
+}
+
+a.delete-link {
+    color: #ff3b30
+}
+
 .side-nav li a:not(.button) {
     color: #0f71aa;
 }

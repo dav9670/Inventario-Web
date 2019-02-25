@@ -6,19 +6,19 @@
 ?>
 <div class="products form large-12 medium-11 columns content">
     <?= $this->Form->create($product, ['id' => 'product_form']) ?>
-    <button type="button" class="right" id="viewButton" style="width: 75px; text-align: center; padding: 10px;" onClick='setReadOnly(true)' hidden="hidden"><?=__('View')?></button>
-    <button type="button" class="right" id="editButton" style="width: 75px; text-align: center; padding: 10px;" onClick='setReadOnly(false)'><?=__('Edit')?></button> 
+    <button type="button" id="editButton" class='right editdone' onClick='setReadOnly(false)'><?=__('Edit')?></button>
+    <button type="button" id="doneButton" class='right editdone' onClick='doneEditing()' hidden='hidden'><?=__('Done')?></button>
     <fieldset>
         <legend><?= __('Product') ?></legend>
         <?php
             echo $this->Form->control('name', ['readOnly' => 'readOnly']);
             echo $this->Form->control('platform', ['readOnly' => 'readOnly']);
-            echo $this->Form->control('description', ['readOnly' => 'readOnly']);
+            echo $this->Form->control('description', ['type' => 'textarea', 'readOnly' => 'readOnly']);
         ?>
     </fieldset>
-    <?= $this->Form->button(__('Submit'), ['id' => 'submit', 'hidden']) ?>
+    <button type="button" class="right editdone" id="cancelButton" class='editdone' onClick='cancel()' hidden="hidden"><?=__('Cancel')?></button>
     <?= $this->Form->end() ?>
-    <?= $this->Form->postLink(__('Delete product'), ['controller' => 'Products', 'action' => 'delete', $product->id], ['confirm' => __('Are you sure you want to delete {0}?', $product->name . " for " . $product->platform)]);?>
+    <?= $this->Html->link(__('Delete product'), ['controller' => 'Products', 'action' => 'delete', $product->id], ['class' => 'delete-link', 'confirm' => $product->licence_count == 0 ? __('Are you sure you want to delete {0}?', $product->name . " for " . $product->platform) : __('Are you sure you want to delete {0}? {1} items are associated with it.', $product->name . " for " . $product->platform, $product->licence_count)]);?>
 
     <div class="related">
         <h4><?= __('Related Licences') ?></h4>
@@ -54,7 +54,7 @@
                 <?php endif; ?>
 
                 <td class="actions">
-                    <?= $this->Form->postLink(__('Unlink'), ['controller' => 'products', 'action' => 'unlink', '?' => ['product' => $product->id, 'licence' => $licence->id]], ['confirm' => __('Are you sure you want to delete the association between {0} and {1}?', $licence->name, $product->name), 'class' => 'unlink_link', 'hidden']) ?>
+                    <?= $this->Form->postLink(__('Unlink'), ['controller' => 'products', 'action' => 'unlink', '?' => ['product' => $product->id, 'licence' => $licence->id]], ['confirm' => __('Are you sure you want to delete the association between {0} and {1}?', $licence->name, $product->name . " for " . $product->platform), 'class' => 'unlink_link delete-link', 'hidden']) ?>
                 </td>
             </tr>
             <?php endforeach; ?>
@@ -64,28 +64,37 @@
 </div>
 
 <script>
-    $("#skill_form :input").change(function() {
-        $("#skill_form").data("changed",true);
-    });
+    function doneEditing(){
+        if ($("#product_form").data("changed")){
+            var confirmed = true;
+            <?php if($product->licence_count > 0) { ?>
+                confirmed = confirm('<?= __('Are you sure you want to modify {0}? {1} items are associated with it.', $product->name . " for " . $product->platform, $product->licence_count) ?>');
+            <?php } ?>
+            if(confirmed){
+                $('#product_form').submit();
+            }
+        } else {
+            setReadOnly(true);
+        }
+    }
+
+    function cancel(){
+        if(confirm("<?=__('Cancel all your changes?')?>")){
+            location.reload(true);
+        }
+    }
 
     function setReadOnly(readOnly){
         if(readOnly){
             //View
-            if ($("#skill_form").data("changed")) {
-                if(confirm("<?=__('Return to view mode and cancel all your changes?')?>")){
-                    location.reload(true);
-                }
-            } else {
-                $('#name').attr('readOnly', readOnly);
-                $('#platform').attr('readOnly', readOnly);
-                $('#description').attr('readOnly', readOnly);
+            $('#name').attr('readOnly', readOnly);
+            $('#platform').attr('readOnly', readOnly);
+            $('#description').attr('readOnly', readOnly);
 
-                $('#viewButton').hide();
-                $('#submit').hide();
-                $('#related a[class="unlink_link"').hide();
+            $('#doneButton').hide();
+            $('.unlink_link').hide();
 
-                $('#editButton').show();
-            }
+            $('#editButton').show();
         }else{
             //Edit
             $('#name').attr('readOnly', readOnly);
@@ -94,9 +103,16 @@
 
             $('#editButton').hide();
 
-            $('#viewButton').show();
+            $('#doneButton').show();
             $('#submit').show();
-            $('#related a[class="unlink_link"').show();
+            $('.unlink_link').show();
         }
     }
+
+    $('document').ready(function(){
+        $("#product_form :input").on('change paste keyup', (function() {
+            $("#product_form").data("changed",true);
+            $('#cancelButton').show();
+        }));
+    });
 </script>

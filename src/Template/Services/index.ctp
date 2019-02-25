@@ -60,9 +60,9 @@
                         let actionsCell = "<td class=\"actions\">";
                         var deleteLink = "";
                         if(elem.room_count == 0){
-                            deleteLink = '<?= $this->Html->link(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete {0}?', -2)]) ?>';
+                            deleteLink = '<?= $this->Html->link(__('Delete'), ['action' => 'delete', -1], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to delete {0}?', -2)]) ?>';
                         } else {
-                            deleteLink = '<?= $this->Html->link(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete {0}? {1} items are associated with it.', -2, -3)]) ?>';
+                            deleteLink = '<?= $this->Html->link(__('Delete'), ['action' => 'delete', -1], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to delete {0}? {1} items are associated with it.', -2, -3)]) ?>';
                             deleteLink = deleteLink.replace(/-3/g, elem.room_count);
                         }
                          
