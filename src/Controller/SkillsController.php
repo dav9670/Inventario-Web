@@ -194,33 +194,19 @@ class SkillsController extends AppController
             $mentor = $this->Skills->Mentors->get($this->getRequest()->getQuery('mentor'));
         }
 
-        if($func == 'link'){
-            if ($this->Skills->Mentors->link($skill, [$mentor])) {
-                if($this->isApi()){
-                    $success = true;
-                } else {
-                    $this->Flash->success(__('The association has been created.'));
-                }
+        $state = $func == 'link' ? 'created' : 'deleted';
+
+        if($func == 'link' && $this->Skills->Mentors->link($skill, [$mentor]) || $func == 'unlink' && $this->Skills->Mentors->unlink($skill, [$mentor])){
+            if($this->isApi()){
+                $success = true;
             } else {
-                if($this->isApi()){
-                    $success = false;
-                } else {
-                    $this->Flash->error(__('The association could not be created. Please, try again.'));
-                }
+                $this->Flash->success(__('The association has been ' . $state . '.'));
             }
-        } else if($func == 'unlink'){
-            if ($this->Skills->Mentors->unlink($skill, [$mentor])) {
-                if($this->isApi()){
-                    $success = true;
-                } else {
-                    $this->Flash->success(__('The association has been deleted.'));
-                }
+        } else {
+            if($this->isApi()){
+                $success = false;
             } else {
-                if($this->isApi()){
-                    $success = false;
-                } else {
-                    $this->Flash->error(__('The association could not be deleted. Please, try again.'));
-                }
+                $this->Flash->error(__('The association could not be ' . $state . '. Please, try again.'));
             }
         }
 
