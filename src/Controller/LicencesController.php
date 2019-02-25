@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\I18n\Time;
 
 /**
  * Licences Controller
@@ -56,7 +57,17 @@ class LicencesController extends AppController
     {
         $licence = $this->Licences->newEntity();
         if ($this->request->is('post')) {
-            $licence = $this->Licences->patchEntity($licence, $this->request->getData());
+
+            $data = $this->request->getData();
+            $image = $data['image'];
+            if($image['tmp_name'] != '') {
+                $imageData  = file_get_contents($image['tmp_name']);
+                $b64   = base64_encode($imageData);
+                $data['image'] = $b64;
+            }
+            $licence = $this->Licences->patchEntity($licence, $data);
+
+
             if ($this->Licences->save($licence)) {
                 $this->Flash->success(__('The licence has been saved.'));
 
@@ -64,8 +75,7 @@ class LicencesController extends AppController
             }
             $this->Flash->error(__('The licence could not be saved. Please, try again.'));
         }
-        $products = $this->Licences->Products->find('list', ['limit' => 200]);
-        $this->set(compact('licence', 'products'));
+        $this->set(compact('licence'));
     }
 
     /**
