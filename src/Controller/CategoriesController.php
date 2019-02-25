@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\I18n\Number;
 
 /**
  * Categories Controller
@@ -59,6 +60,7 @@ class CategoriesController extends AppController
         $success = false;
         if ($this->getRequest()->is('post')) {
             $category = $this->Categories->patchEntity($category, $this->getRequest()->getData());
+
             if ($this->Categories->save($category)) {
                 if($this->isApi()){
                     $success = true;
@@ -133,6 +135,7 @@ class CategoriesController extends AppController
             'contain' => ['Equipments']
         ]);
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
+
             $category = $this->Categories->patchEntity($category, $this->getRequest()->getData());
             if ($this->Categories->save($category)) {
                 $this->Flash->success(__('The category has been saved.'));
@@ -161,7 +164,7 @@ class CategoriesController extends AppController
      */
     public function delete($id = null)
     {
-        $this->getRequest()->allowMethod(['post', 'delete']);
+        $this->getRequest()->allowMethod(['get', 'post', 'delete']);
         $category = $this->Categories->get($id);
         $success = false;
         if ($this->Categories->delete($category)) {

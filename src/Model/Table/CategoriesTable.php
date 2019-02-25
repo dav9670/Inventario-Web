@@ -70,7 +70,7 @@ class CategoriesTable extends Table
 
         $validator
             ->numeric('hourly_rate',['message' => 'Please enter a number like 3.14'])
-            ->requirePresence('hourly_rate','create')
+            ->requirePresence('hourly_rate','create',['message' => 'You must enter a valid number.'])
             ->add('hourly_rate', 'validFormat',[
                 'rule' => array('custom', '/^[0-9]{1,2}$|^[0-9]{1,2}(\.\d{1,2})?$/'),
                 'message' => 'Please enter a number like 3.14']);
