@@ -47,11 +47,11 @@ class Mentor extends Entity
     {
         $loans = TableRegistry::get('Loans');
         $myloans = $loans->find('all', ['contains' => ['Mentors']])
-            ->where('Loans.item_id = :id and Loans.start_time <= NOW() and Loans.returned is not null')
+            ->where('Loans.item_id = :id and Loans.start_time <= NOW() and Loans.returned is null')
             ->bind(':id', $this->id);
         $nbloans = $myloans->count();
         
-        return $nbloans > 0 && is_null($this->deleted);
+        return $nbloans == 0 && is_null($this->deleted);
     }
 
     protected function _getSkillsList()
