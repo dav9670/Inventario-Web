@@ -108,8 +108,18 @@ class MentorsController extends AppController
         $mentor = $this->Mentors->get($id, [
             'contain' => ['Skills']
         ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $mentor = $this->Mentors->patchEntity($mentor, $this->request->getData());
+        if($this->request->is(['patch', 'post', 'put'])) {
+            $data = $this->request->getData();
+            $image = $data['image'];
+            if($image['tmp_name'] != '') {
+                $imageData  = file_get_contents($image['tmp_name']);
+                $b64   = base64_encode($imageData);
+                $data['image'] = $b64;
+            } else {
+                $data['image'] = $mentor->image;
+            }
+
+            $mentor = $this->Mentors->patchEntity($mentor, $data);
             if ($this->Mentors->save($mentor)) {
                 $this->Flash->success(__('The mentor has been saved.'));
 

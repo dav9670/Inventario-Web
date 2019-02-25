@@ -93,7 +93,8 @@ class MentorsTable extends Table
             ->scalar('image')
             ->maxLength('image', 16777215)
             ->requirePresence('image', 'create')
-            ->allowEmptyFile('image', false);
+            ->allowEmptyFile('image', 'create', false)
+            ->allowEmptyFile('image', 'update', true);
 
         $validator
             ->dateTime('deleted')
