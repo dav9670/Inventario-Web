@@ -73,6 +73,9 @@
 
                         table.append("<tr>" + nameCell + descriptionCell + mentorCountCell + actionsCell + "</tr>");
                     });
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                    console.log(textStatus);
                 }
         });
     };

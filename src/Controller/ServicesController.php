@@ -137,7 +137,7 @@ class ServicesController extends AppController
             if ($this->Services->save($service)) {
                 $this->Flash->success(__('The service has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'consult', $service->id]);
             }
             $this->Flash->error(__('The service could not be saved. Please, try again.'));
         }
@@ -174,6 +174,21 @@ class ServicesController extends AppController
         if($this->isApi()){
             $this->set(compact('success'));
             $this->set('_serialize', ['success']);
+        } else {
+            return $this->redirect(['action' => 'index']);
+        }
+    }
+
+    public function isTaken()
+    {
+        if ($this->isApi()){
+            $jsonData = $this->getRequest()->input('json_decode', true);
+            $service = $this->Services->find('all')
+                ->where(["lower(name) = :search"])
+                ->bind(":search", strtolower($jsonData['name']), 'string')->first();
+            
+                $this->set(compact('service'));
+            $this->set('_serialize', ['service']);  
         } else {
             return $this->redirect(['action' => 'index']);
         }

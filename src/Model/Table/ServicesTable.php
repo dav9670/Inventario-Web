@@ -61,7 +61,7 @@ class ServicesTable extends Table
             ->maxLength('name', 50)
             ->requirePresence('name', 'create')
             ->allowEmptyString('name', false)
-            ->add('name', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+            ->add('name', 'unique', ['rule' => 'validateUnique', 'provider' => 'table', 'message' => __('Name must be unique')]);
 
         $validator
             ->scalar('description')
