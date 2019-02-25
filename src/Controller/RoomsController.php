@@ -60,7 +60,7 @@ class RoomsController extends AppController
 
 
             $data = $this->request->getData();
-            if(!isApi()){
+            if(!$this->isApi()){
                 $image = $data['image'];
                 if($image['tmp_name'] != '') {
                     $imageData  = file_get_contents($image['tmp_name']);
@@ -69,7 +69,6 @@ class RoomsController extends AppController
                 }
             }
             $room = $this->Rooms->patchEntity($room, $data);
-            
             if ($this->Rooms->save($room)) {
                 if($this->isApi()){
                     $success = true;
@@ -87,7 +86,7 @@ class RoomsController extends AppController
             $this->set(compact('success'));
             $this->set('_serialize', ['success']);
         } else {
-            $this->set(compact('room', 'mentors'));
+            $this->set(compact('room'));
         }
     }
 
