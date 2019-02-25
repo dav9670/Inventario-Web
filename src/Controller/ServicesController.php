@@ -179,6 +179,21 @@ class ServicesController extends AppController
         }
     }
 
+    public function isTaken()
+    {
+        if ($this->isApi()){
+            $jsonData = $this->getRequest()->input('json_decode', true);
+            $service = $this->Services->find('all')
+                ->where(["lower(name) = :search"])
+                ->bind(":search", strtolower($jsonData['name']), 'string')->first();
+            
+                $this->set(compact('service'));
+            $this->set('_serialize', ['service']);  
+        } else {
+            return $this->redirect(['action' => 'index']);
+        }
+    }
+
     public function unlink()
     {
         $this->getRequest()->allowMethod(['post', 'delete']);
