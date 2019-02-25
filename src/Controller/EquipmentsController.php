@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\I18n\Time;
 
 /**
  * Equipments Controller
@@ -56,16 +57,25 @@ class EquipmentsController extends AppController
     {
         $equipment = $this->Equipments->newEntity();
         if ($this->request->is('post')) {
-            $equipment = $this->Equipments->patchEntity($equipment, $this->request->getData());
+
+            $data = $this->request->getData();
+            $image = $data['image'];
+            if($image['tmp_name'] != '') {
+                $imageData  = file_get_contents($image['tmp_name']);
+                $b64   = base64_encode($imageData);
+                $data['image'] = $b64;
+            }
+            $equipment = $this->Equipments->patchEntity($equipment, $data);
+            
+            
             if ($this->Equipments->save($equipment)) {
                 $this->Flash->success(__('The equipment has been saved.'));
-
+                
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The equipment could not be saved. Please, try again.'));
         }
-        $categories = $this->Equipments->Categories->find('list', ['limit' => 200]);
-        $this->set(compact('equipment', 'categories'));
+        $this->set(compact('equipment'));
     }
 
     /**
@@ -102,16 +112,68 @@ class EquipmentsController extends AppController
      */
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
+        $this->getRequest()->allowMethod(['get', 'post', 'delete']);
         $equipment = $this->Equipments->get($id);
+        $success = false;
         if ($this->Equipments->delete($equipment)) {
-            $this->Flash->success(__('The equipment has been deleted.'));
+            if($this->isApi()){
+                $success = true;
+            } else {
+                $this->Flash->success(__('The category has been deleted.'));
+            }
         } else {
-            $this->Flash->error(__('The equipment could not be deleted. Please, try again.'));
+            if($this->isApi()){
+                $success = false;
+            } else {
+                $this->Flash->error(__('The category could not be deleted. Please, try again.'));
+            }
         }
 
-        return $this->redirect(['action' => 'index']);
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        } else {
+            return $this->redirect(['action' => 'index']);
+        }
     }
+
+    /**
+     * function deactivate
+     * désactive un equipement, set sa date de delete à now
+     */
+    public function deactivate($id = null){
+        $this->getRequest()->allowMethod(['get', 'post', 'deactivate']);
+        $equipment = $this->Equipments->get($id);
+        $equipment->deleted = Time::now();
+        $success = false;
+        if ($this->Equipments->save($equipment)) {
+            if($this->isApi()){
+                $success = true;
+            } else {
+                $this->Flash->success(__('The category has been deleted.'));
+            }
+        } else {
+            if($this->isApi()){
+                $success = false;
+            } else {
+                $this->Flash->error(__('The category could not be deleted. Please, try again.'));
+            }
+        }
+
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        } else {
+            return $this->redirect(['action' => 'index']);
+        }
+    }
+
+
+
+
+    /**
+     * isAuthorized function
+     */
 
     public function isAuthorized($user)
     {
