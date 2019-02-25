@@ -58,7 +58,6 @@ class RoomsController extends AppController
         $success = false;
         if ($this->request->is('post')) {
 
-
             $data = $this->request->getData();
             if(!$this->isApi()){
                 $image = $data['image'];
@@ -82,6 +81,7 @@ class RoomsController extends AppController
                 $this->Flash->error(__('The room could not be saved. Please, try again.'));
             }
         }
+
         if($this->isApi()){
             $this->set(compact('success'));
             $this->set('_serialize', ['success']);
