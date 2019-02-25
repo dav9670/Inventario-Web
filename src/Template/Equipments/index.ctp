@@ -131,7 +131,7 @@
                             let actionsCell = "<td class=\"actions\">";
                             var link = ""
                             if(elem.deleted == null){
-                                if(elem.category_count == 0){
+                                if(elem.loans_count == 0){
                                     link = '<?= $this->Html->link(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete {0}?', -2)]) ?>';
                                     link = link.replace(/-1/g, elem.id);
                                 }else{
