@@ -55,18 +55,40 @@ class RoomsController extends AppController
     public function add()
     {
         $room = $this->Rooms->newEntity();
+        $success = false;
         if ($this->request->is('post')) {
-            $room = $this->Rooms->patchEntity($room, $this->request->getData());
-            debug($this->request->getData());
-            if ($this->Rooms->save($room)) {
-                $this->Flash->success(__('The room has been saved.'));
 
-                //return $this->redirect(['action' => 'index']);
+
+            $data = $this->request->getData();
+            if(!isApi()){
+                $image = $data['image'];
+                if($image['tmp_name'] != '') {
+                    $imageData  = file_get_contents($image['tmp_name']);
+                    $b64   = base64_encode($imageData);
+                    $data['image'] = $b64;
+                }
             }
-            $this->Flash->error(__('The room could not be saved. Please, try again.'));
+            $room = $this->Rooms->patchEntity($room, $data);
+            
+            if ($this->Rooms->save($room)) {
+                if($this->isApi()){
+                    $success = true;
+                } else {
+                    $this->Flash->success(__('The room has been saved.'));
+                    return $this->redirect(['action' => 'index']);
+                }
+            } else if($this->isApi()){
+                $success = false;
+            } else {
+                $this->Flash->error(__('The room could not be saved. Please, try again.'));
+            }
         }
-        $services = $this->Rooms->Services->find('list', ['limit' => 200]);
-        $this->set(compact('room', 'services'));
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        } else {
+            $this->set(compact('room', 'mentors'));
+        }
     }
 
     /**
@@ -117,6 +139,21 @@ class RoomsController extends AppController
     public function isAuthorized($user)
     {
         return $this->Auth->user('admin_status') == 'admin';
+    }
+
+    public function isTaken()
+    {
+        if ($this->isApi()){
+            $jsonData = $this->getRequest()->input('json_decode', true);
+            $room = $this->Rooms->find('all')
+                ->where(["lower(name) = :search"])
+                ->bind(":search", strtolower($jsonData['name']), 'string')->first();
+            
+                $this->set(compact('room'));
+            $this->set('_serialize', ['room']);  
+        } else {
+            return $this->redirect(['action' => 'index']);
+        }
     }
 
     /**
