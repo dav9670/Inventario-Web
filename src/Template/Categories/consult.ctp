@@ -3,6 +3,7 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Category $category
  */
+
 ?>
 <div class="categories form large-12 medium-11 columns content">
     <?= $this->Form->create($category, ['id' => 'category_form']) ?>
@@ -18,7 +19,7 @@
     </fieldset>
     <button type="button" class="right editdone" id="cancelButton" class='editdone' onClick='cancel()' hidden="hidden"><?=__('Cancel')?></button>
     <?= $this->Form->end() ?>
-    <?= $this->Html->link(__('Delete skill'), ['controller' => 'Skills', 'action' => 'delete', $category->id], ['confirm' => $category->equipment_count == 0 ? __('Are you sure you want to delete {0}?', $category->name) : __('Are you sure you want to delete {0}? {1} equipments are associated with it.', $category->name, $category->equipment_count)]);?>
+    <?= $this->Html->link(__('Delete category'), ['controller' => 'Categories', 'action' => 'delete', $category->id], ['confirm' => $category->equipment_count == 0 ? __('Are you sure you want to delete {0}?', $category->name) : __('Are you sure you want to delete {0}? {1} equipments are associated with it.', $category->name, $category->equipment_count)]);?>
 
     <div class="related">
         <h4><?= __('Related Equipments') ?></h4>
@@ -79,6 +80,7 @@
         }
     }
 
+
     function cancel(){
         if(confirm("<?=__('Cancel all your changes?')?>")){
             location.reload(true);
@@ -108,5 +110,15 @@
             $('#submit').show();
             $('#related a[class="unlink_link"').show();
         }
+    
     }
+
+    $('document').ready(function(){
+        if("<?=$data?>" == 'edit'){
+            setReadOnly(false);
+        }else{
+            setReadOnly(true);
+        }
+        });
+        
 </script>

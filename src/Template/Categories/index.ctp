@@ -31,7 +31,7 @@
             <tr>
                 <th scope="col"><a id='name_sort' class='asc'><?= __("Name") ?></a></th>
                 <th scope="col"><a id='description_sort'><?= __("Description") ?></a></th>
-                <th scope="col"><a id='hourly_rate_sort'><?= __("Hourly Rate") ?></a></th>
+                <th scope="col"><?= __("Hourly Rate") ?></th>
                 <th scope="col"><?= __("Equipment count") ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
@@ -57,20 +57,39 @@
                     $.each(response.categories, function(idx, elem){
                         let nameCell = "<td><a href='/categories/" + elem.id + "'>" + elem.name + "</a></td>";
                         let descriptionCell = "<td><a href='/categories/" + elem.id + "'>" + elem.description + "</a></td>";
-                        let hourlyRateCell = "<td><a href='/categories/" + elem.id + "'>" + elem.hourly_rate + "</a></td>";
+                        let hourlyRateCell = "<td><a href='/categories/" + elem.id + "'>" + elem.hourly_rate.toFixed(2) +"$" + "</a></td>";
                         let equipmentCountCell = "<td><a href='/categories/" + elem.id + "'>" + elem.equipment_count + "</a></td>";
                         let actionsCell = "<td class=\"actions\">";
-                        var deleteLink = "";
-                        if(elem.equipment_count == 0){
-                            deleteLink = '<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete {0}?', -1)]) ?>';
-                        } else {
-                            deleteLink = '<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete {0}? {1} items are associated with it.', -1, -2)]) ?>';
-                            deleteLink = deleteLink.replace(/-2/g, elem.equipment_count);
+                        /*var deleteLink = "";
+                        if(elem.delete == null){
+                            if(elem.equipment_count == 0){
+                                deleteLink = '<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', ], ['confirm' => __('Are you sure you want to delete {0}?', -1)]) ?>';
+                                deleteLink = deleteLink.replace(/-1/g, elem.name);
+                            } else {
+                                deleteLink = '<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete {0}? {1} items are associated with it.', -1, -2)]) ?>';
+                                deleteLink = deleteLink.replace(/-2/g, elem.equipment_count);
+                            }
+                        }else{
+                            deleteLink = '<?= $this->Form->postLink(__('Reactivate'), ['action' => 'reactivate', -1], ['confirm' => __('Are you sure you want to reactivate {0}?', -1)]) ?>';
+                            deleteLink = deleteLink.replace(/-1/g, elem.name);
                         }
-                         
-                        deleteLink = deleteLink.replace(/-1/g, elem.name);
+                        
                         
                         actionsCell = actionsCell.concat(deleteLink);
+                        */
+                        var deleteLink = "";
+                        if(elem.equipment_count == 0){
+                            deleteLink = '<?= $this->Html->link(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete {0}?', -2)]) ?>';
+                        } else {
+                            deleteLink = '<?= $this->Html->link(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete {0}? {1} items are associated with it.', -2, -3)]) ?>';
+                            deleteLink = deleteLink.replace(/-3/g, elem.equipment_count);
+                        }
+                         
+                        deleteLink = deleteLink.replace(/-1/g, elem.id);
+                        deleteLink = deleteLink.replace(/-2/g, elem.name);
+                        
+                        actionsCell = actionsCell.concat(deleteLink);
+                       
                         actionsCell = actionsCell.concat("</td>");
 
                         table.append("<tr>" + nameCell + descriptionCell + hourlyRateCell + equipmentCountCell + actionsCell + "</tr>");
