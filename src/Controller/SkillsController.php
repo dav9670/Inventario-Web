@@ -234,12 +234,12 @@ class SkillsController extends AppController
 
     public function link()
     {
-        modifyLink('link');    
+        $this->modifyLink('link');    
     }
 
     public function unlink()
     {
-        modifyLink('unlink');
+        $this->modifyLink('unlink');
     }
 
     public function search()
@@ -281,8 +281,12 @@ class SkillsController extends AppController
 
         if($mentor_id != '')
         {
-            $mentorSkills = $this->Skills->Mentors->get($mentor_id, ['contains' => ['Skills']])
-                ->select('skill_id');
+            $mentorSkills = $this->Skills->Mentors->find('all')
+                ->select('Skills.id')
+                ->where('Mentors.id = :id')
+                ->bind(':id', $mentor_id)
+                ->innerJoinWith('Skills');
+            //var_dump($mentorSkills->sql());
             $query->where(["Skills.id not in" => $mentorSkills]);
         }
 
