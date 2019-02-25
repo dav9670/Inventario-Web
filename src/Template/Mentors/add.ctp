@@ -15,9 +15,8 @@
             echo $this->Form->control('description', ['type' => 'textarea']);
             echo $this->Form->control('image', ['type' => 'file', 'accept'=> 'image/*', 'onchange' => 'loadFile(event)']);
         ?>
-        <img id='output' style='max-width:200px; max-height:200px;'/>
-
     </fieldset>
+    <img id='output' style='max-width:200px; max-height:200px;'/>
     <h3><?=__('Skills')?></h3>
     <input id='autocomplete' type ='text'>
     <input type='hidden' name='skills[_ids]' value=""/>

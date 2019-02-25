@@ -178,7 +178,7 @@ class SkillsController extends AppController
         }
     }
 
-    public function unlink()
+    private function modifyLink($func)
     {
         $this->getRequest()->allowMethod(['post', 'delete']);
 
@@ -193,19 +193,34 @@ class SkillsController extends AppController
             $skill = $this->Skills->get($this->getRequest()->getQuery('skill'));
             $mentor = $this->Skills->Mentors->get($this->getRequest()->getQuery('mentor'));
         }
-        
 
-        if ($this->Skills->Mentors->unlink($skill, [$mentor])) {
-            if($this->isApi()){
-                $success = true;
+        if($func == 'link'){
+            if ($this->Skills->Mentors->link($skill, [$mentor])) {
+                if($this->isApi()){
+                    $success = true;
+                } else {
+                    $this->Flash->success(__('The association has been created.'));
+                }
             } else {
-                $this->Flash->success(__('The association has been deleted.'));
+                if($this->isApi()){
+                    $success = false;
+                } else {
+                    $this->Flash->error(__('The association could not be created. Please, try again.'));
+                }
             }
-        } else {
-            if($this->isApi()){
-                $success = false;
+        } else if($func == 'unlink'){
+            if ($this->Skills->Mentors->unlink($skill, [$mentor])) {
+                if($this->isApi()){
+                    $success = true;
+                } else {
+                    $this->Flash->success(__('The association has been deleted.'));
+                }
             } else {
-                $this->Flash->error(__('The association could not be deleted. Please, try again.'));
+                if($this->isApi()){
+                    $success = false;
+                } else {
+                    $this->Flash->error(__('The association could not be deleted. Please, try again.'));
+                }
             }
         }
 
@@ -215,6 +230,16 @@ class SkillsController extends AppController
         } else {
             return $this->redirect(['action' => 'consult', $skill->id]);
         }
+    }
+
+    public function link()
+    {
+        modifyLink('link');    
+    }
+
+    public function unlink()
+    {
+        modifyLink('unlink');
     }
 
     public function search()
@@ -228,16 +253,19 @@ class SkillsController extends AppController
         $keyword = "";
         $sort_field = "";
         $sort_dir = "";
+        $mentor_id = "";
 
         if ($this->isApi()){
             $jsonData = $this->getRequest()->input('json_decode', true);
             $keyword = $jsonData['keyword'] != null ? $jsonData['keyword'] : '';
             $sort_field = $jsonData['sort_field'] != null ? $jsonData['sort_field'] : 'name';
             $sort_dir = $jsonData['sort_dir'] != null ? $jsonData['sort_dir'] : 'asc';
+            $mentor_id = $jsonData['mentor_id'] != null ? $jsonData['mentor_id'] : '';
         } else {
             $keyword = $this->getRequest()->getQuery('keyword') != null ? $this->getRequest()->getQuery('keyword') : '';
             $sort_field = $this->getRequest()->getQuery('sort_field') != null ? $this->getRequest()->getQuery('sort_field') : 'name';
             $sort_dir = $this->getRequest()->getQuery('sort_dir') != null ? $this->getRequest()->getQuery('sort_dir') : 'asc';
+            $mentor_id = $this->getRequest()->getQuery('mentor_id') != null ? $this->getRequest()->getQuery('mentor_id') : '';
         }
         
         if($keyword == '')
@@ -249,6 +277,13 @@ class SkillsController extends AppController
             $query = $this->Skills->find('all')
                 ->where(["match (name, description) against(:search in boolean mode)"])
                 ->bind(":search", $keyword . '*', 'string');
+        }
+
+        if($mentor_id != '')
+        {
+            $mentorSkills = $this->Skills->Mentors->get($mentor_id, ['contains' => ['Skills']])
+                ->select('skill_id');
+            $query->where(["Skills.id not in" => $mentorSkills]);
         }
 
         $query->order([$sort_field => $sort_dir]);
