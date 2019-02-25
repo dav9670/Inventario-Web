@@ -33,15 +33,15 @@
         </thead>
         <tbody id='skills_table_body'>
             <?php foreach ($mentor->skills as $skill): ?>
-            <tr>
+            <tr id='skill_row_<?=$skill->id?>'>
                 <td><a href='skills/<?=$skill->id?>'><?= h($skill->name) ?></a></td>
                 <td><a href='skills/<?=$skill->id?>'><?= h($skill->description)?></a></td>
                 <td><a href='skills/<?=$skill->id?>'><?= h($skill->mentor_count)?></a></td>
+                <td><a class='unlink_link delete-link' onclick='removeLink(<?=$skill->id?>)' style="display:none;">Remove</a></td>
             </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
-    <?= $this->Form->button(__('Save')) ?>
     <?= $this->Form->end() ?>
 </div>
 <script>
@@ -63,6 +63,20 @@
         }
     }
 
+    function removeLink(skill_id){
+        $.ajax({
+            method: 'post',
+            url : "/skills/unlink.json?skill=" + skill_id + "&mentor=<?= $mentor->id ?>",
+            headers: { 'X-CSRF-TOKEN': '<?=$this->getRequest()->getParam('_csrfToken');?>' },
+            success: function( response ){
+                $('#skill_row_' + skill_id).remove();
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                console.log(jqXHR.responseText);
+            }
+        });
+    }
+
     function setReadOnly(readOnly){
         $('#email').attr('readOnly', readOnly);
         $('#first-name').attr('readOnly', readOnly);
@@ -72,26 +86,28 @@
         if(readOnly){
             //View
             $('#image').hide();
+            $('#image').attr('disabled', 'disabled');
             $('#autocomplete').hide();
 
             $('#doneButton').hide();
-            $('#related a[class="unlink_link"').hide();
+            $('.unlink_link').hide();
 
             $('#editButton').show();
         }else{
             //Edit
             $('#image').show();
+            $('#image').removeAttr('disabled');
             $('#autocomplete').show();
 
             $('#doneButton').show();
-            $('#related a[class="unlink_link"').show();
+            $('.unlink_link').show();
 
             $('#editButton').hide();
         }
     }
 
     $('document').ready(function(){
-        $("#mentor_form :input").on('change paste keyup', (function() {
+        $("#mentor_form :input:not(#autocomplete)").on('change paste keyup', (function() {
             $("#mentor_form").data("changed",true);
             $('#cancelButton').show();
         }));
@@ -116,29 +132,41 @@
                         show(results);
                     },
                     error: function(jqXHR, textStatus, errorThrown){
-                        console.log(textStatus);
+                        console.log(jqXHR.responseText);
                     }
                 });
             },
             minLength: 1,
             autoFocus: true,
             select: function (event, ui) {
-                let table = $('#skills_table_body');
                 let elem = ui.item.data;
 
-                let nameCell = "<td><a href='/skills/" + elem.id + "'>" + elem.name + "</a></td>";
-                let descriptionCell = "<td><a href='/skills/" + elem.id + "'>" + elem.description + "</a></td>";
-                let mentorCountCell = "<td><a href='/skills/" + elem.id + "'>" + elem.mentor_count + "</a></td>";
-                let actionsCell = "<td class=\"actions\">";
-                //var deleteLink = "<a onclick='removeRow(" + elem.id + ")'>Remove</a>";
-                
-                //actionsCell = actionsCell.concat(deleteLink);
-                actionsCell = actionsCell.concat("</td>");
+                $.ajax({
+                    method: 'post',
+                    url : "/skills/link.json?skill=" + elem.id + "&mentor=<?= $mentor->id ?>",
+                    headers: { 'X-CSRF-TOKEN': '<?=$this->getRequest()->getParam('_csrfToken');?>' },
+                    success: function( response ){
+                        let table = $('#skills_table_body');
+                        
+                        let nameCell = "<td><a href='/skills/" + elem.id + "'>" + elem.name + "</a></td>";
+                        let descriptionCell = "<td><a href='/skills/" + elem.id + "'>" + elem.description + "</a></td>";
+                        let mentorCountCell = "<td><a href='/skills/" + elem.id + "'>" + elem.mentor_count + "</a></td>";
+                        
+                        let deleteLink = "<a class='unlink_link delete-link' onclick='removeLink(" + elem.id + ")'>Remove</a>";
+                        
+                        let actionsCell = "<td class=\"actions\">";
+                        actionsCell = actionsCell.concat(deleteLink);
+                        actionsCell = actionsCell.concat("</td>");
 
-                table.append("<tr id='skill_row_" + elem.id +"'>" + input + nameCell + descriptionCell + mentorCountCell + actionsCell + "</tr>");
+                        table.append("<tr id='skill_row_" + elem.id +"'>" + nameCell + descriptionCell + mentorCountCell + actionsCell + "</tr>");
 
-                $('#autocomplete').val('');
-                event.preventDefault();
+                        $('#autocomplete').val('');
+                        event.preventDefault();
+                    },
+                    error: function(jqXHR, textStatus, errorThrown){
+                        console.log(jqXHR.responseText);
+                    }
+                });
             }
         });
     });
