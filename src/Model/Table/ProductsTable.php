@@ -59,19 +59,19 @@ class ProductsTable extends Table
 
         $validator
             ->scalar('name')
-            ->maxLength('name', 50)
-            ->requirePresence('name', 'create')
-            ->allowEmptyString('name', false);
+            ->maxLength('name', 50, __('Name is too long. (Max 50 characters)'))
+            ->requirePresence('name', 'create', __('Name cannot be empty.'))
+            ->allowEmptyString('name', false, __('Name cannot be empty.'));
 
         $validator
             ->scalar('platform')
-            ->maxLength('platform', 50)
-            ->requirePresence('platform', 'create')
-            ->allowEmptyString('platform', false);
+            ->maxLength('platform', 50, __('Platform name is too long. (Max 50 characters)'))
+            ->requirePresence('platform', 'create', __('Platform name cannot be empty.'))
+            ->allowEmptyString('platform', false, __('Platform name cannot be empty.'));
 
         $validator
             ->scalar('description')
-            ->maxLength('description', 255)
+            ->maxLength('description', 255, __('Description is too long. (Max 255 characters)'))
             ->allowEmptyString('description');
 
         return $validator;
