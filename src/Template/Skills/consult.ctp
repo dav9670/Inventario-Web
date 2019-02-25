@@ -86,25 +86,21 @@
     }
 
     function setReadOnly(readOnly){
+        $('#name').attr('readOnly', readOnly);
+        $('#description').attr('readOnly', readOnly);
+        
         if(readOnly){
             //View
-            $('#name').attr('readOnly', readOnly);
-            $('#description').attr('readOnly', readOnly);
-
             $('#doneButton').hide();
             $('#related a[class="unlink_link"').hide();
 
             $('#editButton').show();
         }else{
             //Edit
-            $('#name').attr('readOnly', readOnly);
-            $('#description').attr('readOnly', readOnly);
+            $('#doneButton').show();
+            $('#related a[class="unlink_link"').show();
 
             $('#editButton').hide();
-
-            $('#doneButton').show();
-            $('#submit').show();
-            $('#related a[class="unlink_link"').show();
         }
     }
 
