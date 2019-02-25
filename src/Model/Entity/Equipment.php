@@ -65,7 +65,7 @@ class Equipment extends Entity
         }
         return array();
     }
-
+    
     protected function _getLoanCount()
     {
         $loans = TableRegistry::get('Loans');
@@ -78,5 +78,4 @@ class Equipment extends Entity
     }
 
     protected $_virtual = ['available', 'categories_list', 'loan_count'];
-
 }
