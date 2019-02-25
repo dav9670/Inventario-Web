@@ -154,7 +154,7 @@ class ProductsController extends AppController
      */
     public function delete($id = null)
     {
-        $this->getRequest()->allowMethod(['post', 'delete']);
+        $this->getRequest()->allowMethod(['get', 'post', 'delete']);
         $product = $this->Products->get($id);
         $success = false;
         if ($this->Products->delete($product)) {

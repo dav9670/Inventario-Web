@@ -58,14 +58,14 @@ class SkillsTable extends Table
 
         $validator
             ->scalar('name')
-            ->maxLength('name', 50)
-            ->requirePresence('name', 'create')
-            ->allowEmptyString('name', false)
-            ->add('name', 'unique', ['rule' => 'validateUnique', 'provider' => 'table', 'message' => 'Name must be unique']);
+            ->maxLength('name', 50, __('Name is too long. (Max 50 characters)'))
+            ->requirePresence('name', 'create', __('Name cannot be empty.'))
+            ->allowEmptyString('name', false, __('Name cannot be empty.'))
+            ->add('name', 'unique', ['rule' => 'validateUnique', 'provider' => 'table', 'message' => __('This name has already been used.')]);
 
         $validator
             ->scalar('description')
-            ->maxLength('description', 255)
+            ->maxLength('description', 255, __('Description is too long. (Max 255 characters)'))
             ->allowEmptyString('description');
 
         return $validator;
@@ -80,7 +80,7 @@ class SkillsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->isUnique(['name']));
+        $rules->add($rules->isUnique(['name'], __('This name has already been used.') ));
 
         return $rules;
     }

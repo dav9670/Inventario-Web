@@ -58,22 +58,23 @@ class CategoriesTable extends Table
 
         $validator
             ->scalar('name')
-            ->maxLength('name', 50)
-            ->requirePresence('name', 'create')
-            ->allowEmptyString('name', false)
-            ->add('name', 'unique', ['rule' => 'validateUnique', 'provider' => 'table'], ['message' => 'This category name is already taken.']);
+            ->maxLength('name', 50, __('Name is too long. (Max 50 characters)'))
+            ->requirePresence('name', 'create', __('Name cannot be empty.'))
+            ->allowEmptyString('name', false, __('Name cannot be empty.'))
+            ->add('name', 'unique', ['rule' => 'validateUnique', 'provider' => 'table'], ['message' => __('This name has already been used.')]);
 
         $validator
             ->scalar('description')
-            ->maxLength('description', 255)
+            ->maxLength('description', 255, __('Description is too long. (Max 255 characters)'))
             ->allowEmptyString('description');
 
         $validator
-            ->numeric('hourly_rate',['message' => 'Please enter a number like 3.14'])
-            ->requirePresence('hourly_rate','create',['message' => 'You must enter a valid number.'])
-            ->add('hourly_rate', 'validFormat',[
-                'rule' => array('custom', '/^[0-9]{1,2}$|^[0-9]{1,2}(\.\d{1,2})?$/'),
-                'message' => 'Please enter a number like 3.14']);
+            ->numeric('hourly_rate', ['message' => __('Hourly rate must be in a #.## format.')])
+            ->requirePresence('hourly_rate', 'create', __('Hourly rate cannot be empty.'))
+            ->add('hourly_rate', 'validFormat', [
+                    'rule' => ['custom', '/^[0-9]{1,2}$|^[0-9]{1,2}(\.\d{1,2})?$/'],
+                    'message' => __('Hourly rate must be in a #.## format.')
+                ]);
             
 
         return $validator;
@@ -88,7 +89,7 @@ class CategoriesTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->isUnique(['name']));
+        $rules->add($rules->isUnique(['name'], __('This name has already been used.') ));
 
         return $rules;
     }

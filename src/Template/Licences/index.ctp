@@ -136,10 +136,10 @@
                             let actionsCell = "<td class=\"actions\">";
                             var link = ""
                             if(elem.deleted == null){
-                                link = '<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete {0}?', -1)]) ?>';
+                                link = '<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', -1], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to delete {0}?', -1)]) ?>';
                                 link = link.replace(/-1/g, elem.name);
                             } else {
-                                link = '<?= $this->Form->postLink(__('Reactivate'), ['action' => 'reactivate', -1], ['confirm' => __('Are you sure you want to reactivate {0}?', -1)]) ?>';
+                                link = '<?= $this->Form->postLink(__('Reactivate'), ['action' => 'reactivate', -1], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to reactivate {0}?', -1)]) ?>';
                                 link = link.replace(/-1/g, elem.name);
                             }
                             actionsCell = actionsCell.concat(link);

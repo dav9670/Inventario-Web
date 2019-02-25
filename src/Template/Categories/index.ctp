@@ -60,23 +60,7 @@
                         let hourlyRateCell = "<td><a href='/categories/" + elem.id + "'>" + elem.hourly_rate.toFixed(2) +"$" + "</a></td>";
                         let equipmentCountCell = "<td><a href='/categories/" + elem.id + "'>" + elem.equipment_count + "</a></td>";
                         let actionsCell = "<td class=\"actions\">";
-                        /*var deleteLink = "";
-                        if(elem.delete == null){
-                            if(elem.equipment_count == 0){
-                                deleteLink = '<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', ], ['confirm' => __('Are you sure you want to delete {0}?', -1)]) ?>';
-                                deleteLink = deleteLink.replace(/-1/g, elem.name);
-                            } else {
-                                deleteLink = '<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete {0}? {1} items are associated with it.', -1, -2)]) ?>';
-                                deleteLink = deleteLink.replace(/-2/g, elem.equipment_count);
-                            }
-                        }else{
-                            deleteLink = '<?= $this->Form->postLink(__('Reactivate'), ['action' => 'reactivate', -1], ['confirm' => __('Are you sure you want to reactivate {0}?', -1)]) ?>';
-                            deleteLink = deleteLink.replace(/-1/g, elem.name);
-                        }
                         
-                        
-                        actionsCell = actionsCell.concat(deleteLink);
-                        */
                         var deleteLink = "";
                         if(elem.equipment_count == 0){
                             deleteLink = '<?= $this->Html->link(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete {0}?', -2)]) ?>';
