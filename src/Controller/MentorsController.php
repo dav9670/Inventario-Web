@@ -140,15 +140,75 @@ class MentorsController extends AppController
      */
     public function delete($id = null)
     {
-        $this->request->allowMethod(['get', 'post', 'delete']);
+        $this->getRequest()->allowMethod(['get', 'post', 'delete']);
         $mentor = $this->Mentors->get($id);
+        $success = false;
         if ($this->Mentors->delete($mentor)) {
-            $this->Flash->success(__('The mentor has been deleted.'));
+            if($this->isApi()){
+                $success = true;
+            } else {
+                $this->Flash->success(__('The mentor has been deleted.'));
+            }
         } else {
-            $this->Flash->error(__('The mentor could not be deleted. Please, try again.'));
+            if($this->isApi()){
+                $success = false;
+            } else {
+                $this->Flash->error(__('The mentor could not be deleted. Please, try again.'));
+            }
         }
 
-        return $this->redirect(['action' => 'index']);
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        } else {
+            return $this->redirect(['action' => 'index']);
+        }
+    }
+
+    /**
+     * function deactivate
+     * désactive un equipement, set sa date de delete à now
+     */
+    public function deactivate($id = null){
+        $this->setDeleted($id, Time::now());
+    }
+
+    /**
+     * function reactivate
+     * reactive un equipement, set sa valeur deleted à null.
+     */
+    public function reactivate($id = null){
+        $this->setDeleted($id, null);
+    }
+
+    private function setDeleted($id, $deleted){
+        $this->getRequest()->allowMethod(['get', 'post']);
+        $mentor = $this->Mentors->get($id);
+        $mentor->deleted = $deleted;
+        $success = false;
+
+        $state = $deleted == null ? 'reactivated' : 'deactivated';
+
+        if ($this->Mentors->save($mentor)) {
+            if($this->isApi()){
+                $success = true;
+            } else {
+                $this->Flash->success(__('The mentor has been ' . $state .'.'));
+            }
+        } else {
+            if($this->isApi()){
+                $success = false;
+            } else {
+                $this->Flash->error(__('The mentor could not be ' . $state . '. Please, try again.'));
+            }
+        }
+
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        } else {
+            return $this->redirect(['action' => 'index']);
+        }
     }
     
     public function isAuthorized($user)
