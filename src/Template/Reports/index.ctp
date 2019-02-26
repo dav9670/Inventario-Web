@@ -60,7 +60,7 @@ use Cake\I18n\I18n;
 </div>
 
 <script>
-    $( function() {
-        $( ".datepicker" ).datepicker();
-    } );
+    $('document').ready(function(){
+        $(".datepicker").datepicker();
+    });
 </script>
