@@ -21,13 +21,12 @@
     <img src='data:image/png;base64,<?=$mentor->image?>' id='output' style='max-width:200px; max-height:200px;'/><br/>
     <?php 
         if($mentor->deleted == null){
-            if($mentor->loan_count == 0){
-                echo $this->Html->link(__('Delete mentor'), ['controller' => 'Mentors', 'action' => 'delete', $mentor->id], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to PERMANENTLY delete {0}?', $mentor->email)]);
-            } else {
-                echo $this->Html->link(__('Deactivate mentor'), ['controller' => 'Mentors', 'action' => 'deactivate', $mentor->id], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to deactivate {0}?', $mentor->email)]);  
-            }
+            echo $this->Html->link(__('Deactivate mentor'), ['controller' => 'Mentors', 'action' => 'deactivate', $mentor->id], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to deactivate {0}?', $mentor->email)]);
         } else {
             echo $this->Html->link(__('Reactivate mentor'), ['controller' => 'Mentors', 'action' => 'reactivate', $mentor->id], ['confirm' => __('Are you sure you want to reactivate {0}?', $mentor->email)]);  
+            if($mentor->loan_count == 0){
+                echo $this->Html->link(__('Delete mentor'), ['controller' => 'Mentors', 'action' => 'delete', $mentor->id], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to PERMANENTLY delete {0}?', $mentor->email)]);
+            }
         }
     ?>
     <button type="button" class="right editdone" id="cancelButton" class='editdone' onClick='cancel()' hidden="hidden"><?=__('Cancel')?></button>

@@ -207,7 +207,7 @@ class MentorsController extends AppController
             $this->set(compact('success'));
             $this->set('_serialize', ['success']);
         } else {
-            return $this->redirect(['action' => 'index']);
+            return $this->redirect($this->referer());
         }
     }
     
