@@ -200,13 +200,13 @@ class SkillsController extends AppController
             if($this->isApi()){
                 $success = true;
             } else {
-                $this->Flash->success(__('The association has been ' . $state . '.'));
+                //$this->Flash->success(__('The association has been ' . $state . '.'));
             }
         } else {
             if($this->isApi()){
                 $success = false;
             } else {
-                $this->Flash->error(__('The association could not be ' . $state . '. Please, try again.'));
+                //$this->Flash->error(__('The association could not be ' . $state . '. Please, try again.'));
             }
         }
 
@@ -214,7 +214,8 @@ class SkillsController extends AppController
             $this->set(compact('success'));
             $this->set('_serialize', ['success']);
         } else {
-            return $this->redirect(['action' => 'consult', $skill->id]);
+            $this->autoRender = false;
+            return /*$this->redirect(['action' => 'consult', $skill->id])*/;
         }
     }
 
@@ -272,7 +273,6 @@ class SkillsController extends AppController
                 ->where('Mentors.id = :id')
                 ->bind(':id', $mentor_id)
                 ->innerJoinWith('Skills');
-            //var_dump($mentorSkills->sql());
             $query->where(["Skills.id not in" => $mentorSkills]);
         }
 

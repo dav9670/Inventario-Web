@@ -86,6 +86,7 @@
                 $('#skill_row_' + skill_id).remove();
             },
             error: function(jqXHR, textStatus, errorThrown){
+                alert('The association could not be deleted');
                 console.log(jqXHR.responseText);
             }
         });
@@ -166,7 +167,7 @@
                         let descriptionCell = "<td><a href='/skills/" + elem.id + "'>" + elem.description + "</a></td>";
                         let mentorCountCell = "<td><a href='/skills/" + elem.id + "'>" + elem.mentor_count + "</a></td>";
                         
-                        let deleteLink = "<a class='unlink_link delete-link' onclick='removeLink(" + elem.id + ")'>Remove</a>";
+                        let deleteLink = "<a class='unlink_link delete-link' onclick='removeLink(" + elem.id + ")'><?=__('Remove')?></a>";
                         
                         let actionsCell = "<td class=\"actions\">";
                         actionsCell = actionsCell.concat(deleteLink);
