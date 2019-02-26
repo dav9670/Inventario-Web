@@ -50,11 +50,11 @@ class Licence extends Entity
     {
         $loans = TableRegistry::get('Loans');
         $myloans = $loans->find('all', ['contains' => ['Licences']])
-            ->where('Loans.item_id = :id and Loans.start_time <= NOW() and Loans.returned is not null')
+            ->where('Loans.item_type like \'licences\' and Loans.item_id = :id and Loans.start_time <= NOW() and Loans.returned is null')
             ->bind(':id', $this->id);
         $nbloans = $myloans->count();
         
-        return $nbloans > 0 && is_null($this->deleted);;
+        return $nbloans == 0 && is_null($this->deleted);
     }
 
     protected function _getProductsList()
@@ -94,5 +94,16 @@ class Licence extends Entity
         }
     }
 
-    protected $_virtual = ['available', 'products_list', 'status'];
+    protected function _getLoanCount()
+    {
+        $loans = TableRegistry::get('Loans');
+        $myloans = $loans->find('all', ['contains' => ['Licences']])
+            ->where('Loans.item_type like \'licences\' and Loans.item_id = :id')
+            ->bind(':id', $this->id);
+        $nbloans = $myloans->count();
+        
+        return $nbloans;
+    }
+
+    protected $_virtual = ['available', 'products_list', 'status', 'loan_count'];
 }

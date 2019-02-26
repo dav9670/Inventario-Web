@@ -119,13 +119,13 @@ class EquipmentsController extends AppController
             if($this->isApi()){
                 $success = true;
             } else {
-                $this->Flash->success(__('The category has been deleted.'));
+                $this->Flash->success(__('The equipment has been deleted.'));
             }
         } else {
             if($this->isApi()){
                 $success = false;
             } else {
-                $this->Flash->error(__('The category could not be deleted. Please, try again.'));
+                $this->Flash->error(__('The equipment could not be deleted. Please, try again.'));
             }
         }
 
@@ -150,13 +150,13 @@ class EquipmentsController extends AppController
             if($this->isApi()){
                 $success = true;
             } else {
-                $this->Flash->success(__('The category has been deleted.'));
+                $this->Flash->success(__('The equipment has been deleted.'));
             }
         } else {
             if($this->isApi()){
                 $success = false;
             } else {
-                $this->Flash->error(__('The category could not be deleted. Please, try again.'));
+                $this->Flash->error(__('The equipment could not be deleted. Please, try again.'));
             }
         }
 
@@ -181,13 +181,13 @@ class EquipmentsController extends AppController
             if($this->isApi()){
                 $success = true;
             } else {
-                $this->Flash->success(__('The category has been reactivated.'));
+                $this->Flash->success(__('The equipment has been reactivated.'));
             }
         } else {
             if($this->isApi()){
                 $success = false;
             } else {
-                $this->Flash->error(__('The category could not be reactivated. Please, try again.'));
+                $this->Flash->error(__('The equipment could not be reactivated. Please, try again.'));
             }
         }
 

@@ -35,7 +35,7 @@
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
             <?php foreach ($skill->mentors as $mentor): ?>
-            <tr class="clickable-row">
+            <tr id='mentor_row_<?=$mentor->id?>' class="clickable-row">
                 <td><a href='/mentors/<?= h($mentor->id) ?>'><img src="data:image/png;base64, <?= h($mentor->image) ?>" alt="<?= h($mentor->first_name) ?> <?= h($mentor->last_name) ?>" width=100/></a></td>
                 <td><a href='/mentors/<?= h($mentor->id) ?>'><?= h($mentor->email) ?></a></td>
                 <td><a href='/mentors/<?= h($mentor->id) ?>'><?= h($mentor->first_name) ?></a></td>
@@ -55,7 +55,7 @@
                 <?php endif; ?>
 
                 <td class="actions">
-                    <?= $this->Form->postLink(__('Unlink'), ['controller' => 'skills', 'action' => 'unlink', '?' => ['skill' => $skill->id, 'mentor' => $mentor->id]], ['confirm' => __('Are you sure you want to delete the association between {0} and {1}?', $mentor->first_name . " " . $mentor->last_name, $skill->name), 'class' => 'unlink_link delete-link', 'hidden']) ?>
+                    <a onclick='if(confirm("<?=__('Are you sure you want to delete the association between {0} and {1}?', $mentor->email, $skill->name)?>")){removeLink(<?=$mentor->id?>)}' class='unlink_link delete-link' hidden><?=__('Unlink')?></a>
                 </td>
             </tr>
             <?php endforeach; ?>
@@ -83,6 +83,21 @@
         if(confirm("<?=__('Cancel all your changes?')?>")){
             location.reload(true);
         }
+    }
+
+    function removeLink(mentor_id){
+        $.ajax({
+            method: 'post',
+            url : "/skills/unlink.json?skill=<?=$skill->id?>&mentor=" + mentor_id,
+            headers: { 'X-CSRF-TOKEN': '<?=$this->getRequest()->getParam('_csrfToken');?>' },
+            success: function( response ){
+                $('#mentor_row_' + mentor_id).remove();
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                alert("The association could not be deleted");
+                console.log(jqXHR.responseText);
+            }
+        });
     }
 
     function setReadOnly(readOnly){

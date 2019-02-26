@@ -194,33 +194,19 @@ class SkillsController extends AppController
             $mentor = $this->Skills->Mentors->get($this->getRequest()->getQuery('mentor'));
         }
 
-        if($func == 'link'){
-            if ($this->Skills->Mentors->link($skill, [$mentor])) {
-                if($this->isApi()){
-                    $success = true;
-                } else {
-                    $this->Flash->success(__('The association has been created.'));
-                }
+        $state = $func == 'link' ? 'created' : 'deleted';
+
+        if($func == 'link' && $this->Skills->Mentors->link($skill, [$mentor]) || $func == 'unlink' && $this->Skills->Mentors->unlink($skill, [$mentor])){
+            if($this->isApi()){
+                $success = true;
             } else {
-                if($this->isApi()){
-                    $success = false;
-                } else {
-                    $this->Flash->error(__('The association could not be created. Please, try again.'));
-                }
+                //$this->Flash->success(__('The association has been ' . $state . '.'));
             }
-        } else if($func == 'unlink'){
-            if ($this->Skills->Mentors->unlink($skill, [$mentor])) {
-                if($this->isApi()){
-                    $success = true;
-                } else {
-                    $this->Flash->success(__('The association has been deleted.'));
-                }
+        } else {
+            if($this->isApi()){
+                $success = false;
             } else {
-                if($this->isApi()){
-                    $success = false;
-                } else {
-                    $this->Flash->error(__('The association could not be deleted. Please, try again.'));
-                }
+                //$this->Flash->error(__('The association could not be ' . $state . '. Please, try again.'));
             }
         }
 
@@ -228,18 +214,19 @@ class SkillsController extends AppController
             $this->set(compact('success'));
             $this->set('_serialize', ['success']);
         } else {
-            return $this->redirect(['action' => 'consult', $skill->id]);
+            $this->autoRender = false;
+            return /*$this->redirect(['action' => 'consult', $skill->id])*/;
         }
     }
 
     public function link()
     {
-        modifyLink('link');    
+        $this->modifyLink('link');    
     }
 
     public function unlink()
     {
-        modifyLink('unlink');
+        $this->modifyLink('unlink');
     }
 
     public function search()
@@ -281,8 +268,11 @@ class SkillsController extends AppController
 
         if($mentor_id != '')
         {
-            $mentorSkills = $this->Skills->Mentors->get($mentor_id, ['contains' => ['Skills']])
-                ->select('skill_id');
+            $mentorSkills = $this->Skills->Mentors->find('all')
+                ->select('Skills.id')
+                ->where('Mentors.id = :id')
+                ->bind(':id', $mentor_id)
+                ->innerJoinWith('Skills');
             $query->where(["Skills.id not in" => $mentorSkills]);
         }
 

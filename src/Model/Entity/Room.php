@@ -43,11 +43,11 @@ class Room extends Entity
     {
         $loans = TableRegistry::get('Loans');
         $myloans = $loans->find('all', ['contains' => ['Rooms']])
-            ->where('Loans.item_id = :id and Loans.start_time <= NOW() and Loans.returned is not null')
+            ->where('Loans.item_type like \'rooms\' and Loans.item_id = :id and Loans.start_time <= NOW() and Loans.returned is null')
             ->bind(':id', $this->id);
         $nbloans = $myloans->count();
         
-        return $nbloans > 0 && is_null($this->deleted);
+        return $nbloans == 0 && is_null($this->deleted);
     }
 
     protected function _getServicesList()
@@ -66,5 +66,16 @@ class Room extends Entity
         return array();
     }
 
-    protected $_virtual = ['available', 'services_list'];
+    protected function _getLoanCount()
+    {
+        $loans = TableRegistry::get('Loans');
+        $myloans = $loans->find('all', ['contains' => ['Rooms']])
+            ->where('Loans.item_type like \'rooms\' and Loans.item_id = :id')
+            ->bind(':id', $this->id);
+        $nbloans = $myloans->count();
+        
+        return $nbloans;
+    }
+
+    protected $_virtual = ['available', 'services_list', 'loan_count'];
 }
