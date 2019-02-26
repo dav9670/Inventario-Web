@@ -55,10 +55,11 @@ use Cake\I18n\I18n;
             setBodyMentors();
         },
         rooms: function(){
-
+            
         },
         licences: function(){
-
+            setHeadersLicences();
+            setBodyLicences();
         },
         equipments: function(){
 
@@ -91,6 +92,51 @@ use Cake\I18n\I18n;
                             <td>` + elem.email + `</td>
                             <td>` + elem.hours_loaned + `</td>
                             <td>` + elem.times_loaned + `</td>
+                        </tr>
+                    `);
+                });
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                alert('The report could not be fetched');
+                console.log(jqXHR.responseText);
+            }
+        });
+    }
+
+    function setHeadersLicences(){
+        $('#report-table-head').empty();
+        $('#report-table-head').append(`
+            <tr>
+                <th scope="col"><?= __("Product") ?></a></th>
+                <th scope="col"><?= __("Platform") ?></a></th>
+                <th scope="col"><?= __("Licence") ?></th>
+                <th scope="col"><?= __("Used") ?></th>
+                <th scope="col"><?= __("Expired") ?></th>
+                <th scope="col"><?= __("Uses") ?></th>
+                <th scope="col"><?= __("% Used") ?></th>
+            </tr>
+        `);
+    }
+
+    function setBodyLicences(){
+        let start_date = $('#date-from').datepicker('option', 'dateFormat', 'yy-mm-dd').val();
+        let end_date = $('#date-to').datepicker('option', 'dateFormat', 'yy-mm-dd').val();
+        $.ajax({
+            method: 'get',
+            url : "/reports/licences_report.json?start_date=" + start_date + "&end_date=" + end_date,
+            headers: { 'X-CSRF-TOKEN': '<?=$this->getRequest()->getParam('_csrfToken');?>' },
+            success: function( response ){
+                $('#report-table-body').empty();
+                response.forEach(function(elem){
+                    $('#report-table-body').append(`
+                        <tr>
+                            <td>` + elem.product + `</td>
+                            <td>` + elem.platform + `</td>
+                            <td>` + elem.licence + `</td>
+                            <td><img src='/img/` + (elem.used ? "good" : "bad") + `.png' alt='Available' width=20 height=20></td>
+                            <td><img src='/img/` + (elem.expired ? "bad" : "good") + `.png' alt='Available' width=20 height=20></td>
+                            <td>` + elem.uses + `</td>
+                            <td>` + elem.percent_used + `</td>
                         </tr>
                     `);
                 });

@@ -190,6 +190,30 @@ create table licences_products(
     foreign key licences_products_product_key(product_id) references products(id)
 );
 
+drop procedure if exists licences_report;
+delimiter //
+create procedure licences_report(start datetime, end datetime)
+begin
+	SELECT
+        products.name AS product,
+        products.platform AS platform,
+        licences.key_text AS licence,
+        CASE WHEN licences.end_time IS NOT NULL AND licences.end_time <= end
+            THEN 1
+            ELSE 0
+        END AS expired,
+        COUNT(licences_loans.start_time <= end AND
+        (licences_loans.returned >= start OR licences_loans.returned IS NULL)) AS uses
+    FROM licences_products
+        INNER JOIN licences ON licences_products.licence_id = licences.id
+        INNER JOIN products ON licences_products.product_id = products.id
+        LEFT  JOIN (SELECT * FROM loans WHERE loans.item_type = 'licences') AS licences_loans
+            ON licences.id = licences_loans.item_id
+    GROUP BY product, platform, licence
+    ORDER BY product, platform;
+end//
+delimiter ;
+
 /*equipments*/
 
 create table equipments(

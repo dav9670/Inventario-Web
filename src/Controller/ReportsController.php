@@ -40,6 +40,26 @@ class ReportsController extends AppController
         $this->set('_serialize', 'report');
     }
 
+    public function licencesReport()
+    {
+        $start_date = $this->getRequest()->getQuery('start_date');
+        $end_date = $this->getRequest()->getQuery('end_date');
+        $conn = ConnectionManager::get('default');
+        $proc_result = $conn->execute("call licences_report(?,?)", [$start_date, $end_date])->fetchAll('assoc');
+        
+        foreach($proc_result as &$line)
+        {
+            $line["licence"] = substr($line["licence"], 0, 5) . "..." . substr($line["licence"], -5, 5);
+            $line["used"] = $line["uses"] > 0;
+            $line["expired"] = $line["expired"] == 1;
+            $line["percent_used"] = "-";
+        }
+        unset($line);
+
+        $this->set('report', $proc_result);
+        $this->set('_serialize', 'report');
+    }
+
     public function isAuthorized($user)
     {
         return $this->Auth->user('admin_status') == 'admin';
