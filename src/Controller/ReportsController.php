@@ -27,8 +27,6 @@ class ReportsController extends AppController
         ])->where('deleted is not null')->order(['name' => 'asc']);
         $this->set(compact('licences', 'archivedLicences'));
         $this->set('_serialize', ['licences', 'archivedLicences']);*/
-
-        
     }
 
     public function mentorsReport()

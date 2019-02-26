@@ -161,18 +161,16 @@
                     headers: { 'X-CSRF-TOKEN': '<?=$this->getRequest()->getParam('_csrfToken');?>' },
                     success: function( response ){
                         let table = $('#skills_table_body');
-                        
-                        let nameCell = "<td><a href='/skills/" + elem.id + "'>" + elem.name + "</a></td>";
-                        let descriptionCell = "<td><a href='/skills/" + elem.id + "'>" + elem.description + "</a></td>";
-                        let mentorCountCell = "<td><a href='/skills/" + elem.id + "'>" + elem.mentor_count + "</a></td>";
-                        
-                        let deleteLink = "<a class='unlink_link delete-link' onclick='removeLink(" + elem.id + ")'><?=__('Remove')?></a>";
-                        
-                        let actionsCell = "<td class=\"actions\">";
-                        actionsCell = actionsCell.concat(deleteLink);
-                        actionsCell = actionsCell.concat("</td>");
-
-                        table.append("<tr id='skill_row_" + elem.id +"'>" + nameCell + descriptionCell + mentorCountCell + actionsCell + "</tr>");
+                        table.append(`
+                            <tr>
+                                <td><a href='skills/` + elem.id + `'>` + elem.name + `</a></td>
+                                <td><a href='skills/` + elem.id + `'>` + elem.description + `</a></td>
+                                <td><a href='/skills/` + elem.id + `'>` + elem.mentor_count + `</a></td>
+                                <td class='actions'>
+                                    <a class='unlink_link delete-link' onclick='removeLink(` + elem.id + `)'><?=__('Remove')?></a>
+                                </td>
+                            </tr>
+                        `);
 
                         $('#autocomplete').val('');
                         event.preventDefault();

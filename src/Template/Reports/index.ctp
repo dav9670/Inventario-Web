@@ -60,6 +60,46 @@ use Cake\I18n\I18n;
 </div>
 
 <script>
+    function setHeadersMentors(){
+        $('#report-table-head').empty();
+        $('#report-table-head').append(`
+            <tr>
+                <th scope="col"><?= __("Email") ?></a></th>
+                <th scope="col"><?= __("Hours loaned") ?></a></th>
+                <th scope="col"><?= __("Times loaned") ?></th>
+            </tr>
+        `);
+    }
+
+    function setBodyMentors(){
+        $.ajax({
+            method: 'get',
+            url : "/reports/mentors_report.json?start_date=" + '2000-01-01' + "&end_date=" + '2020-01-01',
+            headers: { 'X-CSRF-TOKEN': '<?=$this->getRequest()->getParam('_csrfToken');?>' },
+            success: function( response ){
+                $('#report-table-body').empty();
+                response.forEach(function(elem){
+                    $('#report-table-body').append(`
+                        <tr>
+                            <td>` + elem.email + `</td>
+                            <td>` + elem.hours_loaned + `</td>
+                            <td>` + elem.times_loaned + `</td>
+                        </tr>
+                    `);
+                });
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                alert('The report could not be fetched');
+                console.log(jqXHR.responseText);
+            }
+        });
+    }
+
+    function setTableMentors(){
+        setHeadersMentors();
+        setBodyMentors();
+    }
+
     $('document').ready(function(){
         $(".datepicker").datepicker();
     });
