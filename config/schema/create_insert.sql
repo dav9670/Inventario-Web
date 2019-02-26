@@ -93,11 +93,17 @@ create table mentors_skills(
     foreign key mentors_skills_skill_key(skill_id) references skills(id)
 );
 
-/*create view mentors_report as
-select
-from loans inner join mentors on loans.item_id = mentors.id
-where loans.item_type like 'mentors'
-group by*/
+drop procedure if exists mentors_report;
+delimiter //
+create procedure mentors_report(start datetime, end datetime)
+begin
+	select m.email as "Mentor", timestampdiff(HOUR, l.start_time, ifnull(l.returned, now())) as "Time loaned", count(m.id) as "Number of times loaned"
+	from loans as l inner join mentors m on l.item_id = m.id
+	where l.item_type like 'mentors' and l.start_time >= start and l.end_time <= end
+	group by l.item_id;
+end//
+delimiter ;
+
 
 /*rooms*/
 
