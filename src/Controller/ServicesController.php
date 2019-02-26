@@ -40,7 +40,10 @@ class ServicesController extends AppController
     public function view($id = null)
     {
         $service = $this->Services->get($id, [
-            'contain' => ['Rooms']
+            'contain' => ['Rooms' => [
+                'sort' => ['Rooms.name' => 'asc']
+                ]
+            ]
         ]);
 
         $this->set(compact('service'));
