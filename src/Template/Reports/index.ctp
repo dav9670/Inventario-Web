@@ -53,6 +53,15 @@ use Cake\I18n\I18n;
         mentors: function(){
             setHeadersMentors();
             setBodyMentors();
+        },
+        rooms: function(){
+
+        },
+        licences: function(){
+
+        },
+        equipments: function(){
+
         }
     }
 
@@ -91,10 +100,6 @@ use Cake\I18n\I18n;
                 console.log(jqXHR.responseText);
             }
         });
-    }
-
-    function setDate(){
-        
     }
 
     function generateReport(){
