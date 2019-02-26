@@ -44,7 +44,8 @@ class RoomsController extends AppController
             'contain' => ['Services']
         ]);
 
-        $this->set('room', $room);
+        $this->set(compact('room'));
+        $this->set('_serialize', ['room']);
     }
 
     /**
@@ -57,7 +58,6 @@ class RoomsController extends AppController
         $room = $this->Rooms->newEntity();
         $success = false;
         if ($this->request->is('post')) {
-
 
             $data = $this->request->getData();
             if(!$this->isApi()){
@@ -82,6 +82,7 @@ class RoomsController extends AppController
                 $this->Flash->error(__('The room could not be saved. Please, try again.'));
             }
         }
+
         if($this->isApi()){
             $this->set(compact('success'));
             $this->set('_serialize', ['success']);
@@ -99,20 +100,45 @@ class RoomsController extends AppController
      */
     public function edit($id = null)
     {
+
         $room = $this->Rooms->get($id, [
             'contain' => ['Services']
         ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $room = $this->Rooms->patchEntity($room, $this->request->getData());
-            if ($this->Rooms->save($room)) {
-                $this->Flash->success(__('The room has been saved.'));
+        $success = false;
 
-                return $this->redirect(['action' => 'index']);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+
+            $data = $this->request->getData();
+            if(!$this->isApi()){
+                $image = $data['image'];
+                if($image['tmp_name'] != '') {
+                    $imageData  = file_get_contents($image['tmp_name']);
+                    $b64   = base64_encode($imageData);
+                    $data['image'] = $b64;
+                }
             }
-            $this->Flash->error(__('The room could not be saved. Please, try again.'));
+            $room = $this->Rooms->patchEntity($room, $data);
+            if ($this->Rooms->save($room)) {
+                if($this->isApi()){
+                    $success = true;
+                } else {
+                    $this->Flash->success(__('The room has been saved.'));
+                    return $this->redirect(['action' => 'index']);
+                }
+            } else if($this->isApi()){
+                $success = false;
+            } else {
+                $this->Flash->error(__('The room could not be saved. Please, try again.'));
+            }
         }
-        $services = $this->Rooms->Services->find('list', ['limit' => 200]);
-        $this->set(compact('room', 'services'));
+
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        } else {
+            $services = $this->Rooms->Services->find('list', ['limit' => 200]);
+            $this->set(compact('room', 'services'));
+        }
     }
 
     /**

@@ -194,7 +194,7 @@ class ServicesController extends AppController
         }
     }
 
-    public function unlink()
+    public function modifyLink($func)
     {
         $this->getRequest()->allowMethod(['post', 'delete']);
 
@@ -210,17 +210,33 @@ class ServicesController extends AppController
             $room = $this->Services->Rooms->get($this->getRequest()->getQuery('room'));
         }
 
-        if ($this->Services->Rooms->unlink($service, [$room])) {
-            if($this->isApi()){
-                $success = true;
+        if($func == 'link'){
+            if ($this->Services->Rooms->link($service, [$room])) {
+                if($this->isApi()){
+                    $success = true;
+                } else {
+                    $this->Flash->success(__('The association has been created.'));
+                }
             } else {
-                $this->Flash->success(__('The association has been deleted.'));
+                if($this->isApi()){
+                    $success = false;
+                } else {
+                    $this->Flash->error(__('The association could not be created. Please, try again.'));
+                }
             }
-        } else {
-            if($this->isApi()){
-                $success = false;
+        } else if($func == 'unlink'){
+            if ($this->Services->Rooms->unlink($service, [$room])) {
+                if($this->isApi()){
+                    $success = true;
+                } else {
+                    $this->Flash->success(__('The association has been deleted.'));
+                }
             } else {
-                $this->Flash->error(__('The association could not be deleted. Please, try again.'));
+                if($this->isApi()){
+                    $success = false;
+                } else {
+                    $this->Flash->error(__('The association could not be deleted. Please, try again.'));
+                }
             }
         }
 
@@ -230,6 +246,16 @@ class ServicesController extends AppController
         } else {
             return $this->redirect(['action' => 'consult', $service->id]);
         }
+    }
+
+    public function link()
+    {
+        $this->modifyLink('link');    
+    }
+
+    public function unlink()
+    {
+        $this->modifyLink('unlink');
     }
 
     public function search()
@@ -243,16 +269,19 @@ class ServicesController extends AppController
         $keyword = "";
         $sort_field = "";
         $sort_dir = "";
+        $room_id = "";
 
         if ($this->isApi()){
             $jsonData = $this->getRequest()->input('json_decode', true);
             $keyword = $jsonData['keyword'] != null ? $jsonData['keyword'] : '';
             $sort_field = $jsonData['sort_field'] != null ? $jsonData['sort_field'] : 'name';
             $sort_dir = $jsonData['sort_dir'] != null ? $jsonData['sort_dir'] : 'asc';
+            $room_id = $jsonData['room_id'] != null ? $jsonData['room_id'] : '';
         } else {
             $keyword = $this->getRequest()->getQuery('keyword') != null ? $this->getRequest()->getQuery('keyword') : '';
             $sort_field = $this->getRequest()->getQuery('sort_field') != null ? $this->getRequest()->getQuery('sort_field') : 'name';
             $sort_dir = $this->getRequest()->getQuery('sort_dir') != null ? $this->getRequest()->getQuery('sort_dir') : 'asc';
+            $room_id = $this->getRequest()->getQuery('room_id') != null ? $this->getRequest()->getQuery('room_id') : '';
         }
         
         if($keyword == '')
@@ -264,6 +293,16 @@ class ServicesController extends AppController
             $query = $this->Services->find('all')
                 ->where(["match (name, description) against(:search in boolean mode)"])
                 ->bind(":search", $keyword . '*', 'string');
+        }
+
+        if($room_id != '')
+        {
+            $roomServices = $this->Services->Rooms->find('all')
+                ->select('Services.id')
+                ->where('Rooms.id = :id')
+                ->bind(':id', $room_id)
+                ->innerJoinWith('Services');
+            $query->where(["Services.id not in" => $roomServices]);
         }
 
         $query->order([$sort_field => $sort_dir]);
