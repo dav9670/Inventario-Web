@@ -17,12 +17,7 @@ use Cake\I18n\I18n;
             <option value="lastmonth"><?= __('Last month') ?></option>
             <option value="thisweek"><?= __('This week') ?></option>
             <option value="lastweek"><?= __('Last week') ?></option>
-        </select>
-
-        <label for="sort-order"><?= __('Sort by') ?></label>
-        <select id="sort-order">
-            <option value="name"><?= __('Name') ?></option>
-            <option value="popularity"><?= __('Popularity') ?></option>
+            <option value="custom"><?= __('Custom') ?></option>
         </select>
 
         <label for="report-type"><?= __('Report type') ?></label>
@@ -34,24 +29,17 @@ use Cake\I18n\I18n;
         </select>
 
         <label for="date-from"><?= __('From') ?></label>
-        <input type="text" class="datepicker">
+        <input id='date-from' type="text" class="datepicker">
         
         <label for="date-to"><?= __('To') ?></label>
-        <input type="text" class="datepicker">
+        <input id='date-to' type="text" class="datepicker">
     </fieldset>
 
-    <button type="submit"><?= __('Generate report') ?></button>
+    <button type="submit" onclick='generateReport();'><?= __('Generate report') ?></button>
 
-    <table cellpadding="0" cellspacing="0">
+    <table id='report-table' cellpadding="0" cellspacing="0" style='display:none;'>
         <thead id='report-table-head'>
             <tr>
-                <th scope="col"><?= __("Insert") ?></a></th>
-                <th scope="col"><?= __("Your") ?></a></th>
-                <th scope="col"><?= __("Fields") ?></th>
-                <th scope="col"><?= __("Here") ?></th>
-                <th scope="col"><?= __("For") ?></th>
-                <th scope="col"><?= __("Your") ?></th>
-                <th scope="col"><?= __("Report") ?></th>
             </tr>
         </thead>
         <tbody id='report-table-body'>
@@ -60,6 +48,14 @@ use Cake\I18n\I18n;
 </div>
 
 <script>
+
+    let reportDict = {
+        mentors: function(){
+            setHeadersMentors();
+            setBodyMentors();
+        }
+    }
+
     function setHeadersMentors(){
         $('#report-table-head').empty();
         $('#report-table-head').append(`
@@ -72,9 +68,11 @@ use Cake\I18n\I18n;
     }
 
     function setBodyMentors(){
+        let start_date = $('#date-from').datepicker('option', 'dateFormat', 'yy-mm-dd').val();
+        let end_date = $('#date-to').datepicker('option', 'dateFormat', 'yy-mm-dd').val();
         $.ajax({
             method: 'get',
-            url : "/reports/mentors_report.json?start_date=" + '2000-01-01' + "&end_date=" + '2020-01-01',
+            url : "/reports/mentors_report.json?start_date=" + start_date + "&end_date=" + end_date,
             headers: { 'X-CSRF-TOKEN': '<?=$this->getRequest()->getParam('_csrfToken');?>' },
             success: function( response ){
                 $('#report-table-body').empty();
@@ -95,12 +93,72 @@ use Cake\I18n\I18n;
         });
     }
 
-    function setTableMentors(){
-        setHeadersMentors();
-        setBodyMentors();
+    function setDate(){
+        
+    }
+
+    function generateReport(){
+        reportDict[$('#report-type').children("option:selected").val()]();
+        $('#report-table').show();
     }
 
     $('document').ready(function(){
-        $(".datepicker").datepicker();
+        $(".datepicker").datepicker({
+            onSelect: function(date) {
+                $('#preset-dates').val('custom');
+            }
+        });
+
+        $('#preset-dates').on('change', function(){
+            let preset = $('#preset-dates').children("option:selected").val();
+            let today = new Date();
+            let target = new Date();
+            switch(preset){
+                case 'thisyear':
+                    target.setFullYear(today.getFullYear() + 1);
+                    
+                    $('#date-from').datepicker("setDate", today);
+                    $('#date-to').datepicker("setDate", target);
+                break;
+                case 'lastyear':
+                    target.setFullYear(today.getFullYear() - 1);
+                    
+                    $('#date-from').datepicker("setDate", target);
+                    $('#date-to').datepicker("setDate", today);
+                break;
+
+                case 'thismonth':
+                    target.setMonth(today.getMonth() + 1);
+                    
+                    $('#date-from').datepicker("setDate", today);
+                    $('#date-to').datepicker("setDate", target);
+                break;
+                case 'lastmonth':
+                    target.setMonth(today.getMonth() - 1);
+                    
+                    $('#date-from').datepicker("setDate", target);
+                    $('#date-to').datepicker("setDate", today);
+                break;
+
+                case 'thisweek':
+                    target.setDate(today.getDate() + 7);
+                    
+                    $('#date-from').datepicker("setDate", today);
+                    $('#date-to').datepicker("setDate", target);
+                break;
+                case 'lastweek':
+                    target.setDate(today.getDate() - 7);
+                    
+                    $('#date-from').datepicker("setDate", target);
+                    $('#date-to').datepicker("setDate", today);
+                break;
+                
+                case 'custom':
+                    //$('#date-from').datepicker("setDate", null);
+                    //$('#date-to').datepicker("setDate", null);
+                break;
+            } 
+        });
+        $('#preset-dates').change();
     });
 </script>
