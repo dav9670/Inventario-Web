@@ -69,7 +69,7 @@ class Room extends Entity
     protected function _getLoanCount()
     {
         $loans = TableRegistry::get('Loans');
-        $myloans = $loans->find('all', ['contains' => ['Mentors']])
+        $myloans = $loans->find('all', ['contains' => ['Rooms']])
             ->where('Loans.item_type like \'rooms\' and Loans.item_id = :id')
             ->bind(':id', $this->id);
         $nbloans = $myloans->count();

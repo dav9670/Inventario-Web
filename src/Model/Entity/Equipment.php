@@ -69,7 +69,7 @@ class Equipment extends Entity
     protected function _getLoanCount()
     {
         $loans = TableRegistry::get('Loans');
-        $myloans = $loans->find('all', ['contains' => ['Mentors']])
+        $myloans = $loans->find('all', ['contains' => ['Equipments']])
             ->where('Loans.item_type like \'equipments\' and Loans.item_id = :id')
             ->bind(':id', $this->id);
         $nbloans = $myloans->count();
