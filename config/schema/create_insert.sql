@@ -95,12 +95,18 @@ create table mentors_skills(
 
 drop procedure if exists mentors_report;
 delimiter //
-create procedure mentors_report(start datetime, end datetime)
+create procedure mentors_report(start datetime, end datetime, sort_field tinytext, sort_dir tinytext)
 begin
-	select m.email as "email", timestampdiff(HOUR, l.start_time, ifnull(l.returned, now())) as "hours_loaned", count(m.id) as "times_loaned"
+	set @query = concat('
+	select m.email as "email", timestampdiff(HOUR, if(l.start_time > "', start ,'", l.start_time, "', start,'"), if(ifnull(l.returned, now()) < "', end ,'", ifnull(l.returned, now()), "', end,'")) as "hours_loaned", count(m.id) as "times_loaned"
 	from loans as l inner join mentors m on l.item_id = m.id
-	where l.item_type like 'mentors' and l.start_time >= start and l.end_time <= end
-	group by l.item_id;
+	where l.item_type like "mentors" and l.start_time <= "',end,'" and l.end_time >= "',start,'"
+	group by m.id
+    order by ',sort_field,' ', sort_dir);
+    
+    PREPARE stmt FROM @query;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
 end//
 delimiter ;
 
