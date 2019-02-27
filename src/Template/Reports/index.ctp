@@ -49,9 +49,15 @@ use Cake\I18n\I18n;
 
 <script>
 
+    var sort_field = '';
+    var sort_dir = '';
+
     let reportDict = {
         mentors: function(){
             setHeadersMentors();
+            sort_field = '';
+            sort_dir = '';
+            sortSetter('email');
             setBodyMentors();
         },
         rooms: function(){
@@ -70,19 +76,19 @@ use Cake\I18n\I18n;
         $('#report-table-head').empty();
         $('#report-table-head').append(`
             <tr>
-                <th scope="col"><?= __("Email") ?></a></th>
-                <th scope="col"><?= __("Hours loaned") ?></a></th>
-                <th scope="col"><?= __("Times loaned") ?></th>
+                <th scope="col"><a id="email_sort" onclick="sortSetter('email'); setBodyMentors();"><?= __("Email") ?></a></th>
+                <th scope="col"><a id="hours_loaned_sort" onclick="sortSetter('hours_loaned'); setBodyMentors();"><?= __("Hours loaned") ?></a></th>
+                <th scope="col"><a id="times_loaned_sort" onclick="sortSetter('times_loaned'); setBodyMentors();"><?= __("Times loaned") ?></a></th>
             </tr>
         `);
     }
 
     function setBodyMentors(){
-        let start_date = $('#date-from').datepicker('option', 'dateFormat', 'yy-mm-dd').val();
-        let end_date = $('#date-to').datepicker('option', 'dateFormat', 'yy-mm-dd').val();
+        let start_date = $('#date-from').val();
+        let end_date = $('#date-to').val();
         $.ajax({
             method: 'get',
-            url : "/reports/mentors_report.json?start_date=" + start_date + "&end_date=" + end_date,
+            url : "/reports/mentors_report.json?start_date=" + start_date + "&end_date=" + end_date + "&sort_field=" + sort_field + "&sort_dir=" + sort_dir,
             headers: { 'X-CSRF-TOKEN': '<?=$this->getRequest()->getParam('_csrfToken');?>' },
             success: function( response ){
                 $('#report-table-body').empty();
@@ -119,8 +125,8 @@ use Cake\I18n\I18n;
     }
 
     function setBodyLicences(){
-        let start_date = $('#date-from').datepicker('option', 'dateFormat', 'yy-mm-dd').val();
-        let end_date = $('#date-to').datepicker('option', 'dateFormat', 'yy-mm-dd').val();
+        let start_date = $('#date-from').val();
+        let end_date = $('#date-to').val();
         $.ajax({
             method: 'get',
             url : "/reports/licences_report.json?start_date=" + start_date + "&end_date=" + end_date,
@@ -177,8 +183,24 @@ use Cake\I18n\I18n;
         $('#report-table').show();
     }
 
+    function sortSetter( sort_field_param ){
+        var oldHtmlFieldId = '#' + sort_field +'_sort';
+        var newHtmlFieldId = '#' + sort_field_param +'_sort';
+        
+        $(oldHtmlFieldId).removeClass('asc');
+        $(oldHtmlFieldId).removeClass('desc');
+        $(newHtmlFieldId).removeClass('asc');
+        $(newHtmlFieldId).removeClass('desc');
+
+        sort_dir = sort_field != sort_field_param ? "asc" : sort_dir == "asc" ? "desc" : "asc";
+        sort_field = sort_field_param;
+
+        $(newHtmlFieldId).addClass(sort_dir);
+    }
+
     $('document').ready(function(){
         $(".datepicker").datepicker({
+            dateFormat: 'yy-mm-dd',
             onSelect: function(date) {
                 $('#preset-dates').val('custom');
             }
@@ -186,53 +208,79 @@ use Cake\I18n\I18n;
 
         $('#preset-dates').on('change', function(){
             let preset = $('#preset-dates').children("option:selected").val();
+            
             let today = new Date();
-            let target = new Date();
+            let start = new Date();
+            let end = new Date();
+
+            let setDate = true;
+
             switch(preset){
                 case 'thisyear':
-                    target.setFullYear(today.getFullYear() + 1);
+                    start.setFullYear(today.getFullYear());
+                    start.setMonth(0);
+                    start.setDate(1);
                     
-                    $('#date-from').datepicker("setDate", today);
-                    $('#date-to').datepicker("setDate", target);
+                    end.setFullYear(today.getFullYear() + 1);
+                    end.setMonth(0);
+                    end.setDate(1);
                 break;
                 case 'lastyear':
-                    target.setFullYear(today.getFullYear() - 1);
+                    start.setFullYear(today.getFullYear() - 1);
+                    start.setMonth(0);
+                    start.setDate(1);
                     
-                    $('#date-from').datepicker("setDate", target);
-                    $('#date-to').datepicker("setDate", today);
+                    end.setFullYear(today.getFullYear());
+                    end.setMonth(0);
+                    end.setDate(1);
                 break;
 
                 case 'thismonth':
-                    target.setMonth(today.getMonth() + 1);
+                    start.setFullYear(today.getFullYear());
+                    start.setMonth(today.getMonth());
+                    start.setDate(1);
                     
-                    $('#date-from').datepicker("setDate", today);
-                    $('#date-to').datepicker("setDate", target);
+                    end.setFullYear(today.getFullYear());
+                    end.setMonth(today.getMonth() + 1);
+                    end.setDate(1);
                 break;
                 case 'lastmonth':
-                    target.setMonth(today.getMonth() - 1);
+                    start.setFullYear(today.getFullYear());
+                    start.setMonth(today.getMonth() - 1);
+                    start.setDate(1);
                     
-                    $('#date-from').datepicker("setDate", target);
-                    $('#date-to').datepicker("setDate", today);
+                    end.setFullYear(today.getFullYear());
+                    end.setMonth(today.getMonth());
+                    end.setDate(1);
                 break;
 
                 case 'thisweek':
-                    target.setDate(today.getDate() + 7);
+                    start.setFullYear(today.getFullYear());
+                    start.setMonth(today.getMonth());
+                    start.setDate(today.getDate() - today.getDay());
                     
-                    $('#date-from').datepicker("setDate", today);
-                    $('#date-to').datepicker("setDate", target);
+                    end.setFullYear(today.getFullYear());
+                    end.setMonth(today.getMonth());
+                    end.setDate(today.getDate() - today.getDay() + 7);
                 break;
                 case 'lastweek':
-                    target.setDate(today.getDate() - 7);
+                    start.setFullYear(today.getFullYear());
+                    start.setMonth(today.getMonth());
+                    start.setDate(today.getDate() - today.getDay() -7);
                     
-                    $('#date-from').datepicker("setDate", target);
-                    $('#date-to').datepicker("setDate", today);
+                    end.setFullYear(today.getFullYear());
+                    end.setMonth(today.getMonth());
+                    end.setDate(today.getDate() - today.getDay());
                 break;
                 
                 case 'custom':
-                    //$('#date-from').datepicker("setDate", null);
-                    //$('#date-to').datepicker("setDate", null);
+                    setDate = false;
                 break;
-            } 
+            }
+            if(setDate){
+                $('#date-from').datepicker("setDate", start);
+                $('#date-to').datepicker("setDate", end);
+            }
         });
         $('#preset-dates').change();
     });
