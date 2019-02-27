@@ -183,53 +183,79 @@ use Cake\I18n\I18n;
 
         $('#preset-dates').on('change', function(){
             let preset = $('#preset-dates').children("option:selected").val();
+            
             let today = new Date();
-            let target = new Date();
+            let start = new Date();
+            let end = new Date();
+
+            let setDate = true;
+
             switch(preset){
                 case 'thisyear':
-                    target.setFullYear(today.getFullYear() + 1);
+                    start.setFullYear(today.getFullYear());
+                    start.setMonth(0);
+                    start.setDate(1);
                     
-                    $('#date-from').datepicker("setDate", today);
-                    $('#date-to').datepicker("setDate", target);
+                    end.setFullYear(today.getFullYear() + 1);
+                    end.setMonth(0);
+                    end.setDate(1);
                 break;
                 case 'lastyear':
-                    target.setFullYear(today.getFullYear() - 1);
+                    start.setFullYear(today.getFullYear() - 1);
+                    start.setMonth(0);
+                    start.setDate(1);
                     
-                    $('#date-from').datepicker("setDate", target);
-                    $('#date-to').datepicker("setDate", today);
+                    end.setFullYear(today.getFullYear());
+                    end.setMonth(0);
+                    end.setDate(1);
                 break;
 
                 case 'thismonth':
-                    target.setMonth(today.getMonth() + 1);
+                    start.setFullYear(today.getFullYear());
+                    start.setMonth(today.getMonth());
+                    start.setDate(1);
                     
-                    $('#date-from').datepicker("setDate", today);
-                    $('#date-to').datepicker("setDate", target);
+                    end.setFullYear(today.getFullYear());
+                    end.setMonth(today.getMonth() + 1);
+                    end.setDate(1);
                 break;
                 case 'lastmonth':
-                    target.setMonth(today.getMonth() - 1);
+                    start.setFullYear(today.getFullYear());
+                    start.setMonth(today.getMonth() - 1);
+                    start.setDate(1);
                     
-                    $('#date-from').datepicker("setDate", target);
-                    $('#date-to').datepicker("setDate", today);
+                    end.setFullYear(today.getFullYear());
+                    end.setMonth(today.getMonth());
+                    end.setDate(1);
                 break;
 
                 case 'thisweek':
-                    target.setDate(today.getDate() + 7);
+                    start.setFullYear(today.getFullYear());
+                    start.setMonth(today.getMonth());
+                    start.setDate(today.getDate() - today.getDay());
                     
-                    $('#date-from').datepicker("setDate", today);
-                    $('#date-to').datepicker("setDate", target);
+                    end.setFullYear(today.getFullYear());
+                    end.setMonth(today.getMonth());
+                    end.setDate(today.getDate() - today.getDay() + 7);
                 break;
                 case 'lastweek':
-                    target.setDate(today.getDate() - 7);
+                    start.setFullYear(today.getFullYear());
+                    start.setMonth(today.getMonth());
+                    start.setDate(today.getDate() - today.getDay() -7);
                     
-                    $('#date-from').datepicker("setDate", target);
-                    $('#date-to').datepicker("setDate", today);
+                    end.setFullYear(today.getFullYear());
+                    end.setMonth(today.getMonth());
+                    end.setDate(today.getDate() - today.getDay());
                 break;
                 
                 case 'custom':
-                    //$('#date-from').datepicker("setDate", null);
-                    //$('#date-to').datepicker("setDate", null);
+                    setDate = false;
                 break;
-            } 
+            }
+            if(setDate){
+                $('#date-from').datepicker("setDate", start);
+                $('#date-to').datepicker("setDate", end);
+            }
         });
         $('#preset-dates').change();
     });
