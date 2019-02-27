@@ -104,7 +104,6 @@ class RoomsController extends AppController
      */
     public function edit($id = null)
     {
-
         $room = $this->Rooms->get($id, [
             'contain' => ['Services']
         ]);
@@ -145,6 +144,34 @@ class RoomsController extends AppController
         }
     }
 
+    public function consult($id = null)
+    {
+        $room = $this->Rooms->get($id, [
+            'contain' => ['Services']
+        ]);
+        if($this->request->is(['patch', 'post', 'put'])) {
+            $data = $this->request->getData();
+            $image = $data['image'];
+            if($image['tmp_name'] != '') {
+                $imageData  = file_get_contents($image['tmp_name']);
+                $b64   = base64_encode($imageData);
+                $data['image'] = $b64;
+            } else {
+                $data['image'] = $room->image;
+            }
+
+            $room = $this->Rooms->patchEntity($room, $data);
+            if ($this->Rooms->save($room)) {
+                $this->Flash->success(__('The room has been saved.'));
+
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('The room could not be saved. Please, try again.'));
+        }
+        $services = $this->Rooms->Services->find('list', ['limit' => 200]);
+        $this->set(compact('room', 'services'));
+    }
+
     /**
      * Delete method
      *
@@ -181,7 +208,7 @@ class RoomsController extends AppController
 
     /**
      * function deactivate
-     * désactive un equipement, set sa date de delete à now
+     * désactive une room, set sa date de delete à now
      */
     public function deactivate($id = null){
         $this->setDeleted($id, Time::now());
@@ -189,7 +216,7 @@ class RoomsController extends AppController
 
     /**
      * function reactivate
-     * reactive un equipement, set sa valeur deleted à null.
+     * reactive une room, set sa valeur deleted à null.
      */
     public function reactivate($id = null){
         $this->setDeleted($id, null);
@@ -221,7 +248,7 @@ class RoomsController extends AppController
             $this->set(compact('success'));
             $this->set('_serialize', ['success']);
         } else {
-            return $this->redirect(['action' => 'index']);
+            return $this->redirect($this->referer());
         }
     }
 

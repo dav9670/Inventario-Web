@@ -104,12 +104,7 @@
 
                         roomsArray = response[array_name];
                         $.each(roomsArray, function(idx, elem){
-                            let pic = "<img src='data:image/png;base64," + elem.image + "' alt='" + elem.name + "' width=100/>";
-                            let picCell = "<td><a href='/rooms/" + elem.id + "'>" + pic + "</a></td>";
-
-                            let nameCell = "<td><a href='/rooms/" + elem.id + "'>" + elem.name + "</a></td>";
-                            let descriptionCell = "<td><a href='/rooms/" + elem.id + "'>" + elem.description + "</a></td>";
-
+                            
                             var services_list = "";
                             var three_services = elem.services_list.slice(0,3);
                             if (elem.services_list.length > 3) {
@@ -117,30 +112,42 @@
                             } else {
                                 services_list = three_services.join(", ");
                             }
-                            let servicesCell = "<td><a href='/rooms/" + elem.id + "'>" + services_list + "</a></td>";
 
                             var imgTag = "";
+                            var imgAlt = '';
                             if (elem.available) {
-                                imgTag = "<img src='/img/good.png' alt='Available' width=20 height=20>";
+                                imgTag = 'good.png';
+                                imgAlt = 'Available';
                             } else {
-                                imgTag = "<img src='/img/bad.png' alt='Not Available' width=20 height=20>";
+                                imgTag = 'bad.png';
+                                imgAlt = 'Not Available';
                             }
-                            let availableCell = "<td><a href='/rooms/" + elem.id + "'>" + imgTag + "</a></td>";
-                            
-                            
-                            let actionsCell = "<td class=\"actions\">";
+
                             var link = ""
                             if(elem.deleted == null){
-                                link = '<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', -1], ['confirm' => __('Are you sure you want to delete {0}?', -1)]) ?>';
-                                link = link.replace(/-1/g, elem.name);
+                                link = link.concat('<?= $this->Html->link(__('Deactivate'), ['action' => 'deactivate', -1], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to deactivate {0}?', -2)]) ?> ');
                             } else {
-                                link = '<?= $this->Form->postLink(__('Reactivate'), ['action' => 'reactivate', -1], ['confirm' => __('Are you sure you want to reactivate {0}?', -1)]) ?>';
-                                link = link.replace(/-1/g, elem.name);
+                                link = link.concat('<?= $this->Html->link(__('Reactivate'), ['action' => 'reactivate', -1], ['confirm' => __('Are you sure you want to reactivate {0}?', -2)]) ?> ');
+                                if(elem.loan_count == 0){
+                                    link = link.concat('<?= $this->Html->link(__('Delete'), ['action' => 'delete', -1], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to PERMANENTLY delete {0}?', -2)]) ?> ');
+                                }
                             }
-                            actionsCell = actionsCell.concat(link);
-                            actionsCell = actionsCell.concat("</td>");
 
-                            table.append("<tr>" + picCell + nameCell + descriptionCell + servicesCell + availableCell + actionsCell + "</tr>");
+                            link = link.replace(/-1/g, elem.id);
+                            link = link.replace(/-2/g, elem.name);
+
+                            table.append(`
+                                <tr>
+                                        <td><a href='/rooms/` + elem.id + `'><img src='data:image/png;base64,` + elem.image + `' alt='` + elem.name + `' width=100/></a></td>
+                                        <td><a href='/rooms/` + elem.id + `'>` + elem.name + `</a></td>
+                                        <td><a href='/rooms/` + elem.id + `'>` + elem.description + `</a></td>
+                                        <td><a href='/rooms/` + elem.id + `'>` + services_list + `</a></td>
+                                        <td><a href='/rooms/` + elem.id + `'><img src='/img/` + imgTag + `' alt='` + imgAlt + `' width=20 height=20></a></td>
+                                        <td class='actions'>
+                                            ` + link + `
+                                        </td>
+                                </tr>
+                            `);
                         });
                     }
                     

@@ -4,26 +4,91 @@
  * @var \App\Model\Entity\Room $room
  */
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('List Rooms'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('List Services'), ['controller' => 'Services', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Service'), ['controller' => 'Services', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
-<div class="rooms form large-9 medium-8 columns content">
-    <?= $this->Form->create($room) ?>
+<div class="rooms form large-12 medium-11 columns content">
+    <?= $this->Form->create($room, ['type' => 'file']) ?>
     <fieldset>
         <legend><?= __('Add Room') ?></legend>
         <?php
             echo $this->Form->control('name');
-            echo $this->Form->control('description');
-            echo $this->Form->control('image');
-            echo $this->Form->control('deleted', ['empty' => true]);
-            echo $this->Form->control('services._ids', ['options' => $services]);
+            echo $this->Form->control('description', ['type' => 'textarea']);
+            echo $this->Form->control('image', ['type' => 'file', 'accept'=> 'image/*', 'onchange' => 'loadFile(event)']);
         ?>
     </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
+    <img id='output' style='max-width:200px; max-height:200px;'/>
+    <h3><?=__('Services')?></h3>
+    <input id='autocomplete' type ='text'>
+    <input type='hidden' name='services[_ids]' value=""/>
+    <table cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th scope="col"><?= __("Name") ?></a></th>
+                <th scope="col"><?= __("Description") ?></a></th>
+                <th scope="col"><?= __("Room count") ?></th>
+                <th scope="col" class="actions"><?= __('Actions') ?></th>
+            </tr>
+        </thead>
+        <tbody id='services_table_body'>
+        </tbody>
+    </table>
+    <?= $this->Form->button(__('Save')) ?>
     <?= $this->Form->end() ?>
 </div>
+<script>
+    function loadFile(event) {
+        $('#output').attr('src', URL.createObjectURL(event.target.files[0])); 
+    }
+
+    function removeRow(id) {
+        if(confirm('<?= __('Are you sure you want to remove this service?')?>')){
+            $('#service_row_' + id).remove();
+        }
+    }
+
+    $('document').ready(function(){
+        $("#autocomplete").autocomplete({
+            source: function(request, show){
+                $.ajax({
+                    method: 'get',
+                    url : "/services/search.json",
+                    data: {keyword: request.term, sort_field: 'name', sort_dir: 'asc'},
+                    success: function( response ){
+                        var results = [];
+                        $.each(response.services, function(idx, elem){
+                            if(!$('#service_row_' + elem.id).length){
+                                var entry = {
+                                    label: elem.name,
+                                    data: elem
+                                };
+                                results.push(entry);
+                            }
+                        });
+                        show(results);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown){
+                        console.log(textStatus);
+                    }
+                });
+            },
+            minLength: 1,
+            autoFocus: true,
+            select: function (event, ui) {
+                let table = $('#services_table_body');
+                let elem = ui.item.data;
+
+                table.append(`
+                    <tr>
+                        <td><a href='services/` + elem.id + `'>` + elem.name + `</a></td>
+                        <td><a href='services/` + elem.id + `'>` + elem.description + `</a></td>
+                        <td><a href='/services/` + elem.id + `'>` + elem.room_count + `</a></td>
+                        <td class='actions'>
+                            <a class='unlink_link delete-link' onclick='removeLink(` + elem.id + `)'><?=__('Remove')?></a>
+                        </td>
+                    </tr>
+                `);
+
+                $('#autocomplete').val('');
+                event.preventDefault();
+            }
+        });
+    });
+</script>

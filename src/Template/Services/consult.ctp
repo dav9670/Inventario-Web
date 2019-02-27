@@ -33,7 +33,7 @@
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
             <?php foreach ($service->rooms as $room): ?>
-            <tr class="clickable-row">
+            <tr id='room_row_<?=$room->id?>' class="clickable-row">
                 <td><a href='/rooms/<?= h($room->id) ?>'><img src="data:image/png;base64, <?= h($room->image) ?>" alt="<?= h($room->name) ?>" width=100/></a></td>
                 <td><a href='/rooms/<?= h($room->id) ?>'><?= h($room->name) ?></a></td>
                 <td><a href='/rooms/<?= h($room->id) ?>'><?= h($room->description) ?></a></td>
@@ -51,7 +51,7 @@
                 <?php endif; ?>
 
                 <td class="actions">
-                    <?= $this->Form->postLink(__('Unlink'), ['controller' => 'services', 'action' => 'unlink', '?' => ['service' => $service->id, 'room' => $room->id]], ['confirm' => __('Are you sure you want to delete the association between {0} and {1}?', $room->name, $service->name), 'class' => 'unlink_link delete-link', 'hidden']) ?>
+                    <a onclick='if(confirm("<?=__('Are you sure you want to delete the association between {0} and {1}?', $room->name, $service->name)?>")){removeLink(<?=$room->id?>)}' class='unlink_link delete-link' hidden><?=__('Unlink')?></a>
                 </td>
             </tr>
             <?php endforeach; ?>
@@ -81,26 +81,37 @@
         }
     }
 
+    function removeLink(room_id){
+        $.ajax({
+            method: 'post',
+            url : "/services/unlink.json?service=<?=$service->id?>&room=" + room_id,
+            headers: { 'X-CSRF-TOKEN': '<?=$this->getRequest()->getParam('_csrfToken');?>' },
+            success: function( response ){
+                $('#room_row_' + room_id).remove();
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                alert("The association could not be deleted");
+                console.log(jqXHR.responseText);
+            }
+        });
+    }
+
     function setReadOnly(readOnly){
+        $('#name').attr('readOnly', readOnly);
+        $('#description').attr('readOnly', readOnly);
+
         if(readOnly){
             //View
-            $('#name').attr('readOnly', readOnly);
-            $('#description').attr('readOnly', readOnly);
-
             $('#doneButton').hide();
             $('.unlink_link').hide();
 
             $('#editButton').show();
         }else{
             //Edit
-            $('#name').attr('readOnly', readOnly);
-            $('#description').attr('readOnly', readOnly);
+            $('#doneButton').show();
+            $('.unlink_link').show();
 
             $('#editButton').hide();
-
-            $('#doneButton').show();
-            $('#submit').show();
-            $('.unlink_link').show();
         }
     }
 
