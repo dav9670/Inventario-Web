@@ -49,9 +49,15 @@ use Cake\I18n\I18n;
 
 <script>
 
+    var sort_field = '';
+    var sort_dir = '';
+
     let reportDict = {
         mentors: function(){
             setHeadersMentors();
+            sort_field = '';
+            sort_dir = '';
+            sortSetter('email');
             setBodyMentors();
         },
         rooms: function(){
@@ -70,9 +76,9 @@ use Cake\I18n\I18n;
         $('#report-table-head').empty();
         $('#report-table-head').append(`
             <tr>
-                <th scope="col"><?= __("Email") ?></a></th>
-                <th scope="col"><?= __("Hours loaned") ?></a></th>
-                <th scope="col"><?= __("Times loaned") ?></th>
+                <th scope="col"><a id="email_sort" onclick="sortSetter('email'); setBodyMentors();"><?= __("Email") ?></a></th>
+                <th scope="col"><a id="hours_loaned_sort" onclick="sortSetter('hours_loaned'); setBodyMentors();"><?= __("Hours loaned") ?></a></th>
+                <th scope="col"><a id="times_loaned_sort" onclick="sortSetter('times_loaned'); setBodyMentors();"><?= __("Times loaned") ?></a></th>
             </tr>
         `);
     }
@@ -82,7 +88,7 @@ use Cake\I18n\I18n;
         let end_date = $('#date-to').datepicker('option', 'dateFormat', 'yy-mm-dd').val();
         $.ajax({
             method: 'get',
-            url : "/reports/mentors_report.json?start_date=" + start_date + "&end_date=" + end_date,
+            url : "/reports/mentors_report.json?start_date=" + start_date + "&end_date=" + end_date + "&sort_field=" + sort_field + "&sort_dir=" + sort_dir,
             headers: { 'X-CSRF-TOKEN': '<?=$this->getRequest()->getParam('_csrfToken');?>' },
             success: function( response ){
                 $('#report-table-body').empty();
@@ -175,6 +181,21 @@ use Cake\I18n\I18n;
     function generateReport(){
         reportDict[$('#report-type').children("option:selected").val()]();
         $('#report-table').show();
+    }
+
+    function sortSetter( sort_field_param ){
+        var oldHtmlFieldId = '#' + sort_field +'_sort';
+        var newHtmlFieldId = '#' + sort_field_param +'_sort';
+        
+        $(oldHtmlFieldId).removeClass('asc');
+        $(oldHtmlFieldId).removeClass('desc');
+        $(newHtmlFieldId).removeClass('asc');
+        $(newHtmlFieldId).removeClass('desc');
+
+        sort_dir = sort_field != sort_field_param ? "asc" : sort_dir == "asc" ? "desc" : "asc";
+        sort_field = sort_field_param;
+
+        $(newHtmlFieldId).addClass(sort_dir);
     }
 
     $('document').ready(function(){
