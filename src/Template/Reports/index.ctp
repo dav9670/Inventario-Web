@@ -84,8 +84,8 @@ use Cake\I18n\I18n;
     }
 
     function setBodyMentors(){
-        let start_date = $('#date-from').datepicker('option', 'dateFormat', 'yy-mm-dd').val();
-        let end_date = $('#date-to').datepicker('option', 'dateFormat', 'yy-mm-dd').val();
+        let start_date = $('#date-from').val();
+        let end_date = $('#date-to').val();
         $.ajax({
             method: 'get',
             url : "/reports/mentors_report.json?start_date=" + start_date + "&end_date=" + end_date + "&sort_field=" + sort_field + "&sort_dir=" + sort_dir,
@@ -125,8 +125,8 @@ use Cake\I18n\I18n;
     }
 
     function setBodyLicences(){
-        let start_date = $('#date-from').datepicker('option', 'dateFormat', 'yy-mm-dd').val();
-        let end_date = $('#date-to').datepicker('option', 'dateFormat', 'yy-mm-dd').val();
+        let start_date = $('#date-from').val();
+        let end_date = $('#date-to').val();
         $.ajax({
             method: 'get',
             url : "/reports/licences_report.json?start_date=" + start_date + "&end_date=" + end_date,
@@ -200,6 +200,7 @@ use Cake\I18n\I18n;
 
     $('document').ready(function(){
         $(".datepicker").datepicker({
+            dateFormat: 'yy-mm-dd',
             onSelect: function(date) {
                 $('#preset-dates').val('custom');
             }
