@@ -132,11 +132,35 @@ use Cake\I18n\I18n;
                         <tr>
                             <td>` + elem.product + `</td>
                             <td>` + elem.platform + `</td>
-                            <td>` + elem.licence + `</td>
-                            <td><img src='/img/` + (elem.used ? "good" : "bad") + `.png' alt='Available' width=20 height=20></td>
-                            <td><img src='/img/` + (elem.expired ? "bad" : "good") + `.png' alt='Available' width=20 height=20></td>
+                            <td></td>
+                            <td>` + elem.used + `</td>
+                            <td>` + elem.expired + `</td>
                             <td>` + elem.uses + `</td>
                             <td>` + elem.percent_used + `</td>
+                        </tr>
+                    `);
+                    elem.licences.forEach(function(elem2){
+                        $('#report-table-body').append(`
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td>` + elem2.licence + `</td>
+                                <td><img src='/img/` + (elem2.used ? "good" : "bad") + `.png' alt='Available' width=20 height=20></td>
+                                <td><img src='/img/` + (elem2.expired ? "bad" : "good") + `.png' alt='Available' width=20 height=20></td>
+                                <td>` + elem2.uses + `</td>
+                                <td>-</td>
+                            </tr>
+                        `);
+                    });
+                    $('#report-table-body').append(`
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                         </tr>
                     `);
                 });

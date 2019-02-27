@@ -56,7 +56,43 @@ class ReportsController extends AppController
         }
         unset($line);
 
-        $this->set('report', $proc_result);
+        $final_result = array();
+        $prev_line = null;
+        $id = 0;
+        foreach($proc_result as &$line)
+        {
+            if ($prev_line != null && ($prev_line["product"] != $line["product"] || $prev_line["platform"] != $line["platform"]))
+            {
+                $final_result[$id]["percent_used"] = ($final_result[$id]["used"] * 100 / count($final_result[$id]["licences"])) . "%";
+                $id += 1;
+            }
+
+            $final_result[$id]["product"] = $line["product"];
+            $final_result[$id]["platform"] = $line["platform"];
+
+            $final_result[$id]["used"] = $final_result[$id]["used"] ?? 0;
+            $final_result[$id]["used"] += $line["used"] ? 1 : 0;
+
+            $final_result[$id]["expired"] = $final_result[$id]["expired"] ?? 0;
+            $final_result[$id]["expired"] += $line["expired"] ? 1 : 0;
+
+            $final_result[$id]["uses"] = $final_result[$id]["uses"] ?? 0;
+            $final_result[$id]["uses"] += $line["uses"];
+
+            $new_licence["licence"] = $line["licence"];
+            $new_licence["used"] = $line["used"];
+            $new_licence["expired"] = $line["expired"];
+            $new_licence["uses"] = $line["uses"];
+
+            $final_result[$id]["licences"][] = $new_licence;
+
+            $prev_line = $line;
+        }
+        unset($line);
+
+        $final_result[$id]["percent_used"] = ($final_result[$id]["used"] * 100 / count($final_result[$id]["licences"])) . "%";
+
+        $this->set('report', $final_result);
         $this->set('_serialize', 'report');
     }
 
