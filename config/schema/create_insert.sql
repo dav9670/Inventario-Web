@@ -109,7 +109,7 @@ begin
             l.item_type like "mentors" and 
             l.start_time <= "', end ,'" and l.end_time >= "', start ,'"
         group by m.id
-        order by ',sort_field,' ', sort_dir
+        order by ', sort_field ,' ', sort_dir
     );
     
     PREPARE stmt FROM @query;
