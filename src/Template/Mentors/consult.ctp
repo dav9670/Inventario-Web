@@ -14,7 +14,7 @@
             echo $this->Form->control('email', ['readOnly' => 'readOnly']);
             echo $this->Form->control('first_name', ['readOnly' => 'readOnly']);
             echo $this->Form->control('last_name', ['readOnly' => 'readOnly']);
-            echo $this->Form->control('description', ['readOnly' => 'readOnly']);
+            echo $this->Form->control('description', ['readOnly' => 'readOnly', 'type' => 'textarea']);
             echo $this->Form->control('image', ['type' => 'file', 'accept'=> 'image/*', 'onchange' => 'loadFile(event)', 'hidden' => 'hidden', 'disabled' => 'disabled']);
         ?>
     </fieldset>
