@@ -148,7 +148,7 @@ class ReportsController extends AppController
         $loansResult = [];
 
         foreach ($loansForResult as $loan){
-            array_push($loansResult,$loan->_getTimePresetsForRooms($start_date, $end_date, $loan['Rooms']['name']));
+            array_push($loansResult,$loan->_getTimePresetsForRooms($start_date, $end_date, $loan['Rooms']));
             
         }
 
@@ -163,7 +163,7 @@ class ReportsController extends AppController
                 if((string)$nameResult == (string)$nameFinalResult && $taken!= true){
                     $taken = true;
                     $tempResult = $finalResults[$index];
-                    for($i = 0; $i < 14; $i++){
+                    for($i = 0; $i < 13; $i++){
                         $tempResult[key($result)][$i] += $result[key($result)][$i];
                     }
                     $finalResults[$index] = $tempResult;
