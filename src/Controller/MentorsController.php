@@ -42,10 +42,14 @@ class MentorsController extends AppController
     public function view($id = null)
     {
         $mentor = $this->Mentors->get($id, [
-            'contain' => ['Skills']
+            'contain' => ['Skills' => [
+                'sort' => ['Skills.name' => 'asc']
+                ]
+            ]
         ]);
 
-        $this->set('mentor', $mentor);
+        $this->set(compact('mentor'));
+        $this->set('_serialize', ['mentor']);
     }
 
     /**
@@ -56,26 +60,39 @@ class MentorsController extends AppController
     public function add()
     {
         $mentor = $this->Mentors->newEntity();
+        $success = false;
         if ($this->request->is('post')) {
 
             $data = $this->request->getData();
-            $image = $data['image'];
-            if($image['tmp_name'] != '') {
-                $imageData  = file_get_contents($image['tmp_name']);
-                $b64   = base64_encode($imageData);
-                $data['image'] = $b64;
+            if(!$this->isApi()){
+                $image = $data['image'];
+                if($image['tmp_name'] != '') {
+                    $imageData  = file_get_contents($image['tmp_name']);
+                    $b64   = base64_encode($imageData);
+                    $data['image'] = $b64;
+                }
             }
             $mentor = $this->Mentors->patchEntity($mentor, $data);
-            
-            
             if ($this->Mentors->save($mentor)) {
-                $this->Flash->success(__('The mentor has been saved.'));
-                
-                return $this->redirect(['action' => 'index']);
+                if($this->isApi()){
+                    $success = true;
+                } else {
+                    $this->Flash->success(__('The mentor has been saved.'));
+                    return $this->redirect(['action' => 'index']);
+                }
+            } else if($this->isApi()){
+                $success = false;
+            } else {
+                $this->Flash->error(__('The mentor could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The mentor could not be saved. Please, try again.'));
         }
-        $this->set(compact('mentor'));
+
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        } else {
+            $this->set(compact('mentor'));
+        }
     }
 
     /**
@@ -90,17 +107,41 @@ class MentorsController extends AppController
         $mentor = $this->Mentors->get($id, [
             'contain' => ['Skills']
         ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $mentor = $this->Mentors->patchEntity($mentor, $this->request->getData());
-            if ($this->Mentors->save($mentor)) {
-                $this->Flash->success(__('The mentor has been saved.'));
+        $success = false;
 
-                return $this->redirect(['action' => 'index']);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+
+            $data = $this->request->getData();
+            if(!$this->isApi()){
+                $image = $data['image'];
+                if($image['tmp_name'] != '') {
+                    $imageData  = file_get_contents($image['tmp_name']);
+                    $b64   = base64_encode($imageData);
+                    $data['image'] = $b64;
+                }
             }
-            $this->Flash->error(__('The mentor could not be saved. Please, try again.'));
+            $mentor = $this->Mentors->patchEntity($mentor, $data);
+            if ($this->Mentors->save($mentor)) {
+                if($this->isApi()){
+                    $success = true;
+                } else {
+                    $this->Flash->success(__('The mentor has been saved.'));
+                    return $this->redirect(['action' => 'index']);
+                }
+            } else if($this->isApi()){
+                $success = false;
+            } else {
+                $this->Flash->error(__('The mentor could not be saved. Please, try again.'));
+            }
         }
-        $skills = $this->Mentors->Skills->find('list', ['limit' => 200]);
-        $this->set(compact('mentor', 'skills'));
+
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        } else {
+            $skills = $this->Mentors->Skills->find('list', ['limit' => 200]);
+            $this->set(compact('mentor', 'skills'));
+        }
     }
 
     public function consult($id = null)
@@ -211,6 +252,21 @@ class MentorsController extends AppController
         }
     }
     
+    public function isTaken()
+    {
+        if ($this->isApi()){
+            $jsonData = $this->getRequest()->input('json_decode', true);
+            $mentor = $this->Mentors->find('all')
+                ->where(["lower(email) = :search"])
+                ->bind(":search", strtolower($jsonData['email']), 'string')->first();
+            
+                $this->set(compact('mentor'));
+            $this->set('_serialize', ['mentor']);  
+        } else {
+            return $this->redirect(['action' => 'index']);
+        }
+    }
+
     public function isAuthorized($user)
     {
         return $this->Auth->user('admin_status') == 'admin';

@@ -40,7 +40,7 @@
         $('#output').attr('src', URL.createObjectURL(event.target.files[0])); 
     }
 
-    function removeRow(id) {
+    function removeLink(id) {
         if(confirm('<?= __('Are you sure you want to remove this skill?')?>')){
             $('#skill_row_' + id).remove();
         }
@@ -78,7 +78,8 @@
                 let elem = ui.item.data;
 
                 table.append(`
-                    <tr>
+                    <tr id='skill_row_` + elem.id + `'>
+                        <input type='hidden' name='skills[_ids][]' value='` + elem.id + `'/>
                         <td><a href='skills/` + elem.id + `'>` + elem.name + `</a></td>
                         <td><a href='skills/` + elem.id + `'>` + elem.description + `</a></td>
                         <td><a href='/skills/` + elem.id + `'>` + elem.mentor_count + `</a></td>
