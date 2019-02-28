@@ -41,7 +41,7 @@ class Loan extends Entity
         'item' => true
     ];
 
-    public function _getTimePresetsForRooms($from, $to, $roomName){
+    public function _getTimePresetsForRooms($from, $to, $room){
         $startCalcul = "";
         $endCalcul = "";
 
@@ -68,14 +68,14 @@ class Loan extends Entity
         $startCalcul = new Time($startCalcul);
         $endCalcul = new Time($endCalcul);
 
-        $result = [0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        $result = [0,0,0,0,0,0,0,0,0,0];
 
         if($startCalcul->hour < 8){
             $startCalcul->hour = 8;
         }
         while ($startCalcul < $endCalcul) {
             $hour = 8;
-            while ($hour <= 20) {
+            while ($hour < 17) {
                 if($startCalcul < $endCalcul){
                     $result[$hour-7] ++;
                     $result[0] ++;
@@ -86,6 +86,17 @@ class Loan extends Entity
             $startCalcul->day ++;
             $startCalcul->hour = 8;
         }
+        array_push($result, $room['deleted']);
+        $roomName = $room['name'];
+
+        $servicesPreview = "";
+
+        $services = $room['services'];
+        foreach ($services as $service){
+            $servicesPreview .= (string)$service['name']."; ";
+        }
+        array_push($result, $servicesPreview);
+
         $roomResult = [
             $roomName => $result
         ];

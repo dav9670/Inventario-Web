@@ -178,6 +178,21 @@ class SkillsController extends AppController
         }
     }
 
+    public function isTaken()
+    {
+        if ($this->isApi()){
+            $jsonData = $this->getRequest()->input('json_decode', true);
+            $skill = $this->Skills->find('all')
+                ->where(["lower(name) = :search"])
+                ->bind(":search", strtolower($jsonData['name']), 'string')->first();
+            
+                $this->set(compact('skill'));
+            $this->set('_serialize', ['skill']);  
+        } else {
+            return $this->redirect(['action' => 'index']);
+        }
+    }
+
     private function modifyLink($func)
     {
         $this->getRequest()->allowMethod(['post', 'delete']);

@@ -149,7 +149,7 @@ class MentorsControllerTest extends TestCase
 			    'type' => 'image/jpeg',
 			    'size' => (int) 31304
             ],
-            'mentors' => [
+            'skills' => [
                 '_ids' => [
                     '1',
                     '2'
@@ -178,45 +178,45 @@ class MentorsControllerTest extends TestCase
         //Positive test
         $post = [
             'id' => 1,
-            'name' => 'Memeology',
+            'email' => 'james@hoffman.ca',
             'description' => 'The science of memes.'
         ];
 
-        $skills = TableRegistry::get('Skills');
-        $skill = $skills->find()->where(['id' => 1])->first();
-        $this->assertNotNull($skill);
-        $this->assertEquals('Html', $skill->name);
-        $this->assertEquals('Hypertext Markup Language. Used to make the graphic structure of a website.', $skill->description);
+        $mentors = TableRegistry::get('Mentors');
+        $mentor = $mentors->find()->where(['id' => 1])->first();
+        $this->assertNotNull($mentor);
+        $this->assertEquals('jam@peanutButter.com', $mentor->email);
+        $this->assertEquals('Hello, I live in Shawinigan and I am very eager to teach you!', $mentor->description);
 
-        $this->post('/skills/1', $post);
+        $this->post('/mentors/1', $post);
 
-        $skills = TableRegistry::get('Skills');
-        $skill = $skills->find()->where(['id' => 1])->first();
-        $this->assertNotNull($skill);
-        $this->assertEquals('Memeology', $skill->name);
-        $this->assertEquals('The science of memes.', $skill->description);
+        $mentors = TableRegistry::get('Mentors');
+        $mentor = $mentors->find()->where(['id' => 1])->first();
+        $this->assertNotNull($mentor);
+        $this->assertEquals('james@hoffman.ca', $mentor->email);
+        $this->assertEquals('The science of memes.', $mentor->description);
 
 
         //Negative test
         $post = [
             'id' => 2,
-            'name' => 'Physics',
-            'description' => 'This is a name that is already taken.'
+            'email' => 'patrick@gmail.com',
+            'description' => 'This is a email that is already taken.'
         ];
 
-        $skills = TableRegistry::get('Skills');
-        $skill = $skills->find()->where(['id' => 2])->first();
-        $this->assertNotNull($skill);
-        $this->assertEquals('Javascript', $skill->name);
-        $this->assertEquals('Scripting language used mainly in web development. Can also be used to develop desktop applications.', $skill->description);
+        $mentors = TableRegistry::get('Mentors');
+        $mentor = $mentors->find()->where(['id' => 2])->first();
+        $this->assertNotNull($mentor);
+        $this->assertEquals('mt@st.yves', $mentor->email);
+        $this->assertEquals('My passion is informatics.', $mentor->description);
 
-        $this->post('/skills/2', $post);
+        $this->post('/mentors/2', $post);
 
-        $skills = TableRegistry::get('Skills');
-        $skill = $skills->find()->where(['id' => 2])->first();
-        $this->assertNotNull($skill);
-        $this->assertEquals('Javascript', $skill->name);
-        $this->assertEquals('Scripting language used mainly in web development. Can also be used to develop desktop applications.', $skill->description);
+        $mentors = TableRegistry::get('Mentors');
+        $mentor = $mentors->find()->where(['id' => 2])->first();
+        $this->assertNotNull($mentor);
+        $this->assertEquals('mt@st.yves', $mentor->email);
+        $this->assertEquals('My passion is informatics.', $mentor->description);
     }
 
     /**
@@ -231,15 +231,15 @@ class MentorsControllerTest extends TestCase
             'id' => 1
         ];
 
-        $skills = TableRegistry::get('Skills');
-        $skill = $skills->find()->where(['id' => 1])->first();
-        $this->assertNotNull($skill);
+        $mentors = TableRegistry::get('Mentors');
+        $mentor = $mentors->find()->where(['id' => 1])->first();
+        $this->assertNotNull($mentor);
 
-        $this->post('/skills/delete/1', $post);
+        $this->post('/mentors/delete/1', $post);
 
-        $skills = TableRegistry::get('Skills');
-        $skill = $skills->find()->where(['id' => 1])->first();
-        $this->assertNull($skill);
+        $mentors = TableRegistry::get('Mentors');
+        $mentor = $mentors->find()->where(['id' => 1])->first();
+        $this->assertNull($mentor);
 
 
         //Negative test
@@ -247,15 +247,15 @@ class MentorsControllerTest extends TestCase
             'id' => -1
         ];
 
-        $skills = TableRegistry::get('Skills');
-        $skill = $skills->find()->where(['id' => -1])->first();
-        $this->assertNull($skill);
+        $mentors = TableRegistry::get('Mentors');
+        $mentor = $mentors->find()->where(['id' => -1])->first();
+        $this->assertNull($mentor);
 
-        $this->post('/skills/delete/-1', $post);
+        $this->post('/mentors/delete/-1', $post);
 
-        $skills = TableRegistry::get('Skills');
-        $skill = $skills->find()->where(['id' => -1])->first();
-        $this->assertNull($skill);
+        $mentors = TableRegistry::get('Mentors');
+        $mentor = $mentors->find()->where(['id' => -1])->first();
+        $this->assertNull($mentor);
 
         $this->assertResponseError();
     }
