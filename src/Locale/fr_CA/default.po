@@ -76,6 +76,18 @@ msgstr "La licence a été supprimée."
 msgid "The licence could not be deleted. Please, try again."
 msgstr "La licence n'a pas pu être supprimée. Veuillez réessayer."
 
+#: Controller/LicencesController.php:315
+msgid "The licence has been "
+msgstr "La licence a été "
+
+#: Controller/LicencesController.php:326
+msgid "The licence could not be "
+msgstr "La licence n'a pas pu être "
+
+#: Controller/LicencesController.php:110;227
+msgid "At least one Product is required. Please, try again."
+msgstr "Au moins un Produit est requis. Veuillez réessayer."
+
 #: Controller/LoansController.php:58;84
 msgid "The loan has been saved."
 msgstr "La location a été sauvegardée."
@@ -107,6 +119,14 @@ msgstr "Le mentor a été supprimé."
 #: Controller/MentorsController.php:111
 msgid "The mentor could not be deleted. Please, try again."
 msgstr "Le mentor n'a pas pu être supprimé. Veuillez réessayer."
+
+#: Controller/MentorsController.php:237
+msgid "The mentor has been "
+msgstr "Le mentor a été "
+
+#: Controller/MentorsController.php:243
+msgid "The mentor could not be "
+msgstr "Le mentor n'a pas pu être "
 
 #: Controller/ProductsController.php:65;103;137
 msgid "The product has been saved."
@@ -140,6 +160,14 @@ msgstr "La salle a été supprimée."
 msgid "The room could not be deleted. Please, try again."
 msgstr "La salle n'a pas pu être supprimée. Veuillez réessayer."
 
+#: Controller/RoomsController.php:237
+msgid "The room has been "
+msgstr "La salle a été "
+
+#: Controller/RoomsController.php:243
+msgid "The room could not be "
+msgstr "La salle n'a pas pu être "
+
 #: Controller/ServicesController.php:65;104;138
 msgid "The service has been saved."
 msgstr "Le service a été sauvegardé."
@@ -171,6 +199,14 @@ msgstr "La compétence a été supprimée."
 #: Controller/SkillsController.php:169
 msgid "The skill could not be deleted. Please, try again."
 msgstr "La compétence n'a pas pu être supprimée. Veuillez réessayer."
+
+#: Controller/UsersController.php:49
+msgid "Your email and/or password is incorrect."
+msgstr "Votre adresse courriel et/ou mot de passe est incorrect."
+
+#: Controller/UsersController.php:56
+msgid "You are now logged out."
+msgstr "Vous être maintenant déconnecté(e)"
 
 #: Controller/UsersController.php:101;125
 msgid "The user has been saved."
@@ -204,6 +240,114 @@ msgstr "Infinie"
 msgid "Expired"
 msgstr "Expirée"
 
+#: Model/Table/CategoriesTable.php:61
+#: Model/Table/EquipmentsTable.php:71
+#: Model/Table/LicencesTable.php:71
+#: Model/Table/ProductsTable.php:62
+#: Model/Table/RoomsTable.php:71
+#: Model/Table/ServicesTable.php:61
+#: Model/Table/SkillsTable.php:61
+msgid "Name is too long. (Max 50 characters)"
+msgstr "Le nom est trop long. (Max 50 caractères)"
+
+#: Model/Table/CategoriesTable.php:62;63
+#: Model/Table/EquipmentsTable.php:72;73
+#: Model/Table/LicencesTable.php:72;73
+#: Model/Table/ProductsTable.php:63;64
+#: Model/Table/RoomsTable.php:72;73
+#: Model/Table/ServicesTable.php:62;63
+#: Model/Table/SkillsTable.php:62;63
+msgid "Name cannot be empty."
+msgstr "Le nom ne peut être vide."
+
+#: Model/Table/CategoriesTable.php:64;92
+#: Model/Table/RoomsTable.php:74
+#: Model/Table/ServicesTable.php:64;83
+#: Model/Table/SkillsTable.php:64;83
+msgid "This name has already been used."
+msgstr "Ce nom est déjà en utilisation."
+
+#: Model/Table/CategoriesTable.php:68
+#: Model/Table/EquipmentsTable.php:77
+#: Model/Table/LicencesTable.php:83
+#: Model/Table/MentorsTable.php:90
+#: Model/Table/ProductsTable.php:74
+#: Model/Table/RoomsTable.php:78
+#: Model/Table/ServicesTable.php:68
+#: Model/Table/SkillsTable.php:68
+msgid "Description is too long. (Max 255 characters)"
+msgstr "La decription est trop longue. (Max 255 caractères)"
+
+#: Model/Table/CategoriesTable.php:72;76
+msgid "Hourly rate must be in a #.## format."
+msgstr "Le taux horaire doit être dans un format #.##"
+
+#: Model/Table/CategoriesTable.php:73
+msgid "Hourly rate cannot be empty."
+msgstr "Le taux horaire ne peut être vide."
+
+#: Model/Table/EquipmentsTable.php:82
+#: Model/Table/LicencesTable.php:88
+#: Model/Table/MentorsTable.php:95
+#: Model/Table/RoomsTable.php:83
+msgid "Image is too large."
+msgstr "L'image est trop large."
+
+#: Model/Table/EquipmentsTable.php:83;84
+#: Model/Table/LicencesTable.php:89;90
+#: Model/Table/MentorsTable.php:96;97
+#: Model/Table/RoomsTable.php:84;85
+msgid "Image is required."
+msgstr "L'image est requise."
+
+#: Model/Table/LicencesTable.php:77
+msgid "Key is too long. (Max 50 characters)"
+msgstr ""La clé de licence est trop longue. (Max 50 caractères)"
+
+#: Model/Table/LicencesTable.php:78;79
+msgid "Key cannot be empty."
+msgstr "La clé de licence ne peut être vide."
+
+#: Model/Table/LicencesTable.php:95;96
+msgid "Start Time cannot be empty."
+msgstr "La date de début ne peut être vide."
+
+#: Model/Table/MentorsTable.php:71
+msgid "Email is too long. (Max 50 characters)"
+msgstr "L'adresse courriel est trop longue. (Max 50 caractères)"
+
+#: Model/Table/MentorsTable.php:72;73
+msgid "Email cannot be empty."
+msgstr "L'adresse courriel ne peut être vide."
+
+#: Model/Table/MentorsTable.php:74
+msgid "This email has already been used."
+msgstr "Cette adresse courriel est déjà en utilisation."
+
+#: Model/Table/MentorsTable.php:78
+msgid "First Name is too long. (Max 50 characters)"
+msgstr "Le prénom est trop long. (Max 50 caractères)"
+
+#: Model/Table/MentorsTable.php:79;80
+msgid "First Name cannot be empty."
+msgstr "Le prénom ne peut être vide."
+
+#: Model/Table/MentorsTable.php:84
+msgid "Last Name is too long. (Max 50 characters)"
+msgstr "Le nom est trop long. (Max 50 caractères)"
+
+#: Model/Table/MentorsTable.php:85;86
+msgid "Last Name cannot be empty."
+msgstr "Le nom ne peut être vide."
+
+#: Model/Table/ProductsTable.php:68
+msgid "Platform name is too long. (Max 50 characters)"
+msgstr "Le nom de plateforme est trop long. (Max 50 caractères)"
+
+#: Model/Table/ProductsTable.php:69;70
+msgid "Platform name cannot be empty."
+msgstr "Le nom de plateforme ne peut être vide."
+
 #: Model/Table/ProductsTable.php:82
 msgid "This name & platform combination has already been used."
 msgstr "Cette combinaison nom/plateforme est déjà utilisée."
@@ -233,24 +377,8 @@ msgstr "Ajouter une catégorie"
 #: Template/Users/add.ctp:26
 #: Template/Users/edit.ctp:32
 #: View/Helper/FormHelper.php:2028
-msgid "Submit"
-msgstr "Soumettre"
-
-#: Template/Categories/consult.ctp:9
-#: Template/Equipments/view.ctp:68
-#: Template/Licences/view.ctp:80
-#: Template/Loans/index.ctp:34
-#: Template/Mentors/view.ctp:74
-#: Template/Products/consult.ctp:9
-#: Template/Rooms/view.ctp:66
-#: Template/Services/consult.ctp:9
-#: Template/Skills/consult.ctp:9
-#: Template/Users/index.ctp:28
-#: Template/Users/profile.ctp:66
-#: Template/Users/view.ctp:66
-#: View/Helper/PaginatorHelper.php:1258
-msgid "View"
-msgstr "Voir"
+msgid "Save"
+msgstr "Sauvegarder"
 
 #: Template/Categories/consult.ctp:10
 #: Template/Equipments/view.ctp:69
@@ -266,6 +394,28 @@ msgstr "Voir"
 #: Template/Users/view.ctp:67
 msgid "Edit"
 msgstr "Modifier"
+
+#: Template/Categories/consult.ctp:11
+#: Template/Equipments/consult.ctp:10
+#: Template/Licences/consult.ctp:10
+#: Template/Mentors/consult.ctp:10
+#: Template/Products/consult.ctp:10
+#: Template/Rooms/consult.ctp:10
+#: Template/Services/consult.ctp:10
+#: Template/Skills/consult.ctp:10
+msgid "Done"
+msgstr "Terminer"
+
+#: Template/Categories/consult.ctp:20
+#: Template/Equipments/consult.ctp:39
+#: Template/Licences/consult.ctp:50
+#: Template/Mentors/consult.ctp:40
+#: Template/Products/consult.ctp:19
+#: Template/Rooms/consult.ctp:37
+#: Template/Services/consult.ctp:18
+#: Template/Skills/consult.ctp:18
+msgid "Cancel"
+msgstr "Annuler"
 
 #: Template/Categories/consult.ctp:12
 msgid "Category"
@@ -397,12 +547,23 @@ msgstr "Désassocier"
 msgid "Are you sure you want to delete the association between {0} and {1}?"
 msgstr "Êtes-vous sûr(e) de vouloir désassocier {0} et {1} ?"
 
-#: Template/Categories/consult.ctp:71
-#: Template/Products/consult.ctp:75
-#: Template/Services/consult.ctp:72
-#: Template/Skills/consult.ctp:76
-msgid "Return to view mode and cancel all your changes?"
-msgstr "Retourner en mode vue et annuler tous les changements?"
+#: Template/Categories/consult.ctp:73
+#: Template/Products/consult.ctp:71
+#: Template/Services/consult.ctp:68
+#: Template/Skills/consult.ctp:72
+msgid "Are you sure you want to modify {0}? {1} items are associated with it."
+msgstr "Êtes-vous sûr(e) de vouloir modifier {0} ? {1} objets y sont associés."
+
+#: Template/Categories/consult.ctp:85
+#: Template/Equipments/consult.ctp:81
+#: Template/Licences/consult.ctp:92
+#: Template/Mentors/consult.ctp:82
+#: Template/Products/consult.ctp:82
+#: Template/Rooms/consult.ctp:79
+#: Template/Services/consult.ctp:79
+#: Template/Skills/consult.ctp:83
+msgid "Cancel all your changes?"
+msgstr "Annuler tous vos changements?"
 
 #: Template/Categories/index.ctp:14
 #: Template/Equipments/index.ctp:11
@@ -462,6 +623,84 @@ msgid "Are you sure you want to delete {0}? {1} items are associated with it."
 msgstr "Êtes-vous sûr(e) de vouloir supprimer {0} ? {1} objets y sont associés."
 
 #: Template/Equipments/add.ctp:10
+msgid "Add Equipment"
+msgstr "Ajouter un Équipement"
+
+#: Template/Equipments/add.ctp:48
+msgid "Are you sure you want to remove this category?"
+msgstr "Êtes-vous sûr(e) de vouloir retirer cette Catégorie?"
+
+#: Template/Equipments/consult.ctp:12
+#: Template/Equipments/edit.ctp:24
+#: Template/Equipments/view.ctp:10
+msgid "Edit Equipment"
+msgstr "Modifier un Équipement"
+
+#: Template/Equipments/consult.ctp:31
+msgid "Deactivate equipment"
+msgstr "Désactiver l'Équipement"
+
+#: Template/Equipments/consult.ctp:31
+#: Template/Licences/consult.ctp:42
+#: Template/Licences/index.ctp:131
+#: Template/Mentors/consult.ctp:32
+#: Template/Mentors/index.ctp:130
+#: Template/Rooms/consult.ctp:29
+#: Template/Rooms/index.ctp:128
+msgid "Are you sure you want to deactivate {0}?"
+msgstr "Êtes-vous sûr(e) de vouloir désactiver {0} ?"
+
+#: Template/Equipments/consult.ctp:33
+msgid "Reactivate equipment"
+msgstr "Réactiver l'Équipement"
+
+#: Template/Equipments/consult.ctp:33
+#: Template/Licences/consult.ctp:44
+#: Template/Licences/index.ctp:133
+#: Template/Mentors/consult.ctp:34
+#: Template/Mentors/index.ctp:132
+#: Template/Rooms/consult.ctp:31
+#: Template/Rooms/index.ctp:130
+msgid "Are you sure you want to reactivate {0}?"
+msgstr "Êtes-vous sûr(e) de vouloir réactiver {0} ?"
+
+#: Template/Equipments/consult.ctp:35
+msgid "Delete equipment"
+msgstr "Supprimer cet Équipement"
+
+#: Template/Equipments/consult.ctp:35
+#: Template/Licences/consult.ctp:46
+#: Template/Licences/index.ctp:135
+#: Template/Mentors/consult.ctp:36
+#: Template/Mentors/index.ctp:134
+#: Template/Rooms/consult.ctp:33
+#: Template/Rooms/index.ctp:132
+msgid "Are you sure you want to PERMANENTLY delete {0}?"
+msgstr "Êtes-vous sûr(e) de vouloir supprimer {0} de manière PERMANENTE ?"
+
+#: Template/Equipments/consult.ctp:174
+#: Template/Licences/add.ctp:110
+#: Template/Licences/consult.ctp:71;197
+#: Template/Mentors/add.ctp:92
+#: Template/Mentors/consult.ctp:178
+#: Template/Rooms/add.ctp:90
+#: Template/Rooms/consult.ctp:173
+msgid "Remove"
+msgstr "Retirer"
+
+#: Template/Equipments/edit.ctp:13
+#: Template/Equipments/view.ctp:11;70
+#: Template/Loans/edit.ctp:13
+#: Template/Loans/index.ctp:36
+#: Template/Loans/view.ctp:11
+#: Template/Users/edit.ctp:13
+#: Template/Users/index.ctp:30
+#: Template/Users/profile.ctp:11;68
+#: Template/Users/view.ctp:11;68
+msgid "Are you sure you want to delete # {0}?"
+msgstr "Êtes-vous sûr(e) de vouloir supprimer # {0} ?"
+
+#: Template/Equipments/add.ctp:10
 #: Template/Equipments/edit.ctp:16
 #: Template/Equipments/view.ctp:12
 msgid "List Equipments"
@@ -479,53 +718,12 @@ msgstr "Liste des Catégories"
 msgid "New Category"
 msgstr "Nouvelle Catégorie"
 
-#: Template/Equipments/add.ctp:18
-msgid "Add Equipment"
-msgstr "Ajouter un Équipement"
-
-#: Template/Equipments/edit.ctp:13
-#: Template/Equipments/view.ctp:11;70
-#: Template/Licences/edit.ctp:13
-#: Template/Licences/view.ctp:11;82
-#: Template/Loans/edit.ctp:13
-#: Template/Loans/index.ctp:36
-#: Template/Loans/view.ctp:11
-#: Template/Mentors/edit.ctp:13
-#: Template/Mentors/view.ctp:11;76
-#: Template/Rooms/edit.ctp:13
-#: Template/Rooms/view.ctp:11;68
-#: Template/Users/edit.ctp:13
-#: Template/Users/index.ctp:30
-#: Template/Users/profile.ctp:11;68
-#: Template/Users/view.ctp:11;68
-msgid "Are you sure you want to delete # {0}?"
-msgstr "Êtes-vous sûr(e) de vouloir supprimer # {0} ?"
-
-#: Template/Equipments/edit.ctp:24
-#: Template/Equipments/view.ctp:10
-msgid "Edit Equipment"
-msgstr "Modifier cet Équipement"
-
 #: Template/Equipments/index.ctp:34
 #: Template/Licences/index.ctp:34
 #: Template/Mentors/index.ctp:34
 #: Template/Rooms/index.ctp:34
 msgid "Filters"
 msgstr "Filtres"
-
-#: Template/Equipments/index.ctp:137
-#: Template/Licences/index.ctp:142
-#: Template/Mentors/index.ctp:141
-#: Template/Rooms/index.ctp:137
-msgid "Reactivate"
-msgstr "Réactiver"
-
-#: Template/Equipments/index.ctp:137
-#: Template/Licences/index.ctp:142
-#: Template/Mentors/index.ctp:141
-#: Template/Rooms/index.ctp:137
-msgid "Are you sure you want to reactivate {0}?"
-msgstr "Êtes-vous sûr(e) de vouloir réactiver {0} ?"
 
 #: Template/Equipments/view.ctp:11
 msgid "Delete Equipment"
@@ -662,9 +860,25 @@ msgstr "Archivé(e)s"
 msgid "Status"
 msgstr "Statut"
 
+#: Template/Licences/add.ctp:59
+msgid "Are you sure you want to remove this product?"
+msgstr "Êtes-vous sûr(e) de vouloir retirer ce Produit ?"
+
+#: Template/Licences/consult.ctp:13
+msgid "Edit Licence"
+msgstr "Modifier une Licence"
+
+#: Template/Licences/consult.ctp:42
+msgid "Deactivate licence"
+msgstr "Désactiver cette Licence"
+
+#: Template/Licences/consult.ctp:44
+msgid "Reactivate licence"
+msgstr "Réactiver cette Licence"
+
 #: Template/Licences/view.ctp:11
 msgid "Delete Licence"
-msgstr "Supprimé cette Licence"
+msgstr "Supprimer cette Licence"
 
 #: Template/Licences/view.ctp:13
 msgid "New Licence"
@@ -796,6 +1010,44 @@ msgid "Returned"
 msgstr "Date de retour"
 
 #: Template/Mentors/add.ctp:10
+msgid "Add Mentor"
+msgstr ""
+
+#: Template/Mentors/add.ctp:25
+#: Template/Mentors/consult.ctp:44
+#: Template/Mentors/index.ctp:14;56
+#: Template/Skills/consult.ctp:33
+#: Template/Skills/index.ctp:11
+msgid "Skills"
+msgstr ""
+
+#: Template/Mentors/add.ctp:33
+#: Template/Mentors/consult.ctp:51
+#: Template/Skills/index.ctp:34
+msgid "Mentor count"
+msgstr ""
+
+#: Template/Mentors/add.ctp:49
+msgid "Are you sure you want to remove this skill?"
+msgstr "Êtes-vous sûr(e) de vouloir retirer cette Compétence ?"
+
+#: Template/Mentors/consult.ctp:12
+msgid "Edit Mentor"
+msgstr "Modifier un Mentor"
+
+#: Template/Mentors/consult.ctp:32
+msgid "Deactivate mentor"
+msgstr "Désactiver ce Mentor"
+
+#: Template/Mentors/consult.ctp:34
+msgid "Reactivate mentor"
+msgstr "Réactiver ce Mentor"
+
+#: Template/Mentors/consult.ctp:36
+msgid "Delete mentor"
+msgstr "Supprimer ce Mentor"
+
+#: Template/Mentors/add.ctp:10
 #: Template/Mentors/edit.ctp:16
 #: Template/Mentors/view.ctp:12
 msgid "List Mentors"
@@ -816,11 +1068,6 @@ msgstr "Nouvelle Compétence"
 #: Template/Mentors/add.ctp:18
 msgid "Add Mentor"
 msgstr "Ajouter un Mentor"
-
-#: Template/Mentors/edit.ctp:24
-#: Template/Mentors/view.ctp:10
-msgid "Edit Mentor"
-msgstr "Modifier ce Mentor"
 
 #: Template/Mentors/index.ctp:11
 #: Template/Skills/index.ctp:14
@@ -861,10 +1108,6 @@ msgstr "Prénom"
 msgid "Last Name"
 msgstr "Nom"
 
-#: Template/Mentors/view.ctp:11
-msgid "Delete Mentor"
-msgstr "Supprimer ce Mentor"
-
 #: Template/Mentors/view.ctp:13
 msgid "New Mentor"
 msgstr "Nouveau Mentor"
@@ -897,6 +1140,116 @@ msgstr "Licences associées"
 msgid "Licence count"
 msgstr "Licences associées"
 
+#: Template/Reports/index.ctp:11
+msgid "Report settings"
+msgstr "Options du Rapport"
+
+#: Template/Reports/index.ctp:14
+msgid "Date Presets"
+msgstr "Intervalles Prédéfinies"
+
+#: Template/Reports/index.ctp:16
+msgid "This year"
+msgstr "Cette année"
+
+#: Template/Reports/index.ctp:17
+msgid "Last year"
+msgstr "L'année dernière"
+
+#: Template/Reports/index.ctp:18
+msgid "This month"
+msgstr "Ce mois-ci"
+
+#: Template/Reports/index.ctp:19
+msgid "Last month"
+msgstr "Le mois dernier"
+
+#: Template/Reports/index.ctp:20
+msgid "This week"
+msgstr "Cette semaine"
+
+#: Template/Reports/index.ctp:21
+msgid "Last week"
+msgstr "La semaine dernière"
+
+#: Template/Reports/index.ctp:22
+msgid "Custom"
+msgstr "Personnalisé"
+
+#: Template/Reports/index.ctp:27
+msgid "From"
+msgstr "De"
+
+#: Template/Reports/index.ctp:32
+msgid "To"
+msgstr "À"
+
+#: Template/Reports/index.ctp:38
+msgid "Report type"
+msgstr "Type de Rapport"
+
+#: Template/Reports/index.ctp:48
+msgid "Generate report"
+msgstr "Générer le Rapport"
+
+#: Template/Reports/index.ctp:94
+msgid "Hours loaned"
+msgstr "Heures emprunté"
+
+#: Template/Reports/index.ctp:95
+msgid "Times loaned"
+msgstr "Quantité d'emprunts"
+
+#: Template/Reports/index.ctp:132
+msgid "Licence"
+msgstr "Licence"
+
+#: Template/Reports/index.ctp:133
+msgid "Used"
+msgstr "Utilisé"
+
+#: Template/Reports/index.ctp:135
+msgid "Uses"
+msgstr "Utilisations"
+
+#: Template/Reports/index.ctp:136
+msgid "% Used"
+msgstr "% d'utilisation"
+
+#: Template/Reports/index.ctp:201
+msgid "Total"
+msgstr "Total"
+
+#: Template/Rooms/add.ctp:10
+msgid "Add Room"
+msgstr "Ajouter une Salle"
+
+#: Template/Rooms/add.ctp:32
+#: Template/Rooms/consult.ctp:48
+#: Template/Services/index.ctp:34
+msgid "Room count"
+msgstr "Salles associées"
+
+#: Template/Rooms/add.ctp:48
+msgid "Are you sure you want to remove this service?"
+msgstr "Êtes-vous sûr(e) de vouloir retirer ce Service ?"
+
+#: Template/Rooms/consult.ctp:12
+msgid "Edit Room"
+msgstr "Modifier une Salle"
+
+#: Template/Rooms/consult.ctp:29
+msgid "Deactivate room"
+msgstr "Désactiver cette Salle"
+
+#: Template/Rooms/consult.ctp:31
+msgid "Reactivate room"
+msgstr "Réactiver cette Salle"
+
+#: Template/Rooms/consult.ctp:33
+msgid "Delete room"
+msgstr "Supprimer cette Salle"
+
 #: Template/Rooms/add.ctp:10
 #: Template/Rooms/edit.ctp:16
 #: Template/Rooms/view.ctp:12
@@ -914,15 +1267,6 @@ msgstr "Liste des Services"
 #: Template/Rooms/view.ctp:15
 msgid "New Service"
 msgstr "Nouveau Service"
-
-#: Template/Rooms/add.ctp:18
-msgid "Add Room"
-msgstr "Ajouter une Salle"
-
-#: Template/Rooms/edit.ctp:24
-#: Template/Rooms/view.ctp:10
-msgid "Edit Room"
-msgstr "Modifier une Salle"
 
 #: Template/Rooms/index.ctp:11
 #: Template/Services/index.ctp:14
@@ -942,10 +1286,6 @@ msgstr "Rechercher dans les Salles"
 #: Template/Rooms/index.ctp:40
 msgid "Search by Services"
 msgstr "Rechercher dans les Services"
-
-#: Template/Rooms/view.ctp:11
-msgid "Delete Room"
-msgstr "Supprimer cette Salle"
 
 #: Template/Rooms/view.ctp:13
 msgid "New Room"
@@ -969,10 +1309,6 @@ msgstr "Supprimer ce Service"
 
 #: Template/Services/consult.ctp:24
 msgid "Related Rooms"
-msgstr "Salles associées"
-
-#: Template/Services/index.ctp:34
-msgid "Room count"
 msgstr "Salles associées"
 
 #: Template/Skills/add.ctp:10
@@ -1004,6 +1340,10 @@ msgstr "Ajouter un Utilisateur"
 #: Template/Users/view.ctp:10
 msgid "Edit User"
 msgstr "Modifier cet Utilisateur"
+
+#: Template/Users/login.ctp:1;5
+msgid "Login"
+msgstr "Connexion"
 
 #: Template/Users/index.ctp:9
 msgid "Users"
