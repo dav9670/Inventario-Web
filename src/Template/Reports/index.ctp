@@ -24,13 +24,13 @@ use Cake\I18n\I18n;
         </div>
 
         <div class="right third-width">
-            <label for="date-from"><?= __('From') ?></label>
-            <input id='date-from' type="text" class="datepicker">
+            <label for="date-to"><?= __('To') ?></label>
+            <input id='date-to' type="text" class="datepicker">
         </div>
 
         <div class="right third-width">
-            <label for="date-to"><?= __('To') ?></label>
-            <input id='date-to' type="text" class="datepicker">
+            <label for="date-from"><?= __('From') ?></label>
+            <input id='date-from' type="text" class="datepicker">
         </div>
 
         <div style="clear: both;"></div>
