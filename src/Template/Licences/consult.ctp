@@ -18,8 +18,8 @@
         ?>
             <img src='data:image/png;base64,<?=$licence->image?>' id='output' style='max-width:200px; max-height:200px;'/><br/>
         <?php
-            echo $this->Form->control('start_time', ['readOnly' => 'readOnly']);
-            echo $this->Form->control('end_time', ['readOnly' => 'readOnly', 'empty' => true]);
+            echo $this->Form->control('start_time', ['readOnly' => 'readOnly', 'type' => 'text', 'class' => 'datepicker']);
+            echo $this->Form->control('end_time', ['readOnly' => 'readOnly', 'type' => 'text', 'class' => 'datepicker', 'empty' => true]);
         ?>
     </fieldset>
     
@@ -97,10 +97,10 @@
 
     function setReadOnly(readOnly){
         $('#name').attr('readOnly', readOnly);
-        $('#key_text').attr('readOnly', readOnly);
+        $('#key-text').attr('readOnly', readOnly);
         $('#description').attr('readOnly', readOnly);
-        $('#start_time').attr('readOnly', readOnly);
-        $('#end_time').attr('readOnly', readOnly);
+        $('#start-time').attr('readOnly', readOnly);
+        $('#end-time').attr('readOnly', readOnly);
         
         if(readOnly){
             //View
@@ -126,6 +126,13 @@
     }
 
     $('document').ready(function(){
+        $(".datepicker").datepicker({
+            dateFormat: 'yy-mm-dd',
+            onSelect: function(date) {
+                $('#preset-dates').val('custom');
+            }
+        });
+
         $("#licence_form :input:not(#autocomplete)").on('change paste keyup', (function() {
             $("#licence_form").data("changed",true);
             $('#cancelButton').show();

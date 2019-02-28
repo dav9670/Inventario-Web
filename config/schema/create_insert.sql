@@ -206,7 +206,7 @@ create table licences_products(
 
 drop procedure if exists licences_report;
 delimiter //
-create procedure licences_report(start datetime, end datetime, sort_field tinytext, sort_dir tinytext)
+create procedure licences_report(start datetime, end datetime)
 begin
 	set @query = concat('
         SELECT
@@ -227,7 +227,7 @@ begin
             LEFT  JOIN (SELECT * FROM loans WHERE loans.item_type = "licences") AS licences_loans
                 ON licences.id = licences_loans.item_id
         GROUP BY product, platform, licence
-        ORDER BY ', sort_field ,' ', sort_dir
+        ORDER BY product, platform'
     );
     
     PREPARE stmt FROM @query;

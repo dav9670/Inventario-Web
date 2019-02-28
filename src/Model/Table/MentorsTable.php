@@ -68,32 +68,33 @@ class MentorsTable extends Table
 
         $validator
             ->email('email')
-            ->requirePresence('email', 'create')
-            ->allowEmptyString('email', false)
-            ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table', 'message' => 'Email must be unique']);
+            ->maxLength('email', 50, __('Email is too long. (Max 50 characters)'))
+            ->requirePresence('email', 'create', __('Email cannot be empty.'))
+            ->allowEmptyString('email', false, __('Email cannot be empty.'))
+            ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table', 'message' => __('This email has already been used.')]);
 
         $validator
             ->scalar('first_name')
-            ->maxLength('first_name', 50)
-            ->requirePresence('first_name', 'create')
-            ->allowEmptyString('first_name', false);
+            ->maxLength('first_name', 50, __('First Name is too long. (Max 50 characters)'))
+            ->requirePresence('first_name', 'create', __('First Name cannot be empty.'))
+            ->allowEmptyString('first_name', false, __('First Name cannot be empty.'));
 
         $validator
             ->scalar('last_name')
-            ->maxLength('last_name', 50)
-            ->requirePresence('last_name', 'create')
-            ->allowEmptyString('last_name', false);
+            ->maxLength('last_name', 50, __('Last Name is too long. (Max 50 characters)'))
+            ->requirePresence('last_name', 'create', __('Last Name cannot be empty.'))
+            ->allowEmptyString('last_name', false, __('Last Name cannot be empty.'));
 
         $validator
             ->scalar('description')
-            ->maxLength('description', 255)
+            ->maxLength('description', 255, __('Description is too long. (Max 255 characters)'))
             ->allowEmptyString('description');
 
         $validator
             ->scalar('image')
-            ->maxLength('image', 16777215)
-            ->requirePresence('image', 'create')
-            ->allowEmptyFile('image', 'create', false)
+            ->maxLength('image', 16777215, __('Image is too large.'))
+            ->requirePresence('image', 'create', __('Image is required.'))
+            ->allowEmptyFile('image', 'create', false, __('Image is required.'))
             ->allowEmptyFile('image', 'update', true);
 
         $validator
