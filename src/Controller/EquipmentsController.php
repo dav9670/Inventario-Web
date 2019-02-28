@@ -104,6 +104,38 @@ class EquipmentsController extends AppController
     }
 
     /**
+     * consult method
+     */
+
+    public function consult($id = null)
+    {
+        $equipment = $this->Equipments->get($id, [
+            'contain' => ['Categories']
+        ]);
+        if($this->request->is(['patch', 'post', 'put'])) {
+            $data = $this->request->getData();
+            $image = $data['image'];
+            if($image['tmp_name'] != '') {
+                $imageData  = file_get_contents($image['tmp_name']);
+                $b64   = base64_encode($imageData);
+                $data['image'] = $b64;
+            } else {
+                $data['image'] = $equipment->image;
+            }
+
+            $equipment = $this->Equipments->patchEntity($equipment, $data);
+            if ($this->Equipments->save($equipment)) {
+                $this->Flash->success(__('The equipment has been saved.'));
+
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('The equipment could not be saved. Please, try again.'));
+        }
+        $categories = $this->Equipments->Categories->find('list', ['limit' => 200]);
+        $this->set(compact('equipment', 'categories'));
+    }
+
+    /**
      * Delete method
      *
      * @param string|null $id Equipment id.
