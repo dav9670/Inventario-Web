@@ -403,6 +403,7 @@ class LicencesController extends AppController
             $search_products = $filters['search_products'] == 'true';
         }
         
+        $query = null;
         if($keyword == '')
         {
             $query = $this->Licences->find('all');

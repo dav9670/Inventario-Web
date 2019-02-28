@@ -10,13 +10,20 @@
     <button type="button" id="doneButton" class='right editdone' onClick='doneEditing()' hidden='hidden'><?=__('Done')?></button>
     <fieldset>
         <legend><?= __('Edit Room') ?></legend>
-        <?php
-            echo $this->Form->control('name', ['readOnly' => 'readOnly']);
-            echo $this->Form->control('description', ['readOnly' => 'readOnly']);
-            echo $this->Form->control('image', ['type' => 'file', 'accept'=> 'image/*', 'onchange' => 'loadFile(event)', 'hidden' => 'hidden', 'disabled' => 'disabled']);
-        ?>
+        <div class="left twothirds-width">
+            <?php
+                echo $this->Form->control('name', ['readOnly' => 'readOnly']);
+                echo $this->Form->control('description', ['readOnly' => 'readOnly']);
+            ?>
+        </div>
+        <div class="right third-width">
+            <?php echo $this->Form->control('image', ['type' => 'file', 'accept'=> 'image/*', 'onchange' => 'loadFile(event)', 'hidden' => 'hidden', 'disabled' => 'disabled']); ?>
+            <img src='data:image/png;base64,<?=$room->image?>' id='output'/>
+        </div>
+
+        <div style="clear: both;"></div>
     </fieldset>
-    <img src='data:image/png;base64,<?=$room->image?>' id='output' style='max-width:200px; max-height:200px;'/><br/>
+    
     <?php 
         if($room->deleted == null){
             echo $this->Html->link(__('Deactivate room'), ['controller' => 'Rooms', 'action' => 'deactivate', $room->id], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to deactivate {0}?', $room->name)]);

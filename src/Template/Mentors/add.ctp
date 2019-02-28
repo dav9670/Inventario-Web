@@ -8,15 +8,20 @@
     <?= $this->Form->create($mentor, ['type' => 'file']) ?>
     <fieldset>
         <legend><?= __('Add Mentor') ?></legend>
-        <?php
-            echo $this->Form->control('email');
-            echo $this->Form->control('first_name');
-            echo $this->Form->control('last_name');
-            echo $this->Form->control('description', ['type' => 'textarea']);
-            echo $this->Form->control('image', ['type' => 'file', 'accept'=> 'image/*', 'onchange' => 'loadFile(event)']);
-        ?>
+        <div class="left twothirds-width">
+            <?php
+                echo $this->Form->control('email');
+                echo $this->Form->control('first_name');
+                echo $this->Form->control('last_name');
+                echo $this->Form->control('description', ['type' => 'textarea']);
+            ?>
+        </div>
+        <div class="right third-width">
+            <?php echo $this->Form->control('image', ['type' => 'file', 'accept'=> 'image/*', 'onchange' => 'loadFile(event)']); ?>
+            <img id='output'/>
+        </div>
+        <div style="clear: both;"></div>
     </fieldset>
-    <img id='output' style='max-width:200px; max-height:200px;'/>
     <h3><?=__('Skills')?></h3>
     <input id='autocomplete' type ='text'>
     <input type='hidden' name='skills[_ids]' value=""/>
