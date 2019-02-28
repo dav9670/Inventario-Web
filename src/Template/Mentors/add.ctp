@@ -40,7 +40,7 @@
         $('#output').attr('src', URL.createObjectURL(event.target.files[0])); 
     }
 
-    function removeRow(id) {
+    function removeLink(id) {
         if(confirm('<?= __('Are you sure you want to remove this skill?')?>')){
             $('#skill_row_' + id).remove();
         }
@@ -77,18 +77,17 @@
                 let table = $('#skills_table_body');
                 let elem = ui.item.data;
 
-                let input = "<input type='hidden' name='skills[_ids][]' value='" + elem.id + "'/>";
-
-                let nameCell = "<td><a href='/skills/" + elem.id + "'>" + elem.name + "</a></td>";
-                let descriptionCell = "<td><a href='/skills/" + elem.id + "'>" + elem.description + "</a></td>";
-                let mentorCountCell = "<td><a href='/skills/" + elem.id + "'>" + elem.mentor_count + "</a></td>";
-                let actionsCell = "<td class=\"actions\">";
-                var deleteLink = "<a onclick='removeRow(" + elem.id + ")'>Remove</a>";
-                
-                actionsCell = actionsCell.concat(deleteLink);
-                actionsCell = actionsCell.concat("</td>");
-
-                table.append("<tr id='skill_row_" + elem.id +"'>" + input + nameCell + descriptionCell + mentorCountCell + actionsCell + "</tr>");
+                table.append(`
+                    <tr id='skill_row_` + elem.id + `'>
+                        <input type='hidden' name='skills[_ids][]' value='` + elem.id + `'/>
+                        <td><a href='skills/` + elem.id + `'>` + elem.name + `</a></td>
+                        <td><a href='skills/` + elem.id + `'>` + elem.description + `</a></td>
+                        <td><a href='/skills/` + elem.id + `'>` + elem.mentor_count + `</a></td>
+                        <td class='actions'>
+                            <a class='unlink_link delete-link' onclick='removeLink(` + elem.id + `)'><?=__('Remove')?></a>
+                        </td>
+                    </tr>
+                `);
 
                 $('#autocomplete').val('');
                 event.preventDefault();

@@ -40,7 +40,10 @@ class ServicesController extends AppController
     public function view($id = null)
     {
         $service = $this->Services->get($id, [
-            'contain' => ['Rooms']
+            'contain' => ['Rooms' => [
+                'sort' => ['Rooms.name' => 'asc']
+                ]
+            ]
         ]);
 
         $this->set(compact('service'));
@@ -210,33 +213,19 @@ class ServicesController extends AppController
             $room = $this->Services->Rooms->get($this->getRequest()->getQuery('room'));
         }
 
-        if($func == 'link'){
-            if ($this->Services->Rooms->link($service, [$room])) {
-                if($this->isApi()){
-                    $success = true;
-                } else {
-                    $this->Flash->success(__('The association has been created.'));
-                }
+        $state = $func == 'link' ? 'created' : 'deleted';
+
+        if($func == 'link' && $this->Services->Rooms->link($service, [$room]) || $func == 'unlink' && $this->Services->Rooms->unlink($service, [$room])){
+            if($this->isApi()){
+                $success = true;
             } else {
-                if($this->isApi()){
-                    $success = false;
-                } else {
-                    $this->Flash->error(__('The association could not be created. Please, try again.'));
-                }
+                //$this->Flash->success(__('The association has been ' . $state . '.'));
             }
-        } else if($func == 'unlink'){
-            if ($this->Services->Rooms->unlink($service, [$room])) {
-                if($this->isApi()){
-                    $success = true;
-                } else {
-                    $this->Flash->success(__('The association has been deleted.'));
-                }
+        } else {
+            if($this->isApi()){
+                $success = false;
             } else {
-                if($this->isApi()){
-                    $success = false;
-                } else {
-                    $this->Flash->error(__('The association could not be deleted. Please, try again.'));
-                }
+                //$this->Flash->error(__('The association could not be ' . $state . '. Please, try again.'));
             }
         }
 
@@ -244,7 +233,8 @@ class ServicesController extends AppController
             $this->set(compact('success'));
             $this->set('_serialize', ['success']);
         } else {
-            return $this->redirect(['action' => 'consult', $service->id]);
+            $this->autoRender = false;
+            return /*$this->redirect(['action' => 'consult', $service->id])*/;
         }
     }
 

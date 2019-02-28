@@ -106,13 +106,6 @@
 
                         mentorsArray = response[array_name];
                         $.each(mentorsArray, function(idx, elem){
-                            let pic = "<img src='data:image/png;base64," + elem.image + "' alt='" + elem.first_name + " " + elem.last_name + "' width=100/>";
-                            let picCell = "<td><a href='/mentors/" + elem.id + "'>" + pic + "</a></td>";
-
-                            let emailCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.email + "</a></td>";
-                            let first_nameCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.first_name + "</a></td>";
-                            let last_nameCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.last_name + "</a></td>";
-                            let descriptionCell = "<td><a href='/mentors/" + elem.id + "'>" + elem.description + "</a></td>";
 
                             var skills_list = "";
                             var three_skills = elem.skills_list.slice(0,3);
@@ -121,18 +114,17 @@
                             } else {
                                 skills_list = three_skills.join(", ");
                             }
-                            let skillsCell = "<td><a href='/mentors/" + elem.id + "'>" + skills_list + "</a></td>";
 
-                            var imgTag = "";
+                            var imgTag = '';
+                            var imgAlt = '';
                             if (elem.available) {
-                                imgTag = "<img src='/img/good.png' alt='Available' width=20 height=20>";
+                                imgTag = 'good.png';
+                                imgAlt = 'Available';
                             } else {
-                                imgTag = "<img src='/img/bad.png' alt='Not Available' width=20 height=20>";
+                                imgTag = 'bad.png';
+                                imgAlt = 'Not Available';
                             }
-                            let availableCell = "<td><a href='/mentors/" + elem.id + "'>" + imgTag + "</a></td>";
-                            
-                            
-                            let actionsCell = "<td class=\"actions\">";
+
                             var link = ""
                             if(elem.deleted == null){
                                 link = link.concat('<?= $this->Html->link(__('Deactivate'), ['action' => 'deactivate', -1], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to deactivate {0}?', -2)]) ?> ');
@@ -142,14 +134,23 @@
                                     link = link.concat('<?= $this->Html->link(__('Delete'), ['action' => 'delete', -1], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to PERMANENTLY delete {0}?', -2)]) ?> ');
                                 }
                             }
-
                             link = link.replace(/-1/g, elem.id);
                             link = link.replace(/-2/g, elem.email);
 
-                            actionsCell = actionsCell.concat(link);
-                            actionsCell = actionsCell.concat("</td>");
-
-                            table.append("<tr>" + picCell + emailCell + first_nameCell + last_nameCell + descriptionCell + skillsCell + availableCell + actionsCell + "</tr>");
+                            table.append(`
+                                <tr>
+                                        <td><a href='/mentors/` + elem.id + `'><img src='data:image/png;base64,` + elem.image + `' alt='` + elem.first_name + ` ` + elem.last_name + `' width=100/></a></td>
+                                        <td><a href='/mentors/` + elem.id + `'>` + elem.email + `</a></td>
+                                        <td><a href='/mentors/` + elem.id + `'>` + elem.first_name + `</a></td>
+                                        <td><a href='/mentors/` + elem.id + `'>` + elem.last_name + `</a></td>
+                                        <td><a href='/mentors/` + elem.id + `'>` + elem.description + `</a></td>
+                                        <td><a href='/mentors/` + elem.id + `'>` + skills_list + `</a></td>
+                                        <td><a href='/mentors/` + elem.id + `'><img src='/img/` + imgTag + `' alt='` + imgAlt + `' width=20 height=20></a></td>
+                                        <td class='actions'>
+                                            ` + link + `
+                                        </td>
+                                </tr>
+                            `);
                         });
                     }
                     

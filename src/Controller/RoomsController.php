@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\I18n\Time;
 
 /**
  * Rooms Controller
@@ -41,7 +42,10 @@ class RoomsController extends AppController
     public function view($id = null)
     {
         $room = $this->Rooms->get($id, [
-            'contain' => ['Services']
+            'contain' => ['Services' => [
+                'sort' => ['Services.name' => 'asc']
+                ]
+            ]
         ]);
 
         $this->set(compact('room'));
@@ -100,7 +104,6 @@ class RoomsController extends AppController
      */
     public function edit($id = null)
     {
-
         $room = $this->Rooms->get($id, [
             'contain' => ['Services']
         ]);
@@ -141,6 +144,34 @@ class RoomsController extends AppController
         }
     }
 
+    public function consult($id = null)
+    {
+        $room = $this->Rooms->get($id, [
+            'contain' => ['Services']
+        ]);
+        if($this->request->is(['patch', 'post', 'put'])) {
+            $data = $this->request->getData();
+            $image = $data['image'];
+            if($image['tmp_name'] != '') {
+                $imageData  = file_get_contents($image['tmp_name']);
+                $b64   = base64_encode($imageData);
+                $data['image'] = $b64;
+            } else {
+                $data['image'] = $room->image;
+            }
+
+            $room = $this->Rooms->patchEntity($room, $data);
+            if ($this->Rooms->save($room)) {
+                $this->Flash->success(__('The room has been saved.'));
+
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('The room could not be saved. Please, try again.'));
+        }
+        $services = $this->Rooms->Services->find('list', ['limit' => 200]);
+        $this->set(compact('room', 'services'));
+    }
+
     /**
      * Delete method
      *
@@ -150,15 +181,75 @@ class RoomsController extends AppController
      */
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
+        $this->getRequest()->allowMethod(['get', 'post', 'delete']);
         $room = $this->Rooms->get($id);
+        $success = false;
         if ($this->Rooms->delete($room)) {
-            $this->Flash->success(__('The room has been deleted.'));
+            if($this->isApi()){
+                $success = true;
+            } else {
+                $this->Flash->success(__('The room has been deleted.'));
+            }
         } else {
-            $this->Flash->error(__('The room could not be deleted. Please, try again.'));
+            if($this->isApi()){
+                $success = false;
+            } else {
+                $this->Flash->error(__('The room could not be deleted. Please, try again.'));
+            }
         }
 
-        return $this->redirect(['action' => 'index']);
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        } else {
+            return $this->redirect(['action' => 'index']);
+        }
+    }
+
+    /**
+     * function deactivate
+     * désactive une room, set sa date de delete à now
+     */
+    public function deactivate($id = null){
+        $this->setDeleted($id, Time::now());
+    }
+
+    /**
+     * function reactivate
+     * reactive une room, set sa valeur deleted à null.
+     */
+    public function reactivate($id = null){
+        $this->setDeleted($id, null);
+    }
+
+    private function setDeleted($id, $deleted){
+        $this->getRequest()->allowMethod(['get', 'post']);
+        $room = $this->Rooms->get($id);
+        $room->deleted = $deleted;
+        $success = false;
+
+        $state = $deleted == null ? 'reactivated' : 'deactivated';
+
+        if ($this->Rooms->save($room)) {
+            if($this->isApi()){
+                $success = true;
+            } else {
+                $this->Flash->success(__('The room has been ' . $state .'.'));
+            }
+        } else {
+            if($this->isApi()){
+                $success = false;
+            } else {
+                $this->Flash->error(__('The room could not be ' . $state . '. Please, try again.'));
+            }
+        }
+
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        } else {
+            return $this->redirect($this->referer());
+        }
     }
 
     public function isAuthorized($user)
@@ -174,7 +265,7 @@ class RoomsController extends AppController
                 ->where(["lower(name) = :search"])
                 ->bind(":search", strtolower($jsonData['name']), 'string')->first();
             
-                $this->set(compact('room'));
+            $this->set(compact('room'));
             $this->set('_serialize', ['room']);  
         } else {
             return $this->redirect(['action' => 'index']);
@@ -193,7 +284,7 @@ class RoomsController extends AppController
         if($this->isApi()){
             $this->getRequest()->allowMethod('post');
         }else {
-            $this->getRequest()->allowMethod('ajax');
+            $this->getRequest()->allowMethod('get', 'ajax');
         }
    
         $keyword = "";
@@ -205,7 +296,12 @@ class RoomsController extends AppController
         $search_rooms = true;
         $search_services = true;
 
-        if ($this->getRequest()->is('ajax')){
+        if ($this->isApi()){
+            $jsonData = $this->getRequest()->input('json_decode', true);
+            $keyword = $jsonData['keyword'];
+            $sort_field = $jsonData['sort_field'];
+            $sort_dir = $jsonData['sort_dir'];
+        } else {
             $keyword = $this->getRequest()->getQuery('keyword');
             $sort_field = $this->getRequest()->getQuery('sort_field');
             $sort_dir = $this->getRequest()->getQuery('sort_dir');
@@ -215,12 +311,6 @@ class RoomsController extends AppController
             $search_unavailable = $filters['search_unavailable'] == 'true';
             $search_rooms = $filters['search_rooms'] == 'true';
             $search_services = $filters['search_services'] == 'true';
-        
-        } else if ($this->getRequest()->is('post')){
-            $jsonData = $this->getRequest()->input('json_decode', true);
-            $keyword = $jsonData['keyword'];
-            $sort_field = $jsonData['sort_field'];
-            $sort_dir = $jsonData['sort_dir'];
         }
         
         if($keyword == '')
