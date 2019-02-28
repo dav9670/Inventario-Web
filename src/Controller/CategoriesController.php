@@ -189,12 +189,13 @@ class CategoriesController extends AppController
         }
     }
 
-    public function unlink()
+    private function modifyLink($func)
     {
         $this->getRequest()->allowMethod(['post', 'delete']);
 
         $category = "";
         $equipment = "";
+        $success = false;
         if($this->isApi()){
             $jsonData = $this->getRequest()->input('json_decode', true);
             $category = $this->Categories->get($jsonData['category']);
@@ -203,19 +204,20 @@ class CategoriesController extends AppController
             $category = $this->Categories->get($this->getRequest()->getQuery('category'));
             $equipment = $this->Categories->Equipments->get($this->getRequest()->getQuery('equipment'));
         }
-        
 
-        if ($this->Categories->Equipments->unlink($category, [$equipment])) {
+        $state = $func == 'link' ? 'created' : 'deleted';
+
+        if($func == 'link' && $this->Categories->Equipments->link($category, [$equipment]) || $func == 'unlink' && $this->Categories->Equipments->unlink($category, [$equipment])){
             if($this->isApi()){
                 $success = true;
             } else {
-                $this->Flash->success(__('The association has been deleted.'));
+                //$this->Flash->success(__('The association has been ' . $state . '.'));
             }
         } else {
             if($this->isApi()){
                 $success = false;
             } else {
-                $this->Flash->error(__('The association could not be deleted. Please, try again.'));
+                //$this->Flash->error(__('The association could not be ' . $state . '. Please, try again.'));
             }
         }
 
@@ -223,8 +225,19 @@ class CategoriesController extends AppController
             $this->set(compact('success'));
             $this->set('_serialize', ['success']);
         } else {
-            return $this->redirect(['action' => 'consult', $category->id]);
+            $this->autoRender = false;
+            return /*$this->redirect(['action' => 'consult', $category->id])*/;
         }
+    }
+
+    public function link()
+    {
+        $this->modifyLink('link');    
+    }
+
+    public function unlink()
+    {
+        $this->modifyLink('unlink');
     }
 
     public function search()
