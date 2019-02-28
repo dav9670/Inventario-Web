@@ -10,15 +10,23 @@
     <button type="button" id="doneButton" class='right editdone' onClick='doneEditing()' hidden='hidden'><?=__('Done')?></button>
     <fieldset>
         <legend><?= __('Edit Mentor') ?></legend>
-        <?php
-            echo $this->Form->control('email', ['readOnly' => 'readOnly']);
-            echo $this->Form->control('first_name', ['readOnly' => 'readOnly']);
-            echo $this->Form->control('last_name', ['readOnly' => 'readOnly']);
-            echo $this->Form->control('description', ['readOnly' => 'readOnly', 'type' => 'textarea']);
-            echo $this->Form->control('image', ['type' => 'file', 'accept'=> 'image/*', 'onchange' => 'loadFile(event)', 'hidden' => 'hidden', 'disabled' => 'disabled']);
-        ?>
+
+        <div class="left twothirds-width">
+            <?php
+                echo $this->Form->control('email', ['readOnly' => 'readOnly']);
+                echo $this->Form->control('first_name', ['readOnly' => 'readOnly']);
+                echo $this->Form->control('last_name', ['readOnly' => 'readOnly']);
+                echo $this->Form->control('description', ['readOnly' => 'readOnly', 'type' => 'textarea']);
+            ?>
+        </div>
+
+        <div class="right third-width">
+            <?php echo $this->Form->control('image', ['type' => 'file', 'accept'=> 'image/*', 'onchange' => 'loadFile(event)', 'hidden' => 'hidden', 'disabled' => 'disabled']); ?>
+            <img src='data:image/png;base64,<?=$mentor->image?>' id='output'/>
+        </div>
+        <div style="clear: both;"></div>
     </fieldset>
-    <img src='data:image/png;base64,<?=$mentor->image?>' id='output' style='max-width:200px; max-height:200px;'/><br/>
+    
     <?php 
         if($mentor->deleted == null){
             echo $this->Html->link(__('Deactivate mentor'), ['controller' => 'Mentors', 'action' => 'deactivate', $mentor->id], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to deactivate {0}?', $mentor->email)]);
