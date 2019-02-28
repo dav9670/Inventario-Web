@@ -271,6 +271,51 @@ create table equipments_categories(
     foreign key equipments_categories_category_key(category_id) references categories(id)
 );
 
+drop procedure if exists equipments_report;
+delimiter //
+create procedure equipments_report(start datetime, end datetime, sort_field tinytext, sort_dir tinytext)
+begin
+    set @query =concat('
+	select c.name as "Category", nloans.nloaned as "Loans", nlate.late as "Late loans", nlate.hlate as "Overtime fee"
+	from 
+		equipments e,
+        equipments_categories ec,
+        categories c left join 
+		(
+			select c.name as cat, count(e.id) as late,timestampdiff(HOUR, l.end_time, ifnull(l.returned, "', start ,'")) as hlate
+			from loans l, equipments e, equipments_categories ec, categories c
+			where e.id = ec.equipment_id
+				and c.id = ec.category_id
+				and e.id = l.item_id
+				and l.item_type like "equipments" 
+				and l.end_time <= "', start ,'"
+				and returned is null
+                group by c.name
+        ) as nlate on c.name = nlate.cat
+       left join (
+			select c.name as cat, count(e.id) as nloaned
+			from loans as l inner join equipments e on l.item_id = e.id, categories c, equipments_categories ec
+			where 
+				e.id = ec.equipment_id
+				and c.id = ec.category_id 
+				and l.item_type like "equipments" 
+                and l.start_time >= "', start ,'"
+                and l.end_time <= "', end ,'"
+                group by c.name
+        ) as nloans on c.name = nloans.cat
+		where 
+			e.id = ec.equipment_id 
+            and c.id = ec.category_id
+            group by c.name
+            order by ', sort_field ,' ', sort_dir);
+
+    PREPARE stmt FROM @query;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+			
+end//
+delimiter ;
+
 /*------------------------ insert ------------------------*/
 
 /*users*/
