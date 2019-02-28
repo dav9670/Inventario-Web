@@ -8,17 +8,27 @@
     <?= $this->Form->create($licence, ['type' => 'file']) ?>
     <fieldset>
         <legend><?= __('Add Licence') ?></legend>
-        <?php
-            echo $this->Form->control('name');
-            echo $this->Form->control('key_text');
-            echo $this->Form->control('description', ['type' => 'textarea']);
-            echo $this->Form->control('image', ['type' => 'file', 'accept'=> 'image/*', 'onchange' => 'loadFile(event)']);
-        ?>
-        <img id='output' style='max-width:200px; max-height:200px;'/>
-        <?php
-            echo $this->Form->control('start_time', ['type' => 'text', 'class' => 'datepicker']);
-            echo $this->Form->control('end_time', ['type' => 'text', 'class' => 'datepicker', 'empty' => true]);
-        ?>
+    
+        <div class="left twothirds-width">
+            <?php
+                echo $this->Form->control('name');
+                echo $this->Form->control('key_text');
+                echo $this->Form->control('description', ['type' => 'textarea']);
+            ?>
+        </div>
+        <div class="right third-width">
+            <?php echo $this->Form->control('image', ['type' => 'file', 'accept'=> 'image/*', 'onchange' => 'loadFile(event)']); ?>
+            <img id='output'/>
+        </div>
+
+        <div style="clear: both;"></div>
+        
+        <div class="left third-width">
+            <?php echo $this->Form->control('start_time', ['type' => 'text', 'class' => 'datepicker']); ?>
+        </div>
+        <div class="left third-width">
+            <?php echo $this->Form->control('end_time', ['type' => 'text', 'class' => 'datepicker', 'empty' => true]); ?>
+        </div>
         
     </fieldset>
     <h3><?=__('Products')?></h3>

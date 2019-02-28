@@ -8,19 +8,33 @@
     <?= $this->Form->create($licence, ['id' => 'licence_form', 'type' => 'file']) ?>
     <button type="button" id="editButton" class='right editdone' onClick='setReadOnly(false)'><?=__('Edit')?></button>
     <button type="button" id="doneButton" class='right editdone' onClick='doneEditing()' hidden='hidden'><?=__('Done')?></button>
+    <div style="clear: both;"></div>
     <fieldset>
         <legend><?= __('Edit Licence') ?></legend>
-        <?php
-            echo $this->Form->control('name', ['readOnly' => 'readOnly']);
-            echo $this->Form->control('key_text', ['readOnly' => 'readOnly']);
-            echo $this->Form->control('description', ['readOnly' => 'readOnly', 'type' => 'textarea']);
-            echo $this->Form->control('image', ['type' => 'file', 'accept'=> 'image/*', 'onchange' => 'loadFile(event)', 'hidden' => 'hidden', 'disabled' => 'disabled']);
-        ?>
-            <img src='data:image/png;base64,<?=$licence->image?>' id='output' style='max-width:200px; max-height:200px;'/><br/>
-        <?php
-            echo $this->Form->control('start_time', ['readOnly' => 'readOnly', 'type' => 'text', 'class' => 'datepicker']);
-            echo $this->Form->control('end_time', ['readOnly' => 'readOnly', 'type' => 'text', 'class' => 'datepicker', 'empty' => true]);
-        ?>
+
+        <div class="left twothirds-width">
+            <?php
+                echo $this->Form->control('name', ['readOnly' => 'readOnly']);
+                echo $this->Form->control('key_text', ['readOnly' => 'readOnly']);
+                echo $this->Form->control('description', ['readOnly' => 'readOnly', 'type' => 'textarea']);
+            ?>
+        </div>
+
+        <div class="right third-width">
+            <?php echo $this->Form->control('image', ['type' => 'file', 'accept'=> 'image/*', 'onchange' => 'loadFile(event)', 'hidden' => 'hidden', 'disabled' => 'disabled']); ?>
+            <img src='data:image/png;base64,<?=$licence->image?>' id='output'/>
+        </div>
+
+        <div style="clear: both;"></div>
+
+        <div class="left third-width">
+            <?php echo $this->Form->control('start_time', ['readOnly' => 'readOnly', 'type' => 'text', 'class' => 'datepicker']); ?>
+        </div>
+        <div class="left third-width">
+            <?php echo $this->Form->control('end_time', ['readOnly' => 'readOnly', 'type' => 'text', 'class' => 'datepicker', 'empty' => true]); ?>
+        </div>
+
+        <div style="clear: both;"></div>
     </fieldset>
     
     <?php 
