@@ -30,7 +30,7 @@
         if($equipment->deleted == null){
             echo $this->Html->link(__('Deactivate equipment'), ['controller' => 'Equipments', 'action' => 'deactivate', $equipment->id], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to deactivate {0}?', $equipment->name)]);
         } else {
-            echo $this->Html->link(__('Reactivate equipment'), ['controller' => 'Equipments', 'action' => 'reactivate', $equipment->id], ['confirm' => __('Are you sure you want to reactivate {0}?', $equipment->name)]);  
+            echo $this->Html->link(__('Reactivate equipment'), ['controller' => 'Equipments', 'action' => 'reactivate', $equipment->id], ['confirm' => __('Are you sure you want to reactivate {0}?', $equipment->name), 'style' => 'margin-right: 25px;']);  
             if($equipment->loan_count == 0){
                 echo $this->Html->link(__('Delete equipment'), ['controller' => 'Equipments', 'action' => 'delete', $equipment->id], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to PERMANENTLY delete {0}?', $equipment->name)]);
             }

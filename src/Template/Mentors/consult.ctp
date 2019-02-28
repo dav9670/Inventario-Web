@@ -31,7 +31,7 @@
         if($mentor->deleted == null){
             echo $this->Html->link(__('Deactivate mentor'), ['controller' => 'Mentors', 'action' => 'deactivate', $mentor->id], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to deactivate {0}?', $mentor->email)]);
         } else {
-            echo $this->Html->link(__('Reactivate mentor'), ['controller' => 'Mentors', 'action' => 'reactivate', $mentor->id], ['confirm' => __('Are you sure you want to reactivate {0}?', $mentor->email)]);  
+            echo $this->Html->link(__('Reactivate mentor'), ['controller' => 'Mentors', 'action' => 'reactivate', $mentor->id], ['confirm' => __('Are you sure you want to reactivate {0}?', $mentor->email), 'style' => 'margin-right: 25px;']);  
             if($mentor->loan_count == 0){
                 echo $this->Html->link(__('Delete mentor'), ['controller' => 'Mentors', 'action' => 'delete', $mentor->id], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to PERMANENTLY delete {0}?', $mentor->email)]);
             }
