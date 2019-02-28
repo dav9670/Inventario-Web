@@ -16,8 +16,8 @@
         ?>
         <img id='output' style='max-width:200px; max-height:200px;'/>
         <?php
-            echo $this->Form->control('start_time');
-            echo $this->Form->control('end_time', ['empty' => true]);
+            echo $this->Form->control('start_time', ['type' => 'text', 'class' => 'datepicker']);
+            echo $this->Form->control('end_time', ['type' => 'text', 'class' => 'datepicker', 'empty' => true]);
         ?>
         
     </fieldset>
@@ -52,6 +52,13 @@
     }
 
     $('document').ready(function(){
+        $(".datepicker").datepicker({
+            dateFormat: 'yy-mm-dd',
+            onSelect: function(date) {
+                $('#preset-dates').val('custom');
+            }
+        });
+
         $("#autocomplete").autocomplete({
             source: function(request, show){
                 $.ajax({
