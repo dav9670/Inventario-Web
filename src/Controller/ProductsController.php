@@ -40,7 +40,10 @@ class ProductsController extends AppController
     public function view($id = null)
     {
         $product = $this->Products->get($id, [
-            'contain' => ['Licences']
+            'contain' => ['Licences' => [
+                'sort' => ['Licences.name' => 'asc']
+                ]
+            ]
         ]);
 
         $this->set('product', $product);
@@ -179,14 +182,29 @@ class ProductsController extends AppController
         }
     }
 
-    public function unlink()
+    public function isTaken()
+    {
+        if ($this->isApi()){
+            $jsonData = $this->getRequest()->input('json_decode', true);
+            $product = $this->Products->find('all')
+                ->where(["lower(name) = :search"])
+                ->bind(":search", strtolower($jsonData['name']), 'string')->first();
+            
+                $this->set(compact('product'));
+            $this->set('_serialize', ['product']);  
+        } else {
+            return $this->redirect(['action' => 'index']);
+        }
+    }
+
+    public function modifyLink($func)
     {
         $this->getRequest()->allowMethod(['post', 'delete']);
 
         $product = "";
         $licence = "";
         $success = false;
-        if($this->isApi()){
+        if ($this->isApi()){
             $jsonData = $this->getRequest()->input('json_decode', true);
             $product = $this->Products->get($jsonData['product']);
             $licence = $this->Products->Licences->get($jsonData['licence']);
@@ -194,19 +212,20 @@ class ProductsController extends AppController
             $product = $this->Products->get($this->getRequest()->getQuery('product'));
             $licence = $this->Products->Licences->get($this->getRequest()->getQuery('licence'));
         }
-        
 
-        if ($this->Products->Licences->unlink($product, [$licence])) {
+        $state = $func == 'link' ? 'created' : 'deleted';
+
+        if($func == 'link' && $this->Products->Licences->link($product, [$room]) || $func == 'unlink' && $this->Products->Licences->unlink($product, [$licence])){
             if($this->isApi()){
                 $success = true;
             } else {
-                $this->Flash->success(__('The association has been deleted.'));
+                //$this->Flash->success(__('The association has been ' . $state . '.'));
             }
         } else {
             if($this->isApi()){
                 $success = false;
             } else {
-                $this->Flash->error(__('The association could not be deleted. Please, try again.'));
+                //$this->Flash->error(__('The association could not be ' . $state . '. Please, try again.'));
             }
         }
 
@@ -214,8 +233,19 @@ class ProductsController extends AppController
             $this->set(compact('success'));
             $this->set('_serialize', ['success']);
         } else {
-            return $this->redirect(['action' => 'consult', $product->id]);
+            $this->autoRender = false;
+            return /*$this->redirect(['action' => 'consult', $service->id])*/;
         }
+    }
+
+    public function link()
+    {
+        $this->modifyLink('link');    
+    }
+
+    public function unlink()
+    {
+        $this->modifyLink('unlink');
     }
 
     public function search()
@@ -229,16 +259,19 @@ class ProductsController extends AppController
         $keyword = "";
         $sort_field = "";
         $sort_dir = "";
+        $licence_id = "";
 
         if ($this->isApi()){
             $jsonData = $this->getRequest()->input('json_decode', true);
             $keyword = $jsonData['keyword'] != null ? $jsonData['keyword'] : '';
             $sort_field = $jsonData['sort_field'] != null ? $jsonData['sort_field'] : 'name';
             $sort_dir = $jsonData['sort_dir'] != null ? $jsonData['sort_dir'] : 'asc';
+            $licence_id = $jsonData['licence_id'] != null ? $jsonData['licence_id'] : '';
         } else {
             $keyword = $this->getRequest()->getQuery('keyword') != null ? $this->getRequest()->getQuery('keyword') : '';
             $sort_field = $this->getRequest()->getQuery('sort_field') != null ? $this->getRequest()->getQuery('sort_field') : 'name';
             $sort_dir = $this->getRequest()->getQuery('sort_dir') != null ? $this->getRequest()->getQuery('sort_dir') : 'asc';
+            $licence_id = $this->getRequest()->getQuery('licence_id') != null ? $this->getRequest()->getQuery('licence_id') : '';
         }
         
         if($keyword == '')
@@ -252,9 +285,19 @@ class ProductsController extends AppController
                 ->bind(":search", $keyword . '*', 'string');
         }
 
+        if($licence_id != '')
+        {
+            $licenceProducts = $this->Products->Licences->find('all')
+                ->select('Products.id')
+                ->where('Licences.id = :id')
+                ->bind(':id', $licence_id)
+                ->innerJoinWith('Products');
+            $query->where(["Products.id not in" => $licenceProducts]);
+        }
+
         $query->order([$sort_field => $sort_dir]);
         
-        $this->set('products', $this->paginate($query));
+        $this->set('products', $query);
         $this->set('_serialize', ['products']);
     }
 
