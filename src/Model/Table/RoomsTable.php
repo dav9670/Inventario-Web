@@ -68,21 +68,22 @@ class RoomsTable extends Table
 
         $validator
             ->scalar('name')
-            ->maxLength('name', 50)
-            ->requirePresence('name', 'create')
-            ->allowEmptyString('name', false)
-            ->add('name', 'unique', ['rule' => 'validateUnique', 'provider' => 'table', 'message' => __('Name must be unique')]);
+            ->maxLength('name', 50, __('Name is too long. (Max 50 characters)'))
+            ->requirePresence('name', 'create', __('Name cannot be empty.'))
+            ->allowEmptyString('name', false, __('Name cannot be empty.'))
+            ->add('name', 'unique', ['rule' => 'validateUnique', 'provider' => 'table', 'message' => __('This name has already been used.')]);
 
         $validator
             ->scalar('description')
-            ->maxLength('description', 255)
+            ->maxLength('description', 255, __('Description is too long. (Max 255 characters)'))
             ->allowEmptyString('description');
 
         $validator
             ->scalar('image')
-            ->maxLength('image', 16777215)
-            ->requirePresence('image', 'create')
-            ->allowEmptyFile('image', false);
+            ->maxLength('image', 16777215, __('Image is too large.'))
+            ->requirePresence('image', 'create', __('Image is required.'))
+            ->allowEmptyFile('image', 'create', false, __('Image is required.'))
+            ->allowEmptyFile('image', 'update', true);
 
         $validator
             ->dateTime('deleted')

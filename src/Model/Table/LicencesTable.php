@@ -68,31 +68,32 @@ class LicencesTable extends Table
 
         $validator
             ->scalar('name')
-            ->maxLength('name', 50)
-            ->requirePresence('name', 'create')
-            ->allowEmptyString('name', false);
+            ->maxLength('name', 50, __('Name is too long. (Max 50 characters)'))
+            ->requirePresence('name', 'create', __('Name cannot be empty.'))
+            ->allowEmptyString('name', false, __('Name cannot be empty.'));
 
         $validator
             ->scalar('key_text')
-            ->maxLength('key_text', 50)
-            ->requirePresence('key_text', 'create')
-            ->allowEmptyString('key_text', false);
+            ->maxLength('key_text', 50, __('Key is too long. (Max 50 characters)'))
+            ->requirePresence('key_text', 'create', __('Key cannot be empty.'))
+            ->allowEmptyString('key_text', false, __('Key cannot be empty.'));
 
         $validator
             ->scalar('description')
-            ->maxLength('description', 255)
+            ->maxLength('description', 255, __('Description is too long. (Max 255 characters)'))
             ->allowEmptyString('description');
 
         $validator
             ->scalar('image')
-            ->maxLength('image', 16777215)
-            ->requirePresence('image', 'create')
-            ->allowEmptyFile('image', false);
+            ->maxLength('image', 16777215, __('Image is too large.'))
+            ->requirePresence('image', 'create', __('Image is required.'))
+            ->allowEmptyFile('image', 'create', false, __('Image is required.'))
+            ->allowEmptyFile('image', 'update', true);
 
         $validator
             ->dateTime('start_time')
-            ->requirePresence('start_time', 'create')
-            ->allowEmptyDateTime('start_time', false);
+            ->requirePresence('start_time', 'create', __('Start Time cannot be empty.'))
+            ->allowEmptyDateTime('start_time', false, __('Start Time cannot be empty.'));
 
         $validator
             ->dateTime('end_time')
