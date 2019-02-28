@@ -94,23 +94,11 @@ class ReportsController extends AppController
     public function roomsReport(){
 
         $conn = ConnectionManager::get('default');
-        $start_date = '';
-        $end_date = '';
-        $sort_field = 'name';
-        $sort_dir = 'asc';
-
-        if ($this->isApi()){
-            $jsonData = $this->getRequest()->input('json_decode', true);
-            $start_date = $jsonData['start_date'];
-            $end_date = $jsonData['end_date'];
-            $sort_field = $jsonData['sort_field'];
-            $sort_dir = $jsonData['sort_dir'];
-        } else {
-            $start_date = $this->getRequest()->getQuery('start_date');
-            $end_date = $this->getRequest()->getQuery('end_date');
-            $sort_field = $this->getRequest()->getQuery('sort_field') != null ? $this->getRequest()->getQuery('sort_field') : 'name';
-            $sort_dir = $this->getRequest()->getQuery('sort_dir') != null ? $this->getRequest()->getQuery('sort_dir') : 'asc';
-        }
+        
+        $start_date = $this->getRequest()->getQuery('start_date');
+        $end_date = $this->getRequest()->getQuery('end_date');
+        $sort_field = $this->getRequest()->getQuery('sort_field') != null ? $this->getRequest()->getQuery('sort_field') : 'name';
+        $sort_dir = $this->getRequest()->getQuery('sort_dir') != null ? $this->getRequest()->getQuery('sort_dir') : 'asc';
 
         $query = TableRegistry::get('Loans')->find('all',[
             'conditions' => [
@@ -130,9 +118,9 @@ class ReportsController extends AppController
                     'Loans.end_time < ' => $end_date
                 ]
             ],  
-            'contain' => ['rooms']
+            'contain' => ['rooms.services']
         ])->where(['item_type' => 'rooms']);
-        
+
         $loans = $this->paginate($query);
 
         $loansForResult = [];
@@ -148,7 +136,7 @@ class ReportsController extends AppController
         $loansResult = [];
 
         foreach ($loansForResult as $loan){
-            array_push($loansResult,$loan->_getTimePresetsForRooms($start_date, $end_date, $loan['Rooms']['name']));
+            array_push($loansResult,$loan->_getTimePresetsForRooms($start_date, $end_date, $loan['Rooms']));
             
         }
 
@@ -163,7 +151,7 @@ class ReportsController extends AppController
                 if((string)$nameResult == (string)$nameFinalResult && $taken!= true){
                     $taken = true;
                     $tempResult = $finalResults[$index];
-                    for($i = 0; $i < 14; $i++){
+                    for($i = 0; $i < 10; $i++){
                         $tempResult[key($result)][$i] += $result[key($result)][$i];
                     }
                     $finalResults[$index] = $tempResult;
