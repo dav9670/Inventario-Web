@@ -107,11 +107,6 @@
 
                         licencesArray = response[array_name];
                         $.each(licencesArray, function(idx, elem){
-                            let pic = "<img src='data:image/png;base64," + elem.image + "' alt='" + elem.name + "' width=100/>";
-                            let picCell = "<td><a href='/licences/" + elem.id + "'>" + pic + "</a></td>";
-
-                            let nameCell = "<td><a href='/licences/" + elem.id + "'>" + elem.name + "</a></td>";
-                            let descriptionCell = "<td><a href='/licences/" + elem.id + "'>" + elem.description + "</a></td>";
 
                             var products_list = "";
                             var three_products = elem.products_list.slice(0,3);
@@ -120,32 +115,42 @@
                             } else {
                                 products_list = three_products.join(", ");
                             }
-                            let productsCell = "<td><a href='/licences/" + elem.id + "'>" + products_list + "</a></td>";
 
-                            let statusCell = "<td><a href='/licences/" + elem.id + "'>" + elem.status + "</a></td>";
-
-                            var imgTag = "";
+                            var imgTag = '';
+                            var imgAlt = '';
                             if (elem.available) {
-                                imgTag = "<img src='/img/good.png' alt='Available' width=20 height=20>";
+                                imgTag = 'good.png';
+                                imgAlt = 'Available';
                             } else {
-                                imgTag = "<img src='/img/bad.png' alt='Not Available' width=20 height=20>";
+                                imgTag = 'bad.png';
+                                imgAlt = 'Not Available';
                             }
-                            let availableCell = "<td><a href='/licences/" + elem.id + "'>" + imgTag + "</a></td>";
                             
-                            
-                            let actionsCell = "<td class=\"actions\">";
                             var link = ""
                             if(elem.deleted == null){
-                                link = '<?= $this->Form->postLink(__('Delete'), ['action' => 'delete', -1], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to delete {0}?', -1)]) ?>';
-                                link = link.replace(/-1/g, elem.name);
+                                link = link.concat('<?= $this->Html->link(__('Deactivate'), ['action' => 'deactivate', -1], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to deactivate {0}?', -2)]) ?> ');
                             } else {
-                                link = '<?= $this->Form->postLink(__('Reactivate'), ['action' => 'reactivate', -1], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to reactivate {0}?', -1)]) ?>';
-                                link = link.replace(/-1/g, elem.name);
+                                link = link.concat('<?= $this->Html->link(__('Reactivate'), ['action' => 'reactivate', -1], ['confirm' => __('Are you sure you want to reactivate {0}?', -2)]) ?> ');
+                                if(elem.loan_count == 0){
+                                    link = link.concat('<?= $this->Html->link(__('Delete'), ['action' => 'delete', -1], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to PERMANENTLY delete {0}?', -2)]) ?> ');
+                                }
                             }
-                            actionsCell = actionsCell.concat(link);
-                            actionsCell = actionsCell.concat("</td>");
+                            link = link.replace(/-1/g, elem.id);
+                            link = link.replace(/-2/g, elem.name);
 
-                            table.append("<tr>" + picCell + nameCell + descriptionCell + productsCell + statusCell + availableCell + actionsCell + "</tr>");
+                            table.append(`
+                                <tr>
+                                        <td><a href='/licences/` + elem.id + `'><img src='data:image/png;base64,` + elem.image + `' alt='` + elem.name + `' width=100/></a></td>
+                                        <td><a href='/licences/` + elem.id + `'>` + elem.name + `</a></td>
+                                        <td><a href='/licences/` + elem.id + `'>` + elem.description + `</a></td>
+                                        <td><a href='/licences/` + elem.id + `'>` + products_list + `</a></td>
+                                        <td><a href='/licences/` + elem.id + `'>` + elem.status + `</a></td>
+                                        <td><a href='/licences/` + elem.id + `'><img src='/img/` + imgTag + `' alt='` + imgAlt + `' width=20 height=20></a></td>
+                                        <td class='actions'>
+                                            ` + link + `
+                                        </td>
+                                </tr>
+                            `);
                         });
                     }
                     

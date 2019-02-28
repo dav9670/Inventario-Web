@@ -206,27 +206,33 @@ create table licences_products(
 
 drop procedure if exists licences_report;
 delimiter //
-create procedure licences_report(start datetime, end datetime)
+create procedure licences_report(start datetime, end datetime, sort_field tinytext, sort_dir tinytext)
 begin
-	SELECT
-        products.name AS product,
-        products.platform AS platform,
-        licences.key_text AS licence,
-        CASE WHEN licences.end_time IS NOT NULL AND licences.end_time <= '2019-02-13 12:00:00'
-            THEN 1
-            ELSE 0
-        END AS expired,
-        COUNT(CASE WHEN licences_loans.start_time <= '2019-02-13 12:00:00' AND (licences_loans.returned >= '2018-10-01 12:00:00' OR licences_loans.returned IS NULL)
+	set @query = concat('
+        SELECT
+            products.name AS product,
+            products.platform AS platform,
+            licences.key_text AS licence,
+            CASE WHEN licences.end_time IS NOT NULL AND licences.end_time <= "', end, '"
                 THEN 1
-                ELSE NULL
-            END) AS uses
-    FROM licences_products
-        INNER JOIN licences ON licences_products.licence_id = licences.id
-        INNER JOIN products ON licences_products.product_id = products.id
-        LEFT  JOIN (SELECT * FROM loans WHERE loans.item_type = 'licences') AS licences_loans
-            ON licences.id = licences_loans.item_id
-    GROUP BY product, platform, licence
-    ORDER BY product, platform;
+                ELSE 0
+            END AS expired,
+            COUNT(CASE WHEN licences_loans.start_time <= "', end, '" AND (licences_loans.returned >= "', start, '" OR licences_loans.returned IS NULL)
+                    THEN 1
+                    ELSE NULL
+                END) AS uses
+        FROM licences_products
+            INNER JOIN licences ON licences_products.licence_id = licences.id
+            INNER JOIN products ON licences_products.product_id = products.id
+            LEFT  JOIN (SELECT * FROM loans WHERE loans.item_type = "licences") AS licences_loans
+                ON licences.id = licences_loans.item_id
+        GROUP BY product, platform, licence
+        ORDER BY ', sort_field ,' ', sort_dir
+    );
+    
+    PREPARE stmt FROM @query;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
 end//
 delimiter ;
 

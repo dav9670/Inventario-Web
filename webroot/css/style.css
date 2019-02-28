@@ -395,6 +395,10 @@ table tr th {
     border-bottom: 2px solid #1289ce;
 }
 
+th#highlighted-header {
+    background: #FFD154;
+}
+
 table tr:nth-of-type(even) {
     background: none;
 }
@@ -405,6 +409,10 @@ table tr.clickable-row:hover {
 
 table td:not(.actions) a {
     display: block;
+}
+
+table tr#deleted-item td:not(.actions) {
+    background: #CCCCCC;
 }
 
 fieldset {
