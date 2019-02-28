@@ -8,13 +8,18 @@
     <?= $this->Form->create($equipment, ['type' => 'file']) ?>
     <fieldset>
         <legend><?= __('Add Equipment') ?></legend>
-        <?php
-            echo $this->Form->control('name');
-            echo $this->Form->control('description', ['type' => 'textarea']);
-            echo $this->Form->control('image', ['type' => 'file', 'accept'=> 'image/*', 'onchange' => 'loadFile(event)']);
-        ?>
-        <img id='output' style='max-width:200px; max-height:200px;'/>
 
+        <div class="left twothirds-width">
+            <?php
+                echo $this->Form->control('name');
+                echo $this->Form->control('description', ['type' => 'textarea']);
+            ?>
+        </div>
+        <div class="right third-width">
+            <?php echo $this->Form->control('image', ['type' => 'file', 'accept'=> 'image/*', 'onchange' => 'loadFile(event)']); ?>
+            <img id='output'/>
+        </div>
+        <div style="clear: both;"></div>
     </fieldset>
     <h3><?=__('Categories')?></h3>
     <input id='autocomplete' type ='text'>

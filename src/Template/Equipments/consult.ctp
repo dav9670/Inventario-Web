@@ -10,18 +10,27 @@
     <button type="button" id="doneButton" class='right editdone' onClick='doneEditing()' hidden='hidden'><?=__('Done')?></button>
     <fieldset>
         <legend><?= __('Edit Equipment') ?></legend>
-        <?php
-            echo $this->Form->control('name', ['readOnly' => 'readOnly']);
-            echo $this->Form->control('description', ['readOnly' => 'readOnly']);
-            echo $this->Form->control('image', ['type' => 'file', 'accept'=> 'image/*', 'onchange' => 'loadFile(event)', 'hidden' => 'hidden', 'disabled' => 'disabled']);
-        ?>
+
+        <div class="left twothirds-width">
+            <?php
+                echo $this->Form->control('name', ['readOnly' => 'readOnly']);
+                echo $this->Form->control('description', ['readOnly' => 'readOnly']);
+            ?>
+        </div>
+
+        <div class="right third-width">
+            <?php echo $this->Form->control('image', ['type' => 'file', 'accept'=> 'image/*', 'onchange' => 'loadFile(event)', 'hidden' => 'hidden', 'disabled' => 'disabled']); ?>
+            <img src='data:image/png;base64,<?=$equipment->image?>' id='output'/>
+        </div>
+        <div style="clear: both;"></div>
     </fieldset>
-    <img src='data:image/png;base64,<?=$equipment->image?>' id='output' style='max-width:200px; max-height:200px;'/><br/>
+    
+
     <?php 
         if($equipment->deleted == null){
             echo $this->Html->link(__('Deactivate equipment'), ['controller' => 'Equipments', 'action' => 'deactivate', $equipment->id], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to deactivate {0}?', $equipment->name)]);
         } else {
-            echo $this->Html->link(__('Reactivate equipment'), ['controller' => 'Equipments', 'action' => 'reactivate', $equipment->id], ['confirm' => __('Are you sure you want to reactivate {0}?', $equipment->name)]);  
+            echo $this->Html->link(__('Reactivate equipment'), ['controller' => 'Equipments', 'action' => 'reactivate', $equipment->id], ['confirm' => __('Are you sure you want to reactivate {0}?', $equipment->name), 'style' => 'margin-right: 25px;']);  
             if($equipment->loan_count == 0){
                 echo $this->Html->link(__('Delete equipment'), ['controller' => 'Equipments', 'action' => 'delete', $equipment->id], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to PERMANENTLY delete {0}?', $equipment->name)]);
             }

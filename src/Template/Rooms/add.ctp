@@ -8,13 +8,19 @@
     <?= $this->Form->create($room, ['type' => 'file']) ?>
     <fieldset>
         <legend><?= __('Add Room') ?></legend>
-        <?php
-            echo $this->Form->control('name');
-            echo $this->Form->control('description', ['type' => 'textarea']);
-            echo $this->Form->control('image', ['type' => 'file', 'accept'=> 'image/*', 'onchange' => 'loadFile(event)']);
-        ?>
+        <div class="left twothirds-width">
+            <?php
+                echo $this->Form->control('name');
+                echo $this->Form->control('description', ['type' => 'textarea']);
+            ?>
+        </div>
+        <div class="right third-width">
+            <?php echo $this->Form->control('image', ['type' => 'file', 'accept'=> 'image/*', 'onchange' => 'loadFile(event)']); ?>
+            <img id='output'/>
+        </div>
+        <div style="clear: both;"></div>
     </fieldset>
-    <img id='output' style='max-width:200px; max-height:200px;'/>
+    
     <h3><?=__('Services')?></h3>
     <input id='autocomplete' type ='text'>
     <input type='hidden' name='services[_ids]' value=""/>

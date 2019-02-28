@@ -8,17 +8,27 @@
     <?= $this->Form->create($licence, ['type' => 'file']) ?>
     <fieldset>
         <legend><?= __('Add Licence') ?></legend>
-        <?php
-            echo $this->Form->control('name');
-            echo $this->Form->control('key_text');
-            echo $this->Form->control('description', ['type' => 'textarea']);
-            echo $this->Form->control('image', ['type' => 'file', 'accept'=> 'image/*', 'onchange' => 'loadFile(event)']);
-        ?>
-        <img id='output' style='max-width:200px; max-height:200px;'/>
-        <?php
-            echo $this->Form->control('start_time');
-            echo $this->Form->control('end_time', ['empty' => true]);
-        ?>
+    
+        <div class="left twothirds-width">
+            <?php
+                echo $this->Form->control('name');
+                echo $this->Form->control('key_text');
+                echo $this->Form->control('description', ['type' => 'textarea']);
+            ?>
+        </div>
+        <div class="right third-width">
+            <?php echo $this->Form->control('image', ['type' => 'file', 'accept'=> 'image/*', 'onchange' => 'loadFile(event)']); ?>
+            <img id='output'/>
+        </div>
+
+        <div style="clear: both;"></div>
+        
+        <div class="left third-width">
+            <?php echo $this->Form->control('start_time', ['type' => 'text', 'class' => 'datepicker']); ?>
+        </div>
+        <div class="left third-width">
+            <?php echo $this->Form->control('end_time', ['type' => 'text', 'class' => 'datepicker', 'empty' => true]); ?>
+        </div>
         
     </fieldset>
     <h3><?=__('Products')?></h3>
@@ -52,6 +62,13 @@
     }
 
     $('document').ready(function(){
+        $(".datepicker").datepicker({
+            dateFormat: 'yy-mm-dd',
+            onSelect: function(date) {
+                $('#preset-dates').val('custom');
+            }
+        });
+
         $("#autocomplete").autocomplete({
             source: function(request, show){
                 $.ajax({
@@ -82,19 +99,18 @@
                 let table = $('#products_table_body');
                 let elem = ui.item.data;
 
-                let input = "<input type='hidden' name='products[_ids][]' value='" + elem.id + "'/>";
-
-                let nameCell = "<td><a href='/products/" + elem.id + "'>" + elem.name + "</a></td>";
-                let platformCell = "<td><a href='/products/" + elem.id + "'>" + elem.platform + "</a></td>";
-                let descriptionCell = "<td><a href='/products/" + elem.id + "'>" + elem.description + "</a></td>";
-                let licenceCountCell = "<td><a href='/products/" + elem.id + "'>" + elem.licence_count + "</a></td>";
-                let actionsCell = "<td class=\"actions\">";
-                var deleteLink = "<a onclick='removeRow(" + elem.id + ")'>Remove</a>";
-                
-                actionsCell = actionsCell.concat(deleteLink);
-                actionsCell = actionsCell.concat("</td>");
-
-                table.append("<tr id='product_row_" + elem.id +"'>" + input + nameCell + platformCell + descriptionCell + licenceCountCell + actionsCell + "</tr>");
+                table.append(`
+                    <tr id='product_row_` + elem.id + `'>
+                        <input type='hidden' name='products[_ids][]' value='` + elem.id + `'/>
+                        <td><a href='/products/` + elem.id + `'>` + elem.name + `</a></td>
+                        <td><a href='/products/` + elem.id + `'>` + elem.platform + `</a></td>
+                        <td><a href='/products/` + elem.id + `'>` + elem.description + `</a></td>
+                        <td><a href='/products/` + elem.id + `'>` + elem.licence_count + `</a></td>
+                        <td class='actions'>
+                            <a class='unlink_link delete-link' onclick='removeLink(` + elem.id + `)'><?=__('Remove')?></a>
+                        </td>
+                    </tr>
+                `);
 
                 $('#autocomplete').val('');
                 event.preventDefault();

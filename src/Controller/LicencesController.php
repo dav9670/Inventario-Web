@@ -64,37 +64,50 @@ class LicencesController extends AppController
         if ($this->request->is('post'))
         {
             $data = $this->request->getData();
-            if(!$this->isApi())
+            $data['start_time'] = $data['start_time'] . " 00:00:00";
+            if ($data['end_time'] != "")
             {
-                $image = $data['image'];
-                if($image['tmp_name'] != '')
-                {
-                    $imageData  = file_get_contents($image['tmp_name']);
-                    $b64   = base64_encode($imageData);
-                    $data['image'] = $b64;
-                }
+                $data['end_time'] = $data['end_time'] . " 00:00:00";
             }
-            $licence = $this->Licences->patchEntity($licence, $data);
 
-            if ($this->Licences->save($licence))
+            if (is_array($data["products"]["_ids"]))
             {
-                if($this->isApi())
+                if(!$this->isApi())
                 {
-                    $success = true;
+                    $image = $data['image'];
+                    if($image['tmp_name'] != '')
+                    {
+                        $imageData  = file_get_contents($image['tmp_name']);
+                        $b64   = base64_encode($imageData);
+                        $data['image'] = $b64;
+                    }
+                }
+                $licence = $this->Licences->patchEntity($licence, $data);
+
+                if ($this->Licences->save($licence))
+                {
+                    if($this->isApi())
+                    {
+                        $success = true;
+                    }
+                    else
+                    {
+                        $this->Flash->success(__('The licence has been saved.'));
+                        return $this->redirect(['action' => 'index']);
+                    }
+                }
+                else if($this->isApi())
+                {
+                    $success = false;
                 }
                 else
                 {
-                    $this->Flash->success(__('The licence has been saved.'));
-                    return $this->redirect(['action' => 'index']);
+                    $this->Flash->error(__('The licence could not be saved. Please, try again.'));
                 }
-            }
-            else if($this->isApi())
-            {
-                $success = false;
             }
             else
             {
-                $this->Flash->error(__('The licence could not be saved. Please, try again.'));
+                $this->Flash->error(__('At least one Product is required. Please, try again.'));
             }
         }
 
@@ -180,26 +193,39 @@ class LicencesController extends AppController
         if($this->request->is(['patch', 'post', 'put']))
         {
             $data = $this->request->getData();
-            $image = $data['image'];
-            if($image['tmp_name'] != '')
+            $data['start_time'] = $data['start_time'] . " 00:00:00";
+            if ($data['end_time'] != "")
             {
-                $imageData  = file_get_contents($image['tmp_name']);
-                $b64   = base64_encode($imageData);
-                $data['image'] = $b64;
+                $data['end_time'] = $data['end_time'] . " 00:00:00";
+            }
+
+            if (is_array($data["products"]["_ids"]))
+            {
+                $image = $data['image'];
+                if($image['tmp_name'] != '')
+                {
+                    $imageData  = file_get_contents($image['tmp_name']);
+                    $b64   = base64_encode($imageData);
+                    $data['image'] = $b64;
+                }
+                else
+                {
+                    $data['image'] = $licence->image;
+                }
+
+                $licence = $this->Licences->patchEntity($licence, $data);
+                if ($this->Licences->save($licence))
+                {
+                    $this->Flash->success(__('The licence has been saved.'));
+
+                    return $this->redirect(['action' => 'index']);
+                }
+                $this->Flash->error(__('The licence could not be saved. Please, try again.'));
             }
             else
             {
-                $data['image'] = $licence->image;
+                $this->Flash->error(__('At least one Product is required. Please, try again.'));
             }
-
-            $licence = $this->Licences->patchEntity($licence, $data);
-            if ($this->Licences->save($licence))
-            {
-                $this->Flash->success(__('The licence has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The licence could not be saved. Please, try again.'));
         }
         $products = $this->Licences->Products->find('list', ['limit' => 200]);
         $this->set(compact('licence', 'products'));
@@ -377,6 +403,7 @@ class LicencesController extends AppController
             $search_products = $filters['search_products'] == 'true';
         }
         
+        $query = null;
         if($keyword == '')
         {
             $query = $this->Licences->find('all');
