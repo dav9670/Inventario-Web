@@ -221,7 +221,7 @@ class EquipmentsController extends AppController
         if($this->isApi()){
             $this->getRequest()->allowMethod('post');
         }else {
-            $this->getRequest()->allowMethod('ajax');
+            $this->getRequest()->allowMethod('get', 'ajax');
         }
    
         $keyword = "";
@@ -233,7 +233,12 @@ class EquipmentsController extends AppController
         $search_equipments = true;
         $search_categories = true;
 
-        if ($this->getRequest()->is('ajax')){
+        if ($this->isApi()){
+            $jsonData = $this->getRequest()->input('json_decode', true);
+            $keyword = $jsonData['keyword'];
+            $sort_field = $jsonData['sort_field'];
+            $sort_dir = $jsonData['sort_dir'];
+        } else {
             $keyword = $this->getRequest()->getQuery('keyword');
             $sort_field = $this->getRequest()->getQuery('sort_field');
             $sort_dir = $this->getRequest()->getQuery('sort_dir');
@@ -243,12 +248,6 @@ class EquipmentsController extends AppController
             $search_unavailable = $filters['search_unavailable'] == 'true';
             $search_equipments = $filters['search_equipments'] == 'true';
             $search_categories = $filters['search_categories'] == 'true';
-        
-        } else if ($this->getRequest()->is('post')){
-            $jsonData = $this->getRequest()->input('json_decode', true);
-            $keyword = $jsonData['keyword'];
-            $sort_field = $jsonData['sort_field'];
-            $sort_dir = $jsonData['sort_dir'];
         }
         
         if($keyword == '')

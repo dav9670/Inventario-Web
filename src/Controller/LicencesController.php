@@ -348,7 +348,7 @@ class LicencesController extends AppController
         if($this->isApi()){
             $this->getRequest()->allowMethod('post');
         }else {
-            $this->getRequest()->allowMethod('ajax');
+            $this->getRequest()->allowMethod('get', 'ajax');
         }
    
         $keyword = "";
@@ -360,7 +360,12 @@ class LicencesController extends AppController
         $search_licences = true;
         $search_products = true;
 
-        if ($this->getRequest()->is('ajax')){
+        if ($this->isApi()){
+            $jsonData = $this->getRequest()->input('json_decode', true);
+            $keyword = $jsonData['keyword'];
+            $sort_field = $jsonData['sort_field'];
+            $sort_dir = $jsonData['sort_dir'];
+        } else {
             $keyword = $this->getRequest()->getQuery('keyword');
             $sort_field = $this->getRequest()->getQuery('sort_field');
             $sort_dir = $this->getRequest()->getQuery('sort_dir');
@@ -370,12 +375,6 @@ class LicencesController extends AppController
             $search_unavailable = $filters['search_unavailable'] == 'true';
             $search_licences = $filters['search_licences'] == 'true';
             $search_products = $filters['search_products'] == 'true';
-        
-        } else if ($this->getRequest()->is('post')){
-            $jsonData = $this->getRequest()->input('json_decode', true);
-            $keyword = $jsonData['keyword'];
-            $sort_field = $jsonData['sort_field'];
-            $sort_dir = $jsonData['sort_dir'];
         }
         
         if($keyword == '')
