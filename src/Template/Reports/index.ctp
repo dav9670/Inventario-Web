@@ -61,7 +61,11 @@ use Cake\I18n\I18n;
             setBodyMentors();
         },
         rooms: function(){
-            
+            setHeadersRooms();
+            sort_field = '';
+            sort_dir = '';
+            sortSetter('name');
+            setBodyRooms();
         },
         licences: function(){
             setHeadersLicences();
@@ -167,6 +171,67 @@ use Cake\I18n\I18n;
                             <td></td>
                             <td></td>
                             <td></td>
+                        </tr>
+                    `);
+                });
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                alert('The report could not be fetched');
+                console.log(jqXHR.responseText);
+            }
+        });
+    }
+
+    function setHeadersRooms(){
+        $('#report-table-head').empty();
+        $('#report-table-head').append(`
+            <tr>
+                <th scope="col"><a id="name_sort" onclick="sortSetter('name'); setBodyRooms();"><?= __("Name") ?></a></th>
+                <th scope="col"><a id="total_sort" onclick="sortSetter('total'); setBodyRooms();"><?= __("Total") ?></a></th>
+                <th scope="col">08h - 09h</a></th>
+                <th scope="col">09h - 10h</a></th>
+                <th scope="col">10h - 11h</a></th>
+                <th scope="col">11h - 12h</a></th>
+                <th scope="col">12h - 13h</a></th>
+                <th scope="col">13h - 14h</a></th>
+                <th scope="col">14h - 15h</a></th>
+                <th scope="col">15h - 16h</a></th>
+                <th scope="col">16h - 17h</a></th>
+                <th scope="col">17h - 18h</a></th>
+                <th scope="col">18h - 19h</a></th>
+                <th scope="col">19h - 20h</a></th>
+                <th scope="col">20h - 21h</a></th>
+            </tr>
+        `);
+    }
+
+    function setBodyRooms(){
+        let start_date = $('#date-from').val();
+        let end_date = $('#date-to').val();
+        $.ajax({
+            method: 'get',
+            url : "/reports/rooms_report.json?start_date=" + start_date + "&end_date=" + end_date + "&sort_field=" + sort_field + "&sort_dir=" + sort_dir,
+            headers: { 'X-CSRF-TOKEN': '<?=$this->getRequest()->getParam('_csrfToken');?>' },
+            success: function( response ){
+                $('#report-table-body').empty();
+                response.forEach(function(elem){
+                    $('#report-table-body').append(`
+                        <tr>
+                            <td>` + elem[0] + `</td>
+                            <td>` + elem[1] + `</td>
+                            <td>` + elem[2] + `</td>
+                            <td>` + elem[3] + `</td>
+                            <td>` + elem[4] + `</td>
+                            <td>` + elem[5] + `</td>
+                            <td>` + elem[6] + `</td>
+                            <td>` + elem[7] + `</td>
+                            <td>` + elem[8] + `</td>
+                            <td>` + elem[9] + `</td>
+                            <td>` + elem[10] + `</td>
+                            <td>` + elem[11] + `</td>
+                            <td>` + elem[12] + `</td>
+                            <td>` + elem[13] + `</td>
+                            <td>` + elem[14] + `</td>
                         </tr>
                     `);
                 });

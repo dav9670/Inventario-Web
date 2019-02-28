@@ -82,19 +82,18 @@
                 let table = $('#products_table_body');
                 let elem = ui.item.data;
 
-                let input = "<input type='hidden' name='products[_ids][]' value='" + elem.id + "'/>";
-
-                let nameCell = "<td><a href='/products/" + elem.id + "'>" + elem.name + "</a></td>";
-                let platformCell = "<td><a href='/products/" + elem.id + "'>" + elem.platform + "</a></td>";
-                let descriptionCell = "<td><a href='/products/" + elem.id + "'>" + elem.description + "</a></td>";
-                let licenceCountCell = "<td><a href='/products/" + elem.id + "'>" + elem.licence_count + "</a></td>";
-                let actionsCell = "<td class=\"actions\">";
-                var deleteLink = "<a onclick='removeRow(" + elem.id + ")'>Remove</a>";
-                
-                actionsCell = actionsCell.concat(deleteLink);
-                actionsCell = actionsCell.concat("</td>");
-
-                table.append("<tr id='product_row_" + elem.id +"'>" + input + nameCell + platformCell + descriptionCell + licenceCountCell + actionsCell + "</tr>");
+                table.append(`
+                    <tr id='product_row_` + elem.id + `'>
+                        <input type='hidden' name='products[_ids][]' value='` + elem.id + `'/>
+                        <td><a href='/products/` + elem.id + `'>` + elem.name + `</a></td>
+                        <td><a href='/products/` + elem.id + `'>` + elem.platform + `</a></td>
+                        <td><a href='/products/` + elem.id + `'>` + elem.description + `</a></td>
+                        <td><a href='/products/` + elem.id + `'>` + elem.licence_count + `</a></td>
+                        <td class='actions'>
+                            <a class='unlink_link delete-link' onclick='removeLink(` + elem.id + `)'><?=__('Remove')?></a>
+                        </td>
+                    </tr>
+                `);
 
                 $('#autocomplete').val('');
                 event.preventDefault();
