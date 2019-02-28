@@ -265,7 +265,7 @@ class RoomsController extends AppController
                 ->where(["lower(name) = :search"])
                 ->bind(":search", strtolower($jsonData['name']), 'string')->first();
             
-                $this->set(compact('room'));
+            $this->set(compact('room'));
             $this->set('_serialize', ['room']);  
         } else {
             return $this->redirect(['action' => 'index']);
