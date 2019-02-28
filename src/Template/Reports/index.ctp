@@ -9,16 +9,31 @@ use Cake\I18n\I18n;
 <div class="reports form large-12 medium-11 columns content">
     <fieldset>
         <legend><?= __('Report settings') ?></legend>
-        <label for="preset-dates"><?= __('Date Presets') ?></label>
-        <select id="preset-dates">
-            <option value="thisyear"><?= __('This year') ?></option>
-            <option value="lastyear"><?= __('Last year') ?></option>
-            <option value="thismonth"><?= __('This month') ?></option>
-            <option value="lastmonth"><?= __('Last month') ?></option>
-            <option value="thisweek"><?= __('This week') ?></option>
-            <option value="lastweek"><?= __('Last week') ?></option>
-            <option value="custom"><?= __('Custom') ?></option>
-        </select>
+
+        <div class="left third-width">
+            <label for="preset-dates"><?= __('Date Presets') ?></label>
+            <select id="preset-dates">
+                <option value="thisyear"><?= __('This year') ?></option>
+                <option value="lastyear"><?= __('Last year') ?></option>
+                <option value="thismonth"><?= __('This month') ?></option>
+                <option value="lastmonth"><?= __('Last month') ?></option>
+                <option value="thisweek"><?= __('This week') ?></option>
+                <option value="lastweek"><?= __('Last week') ?></option>
+                <option value="custom"><?= __('Custom') ?></option>
+            </select>
+        </div>
+
+        <div class="right third-width">
+            <label for="date-from"><?= __('From') ?></label>
+            <input id='date-from' type="text" class="datepicker">
+        </div>
+
+        <div class="right third-width">
+            <label for="date-to"><?= __('To') ?></label>
+            <input id='date-to' type="text" class="datepicker">
+        </div>
+
+        <div style="clear: both;"></div>
 
         <label for="report-type"><?= __('Report type') ?></label>
         <select id="report-type">
@@ -27,12 +42,7 @@ use Cake\I18n\I18n;
             <option value="licences"><?= __('Licences') ?></option>
             <option value="equipments"><?= __('Equipments') ?></option>
         </select>
-
-        <label for="date-from"><?= __('From') ?></label>
-        <input id='date-from' type="text" class="datepicker">
         
-        <label for="date-to"><?= __('To') ?></label>
-        <input id='date-to' type="text" class="datepicker">
     </fieldset>
 
     <button type="submit" onclick='generateReport();'><?= __('Generate report') ?></button>
