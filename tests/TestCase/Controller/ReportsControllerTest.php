@@ -9,7 +9,7 @@ use Cake\ORM\TableRegistry;
 /**
  * App\Controller\MentorsController Test Case
  */
-class MentorsControllerTest extends TestCase
+class ReportControllerTest extends TestCase
 {
     use IntegrationTestTrait;
 
@@ -22,7 +22,10 @@ class MentorsControllerTest extends TestCase
         'app.Mentors',
         'app.Skills',
         'app.MentorsSkills',
-        'app.Loans'
+        'app.Loans',
+        'app.Equipments',
+        'app.Categories',
+        'app.EquipmentsCategories'
     ];
 
     public function setUp()
@@ -64,5 +67,28 @@ class MentorsControllerTest extends TestCase
         $this->get('/reports/mentors_report.json?start_date=2100-10-01&end_date=2100-10-10&sort_field=email&sort_dir=asc');
         $response = json_decode((string)$this->_response->getBody());
         $this->assertCount(0, $response);
+    }
+
+    /**
+     * Test delete method
+     *
+     * @return void
+     */
+    public function testEquipmentsReport()
+    {
+        //Positive test
+        $this->get('/reports/equipments_report.json?start_date=2018-10-01&end_date=2018-10-10&sort_field=cat&sort_dir=asc');
+        $response = (array) json_decode((string)$this->_response->getBody());
+        $first = $response[0];
+        
+
+        $this->assertEquals('4K', $first->cat);
+        $this->assertEquals('0', $first->time_loans);
+        $this->assertEquals('0', $first->hour_loans);
+        $this->assertEquals('0', $first->late_loans);
+        $this->assertEquals('1', $first->available);
+        
+        //Negative test
+        //can't fo negative test there is always a value.
     }
 }

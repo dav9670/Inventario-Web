@@ -415,6 +415,24 @@ values                  ('2019-02-23 12:00:00', '2019-03-03 12:00:00', null, 2, 
 insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
 values                  ('2019-02-07 12:00:00', '2019-02-09 12:00:00', '2019-02-09 09:00:00', 3, 'equipments', 2);
 
+insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
+values                  ('2018-11-01 12:00:00', '2018-11-05 12:00:00', '2018-11-05 14:00:00', 1, 'equipments', 1);
+
+insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
+values                  ('2018-02-13 12:00:00', '2018-03-01 12:00:00', '2018-11-05 14:00:00', 1, 'equipments', 2);
+
+insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
+values                  ('2018-02-01 12:00:00', '2018-02-03 12:00:00', '2019-02-04 09:00:00', 1, 'equipments', 2);
+
+insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
+values                  ('2017-02-23 12:00:00', '2020-03-03 12:00:00', null, 1, 'equipments', 4);
+
+insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
+values                  ('2017-02-07 12:00:00', '2020-02-09 12:00:00', null, 1, 'equipments', 5);
+
+insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
+values                  ('2017-02-07 12:00:00', '2019-02-26 12:00:00', null, 1, 'equipments', 3);
+
 /*mentors & skills*/
 
 insert into mentors (email, first_name, last_name, description, image)
