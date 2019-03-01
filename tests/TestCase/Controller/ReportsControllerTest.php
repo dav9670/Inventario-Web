@@ -97,6 +97,8 @@ class ReportControllerTest extends TestCase
         //Negative test
         //can't fo negative test there is always a value.
     }
+    
+    /**
      * Test licences report method
      *
      * @return void
