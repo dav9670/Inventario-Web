@@ -28,7 +28,7 @@
         if($room->deleted == null){
             echo $this->Html->link(__('Deactivate room'), ['controller' => 'Rooms', 'action' => 'deactivate', $room->id], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to deactivate {0}?', $room->name)]);
         } else {
-            echo $this->Html->link(__('Reactivate room'), ['controller' => 'Rooms', 'action' => 'reactivate', $room->id], ['confirm' => __('Are you sure you want to reactivate {0}?', $room->name)]);  
+            echo $this->Html->link(__('Reactivate room'), ['controller' => 'Rooms', 'action' => 'reactivate', $room->id], ['confirm' => __('Are you sure you want to reactivate {0}?', $room->name), 'style' => 'margin-right: 25px;']);  
             if($room->loan_count == 0){
                 echo $this->Html->link(__('Delete room'), ['controller' => 'Rooms', 'action' => 'delete', $room->id], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to PERMANENTLY delete {0}?', $room->name)]);
             }

@@ -41,7 +41,7 @@
         if($licence->deleted == null){
             echo $this->Html->link(__('Deactivate licence'), ['controller' => 'Licences', 'action' => 'deactivate', $licence->id], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to deactivate {0}?', $licence->name)]);
         } else {
-            echo $this->Html->link(__('Reactivate licence'), ['controller' => 'Licences', 'action' => 'reactivate', $licence->id], ['confirm' => __('Are you sure you want to reactivate {0}?', $licence->name)]);  
+            echo $this->Html->link(__('Reactivate licence'), ['controller' => 'Licences', 'action' => 'reactivate', $licence->id], ['confirm' => __('Are you sure you want to reactivate {0}?', $licence->name), 'style' => 'margin-right: 25px;']);  
             if($licence->loan_count == 0){
                 echo $this->Html->link(__('Delete licence'), ['controller' => 'Licences', 'action' => 'delete', $licence->id], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to PERMANENTLY delete {0}?', $licence->name)]);
             }

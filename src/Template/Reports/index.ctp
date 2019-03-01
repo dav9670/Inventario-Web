@@ -82,7 +82,11 @@ use Cake\I18n\I18n;
             setBodyLicences();
         },
         equipments: function(){
-
+            setHeadersEquipments();
+            sort_field = '';
+            sort_dir = '';
+            sortSetter('cat');
+            setBodyEquipments();
         }
     }
 
@@ -221,7 +225,7 @@ use Cake\I18n\I18n;
             headers: { 'X-CSRF-TOKEN': '<?=$this->getRequest()->getParam('_csrfToken');?>' },
             success: function( response ){
                 $('#report-table-body').empty();
-                var totalByHours = [0,0,0,0,0,0,0,0,0,0,0,0];
+                var totalByHours = [0,0,0,0,0,0,0,0,0];
                 var temp = response;
                 temp.forEach(function(elem){
                     for (var i = 2; i < elem.length - 1; i++  ){
@@ -255,6 +259,48 @@ use Cake\I18n\I18n;
                             <td>` + elem[8] + `</td>
                             <td>` + elem[9] + `</td>
                             <td>` + elem[10] + `</td>
+                        </tr>
+                    `);
+                });
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                alert('The report could not be fetched');
+                console.log(jqXHR.responseText);
+            }
+        });
+    }
+
+    function setHeadersEquipments(){
+        $('#report-table-head').empty();
+        $('#report-table-head').append(`
+            <tr>
+                <th scope="col"><a id="cat_sort" onclick="sortSetter('cat'); setBodyEquipments();"><?= __("Category") ?></a></th>
+                <th scope="col"><?= __("Time loaned") ?></th>
+                <th scope="col"><?= __("Overtime fee") ?></th>
+                <th scope="col"><?= __("Late loans") ?></th>
+                <th scope="col"><?= __("Available") ?></th>
+            </tr>
+        `);
+    }
+
+    function setBodyEquipments(){
+        let start_date = $('#date-from').val();
+        let end_date = $('#date-to').val();
+        $.ajax({
+            method: 'get',
+            url : "/reports/equipments_report.json?start_date=" + start_date + "&end_date=" + end_date + "&sort_field=" + "c.name" + "&sort_dir=" + sort_dir,
+            headers: { 'X-CSRF-TOKEN': '<?=$this->getRequest()->getParam('_csrfToken');?>' },
+            success: function( response ){
+                $('#report-table-body').empty();
+
+                response.forEach(function(elem){
+                    $('#report-table-body').append(`
+                        <tr>
+                            <td>` + elem.cat + `</td>
+                            <td>` + elem.time_loans + `</td>
+                            <td>` + elem.hour_loans + `</td>
+                            <td>` + elem.late_loans + `</td>
+                            <td>` + elem.available + `</td>
                         </tr>
                     `);
                 });

@@ -44,5 +44,21 @@ class Category extends Entity
         return 0;
     }
 
-    protected $_virtual = ['equipment_count'];
+    protected function _getEquipmentCountAvailable()
+    {
+        TableRegistry::get($this->getSource())->loadInto($this, ['Equipments']);
+        if (is_array($this->equipments))
+        {
+            $count =0;
+            foreach($this->equipments as $equipment){
+                if ($equipment->available){
+                    $count = $count +1;
+                }
+            }
+            return $count;
+        }
+        return 0;
+    }
+
+    protected $_virtual = ['equipment_count', 'equipment_count_available'];
 }

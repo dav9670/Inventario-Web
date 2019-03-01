@@ -282,7 +282,7 @@ delimiter //
 create procedure equipments_report(start datetime, end datetime, sort_field tinytext, sort_dir tinytext)
 begin
     set @query =concat('
-	select c.name as "Category", nloans.nloaned as "Loans", nlate.late as "Late loans", nlate.hlate as "Overtime fee"
+	select c.name as "cat", nloans.nloaned as "time_loans", nlate.late as "late_loans", nlate.hlate as "hour_loans"
 	from 
 		equipments e,
         equipments_categories ec,

@@ -25,7 +25,10 @@ class MentorsControllerTest extends TestCase
         'app.Licences',
         'app.Products',
         'app.LicencesProducts',
-        'app.Loans'
+        'app.Loans',
+        'app.Rooms',
+        'app.Services',
+        'app.RoomsServices'
     ];
 
     public function setUp()
@@ -49,7 +52,7 @@ class MentorsControllerTest extends TestCase
     }
 
     /**
-     * Test metors report method
+     * Test mentors report method
      *
      * @return void
      */
@@ -87,5 +90,36 @@ class MentorsControllerTest extends TestCase
         $this->assertEquals(0, $first->expired);
         $this->assertEquals(0, $first->uses);
         $this->assertEquals("0%", $first->percent_used);
+    }
+
+    /**
+     * Test rooms report method
+     *
+     * @return void
+     */
+    public function testRoomsReport()
+    {
+        //Positive test
+        $this->get('/reports/rooms_report.json?start_date=2019-02-01&end_date=2019-03-01&sort_field=name&sort_dir=asc');
+        $response = json_decode((string)$this->_response->getBody());
+        $first = $response[0];
+        $this->assertEquals('1133A', $first[0]);
+        $this->assertEquals('28', $first[1]);
+        $this->assertEquals('4', $first[2]);
+        $this->assertEquals('3', $first[3]);
+        $this->assertEquals('3', $first[4]);
+        $this->assertEquals('3', $first[5]);
+        $this->assertEquals('3', $first[6]);
+        $this->assertEquals('3', $first[7]);
+        $this->assertEquals('3', $first[8]);
+        $this->assertEquals('3', $first[9]);
+        $this->assertEquals('3', $first[10]);
+        $this->assertEquals('', $first[11]);
+        $this->assertEquals('Projector; Lab Linux; Office chairs; Basic tables; Phone; ', $first[12]);
+
+        //Negative test
+        $this->get('/reports/rooms_report.json?start_date=2100-10-01&end_date=2100-10-10&sort_field=name&sort_dir=asc');
+        $response = json_decode((string)$this->_response->getBody());
+        $this->assertCount(0, $response);
     }
 }

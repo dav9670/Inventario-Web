@@ -222,6 +222,39 @@ class ReportsController extends AppController
         }
     }
 
+    public function equipmentsReport()
+    {
+        $start_date = $this->getRequest()->getQuery('start_date');
+        $end_date = $this->getRequest()->getQuery('end_date');
+        $sort_field = $this->getRequest()->getQuery('sort_field') != null ? $this->getRequest()->getQuery('sort_field') : 'c.name';
+        $sort_dir = $this->getRequest()->getQuery('sort_dir') != null ? $this->getRequest()->getQuery('sort_dir') : 'asc';
+
+        $conn = ConnectionManager::get('default');
+        $proc_result = $conn->execute("call equipments_report(?,?,?,?)", [$start_date, $end_date, $sort_field, $sort_dir])->fetchAll('assoc');
+        
+
+        $finalArray = array();
+        $id = 0;
+        foreach($proc_result as $result){
+            $query = TableRegistry::get('Categories')->find('all');
+            $category = $query->where(['name' => $result['cat']]);
+
+            
+            //$id = $category->toArray()[0]['id'];
+            $value = $category->toArray()[0]['hourly_rate'];
+            
+            $finalArray[$id]["cat"] = $result["cat"];
+            $finalArray[$id]["hour_loans"] = $result["hour_loans"] * $value;
+            $finalArray[$id]["late_loans"] = ($result["late_loans"] == null) ? 0 : $result["late_loans"];
+            $finalArray[$id]["time_loans"] = ($result["time_loans"] == null) ? 0 : $result["time_loans"];
+            $finalArray[$id]["available"] = $category->toArray()[0]["equipment_count_available"];
+            $id = $id +1;
+        }
+
+        $this->set('report', $finalArray);
+        $this->set('_serialize', 'report');
+    }
+
     public function isAuthorized($user)
     {
         return $this->Auth->user('admin_status') == 'admin';
