@@ -225,7 +225,7 @@ use Cake\I18n\I18n;
             headers: { 'X-CSRF-TOKEN': '<?=$this->getRequest()->getParam('_csrfToken');?>' },
             success: function( response ){
                 $('#report-table-body').empty();
-                var totalByHours = [0,0,0,0,0,0,0,0,0,0,0,0];
+                var totalByHours = [0,0,0,0,0,0,0,0,0];
                 var temp = response;
                 temp.forEach(function(elem){
                     for (var i = 2; i < elem.length - 1; i++  ){
