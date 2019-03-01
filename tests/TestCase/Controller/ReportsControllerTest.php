@@ -22,6 +22,9 @@ class MentorsControllerTest extends TestCase
         'app.Mentors',
         'app.Skills',
         'app.MentorsSkills',
+        'app.Licences',
+        'app.Products',
+        'app.LicencesProducts',
         'app.Loans'
     ];
 
@@ -46,7 +49,7 @@ class MentorsControllerTest extends TestCase
     }
 
     /**
-     * Test delete method
+     * Test metors report method
      *
      * @return void
      */
@@ -64,5 +67,25 @@ class MentorsControllerTest extends TestCase
         $this->get('/reports/mentors_report.json?start_date=2100-10-01&end_date=2100-10-10&sort_field=email&sort_dir=asc');
         $response = json_decode((string)$this->_response->getBody());
         $this->assertCount(0, $response);
+    }
+
+    /**
+     * Test licences report method
+     *
+     * @return void
+     */
+    public function testLicencesReport()
+    {
+        //Positive test
+        $this->get('/reports/licences_report.json?start_date=2018-10-01&end_date=2019-01-01');
+        $response = json_decode((string)$this->_response->getBody());
+        
+        $first = $response[0];
+        $this->assertEquals('Mockups', $first->product);
+        $this->assertEquals('Mac', $first->platform);
+        $this->assertEquals(0, $first->used);
+        $this->assertEquals(0, $first->expired);
+        $this->assertEquals(0, $first->uses);
+        $this->assertEquals("0%", $first->percent_used);
     }
 }
