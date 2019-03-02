@@ -18,7 +18,7 @@
         </div>
         <div class="right third-width">
             <?php echo $this->Form->control('image', ['type' => 'file', 'accept'=> 'image/*', 'onchange' => 'loadFile(event)']); ?>
-            <img id='output'/>
+            <img id='output' <?php if($mentor->image != null) { echo "src='data:image/png;base64," . $mentor->image . "'"; } ?>/>
         </div>
         <div style="clear: both;"></div>
     </fieldset>
@@ -35,6 +35,21 @@
             </tr>
         </thead>
         <tbody id='skills_table_body'>
+            <?php   
+            if($mentor->skills != null) {
+                foreach($mentor->skills as $elem){?>
+                    <tr id='skill_row_<?=$elem->id?>'>
+                        <input type='hidden' name='skills[_ids][]' value='<?=$elem->id?>'/>
+                        <td><a href='skills/<?=$elem->id?>'><?=$elem->name?></a></td>
+                        <td><a href='skills/<?=$elem->id?>'><?=$elem->description?></a></td>
+                        <td><a href='skills/<?=$elem->id?>'><?=$elem->mentor_count?></a></td>
+                        <td class='actions'>
+                            <a class='unlink_link delete-link' onclick='removeLink(<?=$elem->id?>)'><?=__('Remove')?></a>
+                        </td>
+                    </tr>
+            <?php
+                } 
+            }?>
         </tbody>
     </table>
     <?= $this->Form->button(__('Save')) ?>
