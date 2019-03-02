@@ -395,7 +395,7 @@ table tr th {
     border-bottom: 2px solid #1289ce;
 }
 
-th.highlighted-header {
+th.highlighted-header, td.highlighted-row {
     background: #FFD154;
 }
 
