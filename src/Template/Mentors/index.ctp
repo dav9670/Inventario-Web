@@ -151,6 +151,10 @@
                         });
                     }
                     
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                    alert("Failed to fetch mentors");
+                    console.log(jqXHR.responseText);
                 }
         });
     };
