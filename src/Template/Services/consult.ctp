@@ -39,9 +39,9 @@
                 <td><a href='/rooms/<?= h($room->id) ?>'><?= h($room->description) ?></a></td>
 
                 <?php if (count($room->services_list) > 3): ?>
-                    <td><a href='/rooms/<?= h($room->id) ?>'><?= h(implode(", ", array_slice($room->services_list,0,3)) . "...") ?></a></td>
+                    <td><a href='/rooms/<?= h($room->id) ?>'><?= h(implode("; ", array_slice($room->services_list,0,3)) . "...") ?></a></td>
                 <?php else: ?>
-                    <td><a href='/rooms/<?= h($room->id) ?>'><?= h(implode(", ", array_slice($room->services_list,0,3))) ?></a></td>
+                    <td><a href='/rooms/<?= h($room->id) ?>'><?= h(implode("; ", array_slice($room->services_list,0,3))) ?></a></td>
                 <?php endif; ?>
 
                 <?php if ($room->available): ?>

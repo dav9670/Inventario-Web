@@ -40,9 +40,9 @@
                 <td><a href='/licences/<?= h($licence->id) ?>'><?= h($licence->description) ?></a></td>
 
                 <?php if (count($licence->products_list) > 3): ?>
-                    <td><a href='/licences/<?= h($licence->id) ?>'><?= h(implode(", ", array_slice($licence->products_list,0,3)) . "...") ?></a></td>
+                    <td><a href='/licences/<?= h($licence->id) ?>'><?= h(implode("; ", array_slice($licence->products_list,0,3)) . "...") ?></a></td>
                 <?php else: ?>
-                    <td><a href='/licences/<?= h($licence->id) ?>'><?= h(implode(", ", array_slice($licence->products_list,0,3))) ?></a></td>
+                    <td><a href='/licences/<?= h($licence->id) ?>'><?= h(implode("; ", array_slice($licence->products_list,0,3))) ?></a></td>
                 <?php endif; ?>
 
                 <td><a href='/licences/<?= h($licence->id) ?>'><?= h($licence->status) ?></a></td>

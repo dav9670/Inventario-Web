@@ -1683,3 +1683,9 @@ msgstr "Rechercher dans les Équipements"
 
 msgid "Search by Categories"
 msgstr "Rechercher dans les Catégories"
+
+msgid "Deactivate"
+msgstr "Désactiver"
+
+msgid "Reactivate"
+msgstr "Réactiver"

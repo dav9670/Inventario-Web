@@ -86,9 +86,6 @@
                 method: 'get',
                 url : "/mentors/search.json",
                 data: {keyword:data, sort_field:sort_field, sort_dir:sort_dir, filters: filters},
-                complete: function(jq, status){
-                    console.log(status);
-                },
                 success: function( response ){
                     
                     for(var i=0; i<2; i++){
@@ -110,9 +107,9 @@
                             var skills_list = "";
                             var three_skills = elem.skills_list.slice(0,3);
                             if (elem.skills_list.length > 3) {
-                                skills_list = three_skills.join(", ") + "...";
+                                skills_list = three_skills.join("; ") + "...";
                             } else {
-                                skills_list = three_skills.join(", ");
+                                skills_list = three_skills.join("; ");
                             }
 
                             var imgTag = '';
@@ -131,7 +128,7 @@
                             } else {
                                 link = link.concat('<?= $this->Html->link(__('Reactivate'), ['action' => 'reactivate', -1], ['confirm' => __('Are you sure you want to reactivate {0}?', -2)]) ?> ');
                                 if(elem.loan_count == 0){
-                                    link = link.concat('<?= $this->Html->link(__('Delete'), ['action' => 'delete', -1], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to PERMANENTLY delete {0}?', -2)]) ?> ');
+                                    link = link.concat('<br/><?= $this->Html->link(__('Delete'), ['action' => 'delete', -1], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to PERMANENTLY delete {0}?', -2)]) ?> ');
                                 }
                             }
                             link = link.replace(/-1/g, elem.id);

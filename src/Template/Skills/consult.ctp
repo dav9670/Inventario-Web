@@ -43,9 +43,9 @@
                 <td><a href='/mentors/<?= h($mentor->id) ?>'><?= h($mentor->description) ?></a></td>
 
                 <?php if (count($mentor->skills_list) > 3): ?>
-                    <td><a href='/mentors/<?= h($mentor->id) ?>'><?= h(implode(", ", array_slice($mentor->skills_list,0,3)) . "...") ?></a></td>
+                    <td><a href='/mentors/<?= h($mentor->id) ?>'><?= h(implode("; ", array_slice($mentor->skills_list,0,3)) . "...") ?></a></td>
                 <?php else: ?>
-                    <td><a href='/mentors/<?= h($mentor->id) ?>'><?= h(implode(", ", array_slice($mentor->skills_list,0,3))) ?></a></td>
+                    <td><a href='/mentors/<?= h($mentor->id) ?>'><?= h(implode("; ", array_slice($mentor->skills_list,0,3))) ?></a></td>
                 <?php endif; ?>
 
                 <?php if ($mentor->available): ?>
