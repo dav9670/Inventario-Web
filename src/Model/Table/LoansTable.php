@@ -42,11 +42,12 @@ class LoansTable extends Table
             'foreignKey' => 'user_id',
             'joinType' => 'INNER'
         ]);
+        
 
         $this->belongsTo('Mentors', [
-                'foreignKey' => 'item_id', 
-                'conditions' => ['Loans.item_type' => 'Mentors']
-            ]);
+            'foreignKey' => 'item_id', 
+            'conditions' => ['Loans.item_type' => 'Mentors']
+        ]);
         
         $this->belongsTo('Licences', [
             'foreignKey' => 'item_id', 
@@ -58,7 +59,7 @@ class LoansTable extends Table
             'conditions' => ['Loans.item_type' => 'Rooms']
         ]);
 
-        $this->belongsTo('Users', [
+        $this->belongsTo('Equipments', [
             'foreignKey' => 'item_id', 
             'conditions' => ['Loans.item_type' => 'Equipments']
         ]);

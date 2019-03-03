@@ -366,7 +366,7 @@ class MentorsController extends AppController
         
         $mentors = [];
         $archivedMentors = [];
-        $allMentors = $this->paginate($query);
+        $allMentors = $query->toList();
         foreach ($allMentors as $mentor){
             if($search_available && $mentor->available || $search_unavailable && !$mentor->available){
                 if ($mentor->deleted != null && $mentor->deleted != "") {

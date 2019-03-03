@@ -20,11 +20,7 @@ class LoansController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['Users', 'Items']
-        ];
-        $loans = $this->paginate($this->Loans);
-
+        $loans = $this->Loans->find('all');
         $this->set(compact('loans'));
     }
 
@@ -110,6 +106,135 @@ class LoansController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    public function search()
+    {
+        ini_set('memory_limit', '-1');
+
+        if($this->isApi()){
+            $this->getRequest()->allowMethod('get', 'post');
+        }else {
+            $this->getRequest()->allowMethod('get', 'ajax');
+        }
+   
+        $keyword = "";
+        $sort_field = "item";
+        $sort_dir = "asc";
+
+        $search_available = true;
+        $search_unavailable = true;
+        $search_items = true;
+        $search_labels = true;
+        $search_users = true;
+
+        if ($this->isApi()){
+            $jsonData = $this->getRequest()->input('json_decode', true);
+            $keyword = $jsonData['keyword'];
+            $sort_field = $jsonData['sort_field'];
+            $sort_dir = $jsonData['sort_dir'];
+        } else {
+            $keyword = $this->getRequest()->getQuery('keyword');
+            $sort_field = $this->getRequest()->getQuery('sort_field');
+            $sort_dir = $this->getRequest()->getQuery('sort_dir');
+            
+            $filters = $this->getRequest()->getQuery('filters');
+            $search_available = $filters['search_available'] == 'true';
+            $search_unavailable = $filters['search_unavailable'] == 'true';
+            $search_items = $filters['search_items'] == 'true';
+            $search_labels = $filters['search_labels'] == 'true';
+            $search_users = $filters['search_users'] == 'true';
+        }
+
+        $query = null;
+
+        $options = [];
+        if($this->isApi())
+        {
+            //$options = ['contain' => ['Labels']];
+        }
+        
+        if($keyword == '')
+        {
+            $query = $this->Loans->find('all', $options);
+        }
+        else
+        {
+            $union_query = null;
+
+            if($search_items)
+            {
+                $query = $this->Loans->find('all', $options)
+                    ->where(["match (Loans.email, Loans.first_name, Loans.last_name, Loans.description) against(:search in boolean mode)
+                        or Loans.email like :like_search or Loans.first_name like :like_search or Loans.last_name like :like_search or Loans.description like :like_search"])
+                    ->bind(":search", $keyword, 'string')
+                    ->bind(":like_search", '%' . $keyword . '%', 'string');
+            }
+            if($search_labels)
+            {
+                if($query != null){
+                    $union_query = $query;
+                }   
+
+                $query = $this->Loans->find('all')
+                    ->innerJoinWith('Labels')
+                    ->where(["match (Labels.name, Labels.description) against(:search in boolean mode)
+                        or Labels.name like :like_search or Labels.description like :like_search"])
+                    ->bind(":search", $keyword, 'string')
+                    ->bind(":like_search", '%' . $keyword . '%', 'string');
+                
+                if($union_query != null){
+                    $query->union($union_query);
+                }
+            }
+            if($search_users)
+            {
+                if($query != null){
+                    $union_query = $query;
+                }   
+
+                $query = $this->Loans->find('all')
+                    ->innerJoinWith('Labels')
+                    ->where(["match (Labels.name, Labels.description) against(:search in boolean mode)
+                        or Labels.name like :like_search or Labels.description like :like_search"])
+                    ->bind(":search", $keyword, 'string')
+                    ->bind(":like_search", '%' . $keyword . '%', 'string');
+                
+                if($union_query != null){
+                    $query->union($union_query);
+                }
+            }
+        }
+
+        if ($query != null)
+        {
+            //$connection = ConnectionManager::get('default');
+            //$query->epilog($connection->newQuery()->order(['Loans_' . $sort_field => $sort_dir]));
+            $query->order(["Loans.".$sort_field => $sort_dir]);
+        }
+        
+        $loans = [];
+        $archivedLoans = [];
+        $allLoans = $query->toList();
+        foreach ($allLoans as $loan){
+            if($search_available && $loan->available || $search_unavailable && !$loan->available){
+                if ($loan->deleted != null && $loan->deleted != "") {
+
+                    if (!in_array($loan,$archivedLoans))
+                    {
+                        array_push($archivedLoans, $loan);
+                    }
+                } else {
+                    if (!in_array($loan,$loans))
+                    {
+                        array_push($loans, $loan);
+                    }
+                }
+            }
+        }
+        
+        $this->set(compact('loans', 'archivedLoans'));
+        $this->set('_serialize', ['loans', 'archivedLoans']);
     }
 
     public function isAuthorized($user)
