@@ -62,7 +62,7 @@
             </thead>
             <tbody id="table_activated">
             </tbody>
-            <tbody id="table_returned" hidden="hidden">
+            <tbody id="table_returned" hidden>
             </tbody>
         </table>
     </div>
@@ -75,10 +75,8 @@
     var current_table = "table_activated";
 
     function searchLoans( keyword ){
-        var data = keyword;
-
         var filters = {
-            search_loans: $('#field_items').is(':checked'),
+            search_items: $('#field_items').is(':checked'),
             search_labels: $('#field_labels').is(':checked'),
             search_users: $('#field_users').is(':checked'),
             date_from: $('#date-from').val(),
@@ -88,7 +86,7 @@
         $.ajax({
                 method: 'get',
                 url : "/loans/search.json",
-                data: {keyword:data, sort_field:sort_field, sort_dir:sort_dir, filters: filters},
+                data: {keyword:keyword, sort_field:sort_field, sort_dir:sort_dir, filters: filters},
                 success: function( response ){
                     
                     for(var i=0; i<2; i++){
@@ -105,47 +103,24 @@
                         table.empty();
 
                         loansArray = response[array_name];
+
                         $.each(loansArray, function(idx, elem){
 
-                            var labels_list = "";
-                            var three_labels = elem.labels_list.slice(0,3);
-                            if (elem.labels_list.length > 3) {
-                                labels_list = three_labels.join("; ") + "...";
-                            } else {
-                                labels_list = three_labels.join("; ");
-                            }
-
-                            var imgTag = '';
-                            var imgAlt = '';
-                            if (elem.available) {
-                                imgTag = 'good.png';
-                                imgAlt = 'Available';
-                            } else {
-                                imgTag = 'bad.png';
-                                imgAlt = 'Not Available';
-                            }
-
-                            var link = ""
-                            if(elem.deleted == null){
-                                link = link.concat('<?= $this->Html->link(__('Deactivate'), ['action' => 'deactivate', -1], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to deactivate {0}?', -2)]) ?> ');
-                            } else {
-                                link = link.concat('<?= $this->Html->link(__('Reactivate'), ['action' => 'reactivate', -1], ['confirm' => __('Are you sure you want to reactivate {0}?', -2)]) ?> ');
-                                if(elem.loan_count == 0){
-                                    link = link.concat('<br/><?= $this->Html->link(__('Delete'), ['action' => 'delete', -1], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to PERMANENTLY delete {0}?', -2)]) ?> ');
-                                }
+                            var link = "";
+                            if(elem.returned == null){
+                                link = link.concat('<?= $this->Html->link(__('Return'), ['action' => 'return', -1]) ?> ');
                             }
                             link = link.replace(/-1/g, elem.id);
-                            link = link.replace(/-2/g, elem.email);
 
                             table.append(`
-                                <tr>
-                                    <td><a href='/loans/` + elem.id + `'><img src='data:image/png;base64,` + elem.image + `' alt='` + elem.first_name + ` ` + elem.last_name + `' width=100/></a></td>
-                                    <td><a href='/loans/` + elem.id + `'>` + elem.email + `</a></td>
-                                    <td><a href='/loans/` + elem.id + `'>` + elem.first_name + `</a></td>
-                                    <td><a href='/loans/` + elem.id + `'>` + elem.last_name + `</a></td>
-                                    <td><a href='/loans/` + elem.id + `'>` + elem.description + `</a></td>
-                                    <td><a href='/loans/` + elem.id + `'>` + labels_list + `</a></td>
-                                    <td><a href='/loans/` + elem.id + `'><img src='/img/` + imgTag + `' alt='` + imgAlt + `' width=20 height=20></a></td>
+                                <tr` + (new Date(elem.end_time) < new Date() && elem.returned == null ? " class='late'" : "") + `>
+                                    <td>Item image</td>
+                                    <td>` + elem.item_id + `</td>
+                                    <td>Item description</td>
+                                    <td>Item labels</td>
+                                    <td>` + elem.user_id + `</td>
+                                    <td>` + elem.start_time + `</td>
+                                    <td>` + elem.end_time + `</td>
                                     <td class='actions'>
                                         ` + link + `
                                     </td>

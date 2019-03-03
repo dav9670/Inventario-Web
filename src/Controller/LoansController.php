@@ -122,11 +122,11 @@ class LoansController extends AppController
         $sort_field = "item";
         $sort_dir = "asc";
 
-        $search_available = true;
-        $search_unavailable = true;
         $search_items = true;
         $search_labels = true;
         $search_users = true;
+        $date_from = '';
+        $date_to = '';
 
         if ($this->isApi()){
             $jsonData = $this->getRequest()->input('json_decode', true);
@@ -139,11 +139,11 @@ class LoansController extends AppController
             $sort_dir = $this->getRequest()->getQuery('sort_dir');
             
             $filters = $this->getRequest()->getQuery('filters');
-            $search_available = $filters['search_available'] == 'true';
-            $search_unavailable = $filters['search_unavailable'] == 'true';
             $search_items = $filters['search_items'] == 'true';
             $search_labels = $filters['search_labels'] == 'true';
             $search_users = $filters['search_users'] == 'true';
+            $search_labels = $filters['date_from'];
+            $search_users = $filters['date_to'];
         }
 
         $query = null;
@@ -213,28 +213,28 @@ class LoansController extends AppController
             $query->order(["Loans.".$sort_field => $sort_dir]);
         }
         
+        $query = $this->Loans->find('all');
+
         $loans = [];
-        $archivedLoans = [];
+        $returnedLoans = [];
         $allLoans = $query->toList();
         foreach ($allLoans as $loan){
-            if($search_available && $loan->available || $search_unavailable && !$loan->available){
-                if ($loan->deleted != null && $loan->deleted != "") {
+            if ($loan->returned != null) {
 
-                    if (!in_array($loan,$archivedLoans))
-                    {
-                        array_push($archivedLoans, $loan);
-                    }
-                } else {
-                    if (!in_array($loan,$loans))
-                    {
-                        array_push($loans, $loan);
-                    }
+                if (!in_array($loan,$returnedLoans))
+                {
+                    array_push($returnedLoans, $loan);
+                }
+            } else {
+                if (!in_array($loan,$loans))
+                {
+                    array_push($loans, $loan);
                 }
             }
         }
         
-        $this->set(compact('loans', 'archivedLoans'));
-        $this->set('_serialize', ['loans', 'archivedLoans']);
+        $this->set(compact('loans', 'returnedLoans'));
+        $this->set('_serialize', ['loans', 'returnedLoans']);
     }
 
     public function isAuthorized($user)
