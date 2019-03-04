@@ -330,7 +330,9 @@ class LoansController extends AppController
             {
                 $sort_field_local = 'identifier'; 
             }
+            
             $sort_dir_local = $sort_dir == 'asc' ? 1 : -1;
+
 
             usort($loans, function($a, $b) use ($sort_field_local, $sort_dir_local){
                 return strnatcmp($a['item'][$sort_field_local], $b['item'][$sort_field_local]) * $sort_dir_local;
@@ -338,8 +340,6 @@ class LoansController extends AppController
             usort($returnedLoans, function($a, $b) use ($sort_field_local, $sort_dir_local){
                 return strnatcmp($a['item'][$sort_field_local], $b['item'][$sort_field_local]) * $sort_dir_local;
             });
-
-            
         }
 
         $this->set(compact('loans', 'returnedLoans'));
