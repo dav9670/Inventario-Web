@@ -120,6 +120,26 @@ class LoansController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
+    /**
+     *  Used to construct string (match(...) or string like '%a%') using the name of the table and an array of strings
+    */
+    private function makeStringSearch($table, $searchFields)
+    {
+        $whereQuery = '';
+        $whereQuery .= 'match (';
+        for($i = 0, $size = count($searchFields); $i < $size; ++$i)
+        {
+            $whereQuery .= $table . '.' . $searchFields[$i] . ($i < $size - 1 ? ', ' : ')');
+        }
+        $whereQuery .= ' against(:search in boolean mode) or ';
+        for($i = 0, $size = count($searchFields); $i < $size; ++$i)
+        {
+            $whereQuery .= $table . '.' . $searchFields[$i] . ' like :like_search' . ($i < $size - 1 ? ' or ' : '');
+        }
+
+        return $whereQuery;
+    }
+
     public function search()
     {
         ini_set('memory_limit', '-1');
@@ -172,59 +192,6 @@ class LoansController extends AppController
             ]
         ];
 
-        $query = $this->Loans->find('all', $options);
-
-        if($keyword != '')
-        {
-            $union_query = null;
-
-            if($search_items)
-            {
-
-            }
-            if($search_labels)
-            {
-                if($query != null){
-                    $union_query = $query;
-                }   
-
-                
-                if($union_query != null){
-                    $query->union($union_query);
-                }
-            }
-            if($search_users)
-            {
-                if($query != null){
-                    $union_query = $query;
-                }   
-
-                
-                if($union_query != null){
-                    $query->union($union_query);
-                }
-            }
-        }
-
-        if($item_type != 'all')
-        {
-            $query
-                ->where('Loans.item_type like :item_type')
-                ->bind(':item_type', $item_type, 'string');
-        }
-        if($start_time != '')
-        {
-            $query
-                ->where('Loans.start_time > :start_time')
-                ->bind(':start_time', $start_time);
-        }
-        if($end_time != '')
-        {
-            $query
-                ->where('Loans.start_time < :end_time')
-                ->bind(':end_time', $end_time);
-        }
-
         $identifiers = [
             'mentors'=>[
                 'identifier' => 'email',
@@ -251,6 +218,118 @@ class LoansController extends AppController
                 'image' => 'image'
             ]
         ];
+
+        $query = null;
+
+        if($keyword == '' || ($search_items == false && $search_labels == false && $search_users == false))
+        {
+            $query = $this->Loans->find('all', $options);
+        }
+        else
+        {
+            $union_query = null;
+
+            if($search_items)
+            {
+                $searchFieldsType = [
+                    'mentors' => [
+                        'email',
+                        'first_name',
+                        'last_name',
+                        'description'
+                    ],
+                    'rooms' => [
+                        'name',
+                        'description'
+                    ],
+                    'licences' => [
+                        'name',
+                        'description'
+                    ], 
+                    'equipments' => [
+                        'name',
+                        'description'
+                    ]
+                ];
+
+                $whereQuery = '';
+
+                if($item_type == 'all')
+                {
+                    $i = 0;
+                    foreach($searchFieldsType as $type => $searchFields)
+                    {
+                        $table = ucfirst($type);
+
+                        $subQuery = $this->makeStringSearch($table, $searchFields);
+                        $whereQuery .= $subQuery . ($i < count($searchFieldsType) - 1 ? ' or ' : '');
+                        
+                        ++$i;
+                    }
+                }
+                else
+                {
+                    $table = ucfirst($item_type);
+                    $searchFields = $searchFieldsType[$item_type];
+
+                    $whereQuery = $this->makeStringSearch($table, $searchFields);
+                    //var_dump($whereQuery);
+                }
+
+                $query = $this->Loans->find('all', $options)
+                    ->where($whereQuery)
+                    ->bind(":search", $keyword, 'string')
+                    ->bind(":like_search", '%' . $keyword . '%', 'string');
+            }
+            if($search_labels)
+            {
+                if($query != null){
+                    $union_query = $query;
+                }   
+
+                /*$query = $this->Loans->find('all', $options)
+                    ->where()
+                    ->bind(":search", $keyword, 'string')
+                    ->bind(":like_search", '%' . $keyword . '%', 'string');*/
+                
+                if($union_query != null){
+                    $query->union($union_query);
+                }
+            }
+            if($search_users)
+            {
+                if($query != null){
+                    $union_query = $query;
+                }   
+
+                $query = $this->Loans->find('all', $options)
+                    ->where('Users.email like :like_search')
+                    ->bind(":like_search", '%' . $keyword . '%', 'string');
+
+                if($union_query != null){
+                    $query->union($union_query);
+                }
+            }
+        }
+
+        if($item_type != 'all')
+        {
+            $query
+                ->where('Loans.item_type like :item_type')
+                ->bind(':item_type', $item_type, 'string');
+        }
+        if($start_time != '')
+        {
+            $query
+                ->where('Loans.start_time > :start_time')
+                ->bind(':start_time', $start_time);
+        }
+        if($end_time != '')
+        {
+            $query
+                ->where('Loans.start_time < :end_time')
+                ->bind(':end_time', $end_time);
+        }
 
         $sqlSorted = false;
 
@@ -325,10 +404,14 @@ class LoansController extends AppController
         if(!$sqlSorted)
         {
             //description stays same
-            $sort_field_local = 'description';
+            $sort_field_local = '';
             if($sort_field == 'item')
             {
                 $sort_field_local = 'identifier'; 
+            }
+            else
+            {
+                $sort_field_local = $sort_field;
             }
             
             $sort_dir_local = $sort_dir == 'asc' ? 1 : -1;
