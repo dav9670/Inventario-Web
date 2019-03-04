@@ -35,11 +35,20 @@
             <input type="checkbox" id="field_labels"><?=__('Search by Labels') ?>
             <input type="checkbox" id="field_users"><?=__('Search by Users') ?><br>
 
-            <label for="date-from"><?= __('From') ?></label>
-            <input id='date-from' type="text" class="datepicker">
+            <label for="item_type"><?= __('Item type') ?></label>
+            <select id="item_type">
+                <option value="all"><?= __('All') ?></option>
+                <option value="mentors"><?= __('Mentors') ?></option>
+                <option value="rooms"><?= __('Rooms') ?></option>
+                <option value="licences"><?= __('Licences') ?></option>
+                <option value="equipments"><?= __('Equipments') ?></option>
+            </select>
 
-            <label for="date-to"><?= __('To') ?></label>
-            <input id='date-to' type="text" class="datepicker">
+            <label for="start_time"><?= __('Start time') ?></label>
+            <input id='start_time' type="text" class="datepicker">
+
+            <label for="end_time"><?= __('End time') ?></label>
+            <input id='end_time' type="text" class="datepicker">
         </form>
     </div>
     <div class="tab">
@@ -79,8 +88,9 @@
             search_items: $('#field_items').is(':checked'),
             search_labels: $('#field_labels').is(':checked'),
             search_users: $('#field_users').is(':checked'),
-            date_from: $('#date-from').val(),
-            date_to: $('#date-to').val()
+            item_type: $('#item_type').children("option:selected").val(),
+            start_time: $('#start_time').val(),
+            end_time: $('#end_time').val()
         };
 
         $.ajax({
@@ -114,11 +124,11 @@
 
                             table.append(`
                                 <tr` + (new Date(elem.end_time) < new Date() && elem.returned == null ? " class='late'" : "") + `>
-                                    <td>Item image</td>
-                                    <td>` + elem.item_id + `</td>
-                                    <td>Item description</td>
-                                    <td>Item labels</td>
-                                    <td>` + elem.user_id + `</td>
+                                    <td><img src='data:image/png;base64,` + elem.item.image + `' width=100/></td>
+                                    <td>` + elem.item.identifier + `</td>
+                                    <td>` + elem.item.description + `</td>
+                                    <td>` + elem.item.labels + `</td>
+                                    <td>` + elem.user.identifier + `</td>
                                     <td>` + elem.start_time + `</td>
                                     <td>` + elem.end_time + `</td>
                                     <td class='actions'>
@@ -168,13 +178,13 @@
 			changeYear: true,
             onSelect: function(dateText,inst) {
                 $('#preset-dates').val('custom');
-                $('#date-from').datepicker('option', 'maxDate', $('#date-to').val());
-                $('#date-to').datepicker('option', 'minDate', $('#date-from').val());
+                $('#start_time').datepicker('option', 'maxDate', $('#end_time').val());
+                $('#end_time').datepicker('option', 'minDate', $('#start_time').val());
             }
         });
 
-        $('#date-from').datepicker('option', 'maxDate', $('#date-to').val());
-        $('#date-to').datepicker('option', 'minDate', $('#date-from').val());
+        $('#start_time').datepicker('option', 'maxDate', $('#end_time').val());
+        $('#end_time').datepicker('option', 'minDate', $('#start_time').val());
 
          $('#search').keyup(function(){
             var searchkey = $(this).val();

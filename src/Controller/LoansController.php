@@ -20,7 +20,18 @@ class LoansController extends AppController
      */
     public function index()
     {
-        $loans = $this->Loans->find('all');
+        $options = [
+            'contain'=>[
+                'Users',
+                'Mentors',
+                'Rooms',
+                'Licences',
+                'Equipments'
+            ]
+        ];
+
+        $loan = $this->Loans->find('all', $options)->toList()[1];
+
         $this->set(compact('loans'));
     }
 
@@ -125,8 +136,9 @@ class LoansController extends AppController
         $search_items = true;
         $search_labels = true;
         $search_users = true;
-        $date_from = '';
-        $date_to = '';
+        $item_type = 'all';
+        $start_time = '';
+        $end_time = '';
 
         if ($this->isApi()){
             $jsonData = $this->getRequest()->input('json_decode', true);
@@ -142,33 +154,32 @@ class LoansController extends AppController
             $search_items = $filters['search_items'] == 'true';
             $search_labels = $filters['search_labels'] == 'true';
             $search_users = $filters['search_users'] == 'true';
-            $search_labels = $filters['date_from'];
-            $search_users = $filters['date_to'];
+            $item_type = $filters['item_type'];
+            $start_time = $filters['start_time'];
+            $end_time = $filters['end_time'];
         }
 
         $query = null;
 
-        $options = [];
-        if($this->isApi())
-        {
-            //$options = ['contain' => ['Labels']];
-        }
-        
-        if($keyword == '')
-        {
-            $query = $this->Loans->find('all', $options);
-        }
-        else
+        $options = [
+            'contain'=>[
+                'Users',
+                'Mentors',
+                'Rooms',
+                'Licences',
+                'Equipments'
+            ]
+        ];
+
+        $query = $this->Loans->find('all', $options);
+
+        if($keyword != '')
         {
             $union_query = null;
 
             if($search_items)
             {
-                $query = $this->Loans->find('all', $options)
-                    ->where(["match (Loans.email, Loans.first_name, Loans.last_name, Loans.description) against(:search in boolean mode)
-                        or Loans.email like :like_search or Loans.first_name like :like_search or Loans.last_name like :like_search or Loans.description like :like_search"])
-                    ->bind(":search", $keyword, 'string')
-                    ->bind(":like_search", '%' . $keyword . '%', 'string');
+
             }
             if($search_labels)
             {
@@ -176,12 +187,6 @@ class LoansController extends AppController
                     $union_query = $query;
                 }   
 
-                $query = $this->Loans->find('all')
-                    ->innerJoinWith('Labels')
-                    ->where(["match (Labels.name, Labels.description) against(:search in boolean mode)
-                        or Labels.name like :like_search or Labels.description like :like_search"])
-                    ->bind(":search", $keyword, 'string')
-                    ->bind(":like_search", '%' . $keyword . '%', 'string');
                 
                 if($union_query != null){
                     $query->union($union_query);
@@ -193,42 +198,79 @@ class LoansController extends AppController
                     $union_query = $query;
                 }   
 
-                $query = $this->Loans->find('all')
-                    ->innerJoinWith('Labels')
-                    ->where(["match (Labels.name, Labels.description) against(:search in boolean mode)
-                        or Labels.name like :like_search or Labels.description like :like_search"])
-                    ->bind(":search", $keyword, 'string')
-                    ->bind(":like_search", '%' . $keyword . '%', 'string');
                 
                 if($union_query != null){
                     $query->union($union_query);
                 }
             }
         }
-
-        if ($query != null)
-        {
-            //$connection = ConnectionManager::get('default');
-            //$query->epilog($connection->newQuery()->order(['Loans_' . $sort_field => $sort_dir]));
-            $query->order(["Loans.".$sort_field => $sort_dir]);
-        }
-        
-        $query = $this->Loans->find('all');
+            
+        //$query->order(["Loans.".$sort_field => $sort_dir]);
 
         $loans = [];
         $returnedLoans = [];
         $allLoans = $query->toList();
-        foreach ($allLoans as $loan){
-            if ($loan->returned != null) {
 
-                if (!in_array($loan,$returnedLoans))
+        $identifiers = [
+            'mentors'=>[
+                'type' => 'mentor',
+                'image' => 'image',
+                'identifier' => 'email',
+                'description' => 'description',
+                'labels' => 'skills_list'
+            ],
+            'rooms'=>[
+                'type' => 'room',
+                'image' => 'image',
+                'identifier' => 'name',
+                'description' => 'description',
+                'labels' => 'services_list'
+            ],
+            'licences'=>[
+                'type' => 'licence',
+                'image' => 'image',
+                'identifier' => 'name',
+                'description' => 'description',
+                'labels' => 'products_list'
+            ],
+            'equipments'=>[
+                'type' => 'equipment',
+                'image' => 'image',
+                'identifier' => 'name',
+                'description' => 'description',
+                'labels' => 'categories_list'
+            ]
+        ];
+
+        foreach ($allLoans as $loan){
+
+            $formattedLoan = [
+                'item' => [
+                    'id' => $loan->item_id,
+                    'type' => $loan->item_type,
+                    'image' => $loan[$identifiers[$loan->item_type]['type']][$identifiers[$loan->item_type]['image']],
+                    'identifier' => $loan[$identifiers[$loan->item_type]['type']][$identifiers[$loan->item_type]['identifier']],
+                    'description' => $loan[$identifiers[$loan->item_type]['type']][$identifiers[$loan->item_type]['description']],
+                    'labels' => $loan[$identifiers[$loan->item_type]['type']][$identifiers[$loan->item_type]['labels']]
+                ],
+                'user' => [
+                    'id' => $loan->user->id,
+                    'identifier' => $loan->user->email
+                ],
+                'start_time' => $loan['start_time'],
+                'end_time' => $loan['end_time'],
+                'returned' => $loan['returned']
+            ];
+
+            if ($formattedLoan['returned'] != null) {
+                if (!in_array($formattedLoan,$returnedLoans))
                 {
-                    array_push($returnedLoans, $loan);
+                    array_push($returnedLoans, $formattedLoan);
                 }
             } else {
-                if (!in_array($loan,$loans))
+                if (!in_array($formattedLoan,$loans))
                 {
-                    array_push($loans, $loan);
+                    array_push($loans, $formattedLoan);
                 }
             }
         }
