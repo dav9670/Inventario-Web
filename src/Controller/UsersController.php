@@ -2,6 +2,8 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Datasource\ConnectionManager;
+use Cake\I18n\Time;
 
 /**
  * Users Controller
@@ -158,8 +160,149 @@ class UsersController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
+        /**
+     * consult method
+     */
+
+    public function consult($id = null)
+    {
+        $user = $this->Users->get($id);
+        if($this->request->is(['patch', 'post', 'put'])) {
+            $data = $this->request->getData();
+            $image = $data['image'];
+            if($image['tmp_name'] != '') {
+                $imageData  = file_get_contents($image['tmp_name']);
+                $b64   = base64_encode($imageData);
+                $data['image'] = $b64;
+            } else {
+                $data['image'] = $user->image;
+            }
+
+            $user = $this->Users->patchEntity($user, $data);
+            if ($this->Users->save($user)) {
+                $this->Flash->success(__('The user has been saved.'));
+
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+        }
+        $this->set(compact('user'));
+    }
+
+    /**
+     * isAuthorized function
+     */
+
     public function isAuthorized($user)
     {
-        return true;
+        return $this->Auth->user('admin_status') == 'admin';
+    }
+
+    /**
+     * fonction search qui est appelée par la ajax request de la page users/index
+     * en fonction des requetes ajax retourne différentes liste de users
+     */
+
+    public function search()
+    {
+        ini_set('memory_limit', '-1');
+
+        if($this->isApi()){
+            $this->getRequest()->allowMethod('post');
+        }else {
+            $this->getRequest()->allowMethod('get', 'ajax');
+        }
+   
+        $keyword = "";
+        $sort_field = "id";
+        $sort_dir = "asc";
+        /*
+        $search_available = true;
+        $search_unavailable = true;
+         */
+        $search_users = true;
+        $search_categories = true;
+        
+
+        if ($this->isApi()){
+            $jsonData = $this->getRequest()->input('json_decode', true);
+            $keyword = $jsonData['keyword'];
+            $sort_field = $jsonData['sort_field'];
+            $sort_dir = $jsonData['sort_dir'];
+        } else {
+            $keyword = $this->getRequest()->getQuery('keyword');
+            $sort_field = $this->getRequest()->getQuery('sort_field');
+            $sort_dir = $this->getRequest()->getQuery('sort_dir');
+            
+            
+            $filters = $this->getRequest()->getQuery('filters');
+            /*
+            $search_available = $filters['search_available'] == 'true';
+            $search_unavailable = $filters['search_unavailable'] == 'true';
+            */
+            $search_users = $filters['search_users'] == 'true';
+            $search_categories = $filters['search_loans'] == 'true';
+            
+        }
+
+        $query = null;
+
+        $options = [];
+        if($this->isApi())
+        {
+            $options = ['contain' => ['Loans']];
+        }
+        
+        if($keyword == '')
+        {
+            $query = $this->Users->find('all', $options);
+        }
+        else
+        {
+            $union_query = null;
+
+            if($search_users)
+            {
+                $query = $this->Users->find('all', $options)
+                    ->where(["match (Users.email, Users.id) against(:search in boolean mode)
+                        or Users.email like :like_search or Users.id like :like_search"])
+                    ->bind(":search", $keyword, 'string')
+                    ->bind(":like_search", '%' . $keyword . '%', 'string');
+            }
+            if($search_loans)
+            {
+                if($query != null){
+                    $union_query = $query;
+                }   
+
+                $query = $this->Users->find('all')
+                    ->innerJoinWith('Loans')
+                    ->where(["match (Loans.item_type) against(:search in boolean mode)
+                        or Loans.item_id like :like_search"])
+                    ->bind(":search", $keyword, 'string')
+                    ->bind(":like_search", '%' . $keyword . '%', 'string');
+                
+                if($union_query != null){
+                    $query->union($union_query);
+                }
+            }
+        }
+
+        if ($query != null)
+        {
+            //$connection = ConnectionManager::get('default');
+            //$query->epilog($connection->newQuery()->order(['Users_' . $sort_field => $sort_dir]));
+            $query->order(["Users.".$sort_field => $sort_dir]);
+        }
+        
+        $users = [];
+        $archivedUsers = [];
+        $allUsers = $this->paginate($query);
+        foreach ($allUsers as $user){
+            array_push($users, $user);
+        }
+        $this->set(compact('users', 'archivedUsers'));
+        $this->set('_serialize', ['users', 'archivedUsers']);
+        
     }
 }

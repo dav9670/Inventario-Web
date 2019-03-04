@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\I18n\Time;
+use Cake\Datasource\ConnectionManager;
 
 /**
  * Equipments Controller
@@ -298,8 +299,8 @@ class EquipmentsController extends AppController
         }
    
         $keyword = "";
-        $sort_field = "";
-        $sort_dir = "";
+        $sort_field = "name";
+        $sort_dir = "asc";
 
         $search_available = true;
         $search_unavailable = true;
@@ -322,61 +323,54 @@ class EquipmentsController extends AppController
             $search_equipments = $filters['search_equipments'] == 'true';
             $search_categories = $filters['search_categories'] == 'true';
         }
+
+        $query = null;
+
+        $options = [];
+        if($this->isApi())
+        {
+            $options = ['contain' => ['Categories']];
+        }
         
         if($keyword == '')
         {
-            $query = $this->Equipments->find('all');
+            $query = $this->Equipments->find('all', $options);
         }
         else
         {
-            if ($this->isApi()){
-                $queryEquipments = $this->Equipments->find('all', [
-                    'contain' => ['Categories']
-                ])
-                    ->where(["match (Equipments.name, Equipments.description) against(:search in boolean mode)"])
-                    ->bind(":search", $keyword . '*', 'string');
-                $queryCategories = $this->Equipments->find('all', [
-                    'contain' => ['Categories']
-                ])
-                    ->innerJoinWith('Categories')
-                    ->where(["match (Categories.name, Categories.description) against(:search in boolean mode)"])
-                    ->bind(":search", $keyword . '*', 'string');
+            $union_query = null;
 
-                $queryEquipments->union($queryCategories);
-                $query = $queryEquipments;
-            }
-            else if($search_equipments && $search_categories)
+            if($search_equipments)
             {
-                $queryEquipments = $this->Equipments->find('all')
-                    ->where(["match (Equipments.name, Equipments.description) against(:search in boolean mode)"])
-                    ->bind(":search", $keyword . '*', 'string');
-                $queryCategories = $this->Equipments->find('all')
-                    ->innerJoinWith('Categories')
-                    ->where(["match (Categories.name, Categories.description) against(:search in boolean mode)"])
-                    ->bind(":search", $keyword . '*', 'string');
+                $query = $this->Equipments->find('all', $options)
+                    ->where(["match (Equipments.name, Equipments.description) against(:search in boolean mode)
+                        or Equipments.name like :like_search or Equipments.description like :like_search"])
+                    ->bind(":search", $keyword, 'string')
+                    ->bind(":like_search", '%' . $keyword . '%', 'string');
+            }
+            if($search_categories)
+            {
+                if($query != null){
+                    $union_query = $query;
+                }   
 
-                $queryEquipments->union($queryCategories);
-                $query = $queryEquipments;
-            }
-            else if($search_equipments)
-            {
-                $query = $this->Equipments->find('all')
-                    ->where(["match (Equipments.name, Equipments.description) against(:search in boolean mode)"])
-                    ->bind(":search", $keyword . '*', 'string');
-            }
-            else if($search_categories)
-            {
                 $query = $this->Equipments->find('all')
                     ->innerJoinWith('Categories')
-                    ->where(["match (Categories.name, Categories.description) against(:search in boolean mode)"])
-                    ->bind(":search", $keyword . '*', 'string');
+                    ->where(["match (Categories.name, Categories.description) against(:search in boolean mode)
+                        or Categories.name like :like_search or Categories.description like :like_search"])
+                    ->bind(":search", $keyword, 'string')
+                    ->bind(":like_search", '%' . $keyword . '%', 'string');
+                
+                if($union_query != null){
+                    $query->union($union_query);
+                }
             }
-
-            
         }
 
-        if (!is_null($query))
+        if ($query != null)
         {
+            //$connection = ConnectionManager::get('default');
+            //$query->epilog($connection->newQuery()->order(['Equipments_' . $sort_field => $sort_dir]));
             $query->order(["Equipments.".$sort_field => $sort_dir]);
         }
         
@@ -404,3 +398,4 @@ class EquipmentsController extends AppController
         
     }
 }
+
