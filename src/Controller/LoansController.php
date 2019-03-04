@@ -145,9 +145,9 @@ class LoansController extends AppController
         ini_set('memory_limit', '-1');
 
         if($this->isApi()){
-            $this->getRequest()->allowMethod('get', 'post');
+            $this->getRequest()->allowMethod(['get', 'post']);
         }else {
-            $this->getRequest()->allowMethod('get', 'ajax');
+            $this->getRequest()->allowMethod(['get', 'ajax']);
         }
    
         $keyword = "";
@@ -164,8 +164,9 @@ class LoansController extends AppController
         if ($this->isApi()){
             $jsonData = $this->getRequest()->input('json_decode', true);
             $keyword = $jsonData['keyword'];
-            $sort_field = $jsonData['sort_field'];
-            $sort_dir = $jsonData['sort_dir'];
+            $item_type = $jsonData['itemType'];
+            $start_time = $jsonData['startTime'];
+            $end_time = $jsonData['endTime'];
         } else {
             $keyword = $this->getRequest()->getQuery('keyword');
             $sort_field = $this->getRequest()->getQuery('sort_field');
