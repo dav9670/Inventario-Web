@@ -86,9 +86,6 @@
                 method: 'get',
                 url : "/mentors/search.json",
                 data: {keyword:data, sort_field:sort_field, sort_dir:sort_dir, filters: filters},
-                complete: function(jq, status){
-                    console.log(status);
-                },
                 success: function( response ){
                     
                     for(var i=0; i<2; i++){
@@ -110,9 +107,9 @@
                             var skills_list = "";
                             var three_skills = elem.skills_list.slice(0,3);
                             if (elem.skills_list.length > 3) {
-                                skills_list = three_skills.join(", ") + "...";
+                                skills_list = three_skills.join("; ") + "...";
                             } else {
-                                skills_list = three_skills.join(", ");
+                                skills_list = three_skills.join("; ");
                             }
 
                             var imgTag = '';
@@ -125,13 +122,13 @@
                                 imgAlt = 'Not Available';
                             }
 
-                            var link = ""
+                            var link = "";
                             if(elem.deleted == null){
                                 link = link.concat('<?= $this->Html->link(__('Deactivate'), ['action' => 'deactivate', -1], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to deactivate {0}?', -2)]) ?> ');
                             } else {
                                 link = link.concat('<?= $this->Html->link(__('Reactivate'), ['action' => 'reactivate', -1], ['confirm' => __('Are you sure you want to reactivate {0}?', -2)]) ?> ');
                                 if(elem.loan_count == 0){
-                                    link = link.concat('<?= $this->Html->link(__('Delete'), ['action' => 'delete', -1], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to PERMANENTLY delete {0}?', -2)]) ?> ');
+                                    link = link.concat('<br/><?= $this->Html->link(__('Delete'), ['action' => 'delete', -1], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to PERMANENTLY delete {0}?', -2)]) ?> ');
                                 }
                             }
                             link = link.replace(/-1/g, elem.id);
@@ -139,21 +136,25 @@
 
                             table.append(`
                                 <tr>
-                                        <td><a href='/mentors/` + elem.id + `'><img src='data:image/png;base64,` + elem.image + `' alt='` + elem.first_name + ` ` + elem.last_name + `' width=100/></a></td>
-                                        <td><a href='/mentors/` + elem.id + `'>` + elem.email + `</a></td>
-                                        <td><a href='/mentors/` + elem.id + `'>` + elem.first_name + `</a></td>
-                                        <td><a href='/mentors/` + elem.id + `'>` + elem.last_name + `</a></td>
-                                        <td><a href='/mentors/` + elem.id + `'>` + elem.description + `</a></td>
-                                        <td><a href='/mentors/` + elem.id + `'>` + skills_list + `</a></td>
-                                        <td><a href='/mentors/` + elem.id + `'><img src='/img/` + imgTag + `' alt='` + imgAlt + `' width=20 height=20></a></td>
-                                        <td class='actions'>
-                                            ` + link + `
-                                        </td>
+                                    <td><a href='/mentors/` + elem.id + `'><img src='data:image/png;base64,` + elem.image + `' alt='` + elem.first_name + ` ` + elem.last_name + `' width=100/></a></td>
+                                    <td><a href='/mentors/` + elem.id + `'>` + elem.email + `</a></td>
+                                    <td><a href='/mentors/` + elem.id + `'>` + elem.first_name + `</a></td>
+                                    <td><a href='/mentors/` + elem.id + `'>` + elem.last_name + `</a></td>
+                                    <td><a href='/mentors/` + elem.id + `'>` + elem.description + `</a></td>
+                                    <td><a href='/mentors/` + elem.id + `'>` + skills_list + `</a></td>
+                                    <td><a href='/mentors/` + elem.id + `'><img src='/img/` + imgTag + `' alt='` + imgAlt + `' width=20 height=20></a></td>
+                                    <td class='actions'>
+                                        ` + link + `
+                                    </td>
                                 </tr>
                             `);
                         });
                     }
                     
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                    alert("Failed to fetch mentors");
+                    console.log(jqXHR.responseText);
                 }
         });
     };

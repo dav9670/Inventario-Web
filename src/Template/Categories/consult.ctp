@@ -39,9 +39,9 @@
                 <td><a href='/equipments/<?= h($equipment->id) ?>'><?= h($equipment->name) ?></a></td>
                 <td><a href='/equipments/<?= h($equipment->id) ?>'><?= h($equipment->description) ?></a></td>
                 <?php if (count($equipment->categories_list) > 3): ?>
-                    <td><a href='/equipments/<?= h($equipment->id) ?>'><?= h(implode(", ", array_slice($equipment->categories_list,0,3)) . "...") ?></a></td>
+                    <td><a href='/equipments/<?= h($equipment->id) ?>'><?= h(implode("; ", array_slice($equipment->categories_list,0,3)) . "...") ?></a></td>
                 <?php else: ?>
-                    <td><a href='/equipments/<?= h($equipment->id) ?>'><?= h(implode(", ", array_slice($equipment->categories_list,0,3))) ?></a></td>
+                    <td><a href='/equipments/<?= h($equipment->id) ?>'><?= h(implode("; ", array_slice($equipment->categories_list,0,3))) ?></a></td>
                 <?php endif; ?>
 
                 <?php if ($equipment->available): ?>

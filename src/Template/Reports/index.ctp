@@ -110,10 +110,63 @@ use Cake\I18n\I18n;
             headers: { 'X-CSRF-TOKEN': '<?=$this->getRequest()->getParam('_csrfToken');?>' },
             success: function( response ){
                 $('#report-table-body').empty();
+                
+                var highest_mentors = [];
+
+                var total_hours = 0;
+                var total_times = 0;
+
+                //field is the elem field, first is highest, second is second highest
+                var highests = [
+                    {
+                        field:  'hours_loaned',
+                        first:  0,
+                        second: 0
+                    },
+                    {
+                        field:  'times_loaned',
+                        first:  0,
+                        second: 0
+                    }
+                ];
+
+                response.forEach(function(elem){
+                    total_hours += parseInt(elem.hours_loaned);
+                    total_times += parseInt(elem.times_loaned);
+
+                    highests.forEach(function(highest){
+                        var value = parseInt(elem[highest.field]);
+                        if(value > highest.first){
+                            highest.second = highest.first;
+                            highest.first = value;
+                        }
+                        if(value > highest.second && value < highest.first){
+                            highest.second = value;
+                        }
+                    });
+                });
+
+                response.forEach(function(elem){
+                    highests.forEach(function(highest){
+                        if(parseInt(elem[highest.field]) == highest.first && highest.first != highest.second && highest.second != 0){
+                            elem[highest.field] = highest.first.toString() + ' (' + (highest.first - highest.second).toString() + ')';
+                            if(highest.field == 'hours_loaned'){
+                                highest_mentors.push(elem.email);
+                            }
+                        }
+                    });
+                });
+
+                response.push({
+                    email: 'Total',
+                    hours_loaned: total_hours,
+                    times_loaned: total_times
+                });
+
                 response.forEach(function(elem){
                     $('#report-table-body').append(`
                         <tr>
-                            <td>` + elem.email + `</td>
+                            <td` + (highest_mentors.includes(elem.email) ? " class='highlighted-row'" : "") + `>` + elem.email + `</td>
                             <td>` + elem.hours_loaned + `</td>
                             <td>` + elem.times_loaned + `</td>
                         </tr>
@@ -313,8 +366,12 @@ use Cake\I18n\I18n;
     }
 
     function generateReport(){
-        reportDict[$('#report-type').children("option:selected").val()]();
-        $('#report-table').show();
+        if($('#date-from').val() < $('#date-to').val()){
+            reportDict[$('#report-type').children("option:selected").val()]();
+            $('#report-table').show();
+        } else {
+            alert('<?=__('"From" date cannot be higher than "To" date.')?>');
+        }
     }
 
     function sortSetter( sort_field_param ){
@@ -335,8 +392,12 @@ use Cake\I18n\I18n;
     $('document').ready(function(){
         $(".datepicker").datepicker({
             dateFormat: 'yy-mm-dd',
-            onSelect: function(date) {
+            changeMonth: true,
+			changeYear: true,
+            onSelect: function(dateText,inst) {
                 $('#preset-dates').val('custom');
+                $('#date-from').datepicker('option', 'maxDate', $('#date-to').val());
+                $('#date-to').datepicker('option', 'minDate', $('#date-from').val());
             }
         });
 
@@ -417,5 +478,8 @@ use Cake\I18n\I18n;
             }
         });
         $('#preset-dates').change();
+
+        $('#date-from').datepicker('option', 'maxDate', $('#date-to').val());
+        $('#date-to').datepicker('option', 'minDate', $('#date-from').val());
     });
 </script>

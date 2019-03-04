@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\I18n\Time;
+use Cake\Datasource\ConnectionManager;
 /**
  * Mentors Controller
  *
@@ -312,67 +313,60 @@ class MentorsController extends AppController
             $search_mentors = $filters['search_mentors'] == 'true';
             $search_skills = $filters['search_skills'] == 'true';
         }
+
+        $query = null;
+
+        $options = [];
+        if($this->isApi())
+        {
+            $options = ['contain' => ['Skills']];
+        }
         
         if($keyword == '')
         {
-            $query = $this->Mentors->find('all');
+            $query = $this->Mentors->find('all', $options);
         }
         else
         {
-            if ($this->isApi()){
-                $queryMentors = $this->Mentors->find('all', [
-                    'contain' => ['Skills']
-                ])
-                    ->where(["match (Mentors.email, Mentors.first_name, Mentors.last_name, Mentors.description) against(:search in boolean mode)"])
-                    ->bind(":search", $keyword . '*', 'string');
-                $querySkills = $this->Mentors->find('all', [
-                    'contain' => ['Skills']
-                ])
-                    ->innerJoinWith('Skills')
-                    ->where(["match (Skills.name, Skills.description) against(:search in boolean mode)"])
-                    ->bind(":search", $keyword . '*', 'string');
+            $union_query = null;
 
-                $queryMentors->union($querySkills);
-                $query = $queryMentors;
-            }
-            else if($search_mentors && $search_skills)
+            if($search_mentors)
             {
-                $queryMentors = $this->Mentors->find('all')
-                    ->where(["match (Mentors.email, Mentors.first_name, Mentors.last_name, Mentors.description) against(:search in boolean mode)"])
-                    ->bind(":search", $keyword . '*', 'string');
-                $querySkills = $this->Mentors->find('all')
-                    ->innerJoinWith('Skills')
-                    ->where(["match (Skills.name, Skills.description) against(:search in boolean mode)"])
-                    ->bind(":search", $keyword . '*', 'string');
+                $query = $this->Mentors->find('all', $options)
+                    ->where(["match (Mentors.email, Mentors.first_name, Mentors.last_name, Mentors.description) against(:search in boolean mode)
+                        or Mentors.email like :like_search or Mentors.first_name like :like_search or Mentors.last_name like :like_search or Mentors.description like :like_search"])
+                    ->bind(":search", $keyword, 'string')
+                    ->bind(":like_search", '%' . $keyword . '%', 'string');
+            }
+            if($search_skills)
+            {
+                if($query != null){
+                    $union_query = $query;
+                }   
 
-                $queryMentors->union($querySkills);
-                $query = $queryMentors;
-            }
-            else if($search_mentors)
-            {
-                $query = $this->Mentors->find('all')
-                    ->where(["match (Mentors.email, Mentors.first_name, Mentors.last_name, Mentors.description) against(:search in boolean mode)"])
-                    ->bind(":search", $keyword . '*', 'string');
-            }
-            else if($search_skills)
-            {
                 $query = $this->Mentors->find('all')
                     ->innerJoinWith('Skills')
-                    ->where(["match (Skills.name, Skills.description) against(:search in boolean mode)"])
-                    ->bind(":search", $keyword . '*', 'string');
+                    ->where(["match (Skills.name, Skills.description) against(:search in boolean mode)
+                        or Skills.name like :like_search or Skills.description like :like_search"])
+                    ->bind(":search", $keyword, 'string')
+                    ->bind(":like_search", '%' . $keyword . '%', 'string');
+                
+                if($union_query != null){
+                    $query->union($union_query);
+                }
             }
-
-            
         }
 
-        if (!is_null($query))
+        if ($query != null)
         {
+            //$connection = ConnectionManager::get('default');
+            //$query->epilog($connection->newQuery()->order(['Mentors_' . $sort_field => $sort_dir]));
             $query->order(["Mentors.".$sort_field => $sort_dir]);
         }
         
         $mentors = [];
         $archivedMentors = [];
-        $allMentors = $this->paginate($query);
+        $allMentors = $query->toList();
         foreach ($allMentors as $mentor){
             if($search_available && $mentor->available || $search_unavailable && !$mentor->available){
                 if ($mentor->deleted != null && $mentor->deleted != "") {

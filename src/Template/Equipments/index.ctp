@@ -85,9 +85,6 @@
                 method: 'get',
                 url : "/equipments/search.json",
                 data: {keyword:data, sort_field:sort_field, sort_dir:sort_dir, filters: filters},
-                complete: function(jq, status){
-                    console.log(status);
-                },
                 success: function( response ){
                     for(var i=0; i<2; i++){
                         var table_name = "";
@@ -113,9 +110,9 @@
                             var categories_list = "";
                             var three_categories = elem.categories_list.slice(0,3);
                             if (elem.categories_list.length > 3) {
-                                categories_list = three_categories.join(", ") + "...";
+                                categories_list = three_categories.join("; ") + "...";
                             } else {
-                                categories_list = three_categories.join(", ");
+                                categories_list = three_categories.join("; ");
                             }
                             let categoriesCell = "<td><a href='/equipments/" + elem.id + "'>" + categories_list + "</a></td>";
 
@@ -135,7 +132,7 @@
                             } else {
                                 link = link.concat('<?= $this->Html->link(__('Reactivate'), ['action' => 'reactivate', -1], ['confirm' => __('Are you sure you want to reactivate {0}?', -2)]) ?> ');
                                 if(elem.loan_count == 0){
-                                    link = link.concat('<?= $this->Html->link(__('Delete'), ['action' => 'delete', -1], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to PERMANENTLY delete {0}?', -2)]) ?> ');
+                                    link = link.concat('<br/><?= $this->Html->link(__('Delete'), ['action' => 'delete', -1], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to PERMANENTLY delete {0}?', -2)]) ?> ');
                                 }
                             }
                             link = link.replace(/-1/g, elem.id);

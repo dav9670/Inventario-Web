@@ -20,10 +20,17 @@ class LoansController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['Users', 'Items']
+        $options = [
+            'contain'=>[
+                'Users',
+                'Mentors',
+                'Rooms',
+                'Licences',
+                'Equipments'
+            ]
         ];
-        $loans = $this->paginate($this->Loans);
+
+        $loan = $this->Loans->find('all', $options)->toList()[1];
 
         $this->set(compact('loans'));
     }
@@ -110,6 +117,166 @@ class LoansController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    public function search()
+    {
+        ini_set('memory_limit', '-1');
+
+        if($this->isApi()){
+            $this->getRequest()->allowMethod('get', 'post');
+        }else {
+            $this->getRequest()->allowMethod('get', 'ajax');
+        }
+   
+        $keyword = "";
+        $sort_field = "item";
+        $sort_dir = "asc";
+
+        $search_items = true;
+        $search_labels = true;
+        $search_users = true;
+        $item_type = 'all';
+        $start_time = '';
+        $end_time = '';
+
+        if ($this->isApi()){
+            $jsonData = $this->getRequest()->input('json_decode', true);
+            $keyword = $jsonData['keyword'];
+            $sort_field = $jsonData['sort_field'];
+            $sort_dir = $jsonData['sort_dir'];
+        } else {
+            $keyword = $this->getRequest()->getQuery('keyword');
+            $sort_field = $this->getRequest()->getQuery('sort_field');
+            $sort_dir = $this->getRequest()->getQuery('sort_dir');
+            
+            $filters = $this->getRequest()->getQuery('filters');
+            $search_items = $filters['search_items'] == 'true';
+            $search_labels = $filters['search_labels'] == 'true';
+            $search_users = $filters['search_users'] == 'true';
+            $item_type = $filters['item_type'];
+            $start_time = $filters['start_time'];
+            $end_time = $filters['end_time'];
+        }
+
+        $query = null;
+
+        $options = [
+            'contain'=>[
+                'Users',
+                'Mentors',
+                'Rooms',
+                'Licences',
+                'Equipments'
+            ]
+        ];
+
+        $query = $this->Loans->find('all', $options);
+
+        if($keyword != '')
+        {
+            $union_query = null;
+
+            if($search_items)
+            {
+
+            }
+            if($search_labels)
+            {
+                if($query != null){
+                    $union_query = $query;
+                }   
+
+                
+                if($union_query != null){
+                    $query->union($union_query);
+                }
+            }
+            if($search_users)
+            {
+                if($query != null){
+                    $union_query = $query;
+                }   
+
+                
+                if($union_query != null){
+                    $query->union($union_query);
+                }
+            }
+        }
+            
+        //$query->order(["Loans.".$sort_field => $sort_dir]);
+
+        $loans = [];
+        $returnedLoans = [];
+        $allLoans = $query->toList();
+
+        $identifiers = [
+            'mentors'=>[
+                'type' => 'mentor',
+                'image' => 'image',
+                'identifier' => 'email',
+                'description' => 'description',
+                'labels' => 'skills_list'
+            ],
+            'rooms'=>[
+                'type' => 'room',
+                'image' => 'image',
+                'identifier' => 'name',
+                'description' => 'description',
+                'labels' => 'services_list'
+            ],
+            'licences'=>[
+                'type' => 'licence',
+                'image' => 'image',
+                'identifier' => 'name',
+                'description' => 'description',
+                'labels' => 'products_list'
+            ],
+            'equipments'=>[
+                'type' => 'equipment',
+                'image' => 'image',
+                'identifier' => 'name',
+                'description' => 'description',
+                'labels' => 'categories_list'
+            ]
+        ];
+
+        foreach ($allLoans as $loan){
+
+            $formattedLoan = [
+                'item' => [
+                    'id' => $loan->item_id,
+                    'type' => $loan->item_type,
+                    'image' => $loan[$identifiers[$loan->item_type]['type']][$identifiers[$loan->item_type]['image']],
+                    'identifier' => $loan[$identifiers[$loan->item_type]['type']][$identifiers[$loan->item_type]['identifier']],
+                    'description' => $loan[$identifiers[$loan->item_type]['type']][$identifiers[$loan->item_type]['description']],
+                    'labels' => $loan[$identifiers[$loan->item_type]['type']][$identifiers[$loan->item_type]['labels']]
+                ],
+                'user' => [
+                    'id' => $loan->user->id,
+                    'identifier' => $loan->user->email
+                ],
+                'start_time' => $loan['start_time'],
+                'end_time' => $loan['end_time'],
+                'returned' => $loan['returned']
+            ];
+
+            if ($formattedLoan['returned'] != null) {
+                if (!in_array($formattedLoan,$returnedLoans))
+                {
+                    array_push($returnedLoans, $formattedLoan);
+                }
+            } else {
+                if (!in_array($formattedLoan,$loans))
+                {
+                    array_push($loans, $formattedLoan);
+                }
+            }
+        }
+        
+        $this->set(compact('loans', 'returnedLoans'));
+        $this->set('_serialize', ['loans', 'returnedLoans']);
     }
 
     public function isAuthorized($user)
