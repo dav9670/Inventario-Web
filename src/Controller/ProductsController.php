@@ -215,7 +215,7 @@ class ProductsController extends AppController
 
         $state = $func == 'link' ? 'created' : 'deleted';
 
-        if($func == 'link' && $this->Products->Licences->link($product, [$room]) || $func == 'unlink' && $this->Products->Licences->unlink($product, [$licence])){
+        if($func == 'link' && $this->Products->Licences->link($product, [$licence]) || $func == 'unlink' && $this->Products->Licences->unlink($product, [$licence])){
             if($this->isApi()){
                 $success = true;
             } else {

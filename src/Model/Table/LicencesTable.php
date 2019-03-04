@@ -97,7 +97,8 @@ class LicencesTable extends Table
 
         $validator
             ->dateTime('end_time')
-            ->allowEmptyDateTime('end_time');
+            ->allowEmptyDateTime('end_time')
+            ->greaterThanField('end_time','start_time', __('End Time cannot be before Start Time.'));
 
         $validator
             ->dateTime('deleted')
