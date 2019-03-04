@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Utility\Inflector;
 
 /**
  * Loans Controller
@@ -204,43 +205,89 @@ class LoansController extends AppController
                 }
             }
         }
-            
-        //$query->order(["Loans.".$sort_field => $sort_dir]);
+
+        if($item_type != 'all')
+        {
+            $query
+                ->where('Loans.item_type like :item_type')
+                ->bind(':item_type', $item_type, 'string');
+        }
+        if($start_time != '')
+        {
+            $query
+                ->where('Loans.start_time > :start_time')
+                ->bind(':start_time', $start_time);
+        }
+        if($end_time != '')
+        {
+            $query
+                ->where('Loans.start_time < :end_time')
+                ->bind(':end_time', $end_time);
+        }
+
+        $identifiers = [
+            'mentors'=>[
+                'identifier' => 'email',
+                'description' => 'description',
+                'labels' => 'skills_list',
+                'image' => 'image'
+            ],
+            'rooms'=>[
+                'identifier' => 'name',
+                'description' => 'description',
+                'labels' => 'services_list',
+                'image' => 'image'
+            ],
+            'licences'=>[
+                'identifier' => 'name',
+                'description' => 'description',
+                'labels' => 'products_list',
+                'image' => 'image'
+            ],
+            'equipments'=>[
+                'identifier' => 'name',
+                'description' => 'description',
+                'labels' => 'categories_list',
+                'image' => 'image'
+            ]
+        ];
+
+        $sqlSorted = false;
+
+        if(!($item_type == 'all' && ($sort_field == 'item' || $sort_field == 'description')))
+        {
+            $table = null;
+            switch($sort_field)
+            {
+                case 'item':
+                    $table = ucfirst($item_type);
+                    $sort_field = $identifiers[$item_type]['identifier'];
+                break;
+                case 'description':
+                    $table = ucfirst($item_type);
+                    $sort_field = $identifiers[$item_type]['description'];
+                break;
+                case 'user':
+                    $table = 'Users';
+                    $sort_field = 'email';
+                break;
+                case 'start_time':
+                    $table = 'Loans';
+                break;
+                case 'end_time':
+                    $table = 'Loans';
+                break;
+                case 'returned':
+                    $table = 'Loans';
+                break;
+            }
+            $query->order([$table . "." . $sort_field => $sort_dir]);
+            $sqlSorted = true;
+        }
 
         $loans = [];
         $returnedLoans = [];
         $allLoans = $query->toList();
-
-        $identifiers = [
-            'mentors'=>[
-                'type' => 'mentor',
-                'image' => 'image',
-                'identifier' => 'email',
-                'description' => 'description',
-                'labels' => 'skills_list'
-            ],
-            'rooms'=>[
-                'type' => 'room',
-                'image' => 'image',
-                'identifier' => 'name',
-                'description' => 'description',
-                'labels' => 'services_list'
-            ],
-            'licences'=>[
-                'type' => 'licence',
-                'image' => 'image',
-                'identifier' => 'name',
-                'description' => 'description',
-                'labels' => 'products_list'
-            ],
-            'equipments'=>[
-                'type' => 'equipment',
-                'image' => 'image',
-                'identifier' => 'name',
-                'description' => 'description',
-                'labels' => 'categories_list'
-            ]
-        ];
 
         foreach ($allLoans as $loan){
 
@@ -248,10 +295,10 @@ class LoansController extends AppController
                 'item' => [
                     'id' => $loan->item_id,
                     'type' => $loan->item_type,
-                    'image' => $loan[$identifiers[$loan->item_type]['type']][$identifiers[$loan->item_type]['image']],
-                    'identifier' => $loan[$identifiers[$loan->item_type]['type']][$identifiers[$loan->item_type]['identifier']],
-                    'description' => $loan[$identifiers[$loan->item_type]['type']][$identifiers[$loan->item_type]['description']],
-                    'labels' => $loan[$identifiers[$loan->item_type]['type']][$identifiers[$loan->item_type]['labels']]
+                    'identifier' => $loan[Inflector::singularize($loan->item_type)][$identifiers[$loan->item_type]['identifier']],
+                    'description' => $loan[Inflector::singularize($loan->item_type)][$identifiers[$loan->item_type]['description']],
+                    'labels' => $loan[Inflector::singularize($loan->item_type)][$identifiers[$loan->item_type]['labels']],
+                    'image' => $loan[Inflector::singularize($loan->item_type)][$identifiers[$loan->item_type]['image']]
                 ],
                 'user' => [
                     'id' => $loan->user->id,
@@ -275,6 +322,26 @@ class LoansController extends AppController
             }
         }
         
+        if(!$sqlSorted)
+        {
+            //description stays same
+            $sort_field_local = 'description';
+            if($sort_field == 'item')
+            {
+                $sort_field_local = 'identifier'; 
+            }
+            $sort_dir_local = $sort_dir == 'asc' ? 1 : -1;
+
+            usort($loans, function($a, $b) use ($sort_field_local, $sort_dir_local){
+                return strnatcmp($a['item'][$sort_field_local], $b['item'][$sort_field_local]) * $sort_dir_local;
+            });
+            usort($returnedLoans, function($a, $b) use ($sort_field_local, $sort_dir_local){
+                return strnatcmp($a['item'][$sort_field_local], $b['item'][$sort_field_local]) * $sort_dir_local;
+            });
+
+            
+        }
+
         $this->set(compact('loans', 'returnedLoans'));
         $this->set('_serialize', ['loans', 'returnedLoans']);
     }
