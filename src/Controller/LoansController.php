@@ -167,6 +167,9 @@ class LoansController extends AppController
             $item_type = $jsonData['itemType'];
             $start_time = $jsonData['startTime'];
             $end_time = $jsonData['endTime'];
+            $search_items = $jsonData['searchItems'] == 'true';
+            $search_labels = $jsonData['searchLabels'] == 'true';
+            $search_users = $jsonData['searchUsers'] == 'true';
         } else {
             $keyword = $this->getRequest()->getQuery('keyword');
             $sort_field = $this->getRequest()->getQuery('sort_field');
