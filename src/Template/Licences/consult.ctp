@@ -51,7 +51,7 @@
     
     <h3><?=__('Products')?></h3>
     <input id='autocomplete' type ='text' style='display:none'>
-    <table cellpadding="0" cellspacing="0">
+    <table id='products_table' cellpadding="0" cellspacing="0">
         <thead>
             <tr>
                 <th scope="col"><?= __("Name") ?></a></th>
@@ -95,18 +95,26 @@
     }
 
     function removeLink(product_id){
-        $.ajax({
-            method: 'post',
-            url : "/products/unlink.json?product=" + product_id + "&licence=<?= $licence->id ?>",
-            headers: { 'X-CSRF-TOKEN': '<?=$this->getRequest()->getParam('_csrfToken');?>' },
-            success: function( response ){
-                $('#product_row_' + product_id).remove();
-            },
-            error: function(jqXHR, textStatus, errorThrown){
-                alert('The association could not be deleted');
-                console.log(jqXHR.responseText);
-            }
-        });
+        var rowCount = document.getElementById('products_table').rows.length;
+        if (rowCount > 2)
+        {
+            $.ajax({
+                method: 'post',
+                url : "/products/unlink.json?product=" + product_id + "&licence=<?= $licence->id ?>",
+                headers: { 'X-CSRF-TOKEN': '<?=$this->getRequest()->getParam('_csrfToken');?>' },
+                success: function( response ){
+                    $('#product_row_' + product_id).remove();
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                    alert('The association could not be deleted');
+                    console.log(jqXHR.responseText);
+                }
+            });
+        }
+        else
+        {
+            alert("<?=__("Cannot remove Product. A Licence must always have at least one Product.")?>");
+        }
     }
 
     function setReadOnly(readOnly){
@@ -122,6 +130,8 @@
             $('#image').attr('disabled', 'disabled');
             $('#autocomplete').hide();
 
+            $(".datepicker").datepicker("option", "disabled", true);
+
             $('#doneButton').hide();
             $('.unlink_link').hide();
 
@@ -131,6 +141,8 @@
             $('#image').show();
             $('#image').removeAttr('disabled');
             $('#autocomplete').show();
+
+            $(".datepicker").datepicker("option", "disabled", false);
 
             $('#doneButton').show();
             $('.unlink_link').show();
@@ -142,10 +154,19 @@
     $('document').ready(function(){
         $(".datepicker").datepicker({
             dateFormat: 'yy-mm-dd',
-            onSelect: function(date) {
+            onSelect: function(date, i) {
                 $('#preset-dates').val('custom');
             }
-        });
+        }).attr("autocomplete", "off");
+
+        $end_time = "<?=$licence->end_time?>";
+
+        $('#start-time').datepicker('setDate', new Date("<?=$licence->start_time?>"));
+        if ($end_time != ""){
+            $('#end-time').datepicker('setDate', new Date($end_time));
+        }
+
+        $(".datepicker").datepicker("option", "disabled", true);
 
         $("#licence_form :input:not(#autocomplete)").on('change paste keyup', (function() {
             $("#licence_form").data("changed",true);
