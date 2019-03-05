@@ -32,7 +32,7 @@
     <div id="hid" hidden>
         <form>
             <input type="checkbox" id="field_items" checked><?=__('Search by Items') ?>
-            <input type="checkbox" id="field_labels" checked><?=__('Search by Labels') ?>
+            <input type="checkbox" id="field_labels"><?=__('Search by Labels') ?>
             <input type="checkbox" id="field_users"><?=__('Search by Users') ?><br>
 
             <label for="item_type"><?= __('Item type') ?></label>
