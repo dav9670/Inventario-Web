@@ -33,7 +33,7 @@ class LoansController extends AppController
         $query = $this->Loans->find('all', $options);
         $loan = $query->toList()[1];
 
-        dd($query->sql());
+        //dd($query->sql());
         $this->set(compact('loans'));
     }
 
@@ -181,8 +181,6 @@ class LoansController extends AppController
             $end_time = $filters['end_time'];
         }
 
-        $query = null;
-
         $options = [
             'contain'=>[
                 'Users',
@@ -221,8 +219,6 @@ class LoansController extends AppController
         ];
 
         $query = null;
-
-        $query = $this->Loans->find('all', $options);
 
         if($keyword == '' || ($search_items == false && $search_labels == false && $search_users == false))
         {
