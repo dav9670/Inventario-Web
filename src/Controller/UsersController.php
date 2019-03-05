@@ -96,6 +96,7 @@ class UsersController extends AppController
         ]);
 
         $this->set('user', $user);
+        $this->set('_serialize', ['user']);
     }
 
     /**
