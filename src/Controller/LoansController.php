@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\Utility\Inflector;
+use Cake\ORM\TableRegistry;
 
 /**
  * Loans Controller
@@ -23,16 +24,16 @@ class LoansController extends AppController
     {
         $options = [
             'contain'=>[
-                'Users',
-                'Mentors',
-                'Rooms',
-                'Licences',
-                'Equipments'
+                'Mentors' => [
+                    'Skills'
+                ]
             ]
         ];
 
-        $loan = $this->Loans->find('all', $options)->toList()[1];
+        $query = $this->Loans->find('all', $options);
+        $loan = $query->toList()[1];
 
+        dd($query->sql());
         $this->set(compact('loans'));
     }
 
@@ -221,12 +222,15 @@ class LoansController extends AppController
 
         $query = null;
 
+        $query = $this->Loans->find('all', $options);
+
         if($keyword == '' || ($search_items == false && $search_labels == false && $search_users == false))
         {
             $query = $this->Loans->find('all', $options);
         }
         else
         {
+            $needs_union = false;
             $union_query = null;
 
             if($search_items)
@@ -287,11 +291,73 @@ class LoansController extends AppController
                     $union_query = $query;
                 }   
 
-                /*$query = $this->Loans->find('all', $options)
-                    ->where()
+                $searchFieldsType = [
+                    'mentors' => [
+                        'label_table' => 'skills',
+                        'fields' => [
+                            'name',
+                            'description'
+                        ]
+                    ],
+                    'rooms' => [
+                        'label_table' => 'services',
+                        'fields' => [
+                            'name',
+                            'description'
+                        ]
+                    ],
+                    'licences' => [
+                        'label_table' => 'products',
+                        'fields' => [
+                            'name',
+                            'description'
+                        ]
+                    ], 
+                    'equipments' => [
+                        'label_table' => 'categories',
+                        'fields' => [
+                            'name',
+                            'description'
+                        ]
+                    ]
+                ];
+
+                $whereQuery = '';
+                $matchings = [];
+                $joins = [];
+
+                if($item_type == 'all')
+                {
+                    $i = 0;
+                    foreach($searchFieldsType as $type => $searchFields)
+                    {
+                        $table = ucfirst($type);
+                        $labelTable = ucfirst($searchFields['label_table']);
+
+                        $subQuery = $this->makeStringSearch($labelTable, $searchFields['fields']);
+                        $whereQuery .= $subQuery . ($i < count($searchFieldsType) - 1 ? ' or ' : '');
+                        
+                        ++$i;
+                    }
+                }
+                else
+                {
+                    $table = ucfirst($item_type);
+                    $labelTable = ucfirst($searchFields['label_table']);
+
+                    $searchFields = $searchFieldsType[$item_type];
+
+                    $whereQuery = $this->makeStringSearch($labelTable, $searchFields['fields']);
+                }
+
+
+                $query = $this->Loans->find('all', $options)
+                    ->where($whereQuery)
                     ->bind(":search", $keyword, 'string')
-                    ->bind(":like_search", '%' . $keyword . '%', 'string');*/
+                    ->bind(":like_search", '%' . $keyword . '%', 'string');
                 
+                var_dump($query->sql());
+
                 if($union_query != null){
                     $query->union($union_query);
                 }
@@ -333,8 +399,9 @@ class LoansController extends AppController
 
         $sqlSorted = false;
 
-        if(!($item_type == 'all' && ($sort_field == 'item' || $sort_field == 'description')))
+        if($item_type != 'all' || ($sort_field != 'item' && $sort_field != 'description'))
         {
+            //Sort by sql
             $table = null;
             switch($sort_field)
             {
