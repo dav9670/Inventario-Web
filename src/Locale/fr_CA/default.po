@@ -1220,6 +1220,10 @@ msgstr "% d'utilisation"
 msgid "Total"
 msgstr "Total"
 
+#: Template/Reports/index.ctp:201
+msgid "Total by room"
+msgstr "Total par chambre"
+
 #: Template/Rooms/add.ctp:10
 msgid "Add Room"
 msgstr "Ajouter une Salle"

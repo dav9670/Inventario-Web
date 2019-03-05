@@ -55,7 +55,7 @@
         $('#output').attr('src', URL.createObjectURL(event.target.files[0])); 
     }
 
-    function removeRow(id) {
+    function removeLink(id) {
         if(confirm('<?= __('Are you sure you want to remove this product?')?>')){
             $('#product_row_' + id).remove();
         }
@@ -67,7 +67,7 @@
             onSelect: function(date) {
                 $('#preset-dates').val('custom');
             }
-        });
+        }).attr("autocomplete", "off");
 
         $("#autocomplete").autocomplete({
             source: function(request, show){

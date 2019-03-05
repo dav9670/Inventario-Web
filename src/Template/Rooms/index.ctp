@@ -147,8 +147,12 @@
                             `);
                         });
                     }
-                    
-                }
+
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                    alert("Failed to fetch rooms");
+                    console.log(jqXHR.responseText);    
+                } 
         });
     };
 

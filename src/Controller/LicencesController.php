@@ -193,6 +193,7 @@ class LicencesController extends AppController
         if($this->request->is(['patch', 'post', 'put']))
         {
             $data = $this->request->getData();
+            dd($data);
             $data['start_time'] = $data['start_time'] . " 00:00:00";
             if ($data['end_time'] != "")
             {

@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\I18n\Time;
+//use Cake\Datasource\ConnectionManager;
 
 /**
  * Rooms Controller
@@ -312,63 +313,56 @@ class RoomsController extends AppController
             $search_rooms = $filters['search_rooms'] == 'true';
             $search_services = $filters['search_services'] == 'true';
         }
+
+        $query = null;
+
+        $options = [];
+        if($this->isApi())
+        {
+            $options = ['contain' => ['Services']];
+        }
         
         if($keyword == '')
         {
-            $query = $this->Rooms->find('all');
+            $query = $this->Rooms->find('all', $options);
         }
         else
         {
-            if ($this->isApi()){
-                $queryRooms = $this->Rooms->find('all', [
-                    'contain' => ['Services']
-                ])
-                    ->where(["match (Rooms.name, Rooms.description) against(:search in boolean mode)"])
-                    ->bind(":search", $keyword . '*', 'string');
-                $queryServices = $this->Rooms->find('all', [
-                    'contain' => ['Services']
-                ])
-                    ->innerJoinWith('Services')
-                    ->where(["match (Services.name, Services.description) against(:search in boolean mode)"])
-                    ->bind(":search", $keyword . '*', 'string');
-
-                $queryRooms->union($queryServices);
-                $query = $queryRooms;
-            }
-            else if($search_rooms && $search_services)
-            {
-                $queryRooms = $this->Rooms->find('all')
-                    ->where(["match (Rooms.name, Rooms.description) against(:search in boolean mode)"])
-                    ->bind(":search", $keyword . '*', 'string');
-                $queryServices = $this->Rooms->find('all')
-                    ->innerJoinWith('Services')
-                    ->where(["match (Services.name, Services.description) against(:search in boolean mode)"])
-                    ->bind(":search", $keyword . '*', 'string');
-
-                $queryRooms->union($queryServices);
-                $query = $queryRooms;
-            }
-            else if($search_rooms)
-            {
-                $query = $this->Rooms->find('all')
-                    ->where(["match (Rooms.name, Rooms.description) against(:search in boolean mode)"])
-                    ->bind(":search", $keyword . '*', 'string');
-            }
-            else if($search_services)
-            {
-                $query = $this->Rooms->find('all')
-                    ->innerJoinWith('Services')
-                    ->where(["match (Services.name, Services.description) against(:search in boolean mode)"])
-                    ->bind(":search", $keyword . '*', 'string');
-            }
-
             
+            $union_query = null;
+
+            if($search_rooms)
+            {
+                $query = $this->Rooms->find('all', $options)
+                    ->where(["match (Rooms.name, Rooms.description) against(:search in boolean mode)
+                        or Rooms.name like :like_search or Rooms.description like :like_search"])
+                    ->bind(":search", $keyword, 'string')
+                    ->bind(":like_search", '%' . $keyword . '%', 'string');
+            }
+            if($search_services)
+            {
+                if($query != null){
+                    $union_query = $query;
+                }
+                $query = $this->Rooms->find('all')
+                    ->innerJoinWith('Services')
+                    ->where(["match (Services.name, Services.description) against(:search in boolean mode)
+                        or Services.name like :like_search or Services.description like :like_search"])
+                    ->bind(":search", $keyword, 'string')
+                    ->bind(":like_search", '%' . $keyword . '%', 'string');
+                
+                if($union_query != null){
+                    $query->union($union_query);
+                }
+            }
         }
 
-        if(!is_null($query))
-        {
-            $query->order(['Rooms.'.$sort_field => $sort_dir]);
-        }
+        if ($query != null)
+         {
+            //$connection = ConnectionManager::get('default');
+            //$query->epilog($connection->newQuery()->order(['Mentors_' . $sort_field => $sort_dir]));
+             $query->order(["Rooms.".$sort_field => $sort_dir]);
+         }
         
         $rooms = [];
         $archivedRooms = [];
