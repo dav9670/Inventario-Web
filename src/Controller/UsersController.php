@@ -4,6 +4,7 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\Datasource\ConnectionManager;
 use Cake\I18n\Time;
+use Cake\Auth\DefaultPasswordHasher;
 
 /**
  * Users Controller
@@ -18,6 +19,7 @@ class UsersController extends AppController
     {
         parent::initialize();
         $this->Auth->allow(['logout', 'add']);
+
     }
 
     public function login()
@@ -104,16 +106,46 @@ class UsersController extends AppController
     public function add()
     {
         $user = $this->Users->newEntity();
+        $success = false;
         if ($this->request->is('post')) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
-            if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+            $data = $this->request->getData();
+            if(!$this->isApi()){
+                $image = $data['image'];
+                if($image['tmp_name'] != '') {
+                    $imageData  = file_get_contents($image['tmp_name']);
+                    $b64   = base64_encode($imageData);
+                    $data['image'] = $b64;
+                }
             }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+
+            if($data['admin_status'] == 0){
+                $data['admin_status'] = 'user';
+            }else{
+                $data['admin_status'] = 'admin';
+            }
+            
+            $user = $this->Users->patchEntity($user, $data);
+            if ($this->Users->save($user)) {
+                if($this->isApi()){
+                    $success = true;
+                } else {
+                    $this->Flash->success(__('The user has been saved.'));
+                    return $this->redirect(['action' => 'index']);
+                }
+            } else if($this->isApi()){
+                $success = false;
+            } else {
+                $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            }
         }
-        $this->set(compact('user'));
+
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        } else {
+            $this->set(compact('user'));
+        }
     }
 
     /**
@@ -166,7 +198,9 @@ class UsersController extends AppController
 
     public function consult($id = null)
     {
-        $user = $this->Users->get($id);
+        $user = $this->Users->get($id, [
+            'contain' => ['Loans']
+        ]);
         if($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
             $image = $data['image'];
@@ -178,6 +212,11 @@ class UsersController extends AppController
                 $data['image'] = $user->image;
             }
 
+            if($data['admin_status'] == 0){
+                $data['admin_status'] = 'user';
+            }else{
+                $data['admin_status'] = 'admin';
+            }
             $user = $this->Users->patchEntity($user, $data);
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
@@ -186,7 +225,8 @@ class UsersController extends AppController
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
-        $this->set(compact('user'));
+        $loans = $this->Users->Loans->find('list', ['limit' => 200]);
+        $this->set(compact('user', 'loans'));
     }
 
     /**
@@ -221,7 +261,7 @@ class UsersController extends AppController
         $search_unavailable = true;
          */
         $search_users = true;
-        $search_categories = true;
+        $search_loans = true;
         
 
         if ($this->isApi()){
@@ -241,7 +281,7 @@ class UsersController extends AppController
             $search_unavailable = $filters['search_unavailable'] == 'true';
             */
             $search_users = $filters['search_users'] == 'true';
-            $search_categories = $filters['search_loans'] == 'true';
+            $search_loans = $filters['search_loans'] == 'true';
             
         }
 

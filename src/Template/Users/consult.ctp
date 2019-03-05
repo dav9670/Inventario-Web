@@ -13,9 +13,10 @@
 
         <div class="left twothirds-width">
             <?php
+                $value = $user->admin_status == 'admin' ? "1" : "0";
                 echo $this->Form->control('email', ['readOnly' => 'readOnly']);
                 echo $this->Form->control('password', ['readOnly' => 'readOnly']);
-                echo $this->Form->select('admin_status', ['admin', 'user'], ['disabled' => 'disabled', 'id' => 'admin']);
+                echo $this->Form->select('admin_status', ['user', 'admin'], ['disabled' => 'disabled', 'id' => 'admin', 'value' => $value]);
             ?>
         </div>
 
@@ -53,12 +54,14 @@
             </tr>
         </thead>
         <tbody id='loans_table_body'>
-            <?php foreach ($user->loans as $loan): ?>
+
+            <?php foreach ($user->loans as $loan): 
+                $returned = $loan->returned != null ? $loan->returned : "---"; ?>
             <tr id='loan_row_<?=$loan->id?>'>
                 <td><a href='loans/<?=$loan->id?>'><?= h($loan->item_type) ?></a></td>
-                <td><a href='loans/<?=$loan->id?>'><?= h($loan->start_date)?></a></td>
-                <td><a href='loans/<?=$loan->id?>'><?= h($loan->end_date)?></a></td>
-                <td><a href='loans/<?=$loan->id?>'><?= h($loan->returned)?></a></td>
+                <td><a href='loans/<?=$loan->id?>'><?= h($loan->start_time)?></a></td>
+                <td><a href='loans/<?=$loan->id?>'><?= h($loan->end_time)?></a></td>
+                <td><a href='loans/<?=$loan->id?>'><?= h($returned)?></a></td>
                 <td><a href='loans/<?=$loan->id?>'><?= h($loan->overtimeFee)?></a></td>
             </tr>
             <?php endforeach; ?>
