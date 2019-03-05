@@ -102,7 +102,7 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->connect('/:controller/:id', ['action' => 'consult'])
         ->setPass(['id'])
         ->setPatterns([
-            'controller' => 'mentors|skills|rooms|services|licences|products|equipments|categories',
+            'controller' => 'mentors|skills|rooms|services|licences|products|equipments|categories|users',
             'id' => '[0-9]+'
         ]);
 

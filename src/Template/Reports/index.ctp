@@ -255,16 +255,16 @@ use Cake\I18n\I18n;
             <tr>
                 <th scope="col"><a id="name_sort" onclick="sortSetter('name'); setBodyRooms();"><?= __("Name") ?></a></th>
                 <th><?= __("Services") ?></a></th>
-                <th scope="col"><a id="total_sort" onclick="sortSetter('total'); setBodyRooms();"><?= __("Total") ?></a></th>
-                <th id="h0" scope="col">08h - 09h</a></th>
-                <th id="h1" scope="col">09h - 10h</a></th>
-                <th id="h2" scope="col">10h - 11h</a></th>
-                <th id="h3" scope="col">11h - 12h</a></th>
-                <th id="h4"  scope="col">12h - 13h</a></th>
-                <th id="h5"  scope="col">13h - 14h</a></th>
-                <th id="h6"  scope="col">14h - 15h</a></th>
-                <th id="h7"  scope="col">15h - 16h</a></th>
-                <th id="h8"  scope="col">16h - 17h</a></th>
+                <th scope="col"><a id="total_sort" onclick="sortSetter('total'); setBodyRooms();"><?= __("Total by room") ?></a></th>
+                <th id="h1" scope="col">08h - 09h</a></th>
+                <th id="h2" scope="col">09h - 10h</a></th>
+                <th id="h3" scope="col">10h - 11h</a></th>
+                <th id="h4" scope="col">11h - 12h</a></th>
+                <th id="h5"  scope="col">12h - 13h</a></th>
+                <th id="h6"  scope="col">13h - 14h</a></th>
+                <th id="h7"  scope="col">14h - 15h</a></th>
+                <th id="h8"  scope="col">15h - 16h</a></th>
+                <th id="h9"  scope="col">16h - 17h</a></th>
             </tr>
         `);
     }
@@ -278,29 +278,35 @@ use Cake\I18n\I18n;
             headers: { 'X-CSRF-TOKEN': '<?=$this->getRequest()->getParam('_csrfToken');?>' },
             success: function( response ){
                 $('#report-table-body').empty();
-                var totalByHours = [0,0,0,0,0,0,0,0,0];
+                var totalByHours = [0,0,0,0,0,0,0,0,0,0];
                 var temp = response;
+                var maxRoom = 0;
                 temp.forEach(function(elem){
-                    for (var i = 2; i < elem.length - 1; i++  ){
-                        totalByHours[i - 2] += parseInt(elem[i]);
+                    if (parseInt(elem[1]) > maxRoom){
+                        maxRoom = parseInt(elem[1]);
+                    }
+                    for (var i = 1; i < elem.length - 1; i++  ){
+                        totalByHours[i - 1] += parseInt(elem[i]);
                     }
                 });
                 var maxHour = 0;
-                for (var i = 0; i < totalByHours.length; i++  ){
+                for (var i = 1; i < totalByHours.length; i++  ){
                     if (totalByHours[i] > maxHour){
                         maxHour = totalByHours[i];
                     }
                 }
-                for (var i = 0; i < totalByHours.length; i++  ){
-                    if (totalByHours[i] == maxHour){
+                for (var i = 1; i < totalByHours.length; i++  ){
+                    if (totalByHours[i] == maxHour && maxHour != 0){
                         hourTitle = "h" + i;
                         $('#' + hourTitle).addClass('highlighted-header');
                     }
                 }
+                
+                maxRoom = maxRoom.toString();
                 response.forEach(function(elem){
                     $('#report-table-body').append(`
                         <tr>
-                            <td>` + elem[0] + `</td>
+                            <td id=` + elem[0] + `>` + elem[0] + `</td>
                             <td>` + elem[12] + `</td>
                             <td>` + elem[1] + `</td>
                             <td>` + elem[2] + `</td>
@@ -314,7 +320,30 @@ use Cake\I18n\I18n;
                             <td>` + elem[10] + `</td>
                         </tr>
                     `);
+                    if (maxRoom == elem[1] && maxRoom != '0'){
+                        $('#' + elem[0]).addClass('highlighted-row');
+                    }
                 });
+                var totalArray = ['<?=__("Total")?>'];
+                for (var i = 0; i < totalByHours.length; i++  ){
+                    totalArray.push(totalByHours[i]);
+                }
+                $('#report-table-body').append(`
+                    <tr>
+                        <td>` + totalArray[0] + `</td>
+                        <td>` + " " + `</td>
+                        <td>` + totalArray[1] + `</td>
+                        <td>` + totalArray[2] + `</td>
+                        <td>` + totalArray[3] + `</td>
+                        <td>` + totalArray[4] + `</td>
+                        <td>` + totalArray[5] + `</td>
+                        <td>` + totalArray[6] + `</td>
+                        <td>` + totalArray[7] + `</td>
+                        <td>` + totalArray[8] + `</td>
+                        <td>` + totalArray[9] + `</td>
+                        <td>` + totalArray[10] + `</td>
+                    </tr>
+                `);
             },
             error: function(jqXHR, textStatus, errorThrown){
                 alert('The report could not be fetched');

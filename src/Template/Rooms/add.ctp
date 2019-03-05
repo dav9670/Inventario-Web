@@ -16,7 +16,7 @@
         </div>
         <div class="right third-width">
             <?php echo $this->Form->control('image', ['type' => 'file', 'accept'=> 'image/*', 'onchange' => 'loadFile(event)']); ?>
-            <img id='output'/>
+            <img id='output' <?php if($room->image != null) { echo "src='data:image/png;base64," . $room->image . "'"; } ?>/>
         </div>
         <div style="clear: both;"></div>
     </fieldset>
@@ -34,6 +34,21 @@
             </tr>
         </thead>
         <tbody id='services_table_body'>
+            <?php   
+            if($room->services != null) {
+                foreach($room->services as $elem){?>
+                    <tr id='service_row_<?=$elem->id?>'>
+                        <input type='hidden' name='services[_ids][]' value='<?=$elem->id?>'/>
+                        <td><a href='services/<?=$elem->id?>'><?=$elem->name?></a></td>
+                        <td><a href='services/<?=$elem->id?>'><?=$elem->description?></a></td>
+                        <td><a href='services/<?=$elem->id?>'><?=$elem->room_count?></a></td>
+                        <td class='actions'>
+                            <a class='unlink_link delete-link' onclick='removeLink(<?=$elem->id?>)'><?=__('Remove')?></a>
+                        </td>
+                    </tr>
+            <?php
+                } 
+            }?>
         </tbody>
     </table>
     <?= $this->Form->button(__('Save')) ?>
