@@ -5,7 +5,6 @@ use App\Controller\AppController;
 use Cake\Datasource\ConnectionManager;
 use Cake\I18n\Time;
 use Cake\Auth\DefaultPasswordHasher;
-
 /**
  * Users Controller
  *
@@ -109,8 +108,8 @@ class UsersController extends AppController
         $user = $this->Users->newEntity();
         $success = false;
         if ($this->request->is('post')) {
-
             $data = $this->request->getData();
+
             if(!$this->isApi()){
                 $image = $data['image'];
                 if($image['tmp_name'] != '') {
@@ -118,25 +117,34 @@ class UsersController extends AppController
                     $b64   = base64_encode($imageData);
                     $data['image'] = $b64;
                 }
+
+                if($data['admin_status'] == 0){
+                    $data['admin_status'] = 'user';
+                }else{
+                    $data['admin_status'] = 'admin';
+                }
             }
 
-            if($data['admin_status'] == 0){
-                $data['admin_status'] = 'user';
-            }else{
-                $data['admin_status'] = 'admin';
-            }
+            
             
             $user = $this->Users->patchEntity($user, $data);
-            if ($this->Users->save($user)) {
+            if ($this->Users->save($user))
+            {
                 if($this->isApi()){
                     $success = true;
-                } else {
+                }
+                else
+                {
                     $this->Flash->success(__('The user has been saved.'));
                     return $this->redirect(['action' => 'index']);
                 }
-            } else if($this->isApi()){
+            }
+            else if($this->isApi())
+            {
                 $success = false;
-            } else {
+            }
+            else
+            {
                 $this->Flash->error(__('The user could not be saved. Please, try again.'));
             }
         }
@@ -173,7 +181,7 @@ class UsersController extends AppController
         $this->set(compact('user'));
     }
 
-    /**
+       /**
      * Delete method
      *
      * @param string|null $id User id.
@@ -182,15 +190,90 @@ class UsersController extends AppController
      */
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
+        $this->getRequest()->allowMethod(['get', 'post', 'delete']);
         $user = $this->Users->get($id);
+        $success = false;
         if ($this->Users->delete($user)) {
-            $this->Flash->success(__('The user has been deleted.'));
+            if($this->isApi()){
+                $success = true;
+            } else {
+                $this->Flash->success(__('The user has been deleted.'));
+            }
         } else {
-            $this->Flash->error(__('The user could not be deleted. Please, try again.'));
+            if($this->isApi()){
+                $success = false;
+            } else {
+                $this->Flash->error(__('The user could not be deleted. Please, try again.'));
+            }
         }
 
-        return $this->redirect(['action' => 'index']);
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        } else {
+            return $this->redirect(['action' => 'index']);
+        }
+    }
+
+    /**
+     * function deactivate
+     * désactive un equipement, set sa date de delete à now
+     */
+    public function deactivate($id = null){
+        $this->setDeleted($id, Time::now());
+    }
+
+    /**
+     * function reactivate
+     * reactive un equipement, set sa valeur deleted à null.
+     */
+    public function reactivate($id = null){
+        $this->setDeleted($id, null);
+    }
+
+    private function setDeleted($id, $deleted){
+        $this->getRequest()->allowMethod(['get', 'post']);
+        $user = $this->Users->get($id);
+        $user->deleted = $deleted;
+        $success = false;
+
+        $state = $deleted == null ? 'reactivated' : 'deactivated';
+
+        if ($this->Users->save($user)) {
+            if($this->isApi()){
+                $success = true;
+            } else {
+                $this->Flash->success(__('The user has been ' . $state .'.'));
+            }
+        } else {
+            if($this->isApi()){
+                $success = false;
+            } else {
+                $this->Flash->error(__('The user could not be ' . $state . '. Please, try again.'));
+            }
+        }
+
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        } else {
+            return $this->redirect($this->referer());
+        }
+    }
+    
+    public function isTaken()
+    {
+        if ($this->isApi()){
+            $jsonData = $this->getRequest()->input('json_decode', true);
+            $user = $this->Users->find('all')
+                ->where(["lower(email) = :search"])
+                ->bind(":search", strtolower($jsonData['email']), 'string')->first();
+            
+                $this->set(compact('user'));
+            $this->set('_serialize', ['user']);  
+        } else {
+            return $this->redirect(['action' => 'index']);
+        }
     }
 
         /**
@@ -255,15 +338,15 @@ class UsersController extends AppController
         }
    
         $keyword = "";
-        $sort_field = "id";
+        $sort_field = "email";
         $sort_dir = "asc";
         
 
         if ($this->isApi()){
             $jsonData = $this->getRequest()->input('json_decode', true);
             $keyword = $jsonData['keyword'];
-            $sort_field = $jsonData['sort_field'];
-            $sort_dir = $jsonData['sort_dir'];
+            //$sort_field = $jsonData['sort_field'];
+            //$sort_dir = $jsonData['sort_dir'];
         } else {
             $keyword = $this->getRequest()->getQuery('keyword');
             $sort_field = $this->getRequest()->getQuery('sort_field');
@@ -301,5 +384,28 @@ class UsersController extends AppController
         $this->set(compact('users', 'archivedUsers'));
         $this->set('_serialize', ['users', 'archivedUsers']);
         
+    }
+
+    public function verify(){
+        $identify = false;
+
+        if ($this->request->is('post')) {
+            $user = $this->Auth->identify();
+
+            if ($user) 
+            {
+                $identify = true;
+                //$this->add();
+            }
+            else
+            {
+                $identify = false;
+                $this->Flash->error(__('Your password is incorrect.'));
+            }
+
+        }
+
+        $this->set(compact('identify'));
+        $this->set('_serialize', 'identify');
     }
 }

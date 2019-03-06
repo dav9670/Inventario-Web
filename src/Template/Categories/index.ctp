@@ -57,7 +57,7 @@
                     $.each(response.categories, function(idx, elem){
                         let nameCell = "<td><a href='/categories/" + elem.id + "'>" + elem.name + "</a></td>";
                         let descriptionCell = "<td><a href='/categories/" + elem.id + "'>" + elem.description + "</a></td>";
-                        let hourlyRateCell = "<td><a href='/categories/" + elem.id + "'>" + elem.hourly_rate.toFixed(2) +"$" + "</a></td>";
+                        let hourlyRateCell = "<td class=\"right\"><a href='/categories/" + elem.id + "'>" + elem.hourly_rate.toFixed(2) +"$" + "</a></td>";
                         let equipmentCountCell = "<td><a href='/categories/" + elem.id + "'>" + elem.equipment_count + "</a></td>";
                         let actionsCell = "<td class=\"actions\">";
                         
