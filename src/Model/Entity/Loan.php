@@ -109,7 +109,8 @@ class Loan extends Entity
     {
         $overtimeFee = 0;
         if($this->returned == null){
-            if($this->end_time <= Time::now()){
+
+            if($this->end_time != null && $this->end_time <= Time::now()){
 
                 $now = Time::now();
                 $diff = $now->diff($this->end_time);
@@ -133,11 +134,11 @@ class Loan extends Entity
                     }
 
                 }
-            }
+            } 
         }
         
         return $overtimeFee;
     }
 
-    protected $_virtual = ['overtime_fee'];
+protected $_virtual = [/*'overtime_fee'*/];
 }
