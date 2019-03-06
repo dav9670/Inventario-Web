@@ -359,8 +359,6 @@ class MentorsController extends AppController
 
         if ($query != null)
         {
-            //$connection = ConnectionManager::get('default');
-            //$query->epilog($connection->newQuery()->order(['Mentors_' . $sort_field => $sort_dir]));
             $query->order(["Mentors.".$sort_field => $sort_dir]);
         }
         

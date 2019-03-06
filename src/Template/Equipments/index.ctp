@@ -95,7 +95,7 @@
                             array_name = "equipments";
                         } else if(i == 1){
                             table_name = "table_archived";
-                            array_name = "archivedEquipmentss";
+                            array_name = "archivedEquipments";
                         }
                         var table = $("#" + table_name);
                         table.empty();

@@ -4,15 +4,18 @@
  * @var \App\Model\Entity\Loan $loan
  */
 ?>
+<?= $this->Html->css('jquery.datetimepicker.min.css') ?>
+<?= $this->Html->script('jquery.datetimepicker.full.js', array('inline' => false)); ?>
+
 <div class="loans form large-12 medium-11 columns content">
     <?= $this->Form->create($loan) ?>
     <fieldset>
         <legend><?= __('Add Loan') ?></legend>
         
         <input type='hidden' id='user-id' name='user_id' required='required'/>
-        <label for="search_user"><?= __('User:') ?></label>
+        <label for="user_search"><?= __('User:') ?></label>
         <span id='user_selected'></span>
-        <input type="text" name="search_user" id="search_user">
+        <input type="text" name="user_search" id="user_search">
         <table cellpadding="0" cellspacing="0">
             <thead>
                 <tr>
@@ -22,28 +25,32 @@
                     <th scope="col" class="actions"><?= __('Actions') ?></th>
                 </tr>
             </thead>
-            <tbody id="table_activated">
-            </tbody>
-            <tbody id="table_archived" hidden="hidden">
+            <tbody id="user-table-body">
             </tbody>
         </table>
 
         <label for="item_type"><?= __('Item type') ?></label>
-        <?= $this->Form->select('item_type', ['mentors' => 'Mentors', 'rooms' => 'Rooms', 'licences' => 'Licences', 'equipments' => 'Equipments']); ?>
+        <?= $this->Form->select('item_type', ['mentors' => 'Mentors', 'rooms' => 'Rooms', 'licences' => 'Licences', 'equipments' => 'Equipments'], ['id' => 'item_type']); ?>
+        
         <input type='hidden' id='item-id' name='item_id' required='required'/>
-        <label for="search_item"><?= __('Item:') ?></label>
+        <label for="item_search"><?= __('Item:') ?></label>
         <span id='item_selected'></span>
-        <input type="text" name="search_item" id="search_item">
-        <table id='item-table' cellpadding="0" cellspacing="0" style='display:none;'>
+        <input type="text" name="item_search" id="item_search">
+        
+        <a onclick="$('#item_filters_div').toggle();"><?= __("Filters")?></a>
+        <div id="item_filters_div" hidden>
+            <input type="checkbox" id="item_check" checked><?=__('Search by Items') ?><br>
+            <input type="checkbox" id="item_label_check"><?=__('Search by Labels') ?><br>
+        </div>
+
+        <table id='item-table' cellpadding="0" cellspacing="0">
             <thead id='item-table-head'>
-                <tr>
-                </tr>
             </thead>
             <tbody id='item-table-body'>
             </tbody>
         </table>
 
-        <?= $this->Form->control('start_time', ['type' => 'text', 'class' => 'datepicker']); ?>
+        <?= $this->Form->control('start_time', ['type' => 'text', 'class' => 'datetpicker']); ?>
         <?= $this->Form->control('end_time', ['type' => 'text', 'class' => 'datepicker', 'empty' => true]); ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
@@ -61,40 +68,32 @@
         }
     };
 
-    function searchUsers( keyword ){
-        var data = keyword;
+    //Users
+    function setBodyUsers(){
+        
+        let keyword = $('#user_search').val();
 
         $.ajax({
                 method: 'get',
                 url : "/users/search.json",
-                data: {keyword:data, sort_field: sort.user.field, sort_dir: sort.user.dir},
+                data: {keyword:keyword, sort_field: sort.user.field, sort_dir: sort.user.dir},
                 success: function( response ){
-                    
-                    var table_name = "table_activated";
+
+                    var table_body_name = "user-table-body";
                     var array_name = "users";
 
-                    var table = $("#" + table_name);
-                    table.empty();
+                    var table_body = $("#" + table_body_name);
+                    table_body.empty();
 
                     usersArray = response[array_name];
                     $.each(usersArray, function(idx, elem){
 
                         var link = "";
-                        if(elem.deleted == null){
-                            link = link.concat('<?= $this->Html->link(__('Deactivate'), ['action' => 'deactivate', -1], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to deactivate {0}?', -2)]) ?> ');
-                        } else {
-                            link = link.concat('<?= $this->Html->link(__('Reactivate'), ['action' => 'reactivate', -1], ['confirm' => __('Are you sure you want to reactivate {0}?', -2)]) ?> ');
-                            if(elem.loan_count == 0){
-                                link = link.concat('<br/><?= $this->Html->link(__('Delete'), ['action' => 'delete', -1], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to PERMANENTLY delete {0}?', -2)]) ?> ');
-                            }
-                        }
-                        link = link.replace(/-1/g, elem.id);
-                        link = link.replace(/-2/g, elem.email);
 
-                        table.append(`
-                            <tr id='user_` + elem.id + `' onclick='userSelected("` + elem.id + `")'>
+                        table_body.append(`
+                            <tr id='user_` + elem.id + `' ` + ($('#user-id').val() == elem.id.toString() ? 'class="selected"' : '') + ` onclick='rowSelected("user", "` + elem.id + `")'>
                                 <td><img id='user_` + elem.id + `_img' src='data:image/png;base64,` + elem.image + `' alt='` + elem.email + `' width=100/></td>
-                                <td><a id='user_` + elem.id + `_email' href='/users/` + elem.id + `'>` + elem.email + `</a></td>
+                                <td><a class='inline' id='user_` + elem.id + `_identifier' href='/users/` + elem.id + `'>` + elem.email + `</a></td>
                                 <td id='user_` + elem.id + `_admin_status'>` + elem.admin_status + `</td>
                                 <td class='actions'>
                                     ` + link + `
@@ -109,58 +108,378 @@
                     console.log(jqXHR.responseText);
                 }
         });
-    };
-
-    function userSelected(id){
-        let old_id = $('#user-id').val();
-        $('#user_' + old_id).removeClass('selected');
-        
-        $('#user_' + id).addClass('selected');
-        $('#user_selected').text($('#user_' + id + '_email').text());
-        $('#user-id').val(id);
     }
 
-    function sort_setter( type, sort_field ){
-        var oldHtmlFieldId = '#' + type + '_' + sort[type].field + '_sort';
-        var newHtmlFieldId = '#' + type + '_' + sort_field + '_sort';
+    //Items
+    let itemDict = {
+        mentors: {
+            labels: 'skills',
+            create: function(){
+                setHeadersMentors();
+                sort['item'].field = '';
+                sort['item'].dir = '';
+                sortSetter('item','email');
+                setBody('mentors');
+            },
+            search: function(){
+                setBody('mentors');
+            }
+        },
+        rooms: {
+            labels: 'services',
+            create: function(){
+                setHeadersRooms();
+                sort['item'].field = '';
+                sort['item'].dir = '';
+                sortSetter('item','name');
+                setBody('rooms');
+            },
+            search: function(){
+                setBody('rooms');
+            }
+        },
+        licences: {
+            labels: 'products',
+            create: function(){
+                setHeadersLicences();
+                sort['item'].field = '';
+                sort['item'].dir = '';
+                sortSetter('item','name');
+                setBody('licences');
+            },
+            search: function(){
+                setBody('licences');
+            }
+        },
+        equipments: {
+            labels: 'categories',
+            create: function(){
+                setHeadersEquipments();
+                sort['item'].field = '';
+                sort['item'].dir = '';
+                sortSetter('item','name');
+                setBody('equipments');
+            },
+            search: function(){
+                setBody('equipments');
+            }
+        }
+    };
+
+    function setBody(itemType){
+        let keyword = $('#item_search').val();
+
+        var filters = {};
+        filters['search_available'] = true;
+        filters['search_unavailable'] = true;
+        filters['search_' + itemType] = $('#item_check').is(':checked');
+        filters['search_' + itemDict[itemType].labels] = $('#item_label_check').is(':checked');
+
+        $.ajax({
+            method: 'get',
+            url : "/" + itemType + "/search.json",
+            data: {keyword:keyword, sort_field:sort.item.field, sort_dir:sort.item.dir, filters: filters},
+            success: function( response ){
+                itemArray = response[itemType];
+                eval('setBody' + itemType.charAt(0).toUpperCase() + itemType.slice(1) + '(itemArray);');
+                
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                alert("Failed to fetch " + itemType);
+                console.log(jqXHR.responseText);
+            }
+        });
+    }
+
+    function setHeadersMentors(){
+        $('#item-table-head').empty();
+        $('#item-table-head').append(`
+            <tr>
+                <th scope="col"></th>
+                <th scope="col"><a id="item_email_sort" onclick="sortSetter('item', 'email'); itemDict.mentors.search();"><?= __("Email") ?></a></th>
+                <th scope="col"><a id="item_first_name_sort" onclick="sortSetter('item', 'first_name'); itemDict.mentors.search();"><?= __("First name") ?></a></th>
+                <th scope="col"><a id="item_last_name_sort" onclick="sortSetter('item', 'last_name'); itemDict.mentors.search();"><?= __("Last name") ?></a></th>
+                <th scope="col"><a id="item_description_sort" onclick="sortSetter('item', 'description'); itemDict.mentors.search();"><?= __("Description") ?></a></th>
+                <th scope="col"><?= __("Skills list") ?></th>
+            </tr>
+        `);
+    }
+
+    function setBodyMentors(itemArray){
+
+        var table_body = $("#item-table-body");
+        table_body.empty();
+
+        $.each(itemArray, function(idx, elem){
+
+            var labels_list = "";
+            var three_labels = elem.skills_list.slice(0,3);
+            if (elem.skills_list.length > 3) {
+                labels_list = three_labels.join("; ") + "...";
+            } else {
+                labels_list = three_labels.join("; ");
+            }
+            table_body.append(`
+                <tr id='item_` + elem.id + `' ` + ($('#item-id').val() == elem.id.toString() ? 'class="selected"' : '') + ` onclick='rowSelected("item", "` + elem.id + `")'>
+                    <td><img src='data:image/png;base64,` + elem.image + `' alt='` + elem.first_name + ` ` + elem.last_name + `' width=100/></td>
+                    <td><a class='inline' id='item_` + elem.id + `_identifier' href='/mentors/` + elem.id + `'>` + elem.email + `</a></td>
+                    <td>` + elem.first_name + `</td>
+                    <td>` + elem.last_name + `</td>
+                    <td>` + elem.description + `</td>
+                    <td>` + labels_list + `</td>
+                </tr>
+            `);
+        });
+    }
+
+    function setHeadersRooms(){
+        $('#item-table-head').empty();
+        $('#item-table-head').append(`
+            <tr>
+                <th scope="col"></th>
+                <th scope="col"><a id="item_name_sort" onclick="sortSetter('item', 'name'); itemDict.rooms.search();"><?= __("Name") ?></a></th>
+                <th scope="col"><a id="item_description_sort" onclick="sortSetter('item', 'description'); itemDict.rooms.search();"><?= __("Description") ?></a></th>
+                <th scope="col"><?= __("Services list") ?></th>
+            </tr>
+        `);
+    }
+
+    function setBodyRooms(itemArray){
+        var table_body = $("#item-table-body");
+        table_body.empty();
+
+        $.each(itemArray, function(idx, elem){
+
+            var labels_list = "";
+            var three_labels = elem.services_list.slice(0,3);
+            if (elem.services_list.length > 3) {
+                labels_list = three_labels.join("; ") + "...";
+            } else {
+                labels_list = three_labels.join("; ");
+            }
+
+            table_body.append(`
+                <tr id='item_` + elem.id + `' ` + ($('#item-id').val() == elem.id.toString() ? 'class="selected"' : '') + ` onclick='rowSelected("item", "` + elem.id + `")'>
+                    <td><img src='data:image/png;base64,` + elem.image + `' alt='` + elem.name + `' width=100/></td>
+                    <td><a class='inline' id='item_` + elem.id + `_identifier' href='/rooms/` + elem.id + `'>` + elem.name + `</a></td>
+                    <td>` + elem.description + `</td>
+                    <td>` + labels_list + `</td>
+                </tr>
+            `);
+        });
+    }
+
+    function setHeadersLicences(){
+        $('#item-table-head').empty();
+        $('#item-table-head').append(`
+            <tr>
+                <th scope="col"></th>
+                <th scope="col"><a id="item_name_sort" onclick="sortSetter('item', 'name'); itemDict.licences.search();"><?= __("Name") ?></a></th>
+                <th scope="col"><a id="item_description_sort" onclick="sortSetter('item', 'description'); itemDict.licences.search();"><?= __("Description") ?></a></th>
+                <th scope="col"><?= __("Products list") ?></th>
+                <th scope="col"><?= __("Status") ?></th>
+            </tr>
+        `);
+    }
+
+    function setBodyLicences(itemArray){
+        var table_body = $("#item-table-body");
+        table_body.empty();
+
+        $.each(itemArray, function(idx, elem){
+
+            var labels_list = "";
+            var three_labels = elem.products_list.slice(0,3);
+            if (elem.products_list.length > 3) {
+                labels_list = three_labels.join("; ") + "...";
+            } else {
+                labels_list = three_labels.join("; ");
+            }
+
+            table_body.append(`
+                <tr id='item_` + elem.id + `' ` + ($('#item-id').val() == elem.id.toString() ? 'class="selected"' : '') + ` onclick='rowSelected("item", "` + elem.id + `")'>
+                    <td><img src='data:image/png;base64,` + elem.image + `' alt='` + elem.name + `' width=100/></td>
+                    <td><a class='inline' id='item_` + elem.id + `_identifier' href='/licences/` + elem.id + `'>` + elem.name + `</a></td>
+                    <td>` + elem.description + `</td>
+                    <td>` + labels_list + `</td>
+                    <td>` + elem.status + `</td>
+                </tr>
+            `);
+        });
+    }
+
+    function setHeadersEquipments(){
+        $('#item-table-head').empty();
+        $('#item-table-head').append(`
+            <tr>
+                <th scope="col"></th>
+                <th scope="col"><a id="item_name_sort" onclick="sortSetter('item', 'name'); itemDict.equipments.search();"><?= __("Name") ?></a></th>
+                <th scope="col"><a id="item_description_sort" onclick="sortSetter('item', 'description'); itemDict.equipments.search();"><?= __("Description") ?></a></th>
+                <th scope="col"><?= __("Categories list") ?></th>
+            </tr>
+        `);
+    }
+
+    function setBodyEquipments(itemArray){
+        var table_body = $("#item-table-body");
+        table_body.empty();
+
+        $.each(itemArray, function(idx, elem){
+
+            var labels_list = "";
+            var three_labels = elem.categories_list.slice(0,3);
+            if (elem.categories_list.length > 3) {
+                labels_list = three_labels.join("; ") + "...";
+            } else {
+                labels_list = three_labels.join("; ");
+            }
+
+            table_body.append(`
+                <tr id='item_` + elem.id + `' ` + ($('#item-id').val() == elem.id.toString() ? 'class="selected"' : '') + ` onclick='rowSelected("item", "` + elem.id + `")'>
+                    <td><img src='data:image/png;base64,` + elem.image + `' alt='` + elem.name + `' width=100/></td>
+                    <td><a class='inline' id='item_` + elem.id + `_identifier' href='/rooms/` + elem.id + `'>` + elem.name + `</a></td>
+                    <td>` + elem.description + `</td>
+                    <td>` + labels_list + `</td>
+                </tr>
+            `);
+        });
+    }
+
+    function sortSetter( type, sort_field ){
+        let oldHtmlFieldId = type + '_' + sort[type].field + '_sort';
+        let newHtmlFieldId = type + '_' + sort_field + '_sort';
         
-        $(oldHtmlFieldId).removeClass('asc');
-        $(oldHtmlFieldId).removeClass('desc');
-        $(newHtmlFieldId).removeClass('asc');
-        $(newHtmlFieldId).removeClass('desc');
+        $('#' + oldHtmlFieldId).removeClass('asc');
+        $('#' + oldHtmlFieldId).removeClass('desc');
+        $('#' + newHtmlFieldId).removeClass('asc');
+        $('#' + newHtmlFieldId).removeClass('desc');
 
         sort[type].dir = sort[type].field != sort_field ? "asc" : sort[type].dir == "asc" ? "desc" : "asc";
         sort[type].field = sort_field;
 
-        $(newHtmlFieldId).addClass(sort[type].dir);
+        $('#' + newHtmlFieldId).addClass(sort[type].dir);
+    }
+
+    function rowSelected(type, id){
+        let old_id = $('#' + type + '-id').val();
+        $('#' + type + '_' + old_id).removeClass('selected');
+        
+        if(id != null)
+            $('#' + type + '_' + id).addClass('selected');
+        $('#' + type + '_selected').text(id != null ? $('#' + type + '_' + id + '_identifier').text() : '');
+        
+        $('#' + type + '-id').val(id != null ? id : '');
     }
 
     $('document').ready(function(){
 
-        $(".datepicker").datepicker({
-            dateFormat: 'yy-mm-dd',
-            changeMonth: true,
-            changeYear: true,
-            onSelect: function(date) {
-                $('#preset-dates').val('custom');
-                $('#start-time').datepicker('option', 'maxDate', $('#end-time').val());
-                $('#end-time').datepicker('option', 'minDate', $('#start-time').val());
-            }
-        }).attr("autocomplete", "off");
+        let startTimeBoundarySet = function(){
+            let myDate = null;
+            let date = null;
+            let time = null;
+            
+            let regMyDate = /(\d{4}-\d{2}-\d{2})/.exec($('#start-time').val());
+            if(regMyDate != null)
+                myDate = regMyDate[0];
+            let regDate = /(\d{4}-\d{2}-\d{2})/.exec($('#end-time').val());
+            if(regDate != null)
+                date = regDate[0];
+            let regTime = /\d{1,2}:\d{2}:\d{2}/.exec($('#end-time').val());
+            if(regTime != null)
+                time = regTime[0];
 
-         $('#search_user').keyup(function(){
-            searchUsers( $(this).val() );
-         });
+            if(date != null)
+                this.setOptions({maxDate: date});
+            else
+                this.setOptions({maxDate: false});
+            if(time != null && date == myDate)
+                this.setOptions({maxTime: time});
+            else
+                this.setOptions({maxTime: false});
+            
+            let dateJs = new Date(myDate + ' 1:00:00');
+            let today = new Date();
+            if(dateJs.getDate() == today.getDate() && dateJs.getMonth() == today.getMonth() && dateJs.getFullYear() == today.getFullYear())
+                this.setOptions({minTime: new Date()});
+            else
+                this.setOptions({minTime: false});
+        }
 
-         $('#user_email_sort').click( function(e) {
-            sort_setter('user', 'email');
-            $('#search').keyup();
-         });
-         $('#user_admin_status_sort').click( function(e) {
-            sort_setter('user', 'admin_status');
-            $('#search').keyup();
-         });
+        let endTimeBoundarySet = function(){
+            let myDate = null;
+            let date = null;
+            let time = null;
+            
+            let regMyDate = /(\d{4}-\d{2}-\d{2})/.exec($('#end-time').val());
+            if(regMyDate != null)
+                myDate = regMyDate[0];
+            let regDate = /(\d{4}-\d{2}-\d{2})/.exec($('#start-time').val());
+            if(regDate != null)
+                date = regDate[0];
+            let regTime = /\d{1,2}:\d{2}:\d{2}/.exec($('#start-time').val());
+            if(regTime != null)
+                time = regTime[0];
+
+            if(date != null)
+                this.setOptions({minDate: date});
+            else
+                this.setOptions({minDate: new Date()});
+            if(time != null && date == myDate)
+                this.setOptions({minTime: time});
+            else
+                this.setOptions({minTime: false});
+        }
+
+        $("#start-time").datetimepicker({
+            format: 'Y-m-d H:00:00',
+            minDate: new Date(),
+            minTime: new Date(),
+            onShow: startTimeBoundarySet,
+            onChangeDateTime: startTimeBoundarySet
+        });
+
+        $("#end-time").datetimepicker({
+            format: 'Y-m-d H:00:00',
+            minDate: new Date(),
+            minTime: new Date(),
+            onShow: endTimeBoundarySet,
+            onChangeDateTime: endTimeBoundarySet
+        });
         
-         $('#search_user').keyup();
+
+        //Users
+        $('#user_search').keyup(function(){
+            setBodyUsers();
+        });
+
+        $('#user_email_sort').click( function(e) {
+            sortSetter('user', 'email');
+            $('#user_search').keyup();
+        });
+        $('#user_admin_status_sort').click( function(e) {
+            sortSetter('user', 'admin_status');
+            $('#user_search').keyup();
+        });
+    
+        $('#user_search').keyup();
+
+        //Items
+        $('#item_type').on('change', function(){
+            itemDict[$('#item_type').children("option:selected").val()].create();
+            rowSelected('item', null);
+        });
+
+        $('#item_search').keyup(function(){
+            itemDict[$('#item_type').children("option:selected").val()].search();
+        });
+
+        $('#item_check').click( function(e) {
+            $('#item_search').keyup();
+        });
+        $('#item_label_check').click( function(e) {
+            $('#item_search').keyup();
+        });
+
+        $('#item_type').change();
     });
 </script>

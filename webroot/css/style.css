@@ -657,3 +657,7 @@ tr.selected{
 td.right {
     text-align: right;
 }
+
+a.inline {
+    display: inline !important;
+}
