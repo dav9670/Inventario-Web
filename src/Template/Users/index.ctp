@@ -38,9 +38,7 @@
             <thead>
                 <tr>
                     <th scope="col"></th>
-                    <th scope="col"><a id='id_sort' class='asc'><?= __("Id") ?></a></th>
                     <th scope="col"><a id='email_sort'><?= __("Email Adress") ?></a></th>
-                    <th scope="col"><a id='password_sort'><?= __("Password") ?></a></th>
                     <th scope="col"><a id='admin_sort'><?= __("Admin Status") ?></a></th>
                     <th scope="col" class="actions"><?= __('Actions') ?></th>
                 </tr>
@@ -100,9 +98,7 @@
                             table.append(`
                                 <tr>
                                     <td><a href='/users/` + elem.id + `'><img src='data:image/png;base64,` + elem.image + `' alt='` + elem.email + ` ` + elem.password + `' width=100/></a></td>
-                                    <td><a href='/users/` + elem.id + `'>` + elem.id + `</a></td>
                                     <td><a href='/users/` + elem.id + `'>` + elem.email + `</a></td>
-                                    <td><a href='/users/` + elem.id + `'>` + elem.password + `</a></td>
                                     <td><a href='/users/` + elem.id + `'>` + elem.admin_status + `</a></td>
                                     <td class='actions'>
                                         ` + link + `

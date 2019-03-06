@@ -245,8 +245,8 @@ class ReportsController extends AppController
             
             $finalArray[$id]["cat"] = $result["cat"];
             $finalArray[$id]["hour_loans"] = $result["hour_loans"] * $value;
-            $finalArray[$id]["late_loans"] = ($result["late_loans"] == null) ? 0 : $result["late_loans"];
-            $finalArray[$id]["time_loans"] = ($result["time_loans"] == null) ? 0 : $result["time_loans"];
+            $finalArray[$id]["late_loans"] = ($result["late_loans"] == null) ? '--' : $result["late_loans"];
+            $finalArray[$id]["time_loans"] = ($result["time_loans"] == null) ? '--' : $result["time_loans"];
             $finalArray[$id]["available"] = $category->toArray()[0]["equipment_count_available"];
             $id = $id +1;
         }

@@ -58,11 +58,11 @@
             <?php foreach ($user->loans as $loan): 
                 $returned = $loan->returned != null ? $loan->returned : "---"; ?>
             <tr id='loan_row_<?=$loan->id?>'>
-                <td><a href='loans/<?=$loan->id?>'><?= h($loan->item_type) ?></a></td>
-                <td><a href='loans/<?=$loan->id?>'><?= h($loan->start_time)?></a></td>
-                <td><a href='loans/<?=$loan->id?>'><?= h($loan->end_time)?></a></td>
-                <td><a href='loans/<?=$loan->id?>'><?= h($returned)?></a></td>
-                <td><a href='loans/<?=$loan->id?>'><?= h($loan->overtimeFee)?></a></td>
+                <td><?= h($loan->item_type) ?></a></td>
+                <td><?= h($loan->start_time)?></a></td>
+                <td><?= h($loan->end_time)?></a></td>
+                <td><?= h($returned)?></a></td>
+                <td class="right" ><?= h($loan->overtimeFee == 0 ? '---' : $loan->overtimeFee . '$')?></a></td>
             </tr>
             <?php endforeach; ?>
         </tbody>

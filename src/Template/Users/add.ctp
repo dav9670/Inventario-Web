@@ -4,15 +4,16 @@
  * @var \App\Model\Entity\User $user
  */
 ?>
+
 <div class="users form large-12 medium-11 columns content">
-    <?= $this->Form->create($user, ['type' => 'file']) ?>
+    <?= $this->Form->create($user, ['id' => 'ajouter', 'type' => 'file']) ?>
     <fieldset>
         <legend><?= __('Add User') ?></legend>
         <div class="left twothirds-width">
             <?php
                 echo $this->Form->control('email');
                 echo $this->Form->control('password');
-                echo $this->Form->select('admin_status', ['user', 'admin']);
+                echo $this->Form->select('admin_status', ['user', 'admin'], ['id' => 'admin']);
             ?>
         </div>
         <div class="right third-width">
@@ -21,66 +22,38 @@
         </div>
         <div style="clear: both;"></div>
     </fieldset>
-    <?= $this->Form->button(__('Save')) ?>
-    <?= $this->Form->end() ?>
-</div>
+    <button type="button" id="saveButton" class='right editdone' onClick='popUp()'><?=__('Save')?></button>
+</div>  
+
 <script>
     function loadFile(event) {
         $('#output').attr('src', URL.createObjectURL(event.target.files[0])); 
     }
 
-    function removeLink(id) {
-        if(confirm('<?= __('Are you sure you want to remove this skill?')?>')){
-            $('#skill_row_' + id).remove();
+    function popUp(){
+
+        if ($('#admin').val() == 1){
+            
+            var password = prompt("Please enter your password to add an admin", "");
+            var name = "<?php echo $this->request->getSession()->read('Auth.User.email'); ?>";
+            $.ajax({
+                method: 'post',
+                url : "/users/verify.json",
+                data: {email:name, password:password},
+                beforeSend: function (xhr) { // Add this line
+                    xhr.setRequestHeader('X-CSRF-Token', $('[name="_csrfToken"]').val());
+                },
+                success: function( response ){
+                    if(response){
+                        $('#ajouter').submit();
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                    alert("Failed");
+                    console.log(jqXHR.responseText);
+                }
+            });
         }
     }
 
-    $('document').ready(function(){
-        $("#autocomplete").autocomplete({
-            source: function(request, show){
-                $.ajax({
-                    method: 'get',
-                    url : "/skills/search.json",
-                    data: {keyword: request.term, sort_field: 'name', sort_dir: 'asc'},
-                    success: function( response ){
-                        var results = [];
-                        $.each(response.skills, function(idx, elem){
-                            if(!$('#skill_row_' + elem.id).length){
-                                var entry = {
-                                    label: elem.name,
-                                    data: elem
-                                };
-                                results.push(entry);
-                            }
-                        });
-                        show(results);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown){
-                        console.log(textStatus);
-                    }
-                });
-            },
-            minLength: 1,
-            autoFocus: true,
-            select: function (event, ui) {
-                let table = $('#skills_table_body');
-                let elem = ui.item.data;
-
-                table.append(`
-                    <tr id='skill_row_` + elem.id + `'>
-                        <input type='hidden' name='skills[_ids][]' value='` + elem.id + `'/>
-                        <td><a href='skills/` + elem.id + `'>` + elem.name + `</a></td>
-                        <td><a href='skills/` + elem.id + `'>` + elem.description + `</a></td>
-                        <td><a href='/skills/` + elem.id + `'>` + elem.user_count + `</a></td>
-                        <td class='actions'>
-                            <a class='unlink_link delete-link' onclick='removeLink(` + elem.id + `)'><?=__('Remove')?></a>
-                        </td>
-                    </tr>
-                `);
-
-                $('#autocomplete').val('');
-                event.preventDefault();
-            }
-        });
-    });
 </script>

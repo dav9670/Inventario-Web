@@ -33,6 +33,7 @@ create table users(
     password        varchar(255)    not null,
     admin_status    varchar(50)     not null,
     image           mediumtext      ,
+    deleted         datetime        ,
     primary key (id),
     fulltext (email)
 );
