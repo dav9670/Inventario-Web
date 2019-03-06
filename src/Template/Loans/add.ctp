@@ -61,6 +61,37 @@
         }
     };
 
+    let itemDict = {
+        mentors: function(){
+            setHeadersMentors();
+            sort['item'].field = '';
+            sort['item'].dir = '';
+            sortSetter('email');
+            setBodyMentors();
+        },
+        rooms: function(){
+            setHeadersRooms();
+            sort['item'].field = '';
+            sort['item'].dir = '';
+            sortSetter('name');
+            setBodyRooms();
+        },
+        licences: function(){
+            setHeadersLicences();
+            sort['item'].field = '';
+            sort['item'].dir = '';
+            sortSetter('name');
+            setBodyLicences();
+        },
+        equipments: function(){
+            setHeadersEquipments();
+            sort_field = '';
+            sort_dir = '';
+            sortSetter('name');
+            setBodyEquipments();
+        }
+    }
+
     function searchUsers( keyword ){
         var data = keyword;
 
@@ -159,6 +190,10 @@
          $('#user_admin_status_sort').click( function(e) {
             sort_setter('user', 'admin_status');
             $('#search').keyup();
+         });
+
+         $('#item_type').on('change', function(){
+            itemDict[$('#item_type').children("option:selected").val()]();
          });
         
          $('#search_user').keyup();
