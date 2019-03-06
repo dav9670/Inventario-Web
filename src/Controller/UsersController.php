@@ -257,12 +257,6 @@ class UsersController extends AppController
         $keyword = "";
         $sort_field = "id";
         $sort_dir = "asc";
-        /*
-        $search_available = true;
-        $search_unavailable = true;
-         */
-        $search_users = true;
-        $search_loans = true;
         
 
         if ($this->isApi()){
@@ -276,63 +270,25 @@ class UsersController extends AppController
             $sort_dir = $this->getRequest()->getQuery('sort_dir');
             
             
-            $filters = $this->getRequest()->getQuery('filters');
-            /*
-            $search_available = $filters['search_available'] == 'true';
-            $search_unavailable = $filters['search_unavailable'] == 'true';
-            */
-            $search_users = $filters['search_users'] == 'true';
-            $search_loans = $filters['search_loans'] == 'true';
-            
         }
 
         $query = null;
-
-        $options = [];
-        if($this->isApi())
-        {
-            $options = ['contain' => ['Loans']];
-        }
         
         if($keyword == '')
         {
-            $query = $this->Users->find('all', $options);
+            $query = $this->Users->find('all');
         }
         else
         {
-            $union_query = null;
-
-            if($search_users)
-            {
-                $query = $this->Users->find('all', $options)
-                    ->where(["match (Users.email, Users.id) against(:search in boolean mode)
-                        or Users.email like :like_search or Users.id like :like_search"])
-                    ->bind(":search", $keyword, 'string')
-                    ->bind(":like_search", '%' . $keyword . '%', 'string');
-            }
-            if($search_loans)
-            {
-                if($query != null){
-                    $union_query = $query;
-                }   
-
-                $query = $this->Users->find('all')
-                    ->innerJoinWith('Loans')
-                    ->where(["match (Loans.item_type) against(:search in boolean mode)
-                        or Loans.item_id like :like_search"])
-                    ->bind(":search", $keyword, 'string')
-                    ->bind(":like_search", '%' . $keyword . '%', 'string');
-                
-                if($union_query != null){
-                    $query->union($union_query);
-                }
-            }
+            $query = $this->Users->find('all')
+                ->where(["match (Users.email) against(:search in boolean mode)
+                    or Users.email like :like_search"])
+                ->bind(":search", $keyword, 'string')
+                ->bind(":like_search", '%' . $keyword . '%', 'string');
         }
 
         if ($query != null)
         {
-            //$connection = ConnectionManager::get('default');
-            //$query->epilog($connection->newQuery()->order(['Users_' . $sort_field => $sort_dir]));
             $query->order(["Users.".$sort_field => $sort_dir]);
         }
         
