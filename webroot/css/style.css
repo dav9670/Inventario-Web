@@ -653,3 +653,7 @@ tr.late{
 tr.selected{
     background: #795799 !important;
 }
+
+a.inline {
+    display: inline !important;
+}
