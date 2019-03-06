@@ -29,7 +29,7 @@
         </table>
 
         <label for="item_type"><?= __('Item type') ?></label>
-        <?= $this->Form->select('item_type', ['mentors' => 'Mentors', 'rooms' => 'Rooms', 'licences' => 'Licences', 'equipments' => 'Equipments']); ?>
+        <?= $this->Form->select('item_type', ['mentors' => 'Mentors', 'rooms' => 'Rooms', 'licences' => 'Licences', 'equipments' => 'Equipments'], ['id' => 'item_type']); ?>
         <input type='hidden' id='item-id' name='item_id' required='required'/>
         <label for="search_item"><?= __('Item:') ?></label>
         <span id='item_selected'></span>
