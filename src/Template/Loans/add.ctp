@@ -171,7 +171,7 @@
 
         var filters = {};
         filters['search_available'] = true;
-        filters['search_unavailable'] = true;
+        filters['search_unavailable'] = false;
         filters['search_' + itemType] = $('#item_check').is(':checked');
         filters['search_' + itemDict[itemType].labels] = $('#item_label_check').is(':checked');
 
