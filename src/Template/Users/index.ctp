@@ -28,14 +28,7 @@
     <br>
     <br>
 
-    <a href="#" onclick="toggle_visibility('hid');"><?= __("Filters")?></a>
-    <div id="hid" class="hidden" >
-        <form action="/action_page.php">
-        
-            <input type="checkbox" id="FieldUsers" checked><?=__('Search by Users') ?><br>
-            <input type="checkbox" id="FieldLoans"><?=__('Search by Loaned item type') ?><br>
-        </form>
-    </div>
+    <br>
     <div class="tab">
         <button id='table_activated_button' class="tablinks active" onclick="show_table('table_activated')"><?= __("Activated") ?></button>
         <button id='table_archived_button' class="tablinks" onclick="show_table('table_archived')"><?= __("Archived") ?></button>
@@ -69,21 +62,11 @@
     function searchUsers( keyword ){
         var data = keyword;
 
-        
-        var filters = {
-            /*
-            search_available: $('#FieldAvailable').is(':checked'),
-            search_unavailable: $('#FieldUnavailable').is(':checked'),
-            */
-            search_users: $('#FieldUsers').is(':checked'),
-            search_loans: $('#FieldLoans').is(':checked')
-            
-        };
 
         $.ajax({
                 method: 'get',
                 url : "/users/search.json",
-                data: {keyword:data, sort_field:sort_field, sort_dir:sort_dir, filters: filters},
+                data: {keyword:data, sort_field:sort_field, sort_dir:sort_dir},
                 success: function( response ){
                     
                     for(var i=0; i<2; i++){
@@ -101,16 +84,6 @@
 
                         usersArray = response[array_name];
                         $.each(usersArray, function(idx, elem){
-
-                            /*
-                            var loans_list = "";
-                            var three_loans = elem.loans_list.slice(0,3);
-                            if (elem.loans_list.length > 3) {
-                                loans_list = three_loans.join("; ") + "...";
-                            } else {
-                                loans_list = three_loans.join("; ");
-                            }
-                            */
 
                             var link = "";
                             if(elem.deleted == null){
@@ -192,30 +165,8 @@
             sort_setter('admin_status');
             $('#search').keyup();
          });
-         /*
-         $('#FieldAvailable').click( function(e) {
-            $('#search').keyup();
-         });
-         $('#FieldUnavailable').click( function(e) {
-            $('#search').keyup();
-         });
-          */
-         $('#FieldUsers').click( function(e) {
-            $('#search').keyup();
-         });
-         $('#FieldLoanss').click( function(e) {
-            $('#search').keyup();
-         });
         
-
          $('#search').keyup();
     });
 
-    function toggle_visibility(id) {
-        var e = document.getElementById(id);
-        if(e.style.display == 'block')
-            e.style.display = 'none';
-        else
-            e.style.display = 'block';
-    }
 </script>
