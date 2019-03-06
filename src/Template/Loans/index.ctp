@@ -99,6 +99,8 @@
                 data: {keyword:keyword, sort_field:sort_field, sort_dir:sort_dir, filters: filters},
                 success: function( response ){
                     
+                    console.dir(response);
+
                     for(var i=0; i<2; i++){
                         var table_name = "";
                         var array_name = "";
