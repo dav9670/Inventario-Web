@@ -70,9 +70,7 @@ class LoansController extends AppController
             }
             $this->Flash->error(__('The loan could not be saved. Please, try again.'));
         }
-        $users = $this->Loans->Users->find('list', ['limit' => 200]);
-        $items = $this->Loans->Items->find('list', ['limit' => 200]);
-        $this->set(compact('loan', 'users', 'items'));
+        $this->set(compact('loan'));
     }
 
     /**
@@ -450,6 +448,7 @@ class LoansController extends AppController
                     'id' => $loan->user->id,
                     'identifier' => $loan->user->email
                 ],
+                'id' => $loan['id'],
                 'start_time' => $loan['start_time'],
                 'end_time' => $loan['end_time'],
                 'returned' => $loan['returned']

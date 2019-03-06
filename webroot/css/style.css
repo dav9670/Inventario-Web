@@ -400,7 +400,7 @@ th.highlighted-header, td.highlighted-row {
 }
 
 table tr:nth-of-type(even) {
-    background: none;
+    /*background: none;*/
 }
 
 table tr.clickable-row:hover {
@@ -647,5 +647,9 @@ img#output {
 }
 
 tr.late{
-    background: rgb(223, 112, 112);
+    background: rgb(223, 112, 112) !important;
+}
+
+tr.selected{
+    background: #795799 !important;
 }
