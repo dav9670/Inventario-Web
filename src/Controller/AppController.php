@@ -18,6 +18,10 @@ use Cake\Controller\Controller;
 use Cake\Event\Event;
 use Cake\I18n\I18n;
 use Cake\Collection\Collection;
+use Cake\I18n\Time;
+use Cake\I18n\FrozenTime;
+use Cake\I18n\Date;
+use Cake\I18n\FrozenDate;
 
 
 /**
@@ -42,6 +46,11 @@ class AppController extends Controller
      */
     public function initialize()
     {
+        Time::setToStringFormat('yyyy-MM-dd HH:mm:ss');
+        FrozenTime::setToStringFormat('yyyy-MM-dd HH:mm:ss');
+        Date::setToStringFormat('yyyy-MM-dd HH:mm:ss');
+        FrozenDate::setToStringFormat('yyyy-MM-dd HH:mm:ss');
+
         parent::initialize();
 
         $this->loadComponent('RequestHandler', [

@@ -120,6 +120,9 @@ class LoansController extends AppController
             $this->Flash->error(__('The loan could not be saved. Please, try again.'));
         }
         $this->set(compact('loan'));
+        if($this->isApi()){
+            $this->set('_serialize', 'loan');
+        }
     }
 
     /**

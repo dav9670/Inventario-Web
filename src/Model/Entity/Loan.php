@@ -154,5 +154,5 @@ class Loan extends Entity
         return $overtimeFee;
     }
 
-protected $_virtual = [/*'overtime_fee'*/];
+protected $_virtual = ['overtime_fee'];
 }

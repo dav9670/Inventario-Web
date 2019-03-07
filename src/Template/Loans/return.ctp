@@ -5,18 +5,22 @@
  */
 echo $this->Html->css('jquery.datetimepicker.min.css');
 echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => false));
+
+debug($loan);
+
 ?>
 <div class="loans form large-12 medium-11 columns content">
     <?= $this->Form->create($loan, ['id' => 'return_form']) ?>
     <fieldset>
         <legend><?= __('Return Loan') ?></legend>
         <div style='width: 50%; float: left;'>
-            <input type="hidden" name="user_id" id="user-id" value="<?=$loan->item_id?>">
+            <input type="hidden" name="user_id" id="user-id" value="<?=$loan->user_id?>">
             <h3><?= $this->Html->Link($loan->user->email, ['controller' => 'users', 'action' => 'consult', $loan->item_id])?></h3>
             <img src='data:image/png;base64,<?=$loan->user->image?>' id='output'/>
         </div>
         <div style='width: 50%; float: left;'>
-            <input type="hidden" name="item_id" id="item-id" value="<?=$loan->user_id?>">
+            <input type="hidden" name="item_type" id="item-type" value="<?=$loan->item_type?>">
+            <input type="hidden" name="item_id" id="item-id" value="<?=$loan->item_id?>">
             <?php
                 if($loan->item_type == 'mentors'){ 
                 ?>
@@ -136,7 +140,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
             <input type="hidden" name="returned" id="returned" value="<?=date("Y-m-d H:i:s")?>">
             <div style='clear:both;'></div>
             <?php 
-            if($loan->end_time > date("Y-m-d H:i:s")){
+            if($loan->overtime_fee != 0){
                 echo __("Overtime fee: ") . number_format($loan->overtime_fee, 2) . '$';
             }
             ?>
