@@ -64,8 +64,8 @@
                     <th scope="col"><a id='description_sort'><?= __("Description") ?></a></th>
                     <th scope="col"><?= __("Labels") ?></th>
                     <th scope="col"><a id='user_sort'><?= __("User") ?></a></th>
-                    <th scope="col"><a id='start_date_sort'><?= __("Start date") ?></a></th>
-                    <th scope="col"><a id='end_date_sort'><?= __("End date") ?></a></th>
+                    <th scope="col"><a id='start_time_sort'><?= __("Start time") ?></a></th>
+                    <th scope="col"><a id='end_time_sort'><?= __("End time") ?></a></th>
                     <th scope="col" class="actions"><?= __('Actions') ?></th>
                 </tr>
             </thead>
@@ -98,7 +98,7 @@
                 url : "/loans/search.json",
                 data: {keyword:keyword, sort_field:sort_field, sort_dir:sort_dir, filters: filters},
                 success: function( response ){
-                    
+
                     for(var i=0; i<2; i++){
                         var table_name = "";
                         var array_name = "";
@@ -180,6 +180,7 @@
                 $('#preset-dates').val('custom');
                 $('#start_time').datepicker('option', 'maxDate', $('#end_time').val());
                 $('#end_time').datepicker('option', 'minDate', $('#start_time').val());
+                $('#search').keyup();
             }
         });
 
@@ -188,7 +189,11 @@
 
          $('#search').keyup(function(){
             var searchkey = $(this).val();
-            searchLoans( searchkey );
+            searchLoans(searchkey);
+         });
+
+         $('#item_type').change(function(){
+            $('#search').keyup();
          });
 
          $('#item_sort').click( function(e) {
@@ -203,12 +208,12 @@
             sort_setter('user');
             $('#search').keyup();
          });
-         $('#start_date_sort').click( function(e) {
-            sort_setter('start_date');
+         $('#start_time_sort').click( function(e) {
+            sort_setter('start_time');
             $('#search').keyup();
          });
-         $('#end_date_sort').click( function(e) {
-            sort_setter('end_date');
+         $('#end_time_sort').click( function(e) {
+            sort_setter('end_time');
             $('#search').keyup();
          });
 

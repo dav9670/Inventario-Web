@@ -270,8 +270,11 @@ class CategoriesController extends AppController
         else
         {
             $query = $this->Categories->find('all')
-                ->where(["match (name, description) against(:search in boolean mode)"])
-                ->bind(":search", $keyword . '*', 'string');
+            ->where(["match (name, description) against(:search in boolean mode)
+                            or name like :like_search or description like :like_search"])
+                            ->bind(":search", $keyword, 'string')
+                            ->bind(":like_search", '%' . $keyword . '%', 'string');
+                     
         }
 
         $query->order([$sort_field => $sort_dir]);
@@ -279,6 +282,7 @@ class CategoriesController extends AppController
         $this->set('categories', $this->paginate($query));
         $this->set('_serialize', ['categories']);
     }
+    
 
     public function isAuthorized($user)
     {

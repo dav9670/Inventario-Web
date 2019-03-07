@@ -56,26 +56,28 @@ class UsersTable extends Table
 
         $validator
             ->email('email')
-            ->requirePresence('email', 'create')
+            ->requirePresence('email', 'create',__('Please enter an Email.'))
             ->allowEmptyString('email', false)
-            ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+            ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table'], _('Please enter a valid Email: exemple@exemple.com'));
 
         $validator
             ->scalar('password')
-            ->maxLength('password', 255)
+            ->maxLength('password', 255, _('You need a password.'))
             ->requirePresence('password', 'create')
             ->allowEmptyString('password', false);
 
         $validator
             ->scalar('admin_status')
             ->maxLength('admin_status', 50)
-            ->requirePresence('admin_status', 'create')
+            ->requirePresence('admin_status', 'create',__('You need to pick one.'))
             ->allowEmptyString('admin_status', false);
 
         $validator
             ->scalar('image')
-            ->maxLength('image', 16777215)
-            ->allowEmptyFile('image');
+            ->maxLength('image', 16777215, __('Image is too large.'))
+            ->requirePresence('image', 'create', __('Image is required.'))
+            ->allowEmptyFile('image', 'create', false, __('Image is required.'))
+            ->allowEmptyFile('image', 'update', true);
 
         return $validator;
     }

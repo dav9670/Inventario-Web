@@ -2,6 +2,8 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Utility\Inflector;
+use Cake\ORM\TableRegistry;
 
 /**
  * Loans Controller
@@ -22,16 +24,16 @@ class LoansController extends AppController
     {
         $options = [
             'contain'=>[
-                'Users',
-                'Mentors',
-                'Rooms',
-                'Licences',
-                'Equipments'
+                'Mentors' => [
+                    'Skills'
+                ]
             ]
         ];
 
-        $loan = $this->Loans->find('all', $options)->toList()[1];
+        $query = $this->Loans->find('all', $options);
+        $loan = $query->toList()[1];
 
+        //dd($query->sql());
         $this->set(compact('loans'));
     }
 
@@ -45,10 +47,12 @@ class LoansController extends AppController
     public function view($id = null)
     {
         $loan = $this->Loans->get($id, [
-            'contain' => ['Users', 'Items']
+            'contain' => ['Users', 'Mentors.Skills', 'Rooms.Services', 'Licences.Products', 'Equipments.Categories']
         ]);
-
-        $this->set('loan', $loan);
+        $this->set(compact('loan'));
+        if($this->isApi()){
+            $this->set('_serialize', 'loan');
+        }
     }
 
     /**
@@ -59,18 +63,30 @@ class LoansController extends AppController
     public function add()
     {
         $loan = $this->Loans->newEntity();
+        $success = false;
         if ($this->request->is('post')) {
             $loan = $this->Loans->patchEntity($loan, $this->request->getData());
             if ($this->Loans->save($loan)) {
-                $this->Flash->success(__('The loan has been saved.'));
+                if($this->isApi()){
+                    $success = true;
+                } else {
+                    $this->Flash->success(__('The loan has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                    return $this->redirect(['action' => 'index']);
+                }
+            }else if($this->isApi()){
+                $success = false;
+            }else {
+                $this->Flash->error(__('The loan could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The loan could not be saved. Please, try again.'));
         }
-        $users = $this->Loans->Users->find('list', ['limit' => 200]);
-        $items = $this->Loans->Items->find('list', ['limit' => 200]);
-        $this->set(compact('loan', 'users', 'items'));
+
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        } else {
+            $this->set(compact('loan'));
+        }
     }
 
     /**
@@ -95,8 +111,34 @@ class LoansController extends AppController
             $this->Flash->error(__('The loan could not be saved. Please, try again.'));
         }
         $users = $this->Loans->Users->find('list', ['limit' => 200]);
-        $items = $this->Loans->Items->find('list', ['limit' => 200]);
-        $this->set(compact('loan', 'users', 'items'));
+        $this->set(compact('loan', 'users'));
+    }
+
+    /**
+     * Edit method
+     *
+     * @param string|null $id Loan id.
+     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function return($id = null)
+    {
+        $loan = $this->Loans->get($id, [
+            'contain' => ['Users', 'Mentors.Skills', 'Rooms.Services', 'Licences.Products', 'Equipments.Categories']
+        ]);
+        if ($this->request->is(['patch', 'post', 'put', 'delete'])) {
+            $loan = $this->Loans->patchEntity($loan, $this->request->getData());
+            if ($this->Loans->save($loan)) {
+                $this->Flash->success(__('The loan has been saved.'));
+
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('The loan could not be saved. Please, try again.'));
+        }
+        $this->set(compact('loan'));
+        if($this->isApi()){
+            $this->set('_serialize', 'loan');
+        }
     }
 
     /**
@@ -119,14 +161,34 @@ class LoansController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
+    /**
+     *  Used to construct string (match(...) or string like '%a%') using the name of the table and an array of strings
+    */
+    private function makeStringSearch($table, $searchFields)
+    {
+        $whereQuery = '';
+        $whereQuery .= 'match (';
+        for($i = 0, $size = count($searchFields); $i < $size; ++$i)
+        {
+            $whereQuery .= $table . '.' . $searchFields[$i] . ($i < $size - 1 ? ', ' : ')');
+        }
+        $whereQuery .= ' against(:search in boolean mode) or ';
+        for($i = 0, $size = count($searchFields); $i < $size; ++$i)
+        {
+            $whereQuery .= $table . '.' . $searchFields[$i] . ' like :like_search' . ($i < $size - 1 ? ' or ' : '');
+        }
+
+        return $whereQuery;
+    }
+
     public function search()
     {
         ini_set('memory_limit', '-1');
 
         if($this->isApi()){
-            $this->getRequest()->allowMethod('get', 'post');
+            $this->getRequest()->allowMethod(['get', 'post']);
         }else {
-            $this->getRequest()->allowMethod('get', 'ajax');
+            $this->getRequest()->allowMethod(['get', 'ajax']);
         }
    
         $keyword = "";
@@ -143,8 +205,12 @@ class LoansController extends AppController
         if ($this->isApi()){
             $jsonData = $this->getRequest()->input('json_decode', true);
             $keyword = $jsonData['keyword'];
-            $sort_field = $jsonData['sort_field'];
-            $sort_dir = $jsonData['sort_dir'];
+            $item_type = $jsonData['itemType'];
+            $start_time = $jsonData['startTime'];
+            $end_time = $jsonData['endTime'];
+            $search_items = $jsonData['searchItems'] == 'true';
+            $search_labels = $jsonData['searchLabels'] == 'true';
+            $search_users = $jsonData['searchUsers'] == 'true';
         } else {
             $keyword = $this->getRequest()->getQuery('keyword');
             $sort_field = $this->getRequest()->getQuery('sort_field');
@@ -159,8 +225,6 @@ class LoansController extends AppController
             $end_time = $filters['end_time'];
         }
 
-        $query = null;
-
         $options = [
             'contain'=>[
                 'Users',
@@ -171,15 +235,95 @@ class LoansController extends AppController
             ]
         ];
 
-        $query = $this->Loans->find('all', $options);
+        $identifiers = [
+            'mentors'=>[
+                'identifier' => 'email',
+                'description' => 'description',
+                'labels' => 'skills_list',
+                'image' => 'image'
+            ],
+            'rooms'=>[
+                'identifier' => 'name',
+                'description' => 'description',
+                'labels' => 'services_list',
+                'image' => 'image'
+            ],
+            'licences'=>[
+                'identifier' => 'name',
+                'description' => 'description',
+                'labels' => 'products_list',
+                'image' => 'image'
+            ],
+            'equipments'=>[
+                'identifier' => 'name',
+                'description' => 'description',
+                'labels' => 'categories_list',
+                'image' => 'image'
+            ]
+        ];
 
-        if($keyword != '')
+        $query = null;
+
+        if($keyword == '' || ($search_items == false && $search_labels == false && $search_users == false))
         {
+            $query = $this->Loans->find('all', $options);
+        }
+        else
+        {
+            $needs_union = false;
             $union_query = null;
 
             if($search_items)
             {
+                $searchFieldsType = [
+                    'mentors' => [
+                        'email',
+                        'first_name',
+                        'last_name',
+                        'description'
+                    ],
+                    'rooms' => [
+                        'name',
+                        'description'
+                    ],
+                    'licences' => [
+                        'name',
+                        'description'
+                    ], 
+                    'equipments' => [
+                        'name',
+                        'description'
+                    ]
+                ];
 
+                $whereQuery = '';
+
+                if($item_type == 'all')
+                {
+                    $i = 0;
+                    foreach($searchFieldsType as $type => $searchFields)
+                    {
+                        $table = ucfirst($type);
+
+                        $subQuery = $this->makeStringSearch($table, $searchFields);
+                        $whereQuery .= $subQuery . ($i < count($searchFieldsType) - 1 ? ' or ' : '');
+                        
+                        ++$i;
+                    }
+                }
+                else
+                {
+                    $table = ucfirst($item_type);
+                    $searchFields = $searchFieldsType[$item_type];
+
+                    $whereQuery = $this->makeStringSearch($table, $searchFields);
+                    //var_dump($whereQuery);
+                }
+
+                $query = $this->Loans->find('all', $options)
+                    ->where($whereQuery)
+                    ->bind(":search", $keyword, 'string')
+                    ->bind(":like_search", '%' . $keyword . '%', 'string');
             }
             if($search_labels)
             {
@@ -187,7 +331,73 @@ class LoansController extends AppController
                     $union_query = $query;
                 }   
 
+                $searchFieldsType = [
+                    'mentors' => [
+                        'label_table' => 'skills',
+                        'fields' => [
+                            'name',
+                            'description'
+                        ]
+                    ],
+                    'rooms' => [
+                        'label_table' => 'services',
+                        'fields' => [
+                            'name',
+                            'description'
+                        ]
+                    ],
+                    'licences' => [
+                        'label_table' => 'products',
+                        'fields' => [
+                            'name',
+                            'description'
+                        ]
+                    ], 
+                    'equipments' => [
+                        'label_table' => 'categories',
+                        'fields' => [
+                            'name',
+                            'description'
+                        ]
+                    ]
+                ];
+
+                $whereQuery = '';
+                $matchings = [];
+                $joins = [];
+
+                if($item_type == 'all')
+                {
+                    $i = 0;
+                    foreach($searchFieldsType as $type => $searchFields)
+                    {
+                        $table = ucfirst($type);
+                        $labelTable = ucfirst($searchFields['label_table']);
+
+                        $subQuery = $this->makeStringSearch($labelTable, $searchFields['fields']);
+                        $whereQuery .= $subQuery . ($i < count($searchFieldsType) - 1 ? ' or ' : '');
+                        
+                        ++$i;
+                    }
+                }
+                else
+                {
+                    $table = ucfirst($item_type);
+                    $labelTable = ucfirst($searchFields['label_table']);
+
+                    $searchFields = $searchFieldsType[$item_type];
+
+                    $whereQuery = $this->makeStringSearch($labelTable, $searchFields['fields']);
+                }
+
+
+                $query = $this->Loans->find('all', $options)
+                    ->where($whereQuery)
+                    ->bind(":search", $keyword, 'string')
+                    ->bind(":like_search", '%' . $keyword . '%', 'string');
                 
+                var_dump($query->sql());
+
                 if($union_query != null){
                     $query->union($union_query);
                 }
@@ -198,49 +408,72 @@ class LoansController extends AppController
                     $union_query = $query;
                 }   
 
-                
+                $query = $this->Loans->find('all', $options)
+                    ->where('Users.email like :like_search')
+                    ->bind(":like_search", '%' . $keyword . '%', 'string');
+
                 if($union_query != null){
                     $query->union($union_query);
                 }
             }
         }
-            
-        //$query->order(["Loans.".$sort_field => $sort_dir]);
+
+        if($item_type != 'all')
+        {
+            $query
+                ->where('Loans.item_type like :item_type')
+                ->bind(':item_type', $item_type, 'string');
+        }
+        if($start_time != '')
+        {
+            $query
+                ->where('Loans.start_time > :start_time')
+                ->bind(':start_time', $start_time);
+        }
+        if($end_time != '')
+        {
+            $query
+                ->where('Loans.start_time < :end_time')
+                ->bind(':end_time', $end_time);
+        }
+
+        $sqlSorted = false;
+
+        if($item_type != 'all' || ($sort_field != 'item' && $sort_field != 'description'))
+        {
+            //Sort by sql
+            $table = null;
+            switch($sort_field)
+            {
+                case 'item':
+                    $table = ucfirst($item_type);
+                    $sort_field = $identifiers[$item_type]['identifier'];
+                break;
+                case 'description':
+                    $table = ucfirst($item_type);
+                    $sort_field = $identifiers[$item_type]['description'];
+                break;
+                case 'user':
+                    $table = 'Users';
+                    $sort_field = 'email';
+                break;
+                case 'start_time':
+                    $table = 'Loans';
+                break;
+                case 'end_time':
+                    $table = 'Loans';
+                break;
+                case 'returned':
+                    $table = 'Loans';
+                break;
+            }
+            $query->order([$table . "." . $sort_field => $sort_dir]);
+            $sqlSorted = true;
+        }
 
         $loans = [];
         $returnedLoans = [];
         $allLoans = $query->toList();
-
-        $identifiers = [
-            'mentors'=>[
-                'type' => 'mentor',
-                'image' => 'image',
-                'identifier' => 'email',
-                'description' => 'description',
-                'labels' => 'skills_list'
-            ],
-            'rooms'=>[
-                'type' => 'room',
-                'image' => 'image',
-                'identifier' => 'name',
-                'description' => 'description',
-                'labels' => 'services_list'
-            ],
-            'licences'=>[
-                'type' => 'licence',
-                'image' => 'image',
-                'identifier' => 'name',
-                'description' => 'description',
-                'labels' => 'products_list'
-            ],
-            'equipments'=>[
-                'type' => 'equipment',
-                'image' => 'image',
-                'identifier' => 'name',
-                'description' => 'description',
-                'labels' => 'categories_list'
-            ]
-        ];
 
         foreach ($allLoans as $loan){
 
@@ -248,18 +481,20 @@ class LoansController extends AppController
                 'item' => [
                     'id' => $loan->item_id,
                     'type' => $loan->item_type,
-                    'image' => $loan[$identifiers[$loan->item_type]['type']][$identifiers[$loan->item_type]['image']],
-                    'identifier' => $loan[$identifiers[$loan->item_type]['type']][$identifiers[$loan->item_type]['identifier']],
-                    'description' => $loan[$identifiers[$loan->item_type]['type']][$identifiers[$loan->item_type]['description']],
-                    'labels' => $loan[$identifiers[$loan->item_type]['type']][$identifiers[$loan->item_type]['labels']]
+                    'identifier' => $loan[Inflector::singularize($loan->item_type)][$identifiers[$loan->item_type]['identifier']],
+                    'description' => $loan[Inflector::singularize($loan->item_type)][$identifiers[$loan->item_type]['description']],
+                    'labels' => $loan[Inflector::singularize($loan->item_type)][$identifiers[$loan->item_type]['labels']],
+                    'image' => $loan[Inflector::singularize($loan->item_type)][$identifiers[$loan->item_type]['image']]
                 ],
                 'user' => [
                     'id' => $loan->user->id,
                     'identifier' => $loan->user->email
                 ],
+                'id' => $loan['id'],
                 'start_time' => $loan['start_time'],
                 'end_time' => $loan['end_time'],
-                'returned' => $loan['returned']
+                'returned' => $loan['returned'],
+                'overtime_fee' => $loan['overtime_fee']
             ];
 
             if ($formattedLoan['returned'] != null) {
@@ -275,6 +510,30 @@ class LoansController extends AppController
             }
         }
         
+        if(!$sqlSorted)
+        {
+            //description stays same
+            $sort_field_local = '';
+            if($sort_field == 'item')
+            {
+                $sort_field_local = 'identifier'; 
+            }
+            else
+            {
+                $sort_field_local = $sort_field;
+            }
+            
+            $sort_dir_local = $sort_dir == 'asc' ? 1 : -1;
+
+
+            usort($loans, function($a, $b) use ($sort_field_local, $sort_dir_local){
+                return strnatcmp($a['item'][$sort_field_local], $b['item'][$sort_field_local]) * $sort_dir_local;
+            });
+            usort($returnedLoans, function($a, $b) use ($sort_field_local, $sort_dir_local){
+                return strnatcmp($a['item'][$sort_field_local], $b['item'][$sort_field_local]) * $sort_dir_local;
+            });
+        }
+
         $this->set(compact('loans', 'returnedLoans'));
         $this->set('_serialize', ['loans', 'returnedLoans']);
     }

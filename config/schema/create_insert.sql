@@ -1,5 +1,7 @@
 use my_app;
 
+/*SET GLOBAL max_allowed_packet=1073741824;*/
+
 /*------------------------ create ------------------------*/
 
 drop table if exists loans;
@@ -33,6 +35,7 @@ create table users(
     password        varchar(255)    not null,
     admin_status    varchar(50)     not null,
     image           mediumtext      ,
+    deleted         datetime        ,
     primary key (id),
     fulltext (email)
 );

@@ -3,6 +3,7 @@ namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
 use Cake\I18n\Time;
+use Cake\ORM\TableRegistry;
 
 /**
  * Loan Entity
@@ -40,6 +41,20 @@ class Loan extends Entity
         'user' => true,
         'item' => true
     ];
+
+    public function getItem(){
+        if($this->mentor != null){
+            return $this->mentor;
+        } else if ($this->room != null){
+            return $this->room;
+        } else if ($this->licence != null){
+            return $this->licence;
+        } else if ($this->equipment != null){
+            return $this->equipment;
+        }
+
+        return null;
+    }
 
     public function _getTimePresetsForRooms($from, $to, $room){
         $startCalcul = "";
@@ -104,4 +119,40 @@ class Loan extends Entity
         return $roomResult;
     }
 
+    protected function _getOvertimeFee()
+    {
+        $overtimeFee = 0;
+        if($this->returned == null){
+
+            if($this->end_time != null && $this->end_time <= Time::now()){
+
+                $now = Time::now();
+                $diff = $now->diff($this->end_time);
+                $overtime =  $diff->days * 24 + $diff->h;
+
+                if($this->item_type != 'equipments'){
+                    $overtimeFee = $overtime * 10;
+                }
+                else{
+                    $equipments = TableRegistry::get('Equipments');
+
+                    $myEquipments = $equipments->get($this->item_id);
+                    $categories = $myEquipments->categories_list;
+                    
+                    foreach($categories as $category){
+                        $query = TableRegistry::get('Categories')->find('all');
+                        $query = $query->where(['name' => $category]);
+                        $category = $query->toArray();
+                        
+                        $overtimeFee += $overtime * $category[0]['hourly_rate'] + $overtime * 10;
+                    }
+
+                }
+            } 
+        }
+        
+        return floatval($overtimeFee);
+    }
+
+protected $_virtual = ['overtime_fee'];
 }

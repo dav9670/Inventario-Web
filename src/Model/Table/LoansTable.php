@@ -81,15 +81,18 @@ class LoansTable extends Table
             ->dateTime('start_time')
             ->requirePresence('start_time', 'create')
             ->allowEmptyDateTime('start_time', false);
+            
 
         $validator
             ->dateTime('end_time')
             ->requirePresence('end_time', 'create')
-            ->allowEmptyDateTime('end_time', false);
+            ->allowEmptyDateTime('end_time', false)
+            ->greaterThanField('end_time','start_time', __('End Time cannot be before Start Time.'));
 
         $validator
             ->dateTime('returned')
-            ->allowEmptyDateTime('returned');
+            ->allowEmptyDateTime('returned')
+            ->greaterThanField('returned','start_time', __('Returned cannot be before Start Time.'));
 
         $validator
             ->scalar('item_type')
