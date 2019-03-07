@@ -47,7 +47,7 @@
             }
         }
     ?>
-    <button type="button" class="right editdone" id="cancelButton" class='editdone' onClick='cancel()' hidden="hidden"><?=__('Cancel')?></button>
+    <button type="button" class="right editdone" id="cancelButton" onClick='cancel()' hidden="hidden"><?=__('Cancel')?></button>
     
     <h3><?=__('Products')?></h3>
     <input id='autocomplete' type ='text' style='display:none'>

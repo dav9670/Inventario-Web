@@ -42,6 +42,20 @@ class Loan extends Entity
         'item' => true
     ];
 
+    public function getItem(){
+        if($this->mentor != null){
+            return $this->mentor;
+        } else if ($this->room != null){
+            return $this->room;
+        } else if ($this->licence != null){
+            return $this->licence;
+        } else if ($this->equipment != null){
+            return $this->equipment;
+        }
+
+        return null;
+    }
+
     public function _getTimePresetsForRooms($from, $to, $room){
         $startCalcul = "";
         $endCalcul = "";

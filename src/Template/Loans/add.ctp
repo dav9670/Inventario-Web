@@ -3,9 +3,9 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Loan $loan
  */
+echo $this->Html->css('jquery.datetimepicker.min.css');
+echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => false));
 ?>
-<?= $this->Html->css('jquery.datetimepicker.min.css') ?>
-<?= $this->Html->script('jquery.datetimepicker.full.js', array('inline' => false)); ?>
 
 <div class="loans form large-12 medium-11 columns content">
     <?= $this->Form->create($loan) ?>
@@ -16,18 +16,19 @@
         <label for="user_search"><?= __('User:') ?></label>
         <span id='user_selected'></span>
         <input type="text" name="user_search" id="user_search">
-        <table cellpadding="0" cellspacing="0">
-            <thead>
-                <tr>
-                    <th scope="col"></th>
-                    <th scope="col"><a id='user_email_sort' class='asc'><?= __("Email Adress") ?></a></th>
-                    <th scope="col"><a id='user_admin_status_sort'><?= __("Admin Status") ?></a></th>
-                    <th scope="col" class="actions"><?= __('Actions') ?></th>
-                </tr>
-            </thead>
-            <tbody id="user-table-body">
-            </tbody>
-        </table>
+        <div style="overflow-x:auto; height:500px;">
+            <table cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col"><a id='user_email_sort' class='asc'><?= __("Email Adress") ?></a></th>
+                        <th scope="col"><a id='user_admin_status_sort'><?= __("Admin Status") ?></a></th>
+                    </tr>
+                </thead>
+                <tbody id="user-table-body">
+                </tbody>
+            </table>
+        </div>
 
         <label for="item_type"><?= __('Item type') ?></label>
         <?= $this->Form->select('item_type', ['mentors' => 'Mentors', 'rooms' => 'Rooms', 'licences' => 'Licences', 'equipments' => 'Equipments'], ['id' => 'item_type']); ?>
@@ -43,15 +44,17 @@
             <input type="checkbox" id="item_label_check"><?=__('Search by Labels') ?><br>
         </div>
 
-        <table id='item-table' cellpadding="0" cellspacing="0">
-            <thead id='item-table-head'>
-            </thead>
-            <tbody id='item-table-body'>
-            </tbody>
-        </table>
+        <div style="overflow-x:auto; height:500px;">
+            <table id='item-table' cellpadding="0" cellspacing="0">
+                <thead id='item-table-head'>
+                </thead>
+                <tbody id='item-table-body'>
+                </tbody>
+            </table>
+        </div>
 
         <?= $this->Form->control('start_time', ['type' => 'text', 'class' => 'datetpicker']); ?>
-        <?= $this->Form->control('end_time', ['type' => 'text', 'class' => 'datepicker', 'empty' => true]); ?>
+        <?= $this->Form->control('end_time', ['type' => 'text', 'class' => 'datepicker']); ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
