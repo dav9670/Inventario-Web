@@ -87,7 +87,7 @@ class Mentor extends Entity
     {
         $loans = TableRegistry::get('Loans');
         $myloans = $loans->find('all', ['contains' => ['Mentors']])
-            ->where('Loans.item_type like \'mentors\' and Loans.item_id = :id and (Loans.start_time <= :end_time and Loans.end_time >= :start_time)')
+            ->where('Loans.item_type like \'mentors\' and Loans.item_id = :id and ((Loans.start_time <= :end_time and Loans.end_time >= :start_time) or Loans.returned is null)')
             ->bind(':id', $this->id)
             ->bind(':end_time', $end_time)
             ->bind(':start_time', $start_time);

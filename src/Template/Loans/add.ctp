@@ -262,6 +262,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                 <th scope="col"><a id="item_name_sort" onclick="sortSetter('item', 'name'); itemDict.rooms.search();"><?= __("Name") ?></a></th>
                 <th scope="col"><a id="item_description_sort" onclick="sortSetter('item', 'description'); itemDict.rooms.search();"><?= __("Description") ?></a></th>
                 <th scope="col"><?= __("Services list") ?></th>
+                <th scope="col"><?= __("Available") ?></th>
             </tr>
         `);
     }
@@ -280,12 +281,23 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                 labels_list = three_labels.join("; ");
             }
 
+            var imgTag = '';
+            var imgAlt = '';
+            if (elem.available_between) {
+                imgTag = 'good.png';
+                imgAlt = 'Available';
+            } else {
+                imgTag = 'bad.png';
+                imgAlt = 'Not Available';
+            }
+
             table_body.append(`
                 <tr id='item_` + elem.id + `' ` + ($('#item-id').val() == elem.id.toString() ? 'class="selected"' : '') + ` onclick='rowSelected("item", "` + elem.id + `")'>
                     <td><img src='data:image/png;base64,` + elem.image + `' alt='` + elem.name + `' width=100/></td>
                     <td><a class='inline' id='item_` + elem.id + `_identifier' href='/rooms/` + elem.id + `'>` + elem.name + `</a></td>
                     <td>` + elem.description + `</td>
                     <td>` + labels_list + `</td>
+                    <td><img src='/img/` + imgTag + `' alt='` + imgAlt + `' width=20 height=20></td>
                 </tr>
             `);
         });
@@ -300,6 +312,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                 <th scope="col"><a id="item_description_sort" onclick="sortSetter('item', 'description'); itemDict.licences.search();"><?= __("Description") ?></a></th>
                 <th scope="col"><?= __("Products list") ?></th>
                 <th scope="col"><?= __("Status") ?></th>
+                <th scope="col"><?= __("Available") ?></th>
             </tr>
         `);
     }
@@ -318,6 +331,16 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                 labels_list = three_labels.join("; ");
             }
 
+            var imgTag = '';
+            var imgAlt = '';
+            if (elem.available_between) {
+                imgTag = 'good.png';
+                imgAlt = 'Available';
+            } else {
+                imgTag = 'bad.png';
+                imgAlt = 'Not Available';
+            }
+
             table_body.append(`
                 <tr id='item_` + elem.id + `' ` + ($('#item-id').val() == elem.id.toString() ? 'class="selected"' : '') + ` onclick='rowSelected("item", "` + elem.id + `")'>
                     <td><img src='data:image/png;base64,` + elem.image + `' alt='` + elem.name + `' width=100/></td>
@@ -325,6 +348,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                     <td>` + elem.description + `</td>
                     <td>` + labels_list + `</td>
                     <td>` + elem.status + `</td>
+                    <td><img src='/img/` + imgTag + `' alt='` + imgAlt + `' width=20 height=20></td>
                 </tr>
             `);
         });
@@ -338,6 +362,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                 <th scope="col"><a id="item_name_sort" onclick="sortSetter('item', 'name'); itemDict.equipments.search();"><?= __("Name") ?></a></th>
                 <th scope="col"><a id="item_description_sort" onclick="sortSetter('item', 'description'); itemDict.equipments.search();"><?= __("Description") ?></a></th>
                 <th scope="col"><?= __("Categories list") ?></th>
+                <th scope="col"><?= __("Available") ?></th>
             </tr>
         `);
     }
@@ -356,12 +381,23 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                 labels_list = three_labels.join("; ");
             }
 
+            var imgTag = '';
+            var imgAlt = '';
+            if (elem.available_between) {
+                imgTag = 'good.png';
+                imgAlt = 'Available';
+            } else {
+                imgTag = 'bad.png';
+                imgAlt = 'Not Available';
+            }
+
             table_body.append(`
                 <tr id='item_` + elem.id + `' ` + ($('#item-id').val() == elem.id.toString() ? 'class="selected"' : '') + ` onclick='rowSelected("item", "` + elem.id + `")'>
                     <td><img src='data:image/png;base64,` + elem.image + `' alt='` + elem.name + `' width=100/></td>
                     <td><a class='inline' id='item_` + elem.id + `_identifier' href='/rooms/` + elem.id + `'>` + elem.name + `</a></td>
                     <td>` + elem.description + `</td>
                     <td>` + labels_list + `</td>
+                    <td><img src='/img/` + imgTag + `' alt='` + imgAlt + `' width=20 height=20></td>
                 </tr>
             `);
         });

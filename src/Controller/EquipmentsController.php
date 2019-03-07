@@ -307,22 +307,29 @@ class EquipmentsController extends AppController
         $search_equipments = true;
         $search_categories = true;
 
+        $start_time_available = null;
+        $end_time_available = null;
+
         if ($this->isApi()){
             $jsonData = $this->getRequest()->input('json_decode', true);
             $keyword = $jsonData['keyword'];
             $sort_field = $jsonData['sort_field'];
             $sort_dir = $jsonData['sort_dir'];
-            $search_unavailable = $jsonData['search_unavailable'] == 'true';
+            $search_unavailable = isset($jsonData['search_unavailable']) ? $jsonData['search_unavailable'] == 'true' : true;
+            $start_time_available = isset($jsonData['start_time_available']) ? $jsonData['start_time_available'] == 'true' : null;
+            $end_time_available = isset($jsonData['end_time_available']) ? $jsonData['end_time_available'] == 'true' : null;
         } else {
             $keyword = $this->getRequest()->getQuery('keyword');
             $sort_field = $this->getRequest()->getQuery('sort_field');
             $sort_dir = $this->getRequest()->getQuery('sort_dir');
             
             $filters = $this->getRequest()->getQuery('filters');
-            $search_available = $filters['search_available'] == 'true';
-            $search_unavailable = $filters['search_unavailable'] == 'true';
-            $search_equipments = $filters['search_equipments'] == 'true';
-            $search_categories = $filters['search_categories'] == 'true';
+            $search_available = isset($filters['search_available']) ? $filters['search_available'] == 'true' : true;
+            $search_unavailable = isset($filters['search_unavailable']) ? $filters['search_unavailable'] == 'true' : true;
+            $search_equipments = isset($filters['search_equipments']) ? $filters['search_equipments'] == 'true' : true;
+            $search_categories = isset($filters['search_categories']) ?  $filters['search_categories'] == 'true' : true;
+            $start_time_available = isset($filters['start_time_available']) ? $filters['start_time_available'] : null;
+            $end_time_available = isset($filters['end_time_available']) ? $filters['end_time_available'] : null;
         }
 
         $query = null;
@@ -370,8 +377,6 @@ class EquipmentsController extends AppController
 
         if ($query != null)
         {
-            //$connection = ConnectionManager::get('default');
-            //$query->epilog($connection->newQuery()->order(['Equipments_' . $sort_field => $sort_dir]));
             $query->order(["Equipments.".$sort_field => $sort_dir]);
         }
         
@@ -379,7 +384,18 @@ class EquipmentsController extends AppController
         $archivedEquipments = [];
         $allEquipments = $this->paginate($query);
         foreach ($allEquipments as $equipment){
-            if($search_available && $equipment->available || $search_unavailable && !$equipment->available){
+            $withTime = (isset($start_time_available) && isset($end_time_available));
+            $isValidAvailable = false;
+            if($withTime){
+                $isValidAvailable = (($search_available && $equipment->isAvailableBetween($start_time_available, $end_time_available)) || ($search_unavailable && !$equipment->isAvailableBetween($start_time_available, $end_time_available)));
+            } else {
+                $isValidAvailable = (($search_available && $equipment->available) || ($search_unavailable && !$equipment->available));
+            }
+            
+            if($isValidAvailable){
+                if($withTime){
+                    $equipment['available_between'] = $equipment->isAvailableBetween($start_time_available, $end_time_available);
+                }
                 if ($equipment->deleted != null && $equipment->deleted != "") {
                     
                     if (!in_array($equipment,$archivedEquipments))
