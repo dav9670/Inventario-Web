@@ -30,6 +30,9 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
             </table>
         </div>
 
+        <?= $this->Form->control('start_time', ['type' => 'text', 'class' => 'datetpicker']); ?>
+        <?= $this->Form->control('end_time', ['type' => 'text', 'class' => 'datepicker']); ?>
+
         <label for="item_type"><?= __('Item type') ?></label>
         <?= $this->Form->select('item_type', ['mentors' => 'Mentors', 'rooms' => 'Rooms', 'licences' => 'Licences', 'equipments' => 'Equipments'], ['id' => 'item_type']); ?>
         
@@ -40,7 +43,9 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
         
         <a onclick="$('#item_filters_div').toggle();"><?= __("Filters")?></a>
         <div id="item_filters_div" hidden>
+            <input type="checkbox" id="item_available" checked><?=__('Search Available') ?>
             <input type="checkbox" id="item_check" checked><?=__('Search by Items') ?><br>
+            <input type="checkbox" id="item_unavailable" checked><?=__('Search Unavailable') ?>
             <input type="checkbox" id="item_label_check"><?=__('Search by Labels') ?><br>
         </div>
 
@@ -52,11 +57,8 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                 </tbody>
             </table>
         </div>
-
-        <?= $this->Form->control('start_time', ['type' => 'text', 'class' => 'datetpicker']); ?>
-        <?= $this->Form->control('end_time', ['type' => 'text', 'class' => 'datepicker']); ?>
     </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
+    <?= $this->Form->button(__('Save')) ?>
     <?= $this->Form->end() ?>
 </div>
 <script>
@@ -172,26 +174,30 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
     function setBody(itemType){
         let keyword = $('#item_search').val();
 
-        var filters = {};
-        filters['search_available'] = true;
-        filters['search_unavailable'] = false;
-        filters['search_' + itemType] = $('#item_check').is(':checked');
-        filters['search_' + itemDict[itemType].labels] = $('#item_label_check').is(':checked');
+        if($('#start-time').val() && $('#end-time').val()){
+            var filters = {};
+            filters['search_available'] = $('#item_available').is(':checked');
+            filters['search_unavailable'] = $('#item_unavailable').is(':checked');
+            filters['search_' + itemType] = $('#item_check').is(':checked');
+            filters['search_' + itemDict[itemType].labels] = $('#item_label_check').is(':checked');
+            filters['start_time_available'] = $('#start-time').val();
+            filters['end_time_available'] = $('#end-time').val();
 
-        $.ajax({
-            method: 'get',
-            url : "/" + itemType + "/search.json",
-            data: {keyword:keyword, sort_field:sort.item.field, sort_dir:sort.item.dir, filters: filters},
-            success: function( response ){
-                itemArray = response[itemType];
-                eval('setBody' + itemType.charAt(0).toUpperCase() + itemType.slice(1) + '(itemArray);');
-                
-            },
-            error: function(jqXHR, textStatus, errorThrown){
-                alert("Failed to fetch " + itemType);
-                console.log(jqXHR.responseText);
-            }
-        });
+            $.ajax({
+                method: 'get',
+                url : "/" + itemType + "/search.json",
+                data: {keyword:keyword, sort_field:sort.item.field, sort_dir:sort.item.dir, filters: filters},
+                success: function( response ){
+                    itemArray = response[itemType];
+                    eval('setBody' + itemType.charAt(0).toUpperCase() + itemType.slice(1) + '(itemArray);');
+                    
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                    alert("Failed to fetch " + itemType);
+                    console.log(jqXHR.responseText);
+                }
+            });
+        }
     }
 
     function setHeadersMentors(){
@@ -204,6 +210,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                 <th scope="col"><a id="item_last_name_sort" onclick="sortSetter('item', 'last_name'); itemDict.mentors.search();"><?= __("Last name") ?></a></th>
                 <th scope="col"><a id="item_description_sort" onclick="sortSetter('item', 'description'); itemDict.mentors.search();"><?= __("Description") ?></a></th>
                 <th scope="col"><?= __("Skills list") ?></th>
+                <th scope="col"><?= __("Available") ?></th>
             </tr>
         `);
     }
@@ -222,6 +229,17 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
             } else {
                 labels_list = three_labels.join("; ");
             }
+
+            var imgTag = '';
+            var imgAlt = '';
+            if (elem.available_between) {
+                imgTag = 'good.png';
+                imgAlt = 'Available';
+            } else {
+                imgTag = 'bad.png';
+                imgAlt = 'Not Available';
+            }
+
             table_body.append(`
                 <tr id='item_` + elem.id + `' ` + ($('#item-id').val() == elem.id.toString() ? 'class="selected"' : '') + ` onclick='rowSelected("item", "` + elem.id + `")'>
                     <td><img src='data:image/png;base64,` + elem.image + `' alt='` + elem.first_name + ` ` + elem.last_name + `' width=100/></td>
@@ -230,6 +248,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                     <td>` + elem.last_name + `</td>
                     <td>` + elem.description + `</td>
                     <td>` + labels_list + `</td>
+                    <td><img src='/img/` + imgTag + `' alt='` + imgAlt + `' width=20 height=20></td>
                 </tr>
             `);
         });
@@ -406,6 +425,8 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                 this.setOptions({minTime: new Date()});
             else
                 this.setOptions({minTime: false});
+
+            $('#item_search').keyup();
         }
 
         let endTimeBoundarySet = function(){
@@ -431,6 +452,8 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                 this.setOptions({minTime: time});
             else
                 this.setOptions({minTime: false});
+            
+            $('#item_search').keyup();
         }
 
         $("#start-time").datetimepicker({
@@ -449,7 +472,6 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
             onChangeDateTime: endTimeBoundarySet
         });
         
-
         //Users
         $('#user_search').keyup(function(){
             setBodyUsers();
@@ -480,6 +502,13 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
             $('#item_search').keyup();
         });
         $('#item_label_check').click( function(e) {
+            $('#item_search').keyup();
+        });
+
+        $('#item_available').click( function(e) {
+            $('#item_search').keyup();
+        });
+        $('#item_unavailable').click( function(e) {
             $('#item_search').keyup();
         });
 

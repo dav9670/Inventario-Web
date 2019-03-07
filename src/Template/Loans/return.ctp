@@ -15,7 +15,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
             <h3><?= $this->Html->Link($loan->user->email, ['controller' => 'users', 'action' => 'consult', $loan->item_id])?></h3>
             <img src='data:image/png;base64,<?=$loan->user->image?>' id='output'/>
         </div>
-        <div style='width: 50%; float: left;'>
+        <div style='width: 50%; float: right;'>
             <input type="hidden" name="item_type" id="item-type" value="<?=$loan->item_type?>">
             <input type="hidden" name="item_id" id="item-id" value="<?=$loan->item_id?>">
             <?php
@@ -149,7 +149,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
 
 <script>
     function returnLoan(){
-        if(confirm("<?=__('Are you sure you want to return this loan? ') . ($loan->end_time > date("Y-m-d H:i:s") ? __('This loan has {0}$ in overtime fees.', number_format($loan->overtime_fee, 2)): '')?>")){
+        if(confirm("<?=__('Are you sure you want to return this loan? ') . ($loan->overtime_fee != 0 ? __('This loan has {0}$ in overtime fees.', number_format($loan->overtime_fee, 2)): '')?>")){
             $('#return_form').submit();
         }
     }

@@ -491,7 +491,8 @@ class LoansController extends AppController
                 'id' => $loan['id'],
                 'start_time' => $loan['start_time'],
                 'end_time' => $loan['end_time'],
-                'returned' => $loan['returned']
+                'returned' => $loan['returned'],
+                'overtime_fee' => $loan['overtime_fee']
             ];
 
             if ($formattedLoan['returned'] != null) {

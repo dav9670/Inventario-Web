@@ -151,7 +151,7 @@ class Loan extends Entity
             } 
         }
         
-        return $overtimeFee;
+        return floatval($overtimeFee);
     }
 
 protected $_virtual = ['overtime_fee'];

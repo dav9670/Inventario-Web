@@ -297,22 +297,29 @@ class MentorsController extends AppController
         $search_mentors = true;
         $search_skills = true;
 
+        $start_time_available = null;
+        $end_time_available = null;
+
         if ($this->isApi()){
             $jsonData = $this->getRequest()->input('json_decode', true);
             $keyword = $jsonData['keyword'];
             $sort_field = $jsonData['sort_field'];
             $sort_dir = $jsonData['sort_dir'];
-            $search_unavailable = $jsonData['search_unavailable'] == 'true';
+            $search_unavailable = isset($jsonData['search_unavailable']) ? $jsonData['search_unavailable'] == 'true' : true;
+            $start_time_available = isset($jsonData['start_time_available']) ? $jsonData['start_time_available'] == 'true' : null;
+            $end_time_available = isset($jsonData['end_time_available']) ? $jsonData['end_time_available'] == 'true' : null;
         } else {
             $keyword = $this->getRequest()->getQuery('keyword');
             $sort_field = $this->getRequest()->getQuery('sort_field');
             $sort_dir = $this->getRequest()->getQuery('sort_dir');
             
             $filters = $this->getRequest()->getQuery('filters');
-            $search_available = $filters['search_available'] == 'true';
-            $search_unavailable = $filters['search_unavailable'] == 'true';
-            $search_mentors = $filters['search_mentors'] == 'true';
-            $search_skills = $filters['search_skills'] == 'true';
+            $search_available = isset($filters['search_available']) ? $filters['search_available'] == 'true' : true;
+            $search_unavailable = isset($filters['search_unavailable']) ? $filters['search_unavailable'] == 'true' : true;
+            $search_mentors = isset($filters['search_mentors']) ? $filters['search_mentors'] == 'true' : true;
+            $search_skills = isset($filters['search_skills']) ?  $filters['search_skills'] == 'true' : true;
+            $start_time_available = isset($filters['start_time_available']) ? $filters['start_time_available'] : null;
+            $end_time_available = isset($filters['end_time_available']) ? $filters['end_time_available'] : null;
         }
 
         $query = null;
@@ -367,9 +374,20 @@ class MentorsController extends AppController
         $archivedMentors = [];
         $allMentors = $query->toList();
         foreach ($allMentors as $mentor){
-            if($search_available && $mentor->available || $search_unavailable && !$mentor->available){
+            $withTime = (isset($start_time_available) && isset($end_time_available));
+            $isValidAvailable = false;
+            if($withTime){
+                $isValidAvailable = (($search_available && $mentor->isAvailableBetween($start_time_available, $end_time_available)) || ($search_unavailable && !$mentor->isAvailableBetween($start_time_available, $end_time_available)));
+            } else {
+                $isValidAvailable = (($search_available && $mentor->available) || ($search_unavailable && !$mentor->available));
+            }
+            
+            if($isValidAvailable){
+                if($withTime){
+                    $mentor['available_between'] = $mentor->isAvailableBetween($start_time_available, $end_time_available);
+                }
+                
                 if ($mentor->deleted != null && $mentor->deleted != "") {
-
                     if (!in_array($mentor,$archivedMentors))
                     {
                         array_push($archivedMentors, $mentor);
