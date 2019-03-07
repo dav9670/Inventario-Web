@@ -4,6 +4,7 @@
  * @var \App\Model\Entity\User $user
  */
 ?>
+<div id='flash' hidden></div>
 <div class="users form large-12 medium-11 columns content">
     <?= $this->Form->create($user, ['id' => 'user_form', 'type' => 'file']) ?>
     <button type="button" id="editButton" class='right editdone' onClick='setReadOnly(false)'><?=__('Edit')?></button>
@@ -75,13 +76,7 @@
         $('#output').attr('src', URL.createObjectURL(event.target.files[0])); 
     }
 
-    function doneEditing(){
-        if ($("#user_form").data("changed")){
-            $('#user_form').submit();
-        } else {
-            setReadOnly(true);
-        }
-    }
+
 
     function cancel(){
         if(confirm("<?=__('Cancel all your changes?')?>")){
@@ -187,4 +182,58 @@
             }
         });
     });
+
+    function doneEditing(){
+
+        if ($("#user_form").data("changed")){
+
+            if ($('#admin').val() == 1){
+                
+                var password = prompt("Please enter your password to add an admin", "");
+                var name = "<?php echo $this->request->getSession()->read('Auth.User.email'); ?>";
+                $.ajax({
+                    method: 'post',
+                    url : "/users/verify.json",
+                    data: {email:name, password:password},
+                    beforeSend: function (xhr) { // Add this line
+                        xhr.setRequestHeader('X-CSRF-Token', $('[name="_csrfToken"]').val());
+                    },
+                    success: function( response ){
+                        if(response){
+                            $('#user_form').submit();
+                        }
+                        else{
+                            showFlash("<strong>Alert:</strong> Wrong password");
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown){
+                        alert("Failed");
+                        console.log(jqXHR.responseText);
+                    }
+                });
+            }else{
+                $('#user_form').submit();
+            }
+
+    } else {
+            setReadOnly(true);
+        }
+    }
+
+    $('.flash-message:first').slideDown(function() {
+        setTimeout(function() {
+            $('.flash-message:first').slideUp();
+        }, 5000);
+    });
+
+    function showFlash (message) {
+        jQuery('#flash').html(message);
+        jQuery('#flash').toggleClass('cssClassHere');
+        jQuery('#flash').slideDown('slow');
+        jQuery('#flash').click(function () { $('#flash').toggle('highlight') });
+        setTimeout(function() {
+            $('#flash').slideUp();
+            }, 5000);
+        };
+
 </script>

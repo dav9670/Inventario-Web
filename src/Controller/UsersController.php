@@ -181,85 +181,7 @@ class UsersController extends AppController
         $this->set(compact('user'));
     }
 
-       /**
-     * Delete method
-     *
-     * @param string|null $id User id.
-     * @return \Cake\Http\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function delete($id = null)
-    {
-        $this->getRequest()->allowMethod(['get', 'post', 'delete']);
-        $user = $this->Users->get($id);
-        $success = false;
-        if ($this->Users->delete($user)) {
-            if($this->isApi()){
-                $success = true;
-            } else {
-                $this->Flash->success(__('The user has been deleted.'));
-            }
-        } else {
-            if($this->isApi()){
-                $success = false;
-            } else {
-                $this->Flash->error(__('The user could not be deleted. Please, try again.'));
-            }
-        }
-
-        if($this->isApi()){
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } else {
-            return $this->redirect(['action' => 'index']);
-        }
-    }
-
-    /**
-     * function deactivate
-     * désactive un equipement, set sa date de delete à now
-     */
-    public function deactivate($id = null){
-        $this->setDeleted($id, Time::now());
-    }
-
-    /**
-     * function reactivate
-     * reactive un equipement, set sa valeur deleted à null.
-     */
-    public function reactivate($id = null){
-        $this->setDeleted($id, null);
-    }
-
-    private function setDeleted($id, $deleted){
-        $this->getRequest()->allowMethod(['get', 'post']);
-        $user = $this->Users->get($id);
-        $user->deleted = $deleted;
-        $success = false;
-
-        $state = $deleted == null ? 'reactivated' : 'deactivated';
-
-        if ($this->Users->save($user)) {
-            if($this->isApi()){
-                $success = true;
-            } else {
-                $this->Flash->success(__('The user has been ' . $state .'.'));
-            }
-        } else {
-            if($this->isApi()){
-                $success = false;
-            } else {
-                $this->Flash->error(__('The user could not be ' . $state . '. Please, try again.'));
-            }
-        }
-
-        if($this->isApi()){
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } else {
-            return $this->redirect($this->referer());
-        }
-    }
+    
     
     public function isTaken()
     {
@@ -400,7 +322,6 @@ class UsersController extends AppController
             else
             {
                 $identify = false;
-                $this->Flash->error(__('Your password is incorrect.'));
             }
 
         }

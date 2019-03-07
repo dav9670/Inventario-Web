@@ -40,7 +40,7 @@
                     <th scope="col"></th>
                     <th scope="col"><a id='email_sort'><?= __("Email Adress") ?></a></th>
                     <th scope="col"><a id='admin_sort'><?= __("Admin Status") ?></a></th>
-                    <th scope="col" class="actions"><?= __('Actions') ?></th>
+                    
                 </tr>
             </thead>
             <tbody id="table_activated">
@@ -83,26 +83,12 @@
                         usersArray = response[array_name];
                         $.each(usersArray, function(idx, elem){
 
-                            var link = "";
-                            if(elem.deleted == null){
-                                link = link.concat('<?= $this->Html->link(__('Deactivate'), ['action' => 'deactivate', -1], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to deactivate {0}?', -2)]) ?> ');
-                            } else {
-                                link = link.concat('<?= $this->Html->link(__('Reactivate'), ['action' => 'reactivate', -1], ['confirm' => __('Are you sure you want to reactivate {0}?', -2)]) ?> ');
-                                if(elem.loan_count == 0){
-                                    link = link.concat('<br/><?= $this->Html->link(__('Delete'), ['action' => 'delete', -1], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to PERMANENTLY delete {0}?', -2)]) ?> ');
-                                }
-                            }
-                            link = link.replace(/-1/g, elem.id);
-                            link = link.replace(/-2/g, elem.email);
 
                             table.append(`
                                 <tr>
                                     <td><a href='/users/` + elem.id + `'><img src='data:image/png;base64,` + elem.image + `' alt='` + elem.email + ` ` + elem.password + `' width=100/></a></td>
                                     <td><a href='/users/` + elem.id + `'>` + elem.email + `</a></td>
                                     <td><a href='/users/` + elem.id + `'>` + elem.admin_status + `</a></td>
-                                    <td class='actions'>
-                                        ` + link + `
-                                    </td>
                                 </tr>
                             `);
                         });
