@@ -5,9 +5,6 @@
  */
 echo $this->Html->css('jquery.datetimepicker.min.css');
 echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => false));
-
-debug($loan);
-
 ?>
 <div class="loans form large-12 medium-11 columns content">
     <?= $this->Form->create($loan, ['id' => 'return_form']) ?>
