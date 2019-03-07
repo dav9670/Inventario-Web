@@ -8,7 +8,6 @@
     <?= $this->Form->create($licence, ['id' => 'licence_form', 'type' => 'file']) ?>
     <button type="button" id="editButton" class='right editdone' onClick='setReadOnly(false)'><?=__('Edit')?></button>
     <button type="button" id="doneButton" class='right editdone' onClick='doneEditing()' hidden='hidden'><?=__('Done')?></button>
-    <div style="clear: both;"></div>
     <fieldset>
         <legend><?= __('Edit Licence') ?></legend>
 
