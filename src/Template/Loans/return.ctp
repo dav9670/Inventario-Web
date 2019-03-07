@@ -11,13 +11,10 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
     <fieldset>
         <legend><?= __('Return Loan') ?></legend>
         <div style='width: 50%; float: left;'>
-            <input type="hidden" name="user_id" id="user-id" value="<?=$loan->user_id?>">
             <h3><?= $this->Html->Link($loan->user->email, ['controller' => 'users', 'action' => 'consult', $loan->item_id])?></h3>
             <img src='data:image/png;base64,<?=$loan->user->image?>' id='output'/>
         </div>
         <div style='width: 50%; float: right;'>
-            <input type="hidden" name="item_type" id="item-type" value="<?=$loan->item_type?>">
-            <input type="hidden" name="item_id" id="item-id" value="<?=$loan->item_id?>">
             <?php
                 if($loan->item_type == 'mentors'){ 
                 ?>
