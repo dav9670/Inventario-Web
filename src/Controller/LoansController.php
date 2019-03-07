@@ -127,13 +127,28 @@ class LoansController extends AppController
             'contain' => ['Users', 'Mentors.Skills', 'Rooms.Services', 'Licences.Products', 'Equipments.Categories']
         ]);
         if ($this->request->is(['patch', 'post', 'put', 'delete'])) {
+            $success = false;
             $loan = $this->Loans->patchEntity($loan, $this->request->getData());
             if ($this->Loans->save($loan)) {
-                $this->Flash->success(__('The loan has been saved.'));
+                $success = true;
+                if($this->isApi()){
+                    $this->set(compact('success'));
+                    $this->set('_serialize', ['success']);
+                    return;
+                } else {
+                    $this->Flash->success(__('The loan has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                    return $this->redirect(['action' => 'index']);
+                }
             }
-            $this->Flash->error(__('The loan could not be saved. Please, try again.'));
+            $success = false;
+            if($this->isApi()){
+                $this->set(compact('success'));
+                $this->set('_serialize', ['success']);
+                return;
+            } else {
+                $this->Flash->error(__('The loan could not be saved. Please, try again.'));
+            }
         }
         $this->set(compact('loan'));
         if($this->isApi()){
