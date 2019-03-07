@@ -4,7 +4,7 @@
  * @var \App\Model\Entity\User $user
  */
 ?>
-
+<div id='flash' hidden></div>
 <div class="users form large-12 medium-11 columns content">
     <?= $this->Form->create($user, ['id' => 'ajouter', 'type' => 'file']) ?>
     <fieldset>
@@ -46,6 +46,8 @@
                 success: function( response ){
                     if(response){
                         $('#ajouter').submit();
+                    }else{
+                        showFlash("<strong>Alert:</strong> Wrong password");
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown){
@@ -55,5 +57,21 @@
             });
         }
     }
+
+    $('.flash-message:first').slideDown(function() {
+        setTimeout(function() {
+            $('.flash-message:first').slideUp();
+        }, 5000);
+    });
+
+    function showFlash (message) {
+        jQuery('#flash').html(message);
+        jQuery('#flash').toggleClass('cssClassHere');
+        jQuery('#flash').slideDown('slow');
+        jQuery('#flash').click(function () { $('#flash').toggle('highlight') });
+        setTimeout(function() {
+            $('#flash').slideUp();
+            }, 5000);
+        };
 
 </script>
