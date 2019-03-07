@@ -91,8 +91,8 @@ class LoansTable extends Table
 
         $validator
             ->dateTime('returned')
-            ->allowEmptyDateTime('returned')
-            ->greaterThanField('returned','start_time', __('Returned cannot be before Start Time.'));
+            ->allowEmptyDateTime('returned');
+            //->greaterThanField('returned','start_time', __('Returned cannot be before Start Time.'));
 
         $validator
             ->scalar('item_type')
