@@ -679,3 +679,18 @@ div#flash {
     padding: 10px;
     text-transform: none !important;
 }
+
+.centered {
+    margin: auto;
+}
+
+.centered-image {
+    display: block;
+    margin: auto;
+}
+
+.centered-button {
+    display: block;
+    margin: auto;
+    float: none !important;
+}
