@@ -47,10 +47,12 @@ class LoansController extends AppController
     public function view($id = null)
     {
         $loan = $this->Loans->get($id, [
-            'contain' => ['Users']
+            'contain' => ['Users', 'Mentors.Skills', 'Rooms.Services', 'Licences.Products', 'Equipments.Categories']
         ]);
-
-        $this->set('loan', $loan);
+        $this->set(compact('loan'));
+        if($this->isApi()){
+            $this->set('_serialize', 'loan');
+        }
     }
 
     /**
