@@ -119,40 +119,40 @@ class Loan extends Entity
         return $roomResult;
     }
 
-    protected function _getOvertimeFee()
+    protected function _getOvertimeHoursLate()
     {
-        $overtimeFee = 0;
         if($this->returned == null){
-
             if($this->end_time != null && $this->end_time <= Time::now()){
-
                 $now = Time::now();
                 $diff = $now->diff($this->end_time);
                 $overtime =  $diff->days * 24 + $diff->h;
-
-                if($this->item_type != 'equipments'){
-                    $overtimeFee = $overtime * 10;
-                }
-                else{
-                    $equipments = TableRegistry::get('Equipments');
-
-                    $myEquipments = $equipments->get($this->item_id);
-                    $categories = $myEquipments->categories_list;
-                    
-                    foreach($categories as $category){
-                        $query = TableRegistry::get('Categories')->find('all');
-                        $query = $query->where(['name' => $category]);
-                        $category = $query->toArray();
-                        
-                        $overtimeFee += $overtime * $category[0]['hourly_rate'] + $overtime * 10;
-                    }
-
-                }
-            } 
+                return $overtime;
+            }
         }
-        
+    }
+
+    protected function _getOvertimeHourlyRate()
+    {
+        $hourly_rate = 10;
+        if($this->item_type == 'equipments'){
+            $equipments = TableRegistry::get('Equipments');
+
+            $equipment = $equipments->get($this->item_id, ['contain' => ['Categories']]);
+            $categories = $myEquipments->categories;
+            
+            foreach($categories as $category){
+                $overtime += $category->hourly_rate;
+            }
+        }
+        return floatval($hourly_rate);
+    }
+
+    protected function _getOvertimeFee()
+    {
+        $overtimeFee = $this->_getOvertimeHoursLate() * $this->_getOvertimeHourlyRate();
+
         return floatval($overtimeFee);
     }
 
-protected $_virtual = ['overtime_fee'];
+    protected $_virtual = ['overtime_hours_late', 'overtime_hourly_rate', 'overtime_fee'];
 }

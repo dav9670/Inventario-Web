@@ -134,7 +134,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
             <input type="hidden" name="returned" id="returned" value="<?=date("Y-m-d H:i:s")?>">
             <div style='clear:both;'></div>
             <?php 
-            if($loan->overtime_fee != 0){
+            if($loan->overtime_hours_late != 0){
                 echo __("Overtime fee: ") . number_format($loan->overtime_fee, 2) . '$';
             }
             ?>
@@ -146,7 +146,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
 
 <script>
     function returnLoan(){
-        if(confirm("<?=__('Are you sure you want to return this loan? ') . ($loan->overtime_fee != 0 ? __('This loan has {0}$ in overtime fees.', number_format($loan->overtime_fee, 2)): '')?>")){
+        if(confirm("<?=__('Are you sure you want to return this loan? ') . ($loan->overtime_hours_late != 0 ? __('This loan has {0}$ in overtime fees.', number_format($loan->overtime_fee, 2)): '')?>")){
             $('#return_form').submit();
         }
     }
