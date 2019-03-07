@@ -680,6 +680,10 @@ div#flash {
     text-transform: none !important;
 }
 
+.users.form.content {
+    padding-bottom: 0;
+}
+
 .centered {
     margin: auto;
 }
