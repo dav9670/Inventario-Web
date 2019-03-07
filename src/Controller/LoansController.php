@@ -61,16 +61,30 @@ class LoansController extends AppController
     public function add()
     {
         $loan = $this->Loans->newEntity();
+        $success = false;
         if ($this->request->is('post')) {
             $loan = $this->Loans->patchEntity($loan, $this->request->getData());
             if ($this->Loans->save($loan)) {
-                $this->Flash->success(__('The loan has been saved.'));
+                if($this->isApi()){
+                    $success = true;
+                } else {
+                    $this->Flash->success(__('The loan has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                    return $this->redirect(['action' => 'index']);
+                }
+            }else if($this->isApi()){
+                $success = false;
+            }else {
+                $this->Flash->error(__('The loan could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The loan could not be saved. Please, try again.'));
         }
-        $this->set(compact('loan'));
+
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        } else {
+            $this->set(compact('loan'));
+        }
     }
 
     /**
