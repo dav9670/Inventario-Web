@@ -78,4 +78,17 @@ class Room extends Entity
     }
 
     protected $_virtual = ['available', 'services_list', 'loan_count'];
+
+    public function isAvailableBetween($start_time, $end_time)
+    {
+        $loans = TableRegistry::get('Loans');
+        $myloans = $loans->find('all', ['contains' => ['Rooms']])
+            ->where('Loans.item_type like \'rooms\' and Loans.item_id = :id and ((Loans.start_time <= :end_time and Loans.end_time >= :start_time) or Loans.returned is null)')
+            ->bind(':id', $this->id)
+            ->bind(':end_time', $end_time)
+            ->bind(':start_time', $start_time);
+        $nbloans = $myloans->count();
+        
+        return $nbloans == 0 && is_null($this->deleted);
+    }
 }

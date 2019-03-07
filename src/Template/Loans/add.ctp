@@ -11,51 +11,63 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
     <?= $this->Form->create($loan) ?>
     <fieldset>
         <legend><?= __('Add Loan') ?></legend>
-        
-        <input type='hidden' id='user-id' name='user_id' required='required'/>
-        <label for="user_search"><?= __('User:') ?></label>
-        <span id='user_selected'></span>
-        <input type="text" name="user_search" id="user_search">
-        <div style="overflow-x:auto; height:500px;">
-            <table cellpadding="0" cellspacing="0">
-                <thead>
-                    <tr>
-                        <th scope="col"></th>
-                        <th scope="col"><a id='user_email_sort' class='asc'><?= __("Email Adress") ?></a></th>
-                        <th scope="col"><a id='user_admin_status_sort'><?= __("Admin Status") ?></a></th>
-                    </tr>
-                </thead>
-                <tbody id="user-table-body">
-                </tbody>
-            </table>
+
+        <div class='right half-width'>
+            
         </div>
 
-        <?= $this->Form->control('start_time', ['type' => 'text', 'class' => 'datetpicker']); ?>
-        <?= $this->Form->control('end_time', ['type' => 'text', 'class' => 'datepicker']); ?>
-
-        <label for="item_type"><?= __('Item type') ?></label>
-        <?= $this->Form->select('item_type', ['mentors' => 'Mentors', 'rooms' => 'Rooms', 'licences' => 'Licences', 'equipments' => 'Equipments'], ['id' => 'item_type']); ?>
-        
-        <input type='hidden' id='item-id' name='item_id' required='required'/>
-        <label for="item_search"><?= __('Item:') ?></label>
-        <span id='item_selected'></span>
-        <input type="text" name="item_search" id="item_search">
-        
-        <a onclick="$('#item_filters_div').toggle();"><?= __("Filters")?></a>
-        <div id="item_filters_div" hidden>
-            <input type="checkbox" id="item_available" checked><?=__('Search Available') ?>
-            <input type="checkbox" id="item_check" checked><?=__('Search by Items') ?><br>
-            <input type="checkbox" id="item_unavailable" checked><?=__('Search Unavailable') ?>
-            <input type="checkbox" id="item_label_check"><?=__('Search by Labels') ?><br>
+        <div class='left half-width' style='height:700px;'>
+            <input type='hidden' id='user-id' name='user_id' required='required'/>
+            <label style='display:inline;' for="user_search"><?= __('User: ') ?><b><span id='user_selected'></span></b></label><br>
+            <input type="text" name="user_search" id="user_search">
+            <div style="overflow:auto; height: 80%;">
+                <table cellpadding="0" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col"><a id='user_email_sort' class='asc'><?= __("Email Adress") ?></a></th>
+                            <th scope="col"><a id='user_admin_status_sort'><?= __("Admin Status") ?></a></th>
+                        </tr>
+                    </thead>
+                    <tbody id="user-table-body">
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        <div style="overflow-x:auto; height:500px;">
-            <table id='item-table' cellpadding="0" cellspacing="0">
-                <thead id='item-table-head'>
-                </thead>
-                <tbody id='item-table-body'>
-                </tbody>
-            </table>
+        <div class='right half-width' style='height:700px;'>
+
+            <div class='left half-width'>
+                <?= $this->Form->control('start_time', ['type' => 'text', 'class' => 'datetpicker']); ?>
+            </div>
+            <div class='right half-width'>
+                <?= $this->Form->control('end_time', ['type' => 'text', 'class' => 'datepicker']); ?>
+            </div>
+            <div style="clear:both;"></div>
+
+            <label for="item_type"><?= __('Item type') ?></label>
+            <?= $this->Form->select('item_type', ['mentors' => 'Mentors', 'rooms' => 'Rooms', 'licences' => 'Licences', 'equipments' => 'Equipments'], ['id' => 'item_type']); ?>
+            
+            <input type='hidden' id='item-id' name='item_id' required='required'/>
+            <label style='display:inline;' for="item_search"><?= __('Item: ') ?></label><b><span id='item_selected'></span></b><br>
+            <input type="text" name="item_search" id="item_search">
+            
+            <a onclick="$('#item_filters_div').toggle();"><?= __("Filters")?></a>
+            <div id="item_filters_div" hidden>
+                <input type="checkbox" id="item_available" checked><?=__('Search Available') ?>
+                <input type="checkbox" id="item_check" checked><?=__('Search by Items') ?><br>
+                <input type="checkbox" id="item_unavailable" checked><?=__('Search Unavailable') ?>
+                <input type="checkbox" id="item_label_check"><?=__('Search by Labels') ?><br>
+            </div>
+
+            <div style="overflow-x:auto; height:56%">
+                <table id='item-table' cellpadding="0" cellspacing="0">
+                    <thead id='item-table-head'>
+                    </thead>
+                    <tbody id='item-table-body'>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </fieldset>
     <?= $this->Form->button(__('Save')) ?>
@@ -262,6 +274,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                 <th scope="col"><a id="item_name_sort" onclick="sortSetter('item', 'name'); itemDict.rooms.search();"><?= __("Name") ?></a></th>
                 <th scope="col"><a id="item_description_sort" onclick="sortSetter('item', 'description'); itemDict.rooms.search();"><?= __("Description") ?></a></th>
                 <th scope="col"><?= __("Services list") ?></th>
+                <th scope="col"><?= __("Available") ?></th>
             </tr>
         `);
     }
@@ -280,12 +293,23 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                 labels_list = three_labels.join("; ");
             }
 
+            var imgTag = '';
+            var imgAlt = '';
+            if (elem.available_between) {
+                imgTag = 'good.png';
+                imgAlt = 'Available';
+            } else {
+                imgTag = 'bad.png';
+                imgAlt = 'Not Available';
+            }
+
             table_body.append(`
                 <tr id='item_` + elem.id + `' ` + ($('#item-id').val() == elem.id.toString() ? 'class="selected"' : '') + ` onclick='rowSelected("item", "` + elem.id + `")'>
                     <td><img src='data:image/png;base64,` + elem.image + `' alt='` + elem.name + `' width=100/></td>
                     <td><a class='inline' id='item_` + elem.id + `_identifier' href='/rooms/` + elem.id + `'>` + elem.name + `</a></td>
                     <td>` + elem.description + `</td>
                     <td>` + labels_list + `</td>
+                    <td><img src='/img/` + imgTag + `' alt='` + imgAlt + `' width=20 height=20></td>
                 </tr>
             `);
         });
@@ -300,6 +324,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                 <th scope="col"><a id="item_description_sort" onclick="sortSetter('item', 'description'); itemDict.licences.search();"><?= __("Description") ?></a></th>
                 <th scope="col"><?= __("Products list") ?></th>
                 <th scope="col"><?= __("Status") ?></th>
+                <th scope="col"><?= __("Available") ?></th>
             </tr>
         `);
     }
@@ -318,6 +343,16 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                 labels_list = three_labels.join("; ");
             }
 
+            var imgTag = '';
+            var imgAlt = '';
+            if (elem.available_between) {
+                imgTag = 'good.png';
+                imgAlt = 'Available';
+            } else {
+                imgTag = 'bad.png';
+                imgAlt = 'Not Available';
+            }
+
             table_body.append(`
                 <tr id='item_` + elem.id + `' ` + ($('#item-id').val() == elem.id.toString() ? 'class="selected"' : '') + ` onclick='rowSelected("item", "` + elem.id + `")'>
                     <td><img src='data:image/png;base64,` + elem.image + `' alt='` + elem.name + `' width=100/></td>
@@ -325,6 +360,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                     <td>` + elem.description + `</td>
                     <td>` + labels_list + `</td>
                     <td>` + elem.status + `</td>
+                    <td><img src='/img/` + imgTag + `' alt='` + imgAlt + `' width=20 height=20></td>
                 </tr>
             `);
         });
@@ -338,6 +374,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                 <th scope="col"><a id="item_name_sort" onclick="sortSetter('item', 'name'); itemDict.equipments.search();"><?= __("Name") ?></a></th>
                 <th scope="col"><a id="item_description_sort" onclick="sortSetter('item', 'description'); itemDict.equipments.search();"><?= __("Description") ?></a></th>
                 <th scope="col"><?= __("Categories list") ?></th>
+                <th scope="col"><?= __("Available") ?></th>
             </tr>
         `);
     }
@@ -356,12 +393,23 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                 labels_list = three_labels.join("; ");
             }
 
+            var imgTag = '';
+            var imgAlt = '';
+            if (elem.available_between) {
+                imgTag = 'good.png';
+                imgAlt = 'Available';
+            } else {
+                imgTag = 'bad.png';
+                imgAlt = 'Not Available';
+            }
+
             table_body.append(`
                 <tr id='item_` + elem.id + `' ` + ($('#item-id').val() == elem.id.toString() ? 'class="selected"' : '') + ` onclick='rowSelected("item", "` + elem.id + `")'>
                     <td><img src='data:image/png;base64,` + elem.image + `' alt='` + elem.name + `' width=100/></td>
                     <td><a class='inline' id='item_` + elem.id + `_identifier' href='/rooms/` + elem.id + `'>` + elem.name + `</a></td>
                     <td>` + elem.description + `</td>
                     <td>` + labels_list + `</td>
+                    <td><img src='/img/` + imgTag + `' alt='` + imgAlt + `' width=20 height=20></td>
                 </tr>
             `);
         });
@@ -386,6 +434,9 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
         let old_id = $('#' + type + '-id').val();
         $('#' + type + '_' + old_id).removeClass('selected');
         
+        /*if(type == 'item'){
+            if(true/* available )
+        }*/
         if(id != null)
             $('#' + type + '_' + id).addClass('selected');
         $('#' + type + '_selected').text(id != null ? $('#' + type + '_' + id + '_identifier').text() : '');

@@ -306,8 +306,8 @@ class MentorsController extends AppController
             $sort_field = $jsonData['sort_field'];
             $sort_dir = $jsonData['sort_dir'];
             $search_unavailable = isset($jsonData['search_unavailable']) ? $jsonData['search_unavailable'] == 'true' : true;
-            $start_time_available = isset($jsonData['start_time_available']) ? $jsonData['start_time_available'] == 'true' : null;
-            $end_time_available = isset($jsonData['end_time_available']) ? $jsonData['end_time_available'] == 'true' : null;
+            $start_time_available = isset($jsonData['start_time_available']) ? $jsonData['start_time_available'] : null;
+            $end_time_available = isset($jsonData['end_time_available']) ? $jsonData['end_time_available'] : null;
         } else {
             $keyword = $this->getRequest()->getQuery('keyword');
             $sort_field = $this->getRequest()->getQuery('sort_field');
