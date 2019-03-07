@@ -122,20 +122,24 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                 <?php
                 }
             ?>
+            <div class="left half-width">
+                <?= $this->Form->control('start_time', ['type' => 'text', 'class' => 'datetpicker', 'readonly']); ?>
+            </div>
+            <div class="right half-width">
+                <?= $this->Form->control('end_time', ['type' => 'text', 'class' => 'datepicker', 'readonly']); ?>
+            </div>
         </div>
         <div style='clear:both;'></div>
         <div style='width: 50%; float: left;'>
-            <div class="left third-width">
-                <?= $this->Form->control('start_time', ['type' => 'text', 'class' => 'datetpicker', 'readonly']); ?>
-            </div>
-            <div class="left third-width">
-                <?= $this->Form->control('end_time', ['type' => 'text', 'class' => 'datepicker', 'readonly']); ?>
-            </div>
             <input type="hidden" name="returned" id="returned" value="<?=date("Y-m-d H:i:s")?>">
             <div style='clear:both;'></div>
             <?php 
             if($loan->overtime_hours_late != 0){
-                echo __("Overtime fee: ") . number_format($loan->overtime_fee, 2) . '$';
+            ?>
+                <?=__("Total hours late: {0}", $loan->overtime_hours_late)?><br>
+                <?=__("Hourly late: {0}$", number_format($loan->overtime_hourly_rate), 2)?><br>
+                <?=__("Overtime fee: {0}$", number_format($loan->overtime_fee, 2))?><br>
+            <?php
             }
             ?>
         </div>

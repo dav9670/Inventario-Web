@@ -138,10 +138,10 @@ class Loan extends Entity
             $equipments = TableRegistry::get('Equipments');
 
             $equipment = $equipments->get($this->item_id, ['contain' => ['Categories']]);
-            $categories = $myEquipments->categories;
+            $categories = $equipment->categories;
             
             foreach($categories as $category){
-                $overtime += $category->hourly_rate;
+                $hourly_rate += $category->hourly_rate;
             }
         }
         return floatval($hourly_rate);
