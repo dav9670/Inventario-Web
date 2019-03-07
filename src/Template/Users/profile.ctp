@@ -14,17 +14,12 @@
 
     <div style="clear: both;"></div>
 
-    <div class="search-container">
-
-        <div class="search-bar">
+    <div>
+        <div>
             <label for="search"><?= __('Search') ?></label>
             <input type="text" name="search" id="search">
         </div>
     </div>
-
-    <br>
-    <br>
-    <br>
 
     <a href="#" onclick="$('#hid').toggle()"><?= __("Filters")?></a>
     <div id="hid" hidden>
