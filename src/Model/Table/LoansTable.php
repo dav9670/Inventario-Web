@@ -103,7 +103,7 @@ class LoansTable extends Table
 
         $validator
             ->integer('item_id')
-            ->requirePresence('item_id')
+            ->requirePresence('item_id', 'create')
             ->add('item_id',[
                 'itemNotAlreadyLoaned' => [
                     'rule' => 'itemNotAlreadyLoaned',
