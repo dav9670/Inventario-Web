@@ -387,22 +387,29 @@ class LicencesController extends AppController
         $search_licences = true;
         $search_products = true;
 
+        $start_time_available = null;
+        $end_time_available = null;
+
         if ($this->isApi()){
             $jsonData = $this->getRequest()->input('json_decode', true);
             $keyword = $jsonData['keyword'];
             $sort_field = $jsonData['sort_field'];
             $sort_dir = $jsonData['sort_dir'];
-            $search_unavailable = $jsonData['search_unavailable'] == 'true';
+            $search_unavailable = isset($jsonData['search_unavailable']) ? $jsonData['search_unavailable'] == 'true' : true;
+            $start_time_available = isset($jsonData['start_time_available']) ? $jsonData['start_time_available'] == 'true' : null;
+            $end_time_available = isset($jsonData['end_time_available']) ? $jsonData['end_time_available'] == 'true' : null;
         } else {
             $keyword = $this->getRequest()->getQuery('keyword');
             $sort_field = $this->getRequest()->getQuery('sort_field');
             $sort_dir = $this->getRequest()->getQuery('sort_dir');
             
             $filters = $this->getRequest()->getQuery('filters');
-            $search_available = $filters['search_available'] == 'true';
-            $search_unavailable = $filters['search_unavailable'] == 'true';
-            $search_licences = $filters['search_licences'] == 'true';
-            $search_products = $filters['search_products'] == 'true';
+            $search_available = isset($filters['search_available']) ? $filters['search_available'] == 'true' : true;
+            $search_unavailable = isset($filters['search_unavailable']) ? $filters['search_unavailable'] == 'true' : true;
+            $search_licences = isset($filters['search_licences']) ? $filters['search_licences'] == 'true' : true;
+            $search_products = isset($filters['search_products']) ?  $filters['search_products'] == 'true' : true;
+            $start_time_available = isset($filters['start_time_available']) ? $filters['start_time_available'] : null;
+            $end_time_available = isset($filters['end_time_available']) ? $filters['end_time_available'] : null;
         }
         
         $query = null;
@@ -467,7 +474,18 @@ class LicencesController extends AppController
         $archivedLicences = [];
         $allLicences = $this->paginate($query);
         foreach ($allLicences as $licence){
-            if($search_available && $licence->available || $search_unavailable && !$licence->available){
+            $withTime = (isset($start_time_available) && isset($end_time_available));
+            $isValidAvailable = false;
+            if($withTime){
+                $isValidAvailable = (($search_available && $licence->isAvailableBetween($start_time_available, $end_time_available)) || ($search_unavailable && !$licence->isAvailableBetween($start_time_available, $end_time_available)));
+            } else {
+                $isValidAvailable = (($search_available && $licence->available) || ($search_unavailable && !$licence->available));
+            }
+            
+            if($isValidAvailable){
+                if($withTime){
+                    $licence['available_between'] = $licence->isAvailableBetween($start_time_available, $end_time_available);
+                }
                 if ($licence->deleted != null && $licence->deleted != "") {
                     
                     if (!in_array($licence,$archivedLicences))
