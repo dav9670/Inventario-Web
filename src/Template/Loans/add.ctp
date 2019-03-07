@@ -260,7 +260,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                     <td>` + elem.last_name + `</td>
                     <td>` + elem.description + `</td>
                     <td>` + labels_list + `</td>
-                    <td><img src='/img/` + imgTag + `' alt='` + imgAlt + `' width=20 height=20></td>
+                    <td><img id='item_` + elem.id + `_available' data-available='`+ elem.available_between + `' src='/img/` + imgTag + `' alt='` + imgAlt + `' width=20 height=20></td>
                 </tr>
             `);
         });
@@ -309,7 +309,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                     <td><a class='inline' id='item_` + elem.id + `_identifier' href='/rooms/` + elem.id + `'>` + elem.name + `</a></td>
                     <td>` + elem.description + `</td>
                     <td>` + labels_list + `</td>
-                    <td><img src='/img/` + imgTag + `' alt='` + imgAlt + `' width=20 height=20></td>
+                    <td><img id='item_` + elem.id + `_available' data-available='`+ elem.available_between + `' src='/img/` + imgTag + `' alt='` + imgAlt + `' width=20 height=20></td>
                 </tr>
             `);
         });
@@ -360,7 +360,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                     <td>` + elem.description + `</td>
                     <td>` + labels_list + `</td>
                     <td>` + elem.status + `</td>
-                    <td><img src='/img/` + imgTag + `' alt='` + imgAlt + `' width=20 height=20></td>
+                    <td><img id='item_` + elem.id + `_available' data-available='`+ elem.available_between + `' src='/img/` + imgTag + `' alt='` + imgAlt + `' width=20 height=20></td>
                 </tr>
             `);
         });
@@ -409,7 +409,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                     <td><a class='inline' id='item_` + elem.id + `_identifier' href='/rooms/` + elem.id + `'>` + elem.name + `</a></td>
                     <td>` + elem.description + `</td>
                     <td>` + labels_list + `</td>
-                    <td><img src='/img/` + imgTag + `' alt='` + imgAlt + `' width=20 height=20></td>
+                    <td><img id='item_` + elem.id + `_available' data-available='`+ elem.available_between + `' src='/img/` + imgTag + `' alt='` + imgAlt + `' width=20 height=20></td>
                 </tr>
             `);
         });
@@ -431,17 +431,27 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
     }
 
     function rowSelected(type, id){
-        let old_id = $('#' + type + '-id').val();
-        $('#' + type + '_' + old_id).removeClass('selected');
-        
-        /*if(type == 'item'){
-            if(true/* available )
-        }*/
-        if(id != null)
+        var canSelect = true;
+        if(type == 'item'){
+            if($('#' + type + '_' + id + '_available').attr('data-available') == 'false'){
+                alert('<?=__('You cannot select this item, it is not available during the time period.')?>');
+                canSelect = false;
+            }
+        }
+
+        if(id == null || (id != null && canSelect)){
+            let old_id = $('#' + type + '-id').val();
+            $('#' + type + '_' + old_id).removeClass('selected');
+        }
+
+        if(id != null && canSelect) {
             $('#' + type + '_' + id).addClass('selected');
-        $('#' + type + '_selected').text(id != null ? $('#' + type + '_' + id + '_identifier').text() : '');
-        
-        $('#' + type + '-id').val(id != null ? id : '');
+            $('#' + type + '_selected').text(id != null ? $('#' + type + '_' + id + '_identifier').text() : '');
+            $('#' + type + '-id').val(id != null ? id : '');
+        } else if (id == null) {
+            $('#' + type + '_selected').text('');
+            $('#' + type + '-id').val('');
+        }
     }
 
     $('document').ready(function(){
