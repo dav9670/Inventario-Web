@@ -654,8 +654,8 @@ tr.selected{
     background: #795799 !important;
 }
 
-td.right {
-    text-align: right;
+td.money {
+     text-align:right;
 }
 
 a.inline {

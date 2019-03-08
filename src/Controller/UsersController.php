@@ -86,6 +86,7 @@ class UsersController extends AppController
         ]);
 
         $this->set('user', $user);
+        $this->set('_serialize', ['user']);
     }
 
     public function profile()
@@ -166,19 +167,46 @@ class UsersController extends AppController
      */
     public function edit($id = null)
     {
-        $user = $this->Users->get($id, [
-            'contain' => []
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
-            if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
+        $user = $this->Users->get($id);
+        $success = false;
 
-                return $this->redirect(['action' => 'index']);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+
+            $data = $this->request->getData();
+            if(!$this->isApi()){
+                $image = $data['image'];
+                if($image['tmp_name'] != '') {
+                    $imageData  = file_get_contents($image['tmp_name']);
+                    $b64   = base64_encode($imageData);
+                    $data['image'] = $b64;
+                }
             }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            else{
+                if($data['password'] == ""){
+                    $data['password'] = $user->password;
+                }
+            }
+            $user = $this->Users->patchEntity($user, $data);
+            if ($this->Users->save($user)) {
+                if($this->isApi()){
+                    $success = true;
+                } else {
+                    $this->Flash->success(__('The user has been saved.'));
+                    return $this->redirect(['action' => 'index']);
+                }
+            } else if($this->isApi()){
+                $success = false;
+            } else {
+                $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            }
         }
-        $this->set(compact('user'));
+
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        } else {
+            $this->set(compact('user'));
+        }
     }
 
     
@@ -209,6 +237,7 @@ class UsersController extends AppController
         ]);
         if($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
+            
             $image = $data['image'];
             if($image['tmp_name'] != '') {
                 $imageData  = file_get_contents($image['tmp_name']);
@@ -224,6 +253,7 @@ class UsersController extends AppController
                 $data['admin_status'] = 'admin';
             }
             $user = $this->Users->patchEntity($user, $data);
+            dd($user);
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
 
@@ -328,5 +358,51 @@ class UsersController extends AppController
 
         $this->set(compact('identify'));
         $this->set('_serialize', 'identify');
+    }
+    
+    public function changePassword(){
+        $user = $this->Users->get($this->request->getSession()->read('Auth.User.id'));
+        $success = false;
+        $auth = array();
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $data = $this->request->getData();
+            $hasher = new DefaultPasswordHasher();
+            $password = $data['Old_password'];
+            if($hasher->check($password,$user->password)){
+                if($data['New_password'] == $data['Confirm_your_new_password']){
+                
+                    $auth['email'] = $user->email;
+                    $auth['password'] = $data['New_password'];
+                    $auth['admin_status'] = $user->admin_status;
+                    $auth['image'] = $user->image;
+                    
+                    $user = $this->Users->patchEntity($user, $auth);
+                    if ($this->Users->save($user))
+                    {
+                        if($this->isApi()){
+                            $success = true;
+                        }
+                        else
+                        {
+                            $this->Flash->success(__('Your password has been save.'));
+                            return $this->redirect(['action' => 'index']);
+                        }
+                    }
+                    else if($this->isApi())
+                    {
+                        $success = false;
+                    }
+                    else
+                    {
+                        $this->Flash->error(__('Could not save your password. Please, try again.'));
+                    }
+                }else {
+                    $this->Flash->error(__('Make sure your new password is the same as the confirmation.'));
+                }
+            }
+            else if(!$hasher->check($password,$user->password)){
+                $this->Flash->error(__('Your old password is incorrect.'));
+            }
+        }
     }
 }
