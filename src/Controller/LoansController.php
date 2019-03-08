@@ -22,18 +22,7 @@ class LoansController extends AppController
      */
     public function index()
     {
-        $options = [
-            'contain'=>[
-                'Mentors' => [
-                    'Skills'
-                ]
-            ]
-        ];
-
-        $query = $this->Loans->find('all', $options);
-        $loan = $query->toList()[1];
-
-        //dd($query->sql());
+        $query = $this->Loans->find('all');
         $this->set(compact('loans'));
     }
 
@@ -211,8 +200,8 @@ class LoansController extends AppController
         $sort_dir = "asc";
 
         $search_items = true;
-        $search_labels = true;
-        $search_users = true;
+        $search_labels = false;
+        $search_users = false;
         $item_type = 'all';
         $start_time = '';
         $end_time = '';
@@ -224,7 +213,7 @@ class LoansController extends AppController
             $start_time = $jsonData['startTime'];
             $end_time = $jsonData['endTime'];
             $search_items = $jsonData['searchItems'] == 'true';
-            $search_labels = $jsonData['searchLabels'] == 'true';
+            $search_labels = /*$jsonData['searchLabels'] == 'true'*/ false;
             $search_users = $jsonData['searchUsers'] == 'true';
         } else {
             $keyword = $this->getRequest()->getQuery('keyword');
@@ -232,12 +221,12 @@ class LoansController extends AppController
             $sort_dir = $this->getRequest()->getQuery('sort_dir');
             
             $filters = $this->getRequest()->getQuery('filters');
-            $search_items = $filters['search_items'] == 'true';
-            $search_labels = $filters['search_labels'] == 'true';
-            $search_users = $filters['search_users'] == 'true';
-            $item_type = $filters['item_type'];
-            $start_time = $filters['start_time'];
-            $end_time = $filters['end_time'];
+            $search_items = isset($filters['search_items']) ? $filters['search_items'] : true;
+            $search_labels = /*isset($filters['search_labels']) ? $filters['search_labels'] : false*/ false;
+            $search_users = isset($filters['search_users']) ? $filters['search_users'] : false;
+            $item_type = isset($filters['item_type']) ? $filters['item_type'] : 'all';
+            $start_time = isset($filters['start_time']) ? $filters['start_time'] : '';
+            $end_time = isset($filters['end_time']) ? $filters['end_time'] : '';
         }
 
         $options = [
@@ -332,7 +321,6 @@ class LoansController extends AppController
                     $searchFields = $searchFieldsType[$item_type];
 
                     $whereQuery = $this->makeStringSearch($table, $searchFields);
-                    //var_dump($whereQuery);
                 }
 
                 $query = $this->Loans->find('all', $options)
@@ -342,7 +330,7 @@ class LoansController extends AppController
             }
             if($search_labels)
             {
-                if($query != null){
+                /*if($query != null){
                     $union_query = $query;
                 }   
 
@@ -410,12 +398,10 @@ class LoansController extends AppController
                     ->where($whereQuery)
                     ->bind(":search", $keyword, 'string')
                     ->bind(":like_search", '%' . $keyword . '%', 'string');
-                
-                var_dump($query->sql());
 
                 if($union_query != null){
                     $query->union($union_query);
-                }
+                }*/
             }
             if($search_users)
             {

@@ -4,6 +4,7 @@ namespace App\Test\TestCase\Controller;
 use App\Controller\LoansController;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
+use Cake\ORM\TableRegistry;
 
 /**
  * App\Controller\LoansController Test Case
@@ -21,9 +22,17 @@ class LoansControllerTest extends TestCase
         'app.Loans',
         'app.Users',
         'app.Mentors',
+        'app.Mentors_Skills',
+        'app.Skills',
         'app.Rooms',
+        'app.Rooms_Services',
+        'app.Services',
         'app.Licences',
-        'app.Equipments'
+        'app.Licences_Products',
+        'app.Products',
+        'app.Equipments',
+        'app.Equipments_Categories',
+        'app.Categories'
     ];
 
     public function setUp()
