@@ -42,6 +42,20 @@ class Loan extends Entity
         'item' => true
     ];
 
+    public function getItem(){
+        if($this->mentor != null){
+            return $this->mentor;
+        } else if ($this->room != null){
+            return $this->room;
+        } else if ($this->licence != null){
+            return $this->licence;
+        } else if ($this->equipment != null){
+            return $this->equipment;
+        }
+
+        return null;
+    }
+
     public function _getTimePresetsForRooms($from, $to, $room){
         $startCalcul = "";
         $endCalcul = "";
@@ -109,7 +123,8 @@ class Loan extends Entity
     {
         $overtimeFee = 0;
         if($this->returned == null){
-            if($this->end_time <= Time::now()){
+
+            if($this->end_time != null && $this->end_time <= Time::now()){
 
                 $now = Time::now();
                 $diff = $now->diff($this->end_time);
@@ -133,11 +148,11 @@ class Loan extends Entity
                     }
 
                 }
-            }
+            } 
         }
         
         return $overtimeFee;
     }
 
-    protected $_virtual = ['overtime_fee'];
+protected $_virtual = ['overtime_fee'];
 }

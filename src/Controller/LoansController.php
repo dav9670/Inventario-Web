@@ -47,7 +47,7 @@ class LoansController extends AppController
     public function view($id = null)
     {
         $loan = $this->Loans->get($id, [
-            'contain' => ['Users', 'Items']
+            'contain' => ['Users']
         ]);
 
         $this->set('loan', $loan);
@@ -61,16 +61,30 @@ class LoansController extends AppController
     public function add()
     {
         $loan = $this->Loans->newEntity();
+        $success = false;
         if ($this->request->is('post')) {
             $loan = $this->Loans->patchEntity($loan, $this->request->getData());
             if ($this->Loans->save($loan)) {
-                $this->Flash->success(__('The loan has been saved.'));
+                if($this->isApi()){
+                    $success = true;
+                } else {
+                    $this->Flash->success(__('The loan has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                    return $this->redirect(['action' => 'index']);
+                }
+            }else if($this->isApi()){
+                $success = false;
+            }else {
+                $this->Flash->error(__('The loan could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The loan could not be saved. Please, try again.'));
         }
-        $this->set(compact('loan'));
+
+        if($this->isApi()){
+            $this->set(compact('success'));
+            $this->set('_serialize', ['success']);
+        } else {
+            $this->set(compact('loan'));
+        }
     }
 
     /**
@@ -95,8 +109,34 @@ class LoansController extends AppController
             $this->Flash->error(__('The loan could not be saved. Please, try again.'));
         }
         $users = $this->Loans->Users->find('list', ['limit' => 200]);
-        $items = $this->Loans->Items->find('list', ['limit' => 200]);
-        $this->set(compact('loan', 'users', 'items'));
+        $this->set(compact('loan', 'users'));
+    }
+
+    /**
+     * Edit method
+     *
+     * @param string|null $id Loan id.
+     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function return($id = null)
+    {
+        $loan = $this->Loans->get($id, [
+            'contain' => ['Users', 'Mentors.Skills', 'Rooms.Services', 'Licences.Products', 'Equipments.Categories']
+        ]);
+        if ($this->request->is(['patch', 'post', 'put', 'delete'])) {
+            $loan = $this->Loans->patchEntity($loan, $this->request->getData());
+            if ($this->Loans->save($loan)) {
+                $this->Flash->success(__('The loan has been saved.'));
+
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('The loan could not be saved. Please, try again.'));
+        }
+        $this->set(compact('loan'));
+        if($this->isApi()){
+            $this->set('_serialize', 'loan');
+        }
     }
 
     /**

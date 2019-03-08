@@ -392,6 +392,7 @@ class LicencesController extends AppController
             $keyword = $jsonData['keyword'];
             $sort_field = $jsonData['sort_field'];
             $sort_dir = $jsonData['sort_dir'];
+            $search_unavailable = $jsonData['search_unavailable'] == 'true';
         } else {
             $keyword = $this->getRequest()->getQuery('keyword');
             $sort_field = $this->getRequest()->getQuery('sort_field');
