@@ -128,7 +128,7 @@ class LoansFixture extends TestFixture
             [
                 'id' => 10,
                 'start_time' => '2019-03-03 12:00:00',
-                'end_time' => '2019-03-05 12:00:00',
+                'end_time' => '2019-03-06 12:00:00',
                 'user_id' => 2,
                 'item_type' => 'rooms',
                 'item_id' => 2
