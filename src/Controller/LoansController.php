@@ -221,9 +221,9 @@ class LoansController extends AppController
             $sort_dir = $this->getRequest()->getQuery('sort_dir');
             
             $filters = $this->getRequest()->getQuery('filters');
-            $search_items = isset($filters['search_items']) ? $filters['search_items'] : true;
-            $search_labels = /*isset($filters['search_labels']) ? $filters['search_labels'] : false*/ false;
-            $search_users = isset($filters['search_users']) ? $filters['search_users'] : false;
+            $search_items = isset($filters['search_items']) ? $filters['search_items'] == 'true' : true;
+            $search_labels = /*isset($filters['search_labels']) ? $filters['search_labels'] == 'true' : false*/ false;
+            $search_users = isset($filters['search_users']) ? $filters['search_users'] == 'true' : false;
             $item_type = isset($filters['item_type']) ? $filters['item_type'] : 'all';
             $start_time = isset($filters['start_time']) ? $filters['start_time'] : '';
             $end_time = isset($filters['end_time']) ? $filters['end_time'] : '';
@@ -271,6 +271,25 @@ class LoansController extends AppController
         if($keyword == '' || ($search_items == false && $search_labels == false && $search_users == false))
         {
             $query = $this->Loans->find('all', $options);
+
+            if($item_type != 'all')
+            {
+                $query
+                    ->where('Loans.item_type like :item_type')
+                    ->bind(':item_type', $item_type, 'string');
+            }
+            if($start_time != '')
+            {
+                $query
+                    ->where('Loans.start_time > :start_time')
+                    ->bind(':start_time', $start_time);
+            }
+            if($end_time != '')
+            {
+                $query
+                    ->where('Loans.end_time < :end_time')
+                    ->bind(':end_time', $end_time);
+            }
         }
         else
         {
@@ -327,6 +346,25 @@ class LoansController extends AppController
                     ->where($whereQuery)
                     ->bind(":search", $keyword, 'string')
                     ->bind(":like_search", '%' . $keyword . '%', 'string');
+
+                if($item_type != 'all')
+                {
+                    $query
+                        ->where('Loans.item_type like :item_type')
+                        ->bind(':item_type', $item_type, 'string');
+                }
+                if($start_time != '')
+                {
+                    $query
+                        ->where('Loans.start_time > :start_time')
+                        ->bind(':start_time', $start_time);
+                }
+                if($end_time != '')
+                {
+                    $query
+                        ->where('Loans.end_time < :end_time')
+                        ->bind(':end_time', $end_time);
+                }
             }
             if($search_labels)
             {
@@ -413,29 +451,29 @@ class LoansController extends AppController
                     ->where('Users.email like :like_search')
                     ->bind(":like_search", '%' . $keyword . '%', 'string');
 
+                if($item_type != 'all')
+                {
+                    $query
+                        ->where('Loans.item_type like :item_type')
+                        ->bind(':item_type', $item_type, 'string');
+                }
+                if($start_time != '')
+                {
+                    $query
+                        ->where('Loans.start_time > :start_time')
+                        ->bind(':start_time', $start_time);
+                }
+                if($end_time != '')
+                {
+                    $query
+                        ->where('Loans.end_time < :end_time')
+                        ->bind(':end_time', $end_time);
+                }
+
                 if($union_query != null){
                     $query->union($union_query);
                 }
             }
-        }
-
-        if($item_type != 'all')
-        {
-            $query
-                ->where('Loans.item_type like :item_type')
-                ->bind(':item_type', $item_type, 'string');
-        }
-        if($start_time != '')
-        {
-            $query
-                ->where('Loans.start_time > :start_time')
-                ->bind(':start_time', $start_time);
-        }
-        if($end_time != '')
-        {
-            $query
-                ->where('Loans.start_time < :end_time')
-                ->bind(':end_time', $end_time);
         }
 
         $sqlSorted = false;
