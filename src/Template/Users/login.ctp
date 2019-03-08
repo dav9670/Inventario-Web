@@ -7,5 +7,6 @@
         <?= $this->Form->control('password') ?>
     </fieldset>
     <?= $this->Form->button(__('Login'), ['class' => 'centered-button']) ?>
+
     <?= $this->Form->end() ?>
 </div>

@@ -41,13 +41,13 @@ class Equipment extends Entity
 
     protected function _getAvailable()
     {
-        $loans = TableRegistry::get('Loans');
-        $myloans = $loans->find('all', ['contains' => ['Equipments']])
-            ->where('Loans.item_type like \'equipments\' and Loans.item_id = :id and Loans.start_time <= NOW() and Loans.returned is null')
-            ->bind(':id', $this->id);
-        $nbloans = $myloans->count();
+            $loans = TableRegistry::get('Loans');
+            $myloans = $loans->find('all', ['contains' => ['Equipments']])
+                ->where('Loans.item_type like \'equipments\' and Loans.item_id = :id and Loans.start_time <= NOW() and Loans.returned is null')
+                ->bind(':id', $this->id);
+            $nbloans = $myloans->count();
         
-        return $nbloans == 0 && is_null($this->deleted);
+            return $nbloans == 0 && is_null($this->deleted);
     }
 
     protected function _getCategoriesList()

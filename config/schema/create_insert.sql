@@ -285,7 +285,7 @@ delimiter //
 create procedure equipments_report(start datetime, end datetime, sort_field tinytext, sort_dir tinytext)
 begin
     set @query =concat('
-	select c.name as "cat", nloans.nloaned as "time_loans", nlate.late as "late_loans", nlate.hlate as "hour_loans"
+	select c.name as "cat", nloans.nloaned as "time_loans", nlate.late as "late_loans", nlate.hlate as "hour_loans", available.availables as "available"
 	from 
 		equipments e,
         equipments_categories ec,
@@ -312,10 +312,19 @@ begin
                 and l.end_time <= "', end ,'"
                 group by c.name
         ) as nloans on c.name = nloans.cat
-		where 
-			e.id = ec.equipment_id 
+        left join (
+        select c.name as cat, count(e.id) as availables
+			from equipments e, categories c, equipments_categories ec
+            where e.id = ec.equipment_id
             and c.id = ec.category_id
-            group by c.name
+			and e.id not in ( select ee.id 
+									from loans as l inner join equipments ee on l.item_id = ee.id
+									where l.item_type = "equipments"
+                                        and l.returned is null
+                                        and start_time < now())
+                                        group by c.name
+                                        ) as available on c.name = available.cat
+                                        group by c.name
             order by ', sort_field ,' ', sort_dir);
 
     PREPARE stmt FROM @query;
