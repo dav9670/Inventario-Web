@@ -357,10 +357,10 @@ use Cake\I18n\I18n;
         $('#report-table-head').append(`
             <tr>
                 <th scope="col"><a id="cat_sort" onclick="sortSetter('cat'); setBodyEquipments();"><?= __("Category") ?></a></th>
-                <th scope="col"><a id="time_loans_sort" onclick="sortSetter('time_loans'); setBodyMentors();"><?= __("Time loaned") ?></th>
-                <th scope="col"><a id="hour_loans_sort" onclick="sortSetter('hour_loans'); setBodyMentors();"><?= __("Overtime fee") ?></th>
-                <th scope="col"><a id="late_loans_sort" onclick="sortSetter('late_loans'); setBodyMentors();"><?= __("Late loans") ?></th>
-                <th scope="col"><a id="available_sort" onclick="sortSetter('available'); setBodyMentors();"><?= __("Available") ?></th>
+                <th scope="col"><?= __("Time loaned") ?></th>
+                <th scope="col"><?= __("Overtime fee") ?></th>
+                <th scope="col"><?= __("Late loans") ?></th>
+                <th scope="col"><?= __("Available") ?></th>
             </tr>
         `);
     }
