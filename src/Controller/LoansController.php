@@ -117,25 +117,32 @@ class LoansController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put', 'delete'])) {
             $success = false;
-            $loan = $this->Loans->patchEntity($loan, $this->request->getData());
-            if ($this->Loans->save($loan)) {
-                $success = true;
+            if ($this->request->getData()['returned'] != null)
+            {
+                $loan = $this->Loans->patchEntity($loan, $this->request->getData());
+                if ($this->Loans->save($loan)) {
+                    $success = true;
+                    if($this->isApi()){
+                        $this->set(compact('success'));
+                        $this->set('_serialize', ['success']);
+                        return;
+                    } else {
+                        $this->Flash->success(__('The loan has been saved.'));
+
+                        return $this->redirect(['action' => 'index']);
+                    }
+                }
+                $success = false;
                 if($this->isApi()){
                     $this->set(compact('success'));
                     $this->set('_serialize', ['success']);
                     return;
                 } else {
-                    $this->Flash->success(__('The loan has been saved.'));
-
-                    return $this->redirect(['action' => 'index']);
+                    $this->Flash->error(__('The loan could not be saved. Please, try again.'));
                 }
             }
-            $success = false;
-            if($this->isApi()){
-                $this->set(compact('success'));
-                $this->set('_serialize', ['success']);
-                return;
-            } else {
+            else
+            {
                 $this->Flash->error(__('The loan could not be saved. Please, try again.'));
             }
         }
@@ -579,6 +586,12 @@ class LoansController extends AppController
 
     public function isAuthorized($user)
     {
+        $action = $this->request->getParam('action');
+        if(in_array($action, ['search']))
+        {
+            return true;
+        }
+
         return $this->Auth->user('admin_status') == 'admin';
     }
 }
