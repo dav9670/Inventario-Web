@@ -679,3 +679,7 @@ div#flash {
     padding: 10px;
     text-transform: none !important;
 }
+
+tr#highlight {
+    background: #FFD154;
+}

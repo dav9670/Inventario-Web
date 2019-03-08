@@ -228,10 +228,13 @@ class ReportsController extends AppController
         $end_date = $this->getRequest()->getQuery('end_date');
         $sort_field = $this->getRequest()->getQuery('sort_field') != null ? $this->getRequest()->getQuery('sort_field') : 'c.name';
         $sort_dir = $this->getRequest()->getQuery('sort_dir') != null ? $this->getRequest()->getQuery('sort_dir') : 'asc';
-
         $conn = ConnectionManager::get('default');
         $proc_result = $conn->execute("call equipments_report(?,?,?,?)", [$start_date, $end_date, $sort_field, $sort_dir])->fetchAll('assoc');
         
+        $time = 0;
+        $hour = 0;
+        $avai = 0;
+        $late = 0;
 
         $finalArray = array();
         $id = 0;
@@ -244,16 +247,24 @@ class ReportsController extends AppController
             //$id = $category->toArray()[0]['id'];
             $hourLate = $result["hour_loans"] == null ? 0 : $result['hour_loans'];
             $value =$result["hour_loans"] * $category->toArray()[0]['hourly_rate'];
-            $formatedValue = number_format($value, 2, '.', ',');
+            $formatedValue = number_format($value, 2, '.', "");
             
+            
+
             $finalArray[$id]["cat"] = $result["cat"];
-            $finalArray[$id]["hour_loans"] =  $value == "0" ? '---' : $formatedValue . '$';
-            $finalArray[$id]["late_loans"] = ($result["late_loans"] == null) ? '---' : $result["late_loans"];
-            $finalArray[$id]["time_loans"] = ($result["time_loans"] == null) ? '---' : $result["time_loans"];
-            $finalArray[$id]["available"] = $result["available"] == null ? '---' : $result["available"];
+            $finalArray[$id]["hour_loans"] =  $formatedValue;
+            $finalArray[$id]["late_loans"] = ($result["late_loans"] == null) ? '0' : $result["late_loans"];
+            $finalArray[$id]["time_loans"] = ($result["time_loans"] == null) ? '0' : $result["time_loans"];
+            $finalArray[$id]["available"] = $result["available"] == null ? '0' : $result["available"];
+            $hour += $finalArray[$id]["hour_loans"];
+            $late += $finalArray[$id]["late_loans"];
+            $time += $finalArray[$id]["time_loans"];
+            $avai += $finalArray[$id]["available"];
             $id = $id +1;
             }
         }
+
+
 
         $change = true;
         while($change){
@@ -267,7 +278,7 @@ class ReportsController extends AppController
                         $change = true;
                     }
                 }
-            }elseif($sort_field == "hour_loans" && $sort_dir == "desc"){
+            } elseif($sort_field == "hour_loans" && $sort_dir == "desc"){
                 for($i = 0; $i < sizeof($finalArray) - 1; $i++){
                     if ($finalArray[$i]['hour_loans'] > $finalArray[$i + 1]['hour_loans']){
                         $temp = $finalArray[$i];
@@ -276,7 +287,7 @@ class ReportsController extends AppController
                         $change = true;
                     }
                 }
-            }elseif($sort_field == "late_loans" && $sort_dir == "asc"){
+            } elseif($sort_field == "late_loans" && $sort_dir == "asc"){
                 for($i = 0; $i < sizeof($finalArray) - 1; $i++){
                     if ($finalArray[$i]['late_loans'] < $finalArray[$i + 1]['late_loans']){
                         $temp = $finalArray[$i];
@@ -285,7 +296,7 @@ class ReportsController extends AppController
                         $change = true;
                     }
                 }
-            }elseif($sort_field == "late_loans" && $sort_dir == "desc"){
+            } elseif($sort_field == "late_loans" && $sort_dir == "desc"){
                 for($i = 0; $i < sizeof($finalArray) - 1; $i++){
                     if ($finalArray[$i]['late_loans'] > $finalArray[$i + 1]['late_loans']){
                         $temp = $finalArray[$i];
@@ -294,7 +305,7 @@ class ReportsController extends AppController
                         $change = true;
                     }
                 }
-            }elseif($sort_field == "available" && $sort_dir == "asc"){
+            } elseif($sort_field == "available" && $sort_dir == "asc"){
                 for($i = 0; $i < sizeof($finalArray) - 1; $i++){
                     if ($finalArray[$i]['available'] < $finalArray[$i + 1]['available']){
                         $temp = $finalArray[$i];
@@ -303,7 +314,7 @@ class ReportsController extends AppController
                         $change = true;
                     }
                 }
-            }elseif($sort_field == "available" && $sort_dir == "desc"){
+            } elseif($sort_field == "available" && $sort_dir == "desc"){
                 for($i = 0; $i < sizeof($finalArray) - 1; $i++){
                     if ($finalArray[$i]['available'] > $finalArray[$i + 1]['available']){
                         $temp = $finalArray[$i];
@@ -312,16 +323,17 @@ class ReportsController extends AppController
                         $change = true;
                     }
                 }
-            }elseif($sort_field == "time_loans" && $sort_dir == "asc"){
+            } elseif($sort_field == "time_loans" && $sort_dir == "asc"){
                 for($i = 0; $i < sizeof($finalArray) - 1; $i++){
                     if ($finalArray[$i]['time_loans'] < $finalArray[$i + 1]['time_loans']){
                         $temp = $finalArray[$i];
                         $finalArray[$i] = $finalArray[$i + 1];
                         $finalArray[$i + 1] = $temp;
                         $change = true;
+                        
                     }
                 }
-            }elseif($sort_field == "time_loans" && $sort_dir == "desc"){
+            } elseif($sort_field == "time_loans" && $sort_dir == "desc"){
                 for($i = 0; $i < sizeof($finalArray) - 1; $i++){
                     if ($finalArray[$i]['time_loans'] > $finalArray[$i + 1]['time_loans']){
                         $temp = $finalArray[$i];
@@ -332,7 +344,20 @@ class ReportsController extends AppController
                 }
             }
         }
+        
+        $finalArray[$id]["cat"] = "Total";
+        $finalArray[$id]["hour_loans"] =  $hour;
+        $finalArray[$id]["late_loans"] = $late;
+        $finalArray[$id]["time_loans"] = $time;
+        $finalArray[$id]["available"] = $avai;
+        
+        for($i = 0; $i < sizeof($finalArray) - 1; $i++){
+            $finalArray[$i]['hour_loans'] = $finalArray[$i]['hour_loans'] == 0 ? '---' : $finalArray[$i]['hour_loans'] . '$';
+            $finalArray[$i]["late_loans"] = ($finalArray[$i]["late_loans"] == null) ? '---' : $finalArray[$i]["late_loans"];
+            $finalArray[$i]["time_loans"] = ($finalArray[$i]["time_loans"] == null) ? '---' : $finalArray[$i]["time_loans"];
+            $finalArray[$i]["available"] = $finalArray[$i]["available"] == null ? '---' : $finalArray[$i]["available"];
 
+        }
         $this->set('report', $finalArray);
         $this->set('_serialize', 'report');
     }

@@ -357,10 +357,10 @@ use Cake\I18n\I18n;
         $('#report-table-head').append(`
             <tr>
                 <th scope="col"><a id="cat_sort" onclick="sortSetter('cat'); setBodyEquipments();"><?= __("Category") ?></a></th>
-                <th scope="col"><?= __("Time loaned") ?></th>
-                <th scope="col"><?= __("Overtime fee") ?></th>
-                <th scope="col"><?= __("Late loans") ?></th>
-                <th scope="col"><?= __("Available") ?></th>
+                <th scope="col"><a id="time_loans_sort" onclick="sortSetter('time_loans'); setBodyEquipments();"><?= __("Time loaned") ?></th>
+                <th scope="col"><a id="hour_loans_sort" onclick="sortSetter('hour_loans'); setBodyEquipments();"><?= __("Overtime fee") ?></th>
+                <th scope="col"><a id="late_loans_sort" onclick="sortSetter('late_loans'); setBodyEquipments();"><?= __("Late loans") ?></th>
+                <th scope="col"><a id="available_sort" onclick="sortSetter('available'); setBodyEquipments();"><?= __("Available") ?></th>
             </tr>
         `);
     }
@@ -370,14 +370,16 @@ use Cake\I18n\I18n;
         let end_date = $('#date-to').val();
         $.ajax({
             method: 'get',
-            url : "/reports/equipments_report.json?start_date=" + start_date + "&end_date=" + end_date + "&sort_field=" + "c.name" + "&sort_dir=" + sort_dir,
+            url : "/reports/equipments_report.json?start_date=" + start_date + "&end_date=" + end_date + "&sort_field=" + sort_field + "&sort_dir=" + sort_dir,
             headers: { 'X-CSRF-TOKEN': '<?=$this->getRequest()->getParam('_csrfToken');?>' },
             success: function( response ){
                 $('#report-table-body').empty();
 
                 response.forEach(function(elem){
-                    $('#report-table-body').append(`
-                        <tr>
+
+                    if(elem.cat == "Total"){
+                        $('#report-table-body').append(`
+                        <tr id = \"highlight\">
                             <td>` + elem.cat + `</td>
                             <td>` + elem.time_loans + `</td>
                             <td class=\"money\">` + elem.hour_loans + `</td>
@@ -385,6 +387,17 @@ use Cake\I18n\I18n;
                             <td>` + elem.available + `</td>
                         </tr>
                     `);
+                    }else{
+                        $('#report-table-body').append(`
+                            <tr>
+                                <td>` + elem.cat + `</td>
+                                <td>` + elem.time_loans + `</td>
+                                <td class=\"money\">` + elem.hour_loans + `</td>
+                                <td>` + elem.late_loans + `</td>
+                                <td>` + elem.available + `</td>
+                            </tr>
+                        `);
+                    }
                 });
             },
             error: function(jqXHR, textStatus, errorThrown){
