@@ -5,6 +5,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\TableRegistry;
 
 /**
  * Loans Model
@@ -91,14 +92,25 @@ class LoansTable extends Table
 
         $validator
             ->dateTime('returned')
-            ->allowEmptyDateTime('returned')
-            ->greaterThanField('returned','start_time', __('Returned cannot be before Start Time.'));
+            ->allowEmptyDateTime('returned');
+            //->greaterThanField('returned','start_time', __('Returned cannot be before Start Time.'));
 
         $validator
             ->scalar('item_type')
             ->maxLength('item_type', 50)
             ->requirePresence('item_type', 'create')
             ->allowEmptyString('item_type', false);
+
+        $validator
+            ->integer('item_id')
+            ->requirePresence('item_id', 'create')
+            ->add('item_id',[
+                'itemNotAlreadyLoaned' => [
+                    'rule' => 'itemNotAlreadyLoaned',
+                    'provider' => 'table',
+                    'message' => 'The item is already loaned during the period'
+                ]
+            ]);
 
         return $validator;
     }
@@ -113,8 +125,14 @@ class LoansTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['user_id'], 'Users'));
-        //$rules->add($rules->existsIn(['item_id'], 'Items'));
 
         return $rules;
+    }
+
+    public function itemNotAlreadyLoaned($value, $context)
+    {
+        $table = TableRegistry::get(ucfirst($context['data']['item_type']));
+        $item = $table->get($value);
+        return $item->isAvailableBetween($context['data']['start_time'], $context['data']['end_time']);
     }
 }

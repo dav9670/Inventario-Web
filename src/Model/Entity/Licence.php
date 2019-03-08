@@ -106,4 +106,17 @@ class Licence extends Entity
     }
 
     protected $_virtual = ['available', 'products_list', 'status', 'loan_count'];
+
+    public function isAvailableBetween($start_time, $end_time)
+    {
+        $loans = TableRegistry::get('Loans');
+        $myloans = $loans->find('all', ['contains' => ['Licences']])
+            ->where('Loans.item_type like \'licences\' and Loans.item_id = :id and (Loans.start_time <= :end_time and Loans.end_time >= :start_time)')
+            ->bind(':id', $this->id)
+            ->bind(':end_time', $end_time)
+            ->bind(':start_time', $start_time);
+        $nbloans = $myloans->count();
+        
+        return $nbloans == 0 && is_null($this->deleted);
+    }
 }

@@ -683,3 +683,22 @@ div#flash {
 tr#highlight {
     background: #FFD154;
 }
+
+.users.form.content {
+    padding-bottom: 0;
+}
+
+.centered {
+    margin: auto;
+}
+
+.centered-image {
+    display: block;
+    margin: auto;
+}
+
+.centered-button {
+    display: block;
+    margin: auto;
+    float: none !important;
+}

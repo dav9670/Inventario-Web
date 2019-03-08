@@ -271,6 +271,12 @@ class UsersController extends AppController
 
     public function isAuthorized($user)
     {
+        $action = $this->request->getParam('action');
+        if(in_array($action, ['profile']))
+        {
+            return true;
+        }
+
         return $this->Auth->user('admin_status') == 'admin';
     }
 

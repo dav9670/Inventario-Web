@@ -4,6 +4,7 @@ namespace App\Test\TestCase\Controller;
 use App\Controller\LoansController;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
+use Cake\ORM\TableRegistry;
 
 /**
  * App\Controller\LoansController Test Case
@@ -20,27 +21,77 @@ class LoansControllerTest extends TestCase
     public $fixtures = [
         'app.Loans',
         'app.Users',
-        'app.Items'
+        'app.Mentors',
+        'app.Mentors_Skills',
+        'app.Skills',
+        'app.Rooms',
+        'app.Rooms_Services',
+        'app.Services',
+        'app.Licences',
+        'app.Licences_Products',
+        'app.Products',
+        'app.Equipments',
+        'app.Equipments_Categories',
+        'app.Categories'
     ];
 
-    /**
-     * Test index method
-     *
-     * @return void
-     */
-    public function testIndex()
+    public function setUp()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        parent::setUp();
+
+        $this->enableCsrfToken();
+        $this->enableSecurityToken();
+
+        // Set session data
+        $this->session([
+            'Auth' => [
+                'User' => [
+                    'id' => 1,
+                    'email' => 'david@gmail.com',
+                    'password' => '$2y$10$Cx3OagaMhBWn64l.MiHpRu36oBdp7J3GCg/cjHpKfTY8CVBxWzloy',
+                    'admin_status' => 'admin'
+                ]
+            ]
+        ]);
     }
 
     /**
-     * Test view method
+     * Test search method
      *
      * @return void
      */
-    public function testView()
+    public function testSearch()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->get('/loans/search.json?keyword=comp&sort_field=item&sort_dir=asc&filters[search_items]=true');
+        $this->assertResponseOk();
+        $user = $this->viewVariable('loans');
+        var_dump($user);
+        //Positive test
+        $loansTable = TableRegistry::get('Loans');
+        $expectedLoans = $loansTable->find('all')
+            ->where('name like "First aid" or name like "Haskell"')
+            ->order(['name' => 'asc'])
+            ->toList();
+
+        $this->get('/loans/search.json?keyword=ha&sort_field=name&sort_dir=asc');
+
+        $receivedLoansDecoded = json_decode((string)$this->_response->getBody());
+        $receivedLoans = [];
+
+        foreach($receivedLoansDecoded->loans as $loan){
+            array_push($receivedLoans, $loansTable->get($loan->id));
+        }
+
+        $this->assertEquals($expectedLoans, $receivedLoans);
+
+        //Negative test
+        $loansTable = TableRegistry::get('Loans');
+
+        $this->get('/loans/search.json?keyword=zzzzzzzzzzzzzzzzz&sort_field=name&sort_dir=asc');
+
+        $receivedLoansDecoded = json_decode((string)$this->_response->getBody());
+
+        $this->assertCount(0, $receivedLoansDecoded->loans);
     }
 
     /**
@@ -49,26 +100,6 @@ class LoansControllerTest extends TestCase
      * @return void
      */
     public function testAdd()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test edit method
-     *
-     * @return void
-     */
-    public function testEdit()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test delete method
-     *
-     * @return void
-     */
-    public function testDelete()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

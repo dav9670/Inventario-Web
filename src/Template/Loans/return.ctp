@@ -11,13 +11,10 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
     <fieldset>
         <legend><?= __('Return Loan') ?></legend>
         <div style='width: 50%; float: left;'>
-            <input type="hidden" name="user_id" id="user-id" value="<?=$loan->user_id?>">
             <h3><?= $this->Html->Link($loan->user->email, ['controller' => 'users', 'action' => 'consult', $loan->item_id])?></h3>
             <img src='data:image/png;base64,<?=$loan->user->image?>' id='output'/>
         </div>
-        <div style='width: 50%; float: left;'>
-            <input type="hidden" name="item_type" id="item-type" value="<?=$loan->item_type?>">
-            <input type="hidden" name="item_id" id="item-id" value="<?=$loan->item_id?>">
+        <div style='width: 50%; float: right;'>
             <?php
                 if($loan->item_type == 'mentors'){ 
                 ?>
@@ -126,19 +123,22 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                 }
             ?>
         </div>
-        <div style='clear:both;'></div>
-        <div style='width: 50%; float: left;'>
-            <div class="left third-width">
+        <div class='left half-width'>
+            <div class="left half-width">
                 <?= $this->Form->control('start_time', ['type' => 'text', 'class' => 'datetpicker', 'readonly']); ?>
             </div>
-            <div class="left third-width">
+            <div class="right half-width">
                 <?= $this->Form->control('end_time', ['type' => 'text', 'class' => 'datepicker', 'readonly']); ?>
             </div>
             <input type="hidden" name="returned" id="returned" value="<?=date("Y-m-d H:i:s")?>">
             <div style='clear:both;'></div>
             <?php 
-            if($loan->overtime_fee != 0){
-                echo __("Overtime fee: ") . number_format($loan->overtime_fee, 2) . '$';
+            if($loan->overtime_hours_late != 0){
+            ?>
+                <?=__("Total hours late: {0}", $loan->overtime_hours_late)?><br>
+                <?=__("Hourly rate: {0}$", number_format($loan->overtime_hourly_rate, 2))?><br>
+                <?=__("Overtime fee: {0}$", number_format($loan->overtime_fee, 2))?><br>
+            <?php
             }
             ?>
         </div>
@@ -149,7 +149,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
 
 <script>
     function returnLoan(){
-        if(confirm("<?=__('Are you sure you want to return this loan? ') . ($loan->end_time > date("Y-m-d H:i:s") ? __('This loan has {0}$ in overtime fees.', number_format($loan->overtime_fee, 2)): '')?>")){
+        if(confirm("<?=__('Are you sure you want to return this loan? ') . ($loan->overtime_hours_late != 0 ? __('This loan has {0}$ in overtime fees.', number_format($loan->overtime_fee, 2)): '')?>")){
             $('#return_form').submit();
         }
     }
