@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2019-01-23 21:54+0000\n"
+"POT-Creation-Date: 2019-01-26 01:49+0000\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -30,20 +30,6 @@ msgstr "La catégorie a été supprimée."
 msgid "The category could not be deleted. Please, try again."
 msgstr "La catégorie n'a pas pu être supprimée. Veuillez réessayer."
 
-#: Controller/CategoriesController.php:202
-#: Controller/ProductsController.php:203
-#: Controller/ServicesController.php:202
-#: Controller/SkillsController.php:202
-msgid "The association has been deleted."
-msgstr "L'association a été supprimée."
-
-#: Controller/CategoriesController.php:208
-#: Controller/ProductsController.php:209
-#: Controller/ServicesController.php:208
-#: Controller/SkillsController.php:208
-msgid "The association could not be deleted. Please, try again."
-msgstr "L'association n'a pas pu être supprimée. Veuillez réessayer."
-
 #: Controller/EquipmentsController.php:61;86
 msgid "The equipment has been saved."
 msgstr "L'équipement a été sauvegardé."
@@ -60,6 +46,14 @@ msgstr "L'équipement a été supprimé."
 msgid "The equipment could not be deleted. Please, try again."
 msgstr "L'équipement n'a pas pu être supprimé. Veuillez réessayer."
 
+#: Controller/EquipmentsController.php:243
+msgid "The equipment has been "
+msgstr "L'équipement a été "
+
+#: Controller/EquipmentsController.php:249
+msgid "The equipment could not be "
+msgstr "L'équipement n'a pas pu être "
+
 #: Controller/LicencesController.php:61;86
 msgid "The licence has been saved."
 msgstr "La licence a été sauvegardée."
@@ -67,6 +61,10 @@ msgstr "La licence a été sauvegardée."
 #: Controller/LicencesController.php:65;90
 msgid "The licence could not be saved. Please, try again."
 msgstr "La licence n'a pas pu être sauvegardée. Veuillez réessayer."
+
+#: Controller/LicencesController.php:110;227
+msgid "At least one Product is required. Please, try again."
+msgstr "Au moins un Produit est requis. Veuillez réessayer."
 
 #: Controller/LicencesController.php:108
 msgid "The licence has been deleted."
@@ -84,25 +82,21 @@ msgstr "La licence a été "
 msgid "The licence could not be "
 msgstr "La licence n'a pas pu être "
 
-#: Controller/LicencesController.php:110;227
-msgid "At least one Product is required. Please, try again."
-msgstr "Au moins un Produit est requis. Veuillez réessayer."
-
 #: Controller/LoansController.php:58;84
 msgid "The loan has been saved."
-msgstr "La location a été sauvegardée."
+msgstr "L'emprunt a été sauvegardé."
 
 #: Controller/LoansController.php:62;88
 msgid "The loan could not be saved. Please, try again."
-msgstr "La location n'a pas pu être sauvegardée. Veuillez réessayer."
+msgstr "L'emprunt n'a pas pu être sauvegardé. Veuillez réessayer."
 
 #: Controller/LoansController.php:107
 msgid "The loan has been deleted."
-msgstr "La location a été supprimée."
+msgstr "L'emprunt a été supprimé."
 
 #: Controller/LoansController.php:109
 msgid "The loan could not be deleted. Please, try again."
-msgstr "La location n'a pas pu être supprimée. Veuillez réessayer."
+msgstr "L'emprunt n'a pas pu être supprimé. Veuillez réessayer."
 
 #: Controller/MentorsController.php:62;87
 msgid "The mentor has been saved."
@@ -216,13 +210,21 @@ msgstr "L'utilisateur a été sauvegardé."
 msgid "The user could not be saved. Please, try again."
 msgstr "L'utilisateur n'a pas pu être sauvegardé. Veuillez réessayer."
 
-#: Controller/UsersController.php:146
-msgid "The user has been deleted."
-msgstr "L'utilisateur a été supprimé."
+#: Controller/UsersController.php:393
+msgid "Your password has been save."
+msgstr "Votre mot de passe a été sauvegardé."
 
-#: Controller/UsersController.php:148
-msgid "The user could not be deleted. Please, try again."
-msgstr "L'utilisateur n'a pas pu être supprimé. Veuillez réessayer."
+#: Controller/UsersController.php:403
+msgid "Could not save your password. Please, try again."
+msgstr "Votre mot de passe n'a pas pu être sauvegardé. Veuillez réessayer."
+
+#: Controller/UsersController.php:406
+msgid "Make sure your new password is the same as the confirmation."
+msgstr "Assurez-vous que votre nouveau mot de passe et sa confirmation sont identiques."
+
+#: Controller/UsersController.php:410
+msgid "Your old password is incorrect."
+msgstr "Votre ancien mot de passe est incorrect."
 
 #: Model/Entity/Licence.php:81
 msgid "Not yet active"
@@ -352,6 +354,14 @@ msgstr "Le nom de plateforme ne peut être vide."
 msgid "This name & platform combination has already been used."
 msgstr "Cette combinaison nom/plateforme est déjà utilisée."
 
+#: Model/Table/UsersTable.php:59
+msgid "Please enter an Email."
+msgstr "Veuillez entrer une adresse courriel."
+
+#: Model/Table/UsersTable.php:72
+msgid "You need to pick one."
+msgstr "Vous devez en choisir un(e)."
+
 #: Template/Categories/add.ctp:10
 msgid "Add Category"
 msgstr "Ajouter une catégorie"
@@ -439,6 +449,10 @@ msgstr "Supprimer la catégorie"
 #: Template/Skills/index.ctp:63
 msgid "Are you sure you want to delete {0}?"
 msgstr "Êtes-vous sûr(e) de vouloir supprimer {0} ?"
+
+#: Template/Categories/consult.ctp:22
+msgid "Are you sure you want to delete {0}? {1} equipments are associated with it."
+msgstr "Êtes-vous sûr(e) de vouloir supprimer {0} ? {1} équipements y sont associés."
 
 #: Template/Categories/consult.ctp:24
 msgid "Related Equipments"
@@ -688,36 +702,6 @@ msgstr "Êtes-vous sûr(e) de vouloir supprimer {0} de manière PERMANENTE ?"
 msgid "Remove"
 msgstr "Retirer"
 
-#: Template/Equipments/edit.ctp:13
-#: Template/Equipments/view.ctp:11;70
-#: Template/Loans/edit.ctp:13
-#: Template/Loans/index.ctp:36
-#: Template/Loans/view.ctp:11
-#: Template/Users/edit.ctp:13
-#: Template/Users/index.ctp:30
-#: Template/Users/profile.ctp:11;68
-#: Template/Users/view.ctp:11;68
-msgid "Are you sure you want to delete # {0}?"
-msgstr "Êtes-vous sûr(e) de vouloir supprimer # {0} ?"
-
-#: Template/Equipments/add.ctp:10
-#: Template/Equipments/edit.ctp:16
-#: Template/Equipments/view.ctp:12
-msgid "List Equipments"
-msgstr "Liste des Équipements"
-
-#: Template/Equipments/add.ctp:11
-#: Template/Equipments/edit.ctp:17
-#: Template/Equipments/view.ctp:14
-msgid "List Categories"
-msgstr "Liste des Catégories"
-
-#: Template/Equipments/add.ctp:12
-#: Template/Equipments/edit.ctp:18
-#: Template/Equipments/view.ctp:15
-msgid "New Category"
-msgstr "Nouvelle Catégorie"
-
 #: Template/Equipments/index.ctp:34
 #: Template/Licences/index.ctp:34
 #: Template/Mentors/index.ctp:34
@@ -725,115 +709,15 @@ msgstr "Nouvelle Catégorie"
 msgid "Filters"
 msgstr "Filtres"
 
-#: Template/Equipments/view.ctp:11
-msgid "Delete Equipment"
-msgstr "Supprimer cet Équipement"
-
-#: Template/Equipments/view.ctp:13
-msgid "New Equipment"
-msgstr "Nouvel Équipement"
-
-#: Template/Equipments/view.ctp:30;55
-#: Template/Licences/view.ctp:34;67
-#: Template/Loans/view.ctp:30
-#: Template/Mentors/view.ctp:38;63
-#: Template/Rooms/view.ctp:30;55
-#: Template/Users/profile.ctp:34;47
-#: Template/Users/view.ctp:34;47
-msgid "Id"
-msgstr "Id"
-
-#: Template/Equipments/view.ctp:34
-#: Template/Licences/view.ctp:46
-#: Template/Mentors/view.ctp:42
-#: Template/Rooms/view.ctp:34
-msgid "Created"
-msgstr "Créé"
-
-#: Template/Equipments/view.ctp:38
-#: Template/Licences/view.ctp:50
-#: Template/Mentors/view.ctp:46
-#: Template/Rooms/view.ctp:38
-msgid "Modified"
-msgstr "Modifié"
-
-#: Template/Equipments/view.ctp:42
-#: Template/Licences/view.ctp:54
-#: Template/Mentors/view.ctp:50
-#: Template/Rooms/view.ctp:42
-msgid "Deleted"
-msgstr "Supprimé"
-
-#: Template/Equipments/view.ctp:47
-#: Template/Licences/view.ctp:59
-#: Template/Mentors/view.ctp:55
-#: Template/Rooms/view.ctp:47
-#: Template/Users/profile.ctp:39
-#: Template/Users/view.ctp:39
-msgid "Image"
-msgstr "Image"
-
-#: Template/Equipments/view.ctp:51
-msgid "Related Categories"
-msgstr "Catégories associées"
-
-#: Template/Layout/error.ctp:35
-#: Template/Error/error400.ctp:36
-#: Template/Error/error500.ctp:41
-msgid "Error"
-msgstr "Erreur"
-
-#: Template/Layout/error.ctp:43
-msgid "Back"
-msgstr "Retour"
-
-#: Template/Licences/add.ctp:10
-#: Template/Licences/edit.ctp:16
-#: Template/Licences/view.ctp:12
-msgid "List Licences"
-msgstr "Liste des Licences"
-
-#: Template/Licences/add.ctp:11
-#: Template/Licences/edit.ctp:17
-#: Template/Licences/view.ctp:14
-msgid "List Products"
-msgstr "Liste des Produits"
-
-#: Template/Licences/add.ctp:12
-#: Template/Licences/edit.ctp:18
-#: Template/Licences/view.ctp:15
-msgid "New Product"
-msgstr "Nouveau Produit"
-
-#: Template/Licences/add.ctp:18
-msgid "Add Licence"
-msgstr "Ajouter une Licence"
-
-#: Template/Licences/edit.ctp:24
-#: Template/Licences/view.ctp:10
-msgid "Edit Licence"
-msgstr "Modifier cette Licence"
-
-#: Template/Licences/index.ctp:11
-#: Template/Products/index.ctp:14
-msgid "Licences"
-msgstr "Licences"
-
-#: Template/Licences/index.ctp:14;56
-#: Template/Products/consult.ctp:31
-#: Template/Products/index.ctp:11
-msgid "Products"
-msgstr "Produits"
-
 #: Template/Licences/index.ctp:37
 #: Template/Mentors/index.ctp:37
 #: Template/Rooms/index.ctp:37
 msgid "Search Available"
 msgstr "Rechercher parmi les disponibles"
 
-#: Template/Licences/index.ctp:38
-msgid "Search by Licences"
-msgstr "Rechercher dans les Licences"
+#: Template/Equipments/index.ctp:38
+msgid "Search by Equipments"
+msgstr "Rechercher dans les Équipements"
 
 #: Template/Licences/index.ctp:39
 #: Template/Mentors/index.ctp:39
@@ -841,9 +725,9 @@ msgstr "Rechercher dans les Licences"
 msgid "Search Unavailable"
 msgstr "Rechercher parmi les non-disponibles"
 
-#: Template/Licences/index.ctp:40
-msgid "Search by Products"
-msgstr "Rechercher dans les Produits"
+#: Template/Equipments/index.ctp:40
+msgid "Search by Categories"
+msgstr "Rechercher dans les Catégories"
 
 #: Template/Licences/index.ctp:45
 #: Template/Rooms/index.ctp:44
@@ -855,10 +739,81 @@ msgstr "Activé(e)s"
 msgid "Archived"
 msgstr "Archivé(e)s"
 
-#: Template/Licences/index.ctp:57
-#: Template/Products/consult.ctp:32
-msgid "Status"
-msgstr "Statut"
+#: Template/Equipments/index.ctp:126
+#: Template/Licences/index.ctp:128
+#: Template/Mentors/index.ctp:127
+#: Template/Rooms/index.ctp:125
+msgid "Deactivate"
+msgstr "Désactiver"
+
+#: Template/Equipments/index.ctp:128
+#: Template/Licences/index.ctp:130
+#: Template/Mentors/index.ctp:129
+#: Template/Rooms/index.ctp:127
+msgid "Reactivate"
+msgstr "Réactiver"
+
+#: Template/Loans/index.ctp:9
+msgid "Loans"
+msgstr "Emprunts"
+
+#: Template/Mentors/index.ctp:11
+#: Template/Skills/index.ctp:14
+msgid "Mentors"
+msgstr "Mentors"
+
+#: Template/Rooms/index.ctp:11
+#: Template/Services/index.ctp:14
+msgid "Rooms"
+msgstr "Salles"
+
+#: Template/Licences/index.ctp:11
+#: Template/Products/index.ctp:14
+msgid "Licences"
+msgstr "Licences"
+
+#: Template/Layout/default.ctp:56
+msgid "Reports"
+msgstr "Rapports"
+
+#: Template/Users/index.ctp:9
+msgid "Users"
+msgstr "Utilisateurs"
+
+#: Template/Layout/default.ctp:59
+msgid "Profile"
+msgstr "Profile"
+
+#: Template/Layout/default.ctp:70
+msgid "Logout"
+msgstr "Déconnexion"
+
+#: Template/Layout/error.ctp:35
+msgid "Error"
+msgstr "Erreur"
+
+#: Template/Layout/error.ctp:43
+msgid "Back"
+msgstr "Retour"
+
+#: Template/Licences/add.ctp:18
+msgid "Add Licence"
+msgstr "Ajouter une Licence"
+
+#: Template/Licences/index.ctp:14;56
+#: Template/Products/consult.ctp:31
+#: Template/Products/index.ctp:11
+msgid "Products"
+msgstr "Produits"
+
+#: Template/Licences/view.ctp:69
+#: Template/Products/index.ctp:33
+msgid "Platform"
+msgstr "Plateforme"
+
+#: Template/Products/index.ctp:35
+msgid "Licence count"
+msgstr "Licences associées"
 
 #: Template/Licences/add.ctp:59
 msgid "Are you sure you want to remove this product?"
@@ -880,213 +835,63 @@ msgstr "Réactiver cette Licence"
 msgid "Delete Licence"
 msgstr "Supprimer cette Licence"
 
-#: Template/Licences/view.ctp:13
-msgid "New Licence"
-msgstr "Nouvelle Licence"
+#: Template/Products/consult.ctp:12
+msgid "Product"
+msgstr "Produit"
 
-#: Template/Licences/view.ctp:26
-msgid "Key Text"
-msgstr "Clé de Licence"
+#: Template/Licences/consult.ctp:115
+msgid "Cannot remove Product. A Licence must always have at least one Product."
+msgstr "Impossible de retirer ce Produit. Une Licence doit toujours avoir au moins un Produit."
 
-#: Template/Licences/view.ctp:38
-#: Template/Loans/view.ctp:38
-#: Template/Users/profile.ctp:48
-#: Template/Users/view.ctp:48
-msgid "Start Time"
-msgstr "Date de début"
+#: Template/Licences/index.ctp:38
+msgid "Search by Licences"
+msgstr "Rechercher dans les Licences"
 
-#: Template/Licences/view.ctp:42
-#: Template/Loans/view.ctp:42
-#: Template/Users/profile.ctp:49
-#: Template/Users/view.ctp:49
-msgid "End Time"
-msgstr "Date de fin"
+#: Template/Licences/index.ctp:40
+msgid "Search by Products"
+msgstr "Rechercher dans les Produits"
 
-#: Template/Licences/view.ctp:63
-msgid "Related Products"
-msgstr "Produits associés"
-
-#: Template/Licences/view.ctp:69
-#: Template/Products/index.ctp:33
-msgid "Platform"
-msgstr "Plateforme"
-
-#: Template/Loans/add.ctp:10
-#: Template/Loans/edit.ctp:16
-#: Template/Loans/view.ctp:12
-#: Template/Users/add.ctp:11
-#: Template/Users/edit.ctp:17
-#: Template/Users/profile.ctp:14
-#: Template/Users/view.ctp:14
-msgid "List Loans"
-msgstr "Liste des Locations"
-
-#: Template/Loans/add.ctp:11
-#: Template/Loans/edit.ctp:17
-#: Template/Loans/view.ctp:14
-#: Template/Users/add.ctp:10
-#: Template/Users/edit.ctp:16
-#: Template/Users/profile.ctp:12
-#: Template/Users/view.ctp:12
-msgid "List Users"
-msgstr "Liste des Utilisateurs"
-
-#: Template/Loans/add.ctp:12
-#: Template/Loans/edit.ctp:18
-#: Template/Loans/view.ctp:15
-#: Template/Users/profile.ctp:13
-#: Template/Users/view.ctp:13
-msgid "New User"
-msgstr "Nouvel Utilisateur"
+#: Template/Licences/index.ctp:57
+#: Template/Products/consult.ctp:32
+msgid "Status"
+msgstr "Statut"
 
 #: Template/Loans/add.ctp:18
 msgid "Add Loan"
-msgstr "Ajouter une Location"
+msgstr "Ajouter un Emprunt"
 
-#: Template/Loans/edit.ctp:24
-#: Template/Loans/view.ctp:10
-msgid "Edit Loan"
-msgstr "Modifier cette Location"
+#: Template/Loans/add.ctp:21
+msgid "User: "
+msgstr "Utilisateur: "
 
-#: Template/Loans/index.ctp:9
-msgid "Loans"
-msgstr "Locations"
-
-#: Template/Loans/index.ctp:44
-#: Template/Users/index.ctp:38
-msgid "first"
-msgstr "première"
-
-#: Template/Loans/index.ctp:45
-#: Template/Users/index.ctp:39
-msgid "previous"
-msgstr "précédente"
-
-#: Template/Loans/index.ctp:47
+#: Template/Loans/add.ctp:28
 #: Template/Users/index.ctp:41
-msgid "next"
-msgstr "prochaine"
+msgid "Email Adress"
+msgstr "Adresse Courriel"
 
-#: Template/Loans/index.ctp:48
-#: Template/Users/index.ctp:42
-msgid "last"
-msgstr "dernière"
-
-#: Template/Loans/index.ctp:50
-#: Template/Users/index.ctp:44
-msgid "Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total"
-msgstr "Page {{page}} de {{pages}}, affichage de {{current}} entrée(s) sur {{count}}"
-
-#: Template/Loans/view.ctp:11
-msgid "Delete Loan"
-msgstr "Supprimer cette Location"
-
-#: Template/Loans/view.ctp:13
-#: Template/Users/add.ctp:12
-#: Template/Users/edit.ctp:18
-#: Template/Users/profile.ctp:15
-#: Template/Users/view.ctp:15
-msgid "New Loan"
-msgstr "Nouvelle Location"
-
-#: Template/Loans/view.ctp:22
-msgid "User"
-msgstr "Utilisateur"
+#: Template/Users/profile.ctp:30
+#: Template/Users/view.ctp:30
+msgid "Admin Status"
+msgstr "Statut d'admin"
 
 #: Template/Loans/view.ctp:26
-msgid "Item Type"
+msgid "Item type"
 msgstr "Type d'objet"
 
-#: Template/Loans/view.ctp:34
-#: Template/Users/profile.ctp:53
-#: Template/Users/view.ctp:53
-msgid "Item Id"
-msgstr "Id de l'objet"
+#: Template/Loans/add.ctp:52
+msgid "Item: "
+msgstr "Objet: "
 
-#: Template/Loans/view.ctp:46
-#: Template/Users/profile.ctp:50
-#: Template/Users/view.ctp:50
-msgid "Returned"
-msgstr "Date de retour"
+#: Template/Loans/add.ctp:58
+#: Template/Loans/index.ctp:34
+#: Template/Users/profile.ctp:27
+msgid "Search by Items"
+msgstr "Recherche par Objets"
 
-#: Template/Mentors/add.ctp:10
-msgid "Add Mentor"
-msgstr ""
-
-#: Template/Mentors/add.ctp:25
-#: Template/Mentors/consult.ctp:44
-#: Template/Mentors/index.ctp:14;56
-#: Template/Skills/consult.ctp:33
-#: Template/Skills/index.ctp:11
-msgid "Skills"
-msgstr ""
-
-#: Template/Mentors/add.ctp:33
-#: Template/Mentors/consult.ctp:51
-#: Template/Skills/index.ctp:34
-msgid "Mentor count"
-msgstr ""
-
-#: Template/Mentors/add.ctp:49
-msgid "Are you sure you want to remove this skill?"
-msgstr "Êtes-vous sûr(e) de vouloir retirer cette Compétence ?"
-
-#: Template/Mentors/consult.ctp:12
-msgid "Edit Mentor"
-msgstr "Modifier un Mentor"
-
-#: Template/Mentors/consult.ctp:32
-msgid "Deactivate mentor"
-msgstr "Désactiver ce Mentor"
-
-#: Template/Mentors/consult.ctp:34
-msgid "Reactivate mentor"
-msgstr "Réactiver ce Mentor"
-
-#: Template/Mentors/consult.ctp:36
-msgid "Delete mentor"
-msgstr "Supprimer ce Mentor"
-
-#: Template/Mentors/add.ctp:10
-#: Template/Mentors/edit.ctp:16
-#: Template/Mentors/view.ctp:12
-msgid "List Mentors"
-msgstr "Liste des Mentors"
-
-#: Template/Mentors/add.ctp:11
-#: Template/Mentors/edit.ctp:17
-#: Template/Mentors/view.ctp:14
-msgid "List Skills"
-msgstr "Liste des Compétences"
-
-#: Template/Mentors/add.ctp:12
-#: Template/Mentors/edit.ctp:18
-#: Template/Mentors/view.ctp:15
-msgid "New Skill"
-msgstr "Nouvelle Compétence"
-
-#: Template/Mentors/add.ctp:18
-msgid "Add Mentor"
-msgstr "Ajouter un Mentor"
-
-#: Template/Mentors/index.ctp:11
-#: Template/Skills/index.ctp:14
-msgid "Mentors"
-msgstr "Mentors"
-
-#: Template/Mentors/index.ctp:14;56
-#: Template/Skills/consult.ctp:33
-#: Template/Skills/index.ctp:11
-msgid "Skills"
-msgstr "Compétences"
-
-#: Template/Mentors/index.ctp:38
-msgid "Search by Mentors"
-msgstr "Rechercher dans les Mentors"
-
-#: Template/Mentors/index.ctp:40
-msgid "Search by Skills"
-msgstr "Rechercher dans les Compétences"
+#: Template/Loans/add.ctp:60
+#: Template/Users/profile.ctp:28
+msgid "Search by Labels"
+msgstr "Recherche par Étiquettes"
 
 #: Template/Mentors/index.ctp:52
 #: Template/Mentors/view.ctp:22
@@ -1108,25 +913,166 @@ msgstr "Prénom"
 msgid "Last Name"
 msgstr "Nom"
 
-#: Template/Mentors/view.ctp:13
-msgid "New Mentor"
-msgstr "Nouveau Mentor"
+#: Template/Loans/add.ctp:224
+msgid "Skills list"
+msgstr "Liste de Compétences"
 
-#: Template/Mentors/view.ctp:56
-msgid "Mentor's image"
-msgstr "Image du Mentor"
+#: Template/Loans/add.ctp:276
+msgid "Services list"
+msgstr "Liste de Services"
 
-#: Template/Mentors/view.ctp:59
-msgid "Related Skills"
-msgstr "Compétences associées"
+#: Template/Loans/add.ctp:325
+msgid "Products list"
+msgstr "Liste de Produits"
+
+#: Template/Loans/add.ctp:376
+msgid "Categories list"
+msgstr "Liste de Catégories"
+
+#: Template/Loans/add.ctp:437
+msgid "You cannot select this item, it is not available during the time period."
+msgstr "Vous ne pouvez pas sélectionner cet objet, il n'est pas disponible pendant cette période."
+
+#: Template/Loans/index.ctp:36
+#: Template/Users/profile.ctp:29
+msgid "Search by Users"
+msgstr "Recherche par Utilisateurs"
+
+#: Template/Loans/index.ctp:40
+#: Template/Users/profile.ctp:33
+msgid "All"
+msgstr "Tous"
+
+#: Template/Loans/index.ctp:47;67
+#: Template/Users/profile.ctp:40;59
+msgid "Start time"
+msgstr "Heure de début"
+
+#: Template/Loans/index.ctp:50;68
+#: Template/Users/profile.ctp:43;60
+msgid "End time"
+msgstr "Heure de fin"
+
+#: Template/Loans/index.ctp:56
+#: Template/Users/consult.ctp:53
+#: Template/Users/profile.ctp:49
+#: Template/Users/view.ctp:50
+msgid "Returned"
+msgstr "Retourné"
+
+#: Template/Loans/index.ctp:63
+#: Template/Users/profile.ctp:56
+msgid "Item"
+msgstr "Objet"
+
+#: Template/Loans/index.ctp:65
+#: Template/Users/profile.ctp:58
+msgid "Labels"
+msgstr "Étiquettes"
+
+#: Template/Loans/index.ctp:66
+msgid "User"
+msgstr "Utilisateur"
+
+#: Template/Loans/index.ctp:123
+#: Template/Loans/return.ctp:147
+msgid "Return"
+msgstr "Retourner"
+
+#: Template/Loans/return.ctp:12
+msgid "Return Loan"
+msgstr "Retour d'Emprunt"
+
+#: Template/Mentors/index.ctp:14;56
+#: Template/Skills/consult.ctp:33
+#: Template/Skills/index.ctp:11
+msgid "Skills"
+msgstr "Compétences"
+
+#: Template/Loans/return.ctp:30
+#: Template/Mentors/add.ctp:33
+#: Template/Mentors/consult.ctp:51
+#: Template/Skills/index.ctp:34
+msgid "Mentor count"
+msgstr "Mentors associés"
+
+#: Template/Rooms/index.ctp:14;54
+#: Template/Services/consult.ctp:31
+#: Template/Services/index.ctp:11
+msgid "Services"
+msgstr "Services"
+
+#: Template/Rooms/add.ctp:32
+#: Template/Rooms/consult.ctp:48
+#: Template/Services/index.ctp:34
+msgid "Room count"
+msgstr "Salles associées"
+
+#: Template/Loans/return.ctp:138
+msgid "Total hours late: {0}"
+msgstr "Heures de retard total: {0}"
+
+#: Template/Loans/return.ctp:139
+msgid "Hourly rate: {0}$"
+msgstr "Taux horaire: {0}$"
+
+#: Template/Loans/return.ctp:140
+msgid "Overtime fee: {0}$"
+msgstr "Frais de retard: {0}$"
+
+#: Template/Loans/return.ctp:152
+msgid "Are you sure you want to return this loan? "
+msgstr "Êtes-vous sûr(e) vous voulez retourner cet emprunt? "
+
+#: Template/Loans/return.ctp:152
+msgid "This loan has {0}$ in overtime fees."
+msgstr "Cet emprunt a des frais de retard de {0}$."
+
+#: Template/Mentors/add.ctp:10
+msgid "Add Mentor"
+msgstr "Ajouter un Mentor"
+
+#: Template/Mentors/add.ctp:64
+msgid "Are you sure you want to remove this skill?"
+msgstr "Êtes-vous sûr(e) de vouloir retirer cette Compétence ?"
+
+#: Template/Mentors/consult.ctp:12
+msgid "Edit Mentor"
+msgstr "Modifier un Mentor"
+
+#: Template/Mentors/consult.ctp:32
+msgid "Deactivate mentor"
+msgstr "Désactiver ce Mentor"
+
+#: Template/Mentors/consult.ctp:34
+msgid "Reactivate mentor"
+msgstr "Réactiver ce Mentor"
+
+#: Template/Mentors/consult.ctp:36
+msgid "Delete mentor"
+msgstr "Supprimer ce Mentor"
+
+#: Template/Mentors/index.ctp:38
+msgid "Search by Mentors"
+msgstr "Rechercher dans les Mentors"
+
+#: Template/Mentors/index.ctp:40
+msgid "Search by Skills"
+msgstr "Rechercher dans les Compétences"
+
+#: Template/Mentors/index.ctp:53
+#: Template/Skills/consult.ctp:30
+msgid "First Name"
+msgstr "Prénom"
+
+#: Template/Mentors/index.ctp:54
+#: Template/Skills/consult.ctp:31
+msgid "Last Name"
+msgstr "Nom"
 
 #: Template/Products/add.ctp:10
 msgid "Add Product"
 msgstr "Ajouter un Produit"
-
-#: Template/Products/consult.ctp:12
-msgid "Product"
-msgstr "Produit"
 
 #: Template/Products/consult.ctp:21
 msgid "Delete product"
@@ -1134,10 +1080,6 @@ msgstr "Supprimer ce Produit"
 
 #: Template/Products/consult.ctp:24
 msgid "Related Licences"
-msgstr "Licences associées"
-
-#: Template/Products/index.ctp:35
-msgid "Licence count"
 msgstr "Licences associées"
 
 #: Template/Reports/index.ctp:11
@@ -1176,13 +1118,13 @@ msgstr "La semaine dernière"
 msgid "Custom"
 msgstr "Personnalisé"
 
-#: Template/Reports/index.ctp:27
-msgid "From"
-msgstr "De"
-
 #: Template/Reports/index.ctp:32
 msgid "To"
 msgstr "À"
+
+#: Template/Reports/index.ctp:27
+msgid "From"
+msgstr "De"
 
 #: Template/Reports/index.ctp:38
 msgid "Report type"
@@ -1217,22 +1159,32 @@ msgid "% Used"
 msgstr "% d'utilisation"
 
 #: Template/Reports/index.ctp:201
+msgid "Total by room"
+msgstr "Total par chambre"
+
+#: Template/Reports/index.ctp:201
 msgid "Total"
 msgstr "Total"
 
-#: Template/Reports/index.ctp:201
-msgid "Total by room"
-msgstr "Total par chambre"
+#: Template/Reports/index.ctp:360
+msgid "Time loaned"
+msgstr "Durée d'emprunt"
+
+#: Template/Reports/index.ctp:361
+msgid "Overtime fee"
+msgstr "Frais de retard"
+
+#: Template/Reports/index.ctp:362
+msgid "Late loans"
+msgstr "Emprunts en retard"
+
+#: Template/Reports/index.ctp:402
+msgid "\"From\" date cannot be higher than \"To\" date."
+msgstr "La Date \"De\" ne peut être après la Date \"À\""
 
 #: Template/Rooms/add.ctp:10
 msgid "Add Room"
 msgstr "Ajouter une Salle"
-
-#: Template/Rooms/add.ctp:32
-#: Template/Rooms/consult.ctp:48
-#: Template/Services/index.ctp:34
-msgid "Room count"
-msgstr "Salles associées"
 
 #: Template/Rooms/add.ctp:48
 msgid "Are you sure you want to remove this service?"
@@ -1254,35 +1206,6 @@ msgstr "Réactiver cette Salle"
 msgid "Delete room"
 msgstr "Supprimer cette Salle"
 
-#: Template/Rooms/add.ctp:10
-#: Template/Rooms/edit.ctp:16
-#: Template/Rooms/view.ctp:12
-msgid "List Rooms"
-msgstr "Liste des Salles"
-
-#: Template/Rooms/add.ctp:11
-#: Template/Rooms/edit.ctp:17
-#: Template/Rooms/view.ctp:14
-msgid "List Services"
-msgstr "Liste des Services"
-
-#: Template/Rooms/add.ctp:12
-#: Template/Rooms/edit.ctp:18
-#: Template/Rooms/view.ctp:15
-msgid "New Service"
-msgstr "Nouveau Service"
-
-#: Template/Rooms/index.ctp:11
-#: Template/Services/index.ctp:14
-msgid "Rooms"
-msgstr "Salles"
-
-#: Template/Rooms/index.ctp:14;54
-#: Template/Services/consult.ctp:31
-#: Template/Services/index.ctp:11
-msgid "Services"
-msgstr "Services"
-
 #: Template/Rooms/index.ctp:38
 msgid "Search by Rooms"
 msgstr "Rechercher dans les Salles"
@@ -1290,14 +1213,6 @@ msgstr "Rechercher dans les Salles"
 #: Template/Rooms/index.ctp:40
 msgid "Search by Services"
 msgstr "Rechercher dans les Services"
-
-#: Template/Rooms/view.ctp:13
-msgid "New Room"
-msgstr "Nouvelle Salle"
-
-#: Template/Rooms/view.ctp:51
-msgid "Related Services"
-msgstr "Services associés"
 
 #: Template/Services/add.ctp:10
 msgid "Add Service"
@@ -1331,13 +1246,17 @@ msgstr "Supprimer cette Compétence"
 msgid "Related Mentors"
 msgstr "Mentors associés"
 
-#: Template/Skills/index.ctp:34
-msgid "Mentor count"
-msgstr "Mentors associés"
-
 #: Template/Users/add.ctp:18
 msgid "Add User"
 msgstr "Ajouter un Utilisateur"
+
+#: Template/Users/change_password.ctp:2
+msgid "Change your password."
+msgstr "Changement de mot de passe"
+
+#: Template/Users/change_password.ctp:7
+msgid "Change it!"
+msgstr "Changer"
 
 #: Template/Users/edit.ctp:24
 #: Template/Users/profile.ctp:10
@@ -1345,47 +1264,122 @@ msgstr "Ajouter un Utilisateur"
 msgid "Edit User"
 msgstr "Modifier cet Utilisateur"
 
-#: Template/Users/login.ctp:1;5
-msgid "Login"
-msgstr "Connexion"
+#: Template/Users/consult.ctp:33
+msgid "Deactivate user"
+msgstr "Désactiver cet Utilisateur"
 
-#: Template/Users/index.ctp:9
-msgid "Users"
-msgstr "Utilisateurs"
+#: Template/Users/consult.ctp:35
+msgid "Reactivate user"
+msgstr "Réactiver cet Utilisateur"
 
 #: Template/Users/profile.ctp:11
 #: Template/Users/view.ctp:11
 msgid "Delete User"
 msgstr "Supprimer cet Utilisateur"
 
-#: Template/Users/profile.ctp:26
+#: Template/Users/profile.ctp:52
+#: Template/Users/view.ctp:52
+msgid "Loan Type"
+msgstr "Type d'Emprunt"
+
+#: Template/Users/consult.ctp:51
+msgid "Start date"
+msgstr "Date de début"
+
+#: Template/Users/consult.ctp:52
+msgid "End Date"
+msgstr "Date de fin"
+
+#: Template/Users/consult.ctp:54
+#: Template/Users/profile.ctp:61
+msgid "Overtime Fee"
+msgstr "Frais de Retard"
+
+#: Template/Users/edit.ctp:13
+#: Template/Users/view.ctp:11;68
+msgid "Are you sure you want to delete # {0}?"
+msgstr "Êtes-vous sûr(e) de vouloir supprimer # {0} ?"
+
+#: Template/Users/edit.ctp:16
+#: Template/Users/view.ctp:12
+msgid "List Users"
+msgstr "Lister les Utilisateurs"
+
+#: Template/Users/edit.ctp:17
+#: Template/Users/view.ctp:14
+msgid "List Loans"
+msgstr "Lister les Emprunts"
+
+#: Template/Users/edit.ctp:18
+#: Template/Users/view.ctp:15
+msgid "New Loan"
+msgstr "Nouvel Emprunt"
+
+#: Template/Users/edit.ctp:32
+msgid "Submit"
+msgstr "Soumettre"
+
+#: Template/Users/login.ctp:5;9
+msgid "Login"
+msgstr "Connexion"
+
+#: Template/Users/profile.ctp:9
+msgid "Change password"
+msgstr "Changement de mot de passe."
+
+#: Template/Users/profile.ctp:12
+#: Template/Users/view.ctp:43
+msgid "Related Loans"
+msgstr "Emprunts associés"
+
+#: Template/Users/profile.ctp:48
+msgid "Current"
+msgstr "Actuels"
+
+#: Template/Users/view.ctp:11
+msgid "Delete User"
+msgstr "Supprimer cet Utilisateur"
+
+#: Template/Users/view.ctp:13
+msgid "New User"
+msgstr "Nouvel Utilisateur"
+
 #: Template/Users/view.ctp:26
 msgid "Password"
 msgstr "Mot de passe"
 
-#: Template/Users/profile.ctp:30
-#: Template/Users/view.ctp:30
-msgid "Admin Status"
-msgstr "Statut d'admin"
+#: Template/Users/view.ctp:34;47
+msgid "Id"
+msgstr "ID"
 
-#: Template/Users/profile.ctp:40
-msgid "User's image"
-msgstr "Image de l'Utilisateur"
+#: Template/Users/view.ctp:39
+msgid "Image"
+msgstr "Image"
 
-#: Template/Users/profile.ctp:43
-#: Template/Users/view.ctp:43
-msgid "Related Loans"
-msgstr "Locations associées"
+#: Template/Users/view.ctp:48
+msgid "Start Time"
+msgstr "Date de début"
 
-#: Template/Users/profile.ctp:51
+#: Template/Users/view.ctp:49
+msgid "End Time"
+msgstr "Date de fin"
+
 #: Template/Users/view.ctp:51
 msgid "User Id"
 msgstr "Id de l'Utilisateur"
 
-#: Template/Users/profile.ctp:52
 #: Template/Users/view.ctp:52
 msgid "Loan Type"
-msgstr "Type de Location"
+msgstr "Type d'Emprunt"
+
+#: Template/Users/view.ctp:53
+msgid "Item Id"
+msgstr "ID de l'objet"
+
+#: Template/Users/view.ctp:66
+#: View/Helper/PaginatorHelper.php:1258
+msgid "View"
+msgstr "Voir"
 
 #: Template/Error/error400.ctp:37
 msgid "The requested address {0} was not found on this server."
@@ -1665,31 +1659,3 @@ msgstr "Novembre"
 #: View/Widget/DateTimeWidget.php:551
 msgid "December"
 msgstr "Décembre"
-
-
-msgid "Reports"
-msgstr "Rapports"
-
-msgid "Logout"
-msgstr "Déconnexion"
-
-msgid "Login"
-msgstr "Connexion"
-
-msgid "You are now logged out."
-msgstr "Vous êtes maintenant déconnecté(e)."
-
-msgid "Your email and/or password is incorrect."
-msgstr "Votre adresse courriel et/ou mot de passe est incorrect(e)."
-
-msgid "Search by Equipments"
-msgstr "Rechercher dans les Équipements"
-
-msgid "Search by Categories"
-msgstr "Rechercher dans les Catégories"
-
-msgid "Deactivate"
-msgstr "Désactiver"
-
-msgid "Reactivate"
-msgstr "Réactiver"
