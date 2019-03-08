@@ -238,17 +238,99 @@ class ReportsController extends AppController
         foreach($proc_result as $result){
             $query = TableRegistry::get('Categories')->find('all');
             $category = $query->where(['name' => $result['cat']]);
-
+            
+            if($result["hour_loans"] != null || $result["late_loans"] != null || $result["time_loans"] != null || $result["available"] != null ){
             
             //$id = $category->toArray()[0]['id'];
-            $value = $category->toArray()[0]['hourly_rate'];
+            $hourLate = $result["hour_loans"] == null ? 0 : $result['hour_loans'];
+            $value =$result["hour_loans"] * $category->toArray()[0]['hourly_rate'];
+            $formatedValue = number_format($value, 2, '.', ',');
             
             $finalArray[$id]["cat"] = $result["cat"];
-            $finalArray[$id]["hour_loans"] = $result["hour_loans"] * $value;
-            $finalArray[$id]["late_loans"] = ($result["late_loans"] == null) ? '--' : $result["late_loans"];
-            $finalArray[$id]["time_loans"] = ($result["time_loans"] == null) ? '--' : $result["time_loans"];
-            $finalArray[$id]["available"] = $category->toArray()[0]["equipment_count_available"];
+            $finalArray[$id]["hour_loans"] =  $value == "0" ? '---' : $formatedValue . '$';
+            $finalArray[$id]["late_loans"] = ($result["late_loans"] == null) ? '---' : $result["late_loans"];
+            $finalArray[$id]["time_loans"] = ($result["time_loans"] == null) ? '---' : $result["time_loans"];
+            $finalArray[$id]["available"] = $result["available"] == null ? '---' : $result["available"];
             $id = $id +1;
+            }
+        }
+
+        $change = true;
+        while($change){
+            $change = false;
+            if($sort_field == "hour_loans" && $sort_dir == "asc"){
+                for($i = 0; $i < sizeof($finalArray) - 1; $i++){
+                    if ($finalArray[$i]['hour_loans'] < $finalArray[$i + 1]['hour_loans']){
+                        $temp = $finalArray[$i];
+                        $finalArray[$i] = $finalArray[$i + 1];
+                        $finalArray[$i + 1] = $temp;
+                        $change = true;
+                    }
+                }
+            }elseif($sort_field == "hour_loans" && $sort_dir == "desc"){
+                for($i = 0; $i < sizeof($finalArray) - 1; $i++){
+                    if ($finalArray[$i]['hour_loans'] > $finalArray[$i + 1]['hour_loans']){
+                        $temp = $finalArray[$i];
+                        $finalArray[$i] = $finalArray[$i + 1];
+                        $finalArray[$i + 1] = $temp;
+                        $change = true;
+                    }
+                }
+            }elseif($sort_field == "late_loans" && $sort_dir == "asc"){
+                for($i = 0; $i < sizeof($finalArray) - 1; $i++){
+                    if ($finalArray[$i]['late_loans'] < $finalArray[$i + 1]['late_loans']){
+                        $temp = $finalArray[$i];
+                        $finalArray[$i] = $finalArray[$i + 1];
+                        $finalArray[$i + 1] = $temp;
+                        $change = true;
+                    }
+                }
+            }elseif($sort_field == "late_loans" && $sort_dir == "desc"){
+                for($i = 0; $i < sizeof($finalArray) - 1; $i++){
+                    if ($finalArray[$i]['late_loans'] > $finalArray[$i + 1]['late_loans']){
+                        $temp = $finalArray[$i];
+                        $finalArray[$i] = $finalArray[$i + 1];
+                        $finalArray[$i + 1] = $temp;
+                        $change = true;
+                    }
+                }
+            }elseif($sort_field == "available" && $sort_dir == "asc"){
+                for($i = 0; $i < sizeof($finalArray) - 1; $i++){
+                    if ($finalArray[$i]['available'] < $finalArray[$i + 1]['available']){
+                        $temp = $finalArray[$i];
+                        $finalArray[$i] = $finalArray[$i + 1];
+                        $finalArray[$i + 1] = $temp;
+                        $change = true;
+                    }
+                }
+            }elseif($sort_field == "available" && $sort_dir == "desc"){
+                for($i = 0; $i < sizeof($finalArray) - 1; $i++){
+                    if ($finalArray[$i]['available'] > $finalArray[$i + 1]['available']){
+                        $temp = $finalArray[$i];
+                        $finalArray[$i] = $finalArray[$i + 1];
+                        $finalArray[$i + 1] = $temp;
+                        $change = true;
+                    }
+                }
+            }elseif($sort_field == "time_loans" && $sort_dir == "asc"){
+                for($i = 0; $i < sizeof($finalArray) - 1; $i++){
+                    if ($finalArray[$i]['time_loans'] < $finalArray[$i + 1]['time_loans']){
+                        $temp = $finalArray[$i];
+                        $finalArray[$i] = $finalArray[$i + 1];
+                        $finalArray[$i + 1] = $temp;
+                        $change = true;
+                    }
+                }
+            }elseif($sort_field == "time_loans" && $sort_dir == "desc"){
+                for($i = 0; $i < sizeof($finalArray) - 1; $i++){
+                    if ($finalArray[$i]['time_loans'] > $finalArray[$i + 1]['time_loans']){
+                        $temp = $finalArray[$i];
+                        $finalArray[$i] = $finalArray[$i + 1];
+                        $finalArray[$i + 1] = $temp;
+                        $change = true;
+                    }
+                }
+            }
         }
 
         $this->set('report', $finalArray);

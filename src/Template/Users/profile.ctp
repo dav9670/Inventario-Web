@@ -110,7 +110,7 @@
                         $.each(loansArray, function(idx, elem){
                         
                             if(elem.user['id'] == id){
-
+                                console.log(elem);
                                 table.append(`
                                     <tr` + (new Date(elem.end_time) < new Date() && elem.returned == null ? " class='late'" : "") + `>
                                         <td><img src='data:image/png;base64,` + elem.item.image + `' width=100/></td>
@@ -214,6 +214,11 @@
          });
 
          $('#search').keyup();
+         
     });
+
+    function changePassword(){
+             window.location.href = "/users/changePassword";
+         }
 </script>
 

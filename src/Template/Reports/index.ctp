@@ -380,7 +380,7 @@ use Cake\I18n\I18n;
                         <tr>
                             <td>` + elem.cat + `</td>
                             <td>` + elem.time_loans + `</td>
-                            <td class=\"right\">` + elem.hour_loans + `$` + `</td>
+                            <td class=\"money\">` + elem.hour_loans + `</td>
                             <td>` + elem.late_loans + `</td>
                             <td>` + elem.available + `</td>
                         </tr>
