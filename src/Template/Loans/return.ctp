@@ -3,6 +3,8 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Loan $loan
  */
+use Cake\I18n\Time;
+
 echo $this->Html->css('jquery.datetimepicker.min.css');
 echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => false));
 ?>
@@ -123,24 +125,51 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                 }
             ?>
         </div>
-        <div class='left half-width'>
-            <div class="left half-width">
-                <?= $this->Form->control('start_time', ['type' => 'text', 'class' => 'datetpicker', 'readonly']); ?>
-            </div>
-            <div class="right half-width">
-                <?= $this->Form->control('end_time', ['type' => 'text', 'class' => 'datepicker', 'readonly']); ?>
-            </div>
-            <input type="hidden" name="returned" id="returned" value="<?=date("Y-m-d H:i:s")?>">
-            <div style='clear:both;'></div>
-            <?php 
-            if($loan->overtime_hours_late != 0){
-            ?>
-                <?=__("Total hours late: {0}", $loan->overtime_hours_late)?><br>
-                <?=__("Hourly rate: {0}$", number_format($loan->overtime_hourly_rate, 2))?><br>
-                <?=__("Overtime fee: {0}$", number_format($loan->overtime_fee, 2))?><br>
-            <?php
-            }
-            ?>
+        <div class='left half-width' style='padding-top: 50px;'>
+        <input type="hidden" name="returned" id="returned" value="<?=Time::now()->i18nFormat("yyyy-MM-dd HH:mm:ss")?>">
+            <table>
+                <thead>
+                    <th><?=__("Statistics")?></th>
+                    <th></th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><?=__("Start time")?></td>
+                        <td><span id="start_time"></span></td>
+                    </tr>
+                    <tr>
+                        <td><?=__("End time")?></td>
+                        <td><span id="end_time"></span></td>
+                    </tr>
+                    <tr>
+                        <td><?=__("Return time")?></td>
+                        <td><span id="return_time"></span></td>
+                    </tr>
+                    <?php 
+                        if($loan->overtime_hours_late != 0){
+                    ?>  
+                        <tr>
+                            <td><b><?=__("Overtime")?></b></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><b><?=__("Total hours late")?></b></td>
+                            <td><span><?=h($loan->overtime_hours_late . " h")?></span></td>
+                        </tr>
+                        <tr>
+                            <td><b><?=__("Hourly rate")?></b></td>
+                            <td><span><?=h(number_format($loan->overtime_hourly_rate, 2) . " $/h")?></span></td>
+                        </tr>
+                        <tr>
+                            <td><b><?=__("Overtime fee")?></b></td>
+                            <td><span><?=h(number_format($loan->overtime_fee, 2) . " $")?></span></td>
+                        </tr>
+                    <?php
+                        }
+                    ?>
+                    
+                </tbody>
+            </table>
         </div>
     </fieldset>
     <?= $this->Form->end() ?>
@@ -153,4 +182,21 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
             $('#return_form').submit();
         }
     }
+
+    function setDatesToLocalTimeZone(){
+        let dateOptions = {hour12: false, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit"};
+
+        let dates = {
+            start_time: '<?= $loan->start_time->i18nFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")?>',
+            end_time: '<?= $loan->end_time->i18nFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")?>',
+            return_time: '<?=Time::now()->i18nFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")?>'
+        }
+        for(var key in dates){
+            $('#' + key).text(new Date(dates[key]).toLocaleString([], dateOptions).replace(/\//g, '-'));
+        }
+    }
+
+    $('document').ready(function(){
+        setDatesToLocalTimeZone();
+    });
 </script>

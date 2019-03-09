@@ -18,8 +18,8 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
 
         <div class='left half-width' style='height:700px;'>
             <input type='hidden' id='user-id' name='user_id' required='required'/>
-            <label style='display:inline;' for="user_search"><?= __('User: ') ?><b><span id='user_selected'></span></b></label><br>
-            <input type="text" name="user_search" id="user_search">
+            <label style='display:inline;' for="user_search"><?= __('Selected User: ') ?><b><span id='user_selected'></span></b></label><br>
+            <input type="text" placeholder="<?=__('Search')?>" name="user_search" id="user_search">
             <div style="overflow:auto; height: 80%;">
                 <table cellpadding="0" cellspacing="0">
                     <thead>
@@ -49,14 +49,14 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
             <?= $this->Form->select('item_type', ['mentors' => 'Mentors', 'rooms' => 'Rooms', 'licences' => 'Licences', 'equipments' => 'Equipments'], ['id' => 'item_type']); ?>
             
             <input type='hidden' id='item-id' name='item_id' required='required'/>
-            <label style='display:inline;' for="item_search"><?= __('Item: ') ?></label><b><span id='item_selected'></span></b><br>
-            <input type="text" name="item_search" id="item_search">
+            <label style='display:inline;' for="item_search"><?= __('Selected Item: ') ?></label><b><span id='item_selected'></span></b><br>
+            <input type="text" placeholder="<?=__('Search')?>" name="item_search" id="item_search">
             
             <a onclick="$('#item_filters_div').toggle();"><?= __("Filters")?></a>
             <div id="item_filters_div" hidden>
                 <input type="checkbox" id="item_available" checked><?=__('Search Available') ?>
                 <input type="checkbox" id="item_check" checked><?=__('Search by Items') ?><br>
-                <input type="checkbox" id="item_unavailable" checked><?=__('Search Unavailable') ?>
+                <input type="checkbox" id="item_unavailable"><?=__('Search Unavailable') ?>
                 <input type="checkbox" id="item_label_check"><?=__('Search by Labels') ?><br>
             </div>
 
@@ -518,7 +518,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
         }
 
         $("#start-time").datetimepicker({
-            format: 'Y-m-d H:00:00',
+            format: 'Y-m-d H:00',
             minDate: new Date(),
             minTime: new Date(),
             onShow: startTimeBoundarySet,
@@ -526,7 +526,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
         });
 
         $("#end-time").datetimepicker({
-            format: 'Y-m-d H:00:00',
+            format: 'Y-m-d H:00',
             minDate: new Date(),
             minTime: new Date(),
             onShow: endTimeBoundarySet,

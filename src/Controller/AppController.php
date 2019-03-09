@@ -51,6 +51,11 @@ class AppController extends Controller
         Date::setToStringFormat('yyyy-MM-dd HH:mm:ss');
         FrozenDate::setToStringFormat('yyyy-MM-dd HH:mm:ss');
 
+        Time::setJsonEncodeFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        FrozenTime::setJsonEncodeFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        Date::setJsonEncodeFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        FrozenDate::setJsonEncodeFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ"); 
+
         parent::initialize();
 
         $this->loadComponent('RequestHandler', [

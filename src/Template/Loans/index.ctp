@@ -32,7 +32,6 @@
     <div id="hid" hidden>
         <form>
             <input type="checkbox" id="field_items" checked><?=__('Search by Items') ?>
-            <input style='display: none;' type="checkbox" id="field_labels"><?#=__('Search by Labels') ?>
             <input type="checkbox" id="field_users"><?=__('Search by Users') ?><br>
 
             <label for="item_type"><?= __('Item type') ?></label>
@@ -52,12 +51,12 @@
         </form>
     </div>
     <div class="tab">
-        <button id='table_activated_button' class="tablinks active" onclick="show_table('table_activated')"><?= __("Activated") ?></button>
-        <button id='table_returned_button' class="tablinks" onclick="show_table('table_returned')"><?= __("Returned") ?></button>
+        <button id='current_button' class="tablinks active" onclick="show_table('current')"><?= __("Current") ?></button>
+        <button id='returned_button' class="tablinks" onclick="show_table('returned')"><?= __("Returned") ?></button>
     </div>
     <div class="tabcontent">
         <table cellpadding="0" cellspacing="0">
-            <thead>
+            <thead id="header_current">
                 <tr>
                     <th scope="col"></th>
                     <th scope="col"><a id='item_sort' class='asc'><?= __("Item") ?></a></th>
@@ -69,9 +68,21 @@
                     <th scope="col" class="actions"><?= __('Actions') ?></th>
                 </tr>
             </thead>
-            <tbody id="table_activated">
+            <thead id="header_returned" hidden>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col"><a id='item_sort' class='asc'><?= __("Item") ?></a></th>
+                    <th scope="col"><a id='description_sort'><?= __("Description") ?></a></th>
+                    <th scope="col"><?= __("Labels") ?></th>
+                    <th scope="col"><a id='user_sort'><?= __("User") ?></a></th>
+                    <th scope="col"><a id='start_time_sort'><?= __("Start time") ?></a></th>
+                    <th scope="col"><a id='end_time_sort'><?= __("End time") ?></a></th>
+                    <th scope="col"><a id='returned_sort'><?= __('Returned') ?></a></th>
+                </tr>
+            </thead>
+            <tbody id="body_current">
             </tbody>
-            <tbody id="table_returned" hidden>
+            <tbody id="body_returned" hidden>
             </tbody>
         </table>
     </div>
@@ -81,12 +92,11 @@
     var sort_field = "item";
     var sort_dir = "asc";
 
-    var current_table = "table_activated";
+    var current_table = "current";
 
     function searchLoans( keyword ){
         var filters = {
             search_items: $('#field_items').is(':checked'),
-            search_labels: $('#field_labels').is(':checked'),
             search_users: $('#field_users').is(':checked'),
             item_type: $('#item_type').children("option:selected").val(),
             start_time: $('#start_time').val(),
@@ -99,20 +109,18 @@
                 data: {keyword:keyword, sort_field:sort_field, sort_dir:sort_dir, filters: filters},
                 success: function( response ){
 
-                    console.dir(response);
-
                     for(var i=0; i<2; i++){
-                        var table_name = "";
+                        var body_name = "";
                         var array_name = "";
                         if(i == 0){
-                            table_name = "table_activated";
+                            body_name = "body_current";
                             array_name = "loans";
                         } else if(i == 1){
-                            table_name = "table_returned";
+                            body_name = "body_returned";
                             array_name = "returnedLoans";
                         }
-                        var table = $("#" + table_name);
-                        table.empty();
+                        var body = $("#" + body_name);
+                        body.empty();
 
                         loansArray = response[array_name];
 
@@ -124,20 +132,37 @@
                             }
                             link = link.replace(/-1/g, elem.id);
 
-                            table.append(`
-                                <tr` + (new Date(elem.end_time) < new Date() && elem.returned == null ? " class='late'" : "") + `>
-                                    <td><img src='data:image/png;base64,` + elem.item.image + `' width=100/></td>
-                                    <td>` + elem.item.identifier + `</td>
-                                    <td>` + elem.item.description + `</td>
-                                    <td>` + elem.item.labels + `</td>
-                                    <td>` + elem.user.identifier + `</td>
-                                    <td>` + elem.start_time + `</td>
-                                    <td>` + elem.end_time + `</td>
-                                    <td class='actions'>
-                                        ` + link + `
-                                    </td>
-                                </tr>
-                            `);
+                            let dateOptions = {hour12: false, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit"};
+
+                            if(body_name == "body_current"){
+                                body.append(`
+                                    <tr` + (new Date(elem.end_time) < new Date() && elem.returned == null ? " class='late'" : "") + `>
+                                        <td><img src='data:image/png;base64,` + elem.item.image + `' width=100/></td>
+                                        <td>` + elem.item.identifier + `</td>
+                                        <td>` + elem.item.description + `</td>
+                                        <td>` + elem.item.labels + `</td>
+                                        <td>` + elem.user.identifier + `</td>
+                                        <td>` + new Date(elem.start_time).toLocaleString([], dateOptions).replace(/\//g, '-') + `</td>
+                                        <td>` + new Date(elem.end_time).toLocaleString([], dateOptions).replace(/\//g, '-') + `</td>
+                                        <td class='actions'>
+                                            ` + link + `
+                                        </td>
+                                    </tr>
+                                `);
+                            } else if (body_name == "body_returned"){
+                                body.append(`
+                                    <tr` + (new Date(elem.end_time) < new Date() && elem.returned == null ? " class='late'" : "") + `>
+                                        <td><img src='data:image/png;base64,` + elem.item.image + `' width=100/></td>
+                                        <td>` + elem.item.identifier + `</td>
+                                        <td>` + elem.item.description + `</td>
+                                        <td>` + elem.item.labels + `</td>
+                                        <td>` + elem.user.identifier + `</td>
+                                        <td>` + new Date(elem.start_time).toLocaleString([], dateOptions).replace(/\//g, '-') + `</td>
+                                        <td>` + new Date(elem.end_time).toLocaleString([], dateOptions).replace(/\//g, '-') + `</td>
+                                        <td>` + new Date(elem.returned).toLocaleString([], dateOptions).replace(/\//g, '-') + `</td>
+                                    </tr>
+                                `);
+                            }
                         });
                     }
                     
@@ -150,10 +175,12 @@
     };
 
     function show_table(table_name){
-        $('#' + current_table).hide();
+        $('#body_' + current_table).hide();
+        $('#header_' + current_table).hide();
         $('#' + current_table + '_button').removeClass('active');
         current_table = table_name;
-        $('#' + current_table).show();
+        $('#body_' + current_table).show();
+        $('#header_' + current_table).show();
         $('#' + current_table + '_button').addClass('active');
     }
 
@@ -216,6 +243,10 @@
          });
          $('#end_time_sort').click( function(e) {
             sort_setter('end_time');
+            $('#search').keyup();
+         });
+         $('#returned_sort').click( function(e) {
+            sort_setter('returned');
             $('#search').keyup();
          });
 
