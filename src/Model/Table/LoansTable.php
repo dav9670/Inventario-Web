@@ -6,6 +6,7 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\ORM\TableRegistry;
+use Cake\I18n\Time;
 
 /**
  * Loans Model
@@ -88,12 +89,18 @@ class LoansTable extends Table
             ->dateTime('end_time')
             ->requirePresence('end_time', 'create')
             ->allowEmptyDateTime('end_time', false)
-            ->greaterThanField('end_time','start_time', __('End Time cannot be before Start Time.'));
+            ->greaterThanField('end_time','start_time', __('End Time cannot be before Start Time.'))
+            ->add('end_time',[
+                'oneHourIntervals' => [
+                    'rule' => 'oneHourIntervals',
+                    'provider' => 'table',
+                    'message' => __('The loan period must be in 1 hour intervals')
+                ]
+            ]);
 
         $validator
             ->dateTime('returned')
             ->allowEmptyDateTime('returned');
-            //->greaterThanField('returned','start_time', __('Returned cannot be before Start Time.'));
 
         $validator
             ->scalar('item_type')
@@ -108,7 +115,7 @@ class LoansTable extends Table
                 'itemNotAlreadyLoaned' => [
                     'rule' => 'itemNotAlreadyLoaned',
                     'provider' => 'table',
-                    'message' => 'The item is already loaned during the period'
+                    'message' => __('The item is already loaned during the period')
                 ]
             ]);
 
@@ -127,6 +134,15 @@ class LoansTable extends Table
         $rules->add($rules->existsIn(['user_id'], 'Users'));
 
         return $rules;
+    }
+
+    public function oneHourIntervals($value, $context)
+    {
+        $start_time = new Time($context['data']['start_time']);
+        $end_time = new Time($context['data']['end_time']);
+        $diff = $start_time->diff($end_time);
+        $nb_hours = ($diff->days * 24) + $diff->h;
+        return $nb_hours >= 1 && $diff->i == 0;
     }
 
     public function itemNotAlreadyLoaned($value, $context)

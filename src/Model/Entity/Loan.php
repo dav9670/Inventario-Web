@@ -122,12 +122,11 @@ class Loan extends Entity
     protected function _getOvertimeHoursLate()
     {
         $overtime = 0;
-        if($this->returned == null){
-            if($this->end_time != null && $this->end_time <= Time::now()){
-                $now = Time::now();
-                $diff = $now->diff($this->end_time);
-                $overtime =  $diff->days * 24 + $diff->h;
-            }
+        $compareDate = $this->returned != null ? $this->returned : Time::now();
+        if($this->end_time != null && $compareDate > $this->end_time)
+        {
+            $diff = $compareDate->diff($this->end_time);
+            $overtime =  ($diff->days * 24) + $diff->h;
         }
         return $overtime;
     }

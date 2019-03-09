@@ -117,9 +117,12 @@ class LoansController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put', 'delete'])) {
             $success = false;
-            if ($this->request->getData()['returned'] != null)
+            $returned = $this->request->getData()['returned'];
+
+            if ($returned != null)
             {
-                $loan = $this->Loans->patchEntity($loan, $this->request->getData());
+                $data = ['returned' => $returned];
+                $loan = $this->Loans->patchEntity($loan, $data);
                 if ($this->Loans->save($loan)) {
                     $success = true;
                     if($this->isApi()){
@@ -150,26 +153,6 @@ class LoansController extends AppController
         if($this->isApi()){
             $this->set('_serialize', 'loan');
         }
-    }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id Loan id.
-     * @return \Cake\Http\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $loan = $this->Loans->get($id);
-        if ($this->Loans->delete($loan)) {
-            $this->Flash->success(__('The loan has been deleted.'));
-        } else {
-            $this->Flash->error(__('The loan could not be deleted. Please, try again.'));
-        }
-
-        return $this->redirect(['action' => 'index']);
     }
 
     /**
