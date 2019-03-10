@@ -253,16 +253,21 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
             }
 
             table_body.append(`
-                <tr id='item_` + elem.id + `' ` + ($('#item-id').val() == elem.id.toString() ? 'class="selected"' : '') + ` onclick='rowSelected("item", "` + elem.id + `")'>
+                <tr id='item_` + elem.id + `' onclick='rowSelected("item", "` + elem.id + `")'>
                     <td><img src='data:image/png;base64,` + elem.image + `' alt='` + elem.first_name + ` ` + elem.last_name + `' width=100/></td>
-                    <td><a class='inline' id='item_` + elem.id + `_identifier' href='/mentors/` + elem.id + `'>` + elem.email + `</a></td>
-                    <td>` + elem.first_name + `</td>
-                    <td>` + elem.last_name + `</td>
+                    <td colspan="3">
+                        <a class='inline' id='item_` + elem.id + `_identifier' href='/mentors/` + elem.id + `'>` + elem.email + `</a><br>
+                        ` + elem.first_name + ` ` + elem.last_name + `
+                    </td>
                     <td>` + elem.description + `</td>
                     <td>` + labels_list + `</td>
                     <td><img id='item_` + elem.id + `_available' data-available='`+ elem.available_between + `' src='/img/` + imgTag + `' alt='` + imgAlt + `' width=20 height=20></td>
                 </tr>
             `);
+
+            if($('#item-id').val() == elem.id.toString()){
+                rowSelected("item", elem.id.toString());
+            }
         });
     }
 
@@ -312,6 +317,10 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                     <td><img id='item_` + elem.id + `_available' data-available='`+ elem.available_between + `' src='/img/` + imgTag + `' alt='` + imgAlt + `' width=20 height=20></td>
                 </tr>
             `);
+
+            if($('#item-id').val() == elem.id.toString()){
+                rowSelected("item", elem.id.toString());
+            }
         });
     }
 
@@ -363,6 +372,10 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                     <td><img id='item_` + elem.id + `_available' data-available='`+ elem.available_between + `' src='/img/` + imgTag + `' alt='` + imgAlt + `' width=20 height=20></td>
                 </tr>
             `);
+
+            if($('#item-id').val() == elem.id.toString()){
+                rowSelected("item", elem.id.toString());
+            }
         });
     }
 
@@ -412,6 +425,10 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                     <td><img id='item_` + elem.id + `_available' data-available='`+ elem.available_between + `' src='/img/` + imgTag + `' alt='` + imgAlt + `' width=20 height=20></td>
                 </tr>
             `);
+
+            if($('#item-id').val() == elem.id.toString()){
+                rowSelected("item", elem.id.toString());
+            }
         });
     }
 
@@ -456,81 +473,54 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
 
     $('document').ready(function(){
 
-        let startTimeBoundarySet = function(){
-            let myDate = null;
-            let date = null;
-            let time = null;
+        let dateTimeBoundarySet = function(datePicker, date, htmlObject){
+            let pickerId = htmlObject[0].id;
+            let start_time_date = null;
+            let end_time_date = null;
             
-            let regMyDate = /(\d{4}-\d{2}-\d{2})/.exec($('#start-time').val());
-            if(regMyDate != null)
-                myDate = regMyDate[0];
-            let regDate = /(\d{4}-\d{2}-\d{2})/.exec($('#end-time').val());
-            if(regDate != null)
-                date = regDate[0];
-            let regTime = /\d{1,2}:\d{2}:\d{2}/.exec($('#end-time').val());
-            if(regTime != null)
-                time = regTime[0];
+            let reg_start_time_date = /(\d{4}-\d{2}-\d{2})/.exec($('#start-time').val());
+            if(reg_start_time_date != null)
+                start_time_date = reg_start_time_date[0];
+            let reg_end_time_date = /(\d{4}-\d{2}-\d{2})/.exec($('#end-time').val());
+            if(reg_end_time_date != null)
+                end_time_date = reg_end_time_date[0];
 
-            if(date != null)
-                this.setOptions({maxDate: date});
-            else
-                this.setOptions({maxDate: false});
-            if(time != null && date == myDate)
-                this.setOptions({maxTime: time});
-            else
-                this.setOptions({maxTime: false});
-            
-            let dateJs = new Date(myDate + ' 1:00:00');
-            let today = new Date();
-            if(dateJs.getDate() == today.getDate() && dateJs.getMonth() == today.getMonth() && dateJs.getFullYear() == today.getFullYear())
-                this.setOptions({minTime: new Date()});
-            else
-                this.setOptions({minTime: false});
+            if(pickerId == "start-time"){
+                if(end_time_date != null)
+                    datePicker.setOptions({maxDate: end_time_date});
+                else
+                    datePicker.setOptions({maxDate: false});
+            } else if(pickerId == "end-time"){
+                if(start_time_date != null)
+                    datePicker.setOptions({minDate: start_time_date});
+                else
+                    datePicker.setOptions({minDate: new Date()});
+            }
+        }
 
+        let showDateTime = function(datePicker, htmlObject){
+            dateTimeBoundarySet(this, datePicker, htmlObject);
             $('#item_search').keyup();
         }
 
-        let endTimeBoundarySet = function(){
-            let myDate = null;
-            let date = null;
-            let time = null;
-            
-            let regMyDate = /(\d{4}-\d{2}-\d{2})/.exec($('#end-time').val());
-            if(regMyDate != null)
-                myDate = regMyDate[0];
-            let regDate = /(\d{4}-\d{2}-\d{2})/.exec($('#start-time').val());
-            if(regDate != null)
-                date = regDate[0];
-            let regTime = /\d{1,2}:\d{2}:\d{2}/.exec($('#start-time').val());
-            if(regTime != null)
-                time = regTime[0];
-
-            if(date != null)
-                this.setOptions({minDate: date});
-            else
-                this.setOptions({minDate: new Date()});
-            if(time != null && date == myDate)
-                this.setOptions({minTime: time});
-            else
-                this.setOptions({minTime: false});
-            
+        let changeDateTime = function(datePicker, htmlObject){
+            dateTimeBoundarySet(this, datePicker, htmlObject);
+            rowSelected("item", null);
             $('#item_search').keyup();
         }
 
         $("#start-time").datetimepicker({
             format: 'Y-m-d H:00',
             minDate: new Date(),
-            minTime: new Date(),
-            onShow: startTimeBoundarySet,
-            onChangeDateTime: startTimeBoundarySet
+            onShow: showDateTime,
+            onChangeDateTime: changeDateTime
         });
 
         $("#end-time").datetimepicker({
             format: 'Y-m-d H:00',
             minDate: new Date(),
-            minTime: new Date(),
-            onShow: endTimeBoundarySet,
-            onChangeDateTime: endTimeBoundarySet
+            onShow: showDateTime,
+            onChangeDateTime: changeDateTime
         });
         
         //Users
@@ -548,6 +538,8 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
         });
     
         $('#user_search').keyup();
+
+        rowSelected('user', <?=isset($loan->user_id) ? "'" . $loan->user_id . "'" : null ?>);
 
         //Items
         $('#item_type').on('change', function(){
@@ -574,5 +566,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
         });
 
         $('#item_type').change();
+
+        rowSelected('item', <?=isset($loan->item_id) ? "'" . $loan->item_id . "'" : null ?>);
     });
 </script>

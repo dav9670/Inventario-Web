@@ -650,8 +650,8 @@ tr.late{
     background: rgb(223, 112, 112) !important;
 }
 
-tr.selected{
-    background: #795799 !important;
+tr.selected {
+    background: #a78fbe !important;
 }
 
 td.money {

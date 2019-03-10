@@ -103,6 +103,10 @@ class LoansTable extends Table
             ->allowEmptyDateTime('returned');
 
         $validator
+            ->integer('user_id')
+            ->requirePresence('user_id', 'create');
+
+        $validator
             ->scalar('item_type')
             ->maxLength('item_type', 50)
             ->requirePresence('item_type', 'create')

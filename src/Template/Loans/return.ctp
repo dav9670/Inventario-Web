@@ -135,15 +135,15 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                 <tbody>
                     <tr>
                         <td><?=__("Start time")?></td>
-                        <td><span id="start_time"></span></td>
+                        <td><span id="start_time"><?= $loan->start_time->i18nFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")?></span></td>
                     </tr>
                     <tr>
                         <td><?=__("End time")?></td>
-                        <td><span id="end_time"></span></td>
+                        <td><span id="end_time"><?= $loan->end_time->i18nFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")?></span></td>
                     </tr>
                     <tr>
                         <td><?=__("Return time")?></td>
-                        <td><span id="return_time"></span></td>
+                        <td><span id="return_time"><?=Time::now()->i18nFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")?></span></td>
                     </tr>
                     <?php 
                         if($loan->overtime_hours_late != 0){
@@ -183,20 +183,12 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
         }
     }
 
-    function setDatesToLocalTimeZone(){
-        let dateOptions = {hour12: false, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit"};
-
-        let dates = {
-            start_time: '<?= $loan->start_time->i18nFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")?>',
-            end_time: '<?= $loan->end_time->i18nFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")?>',
-            return_time: '<?=Time::now()->i18nFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")?>'
-        }
-        for(var key in dates){
-            $('#' + key).text(new Date(dates[key]).toLocaleString([], dateOptions).replace(/\//g, '-'));
-        }
-    }
-
     $('document').ready(function(){
-        setDatesToLocalTimeZone();
+        let dateOptions = {hour12: false, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit"};
+        let dates = ['start_time', 'end_time', 'return_time'];
+
+        dates.forEach(function(elem, index){
+            $('#' + elem).text(new Date($('#' + elem).text()).toLocaleString([], dateOptions).replace(/\//g, '-'));
+        });
     });
 </script>
