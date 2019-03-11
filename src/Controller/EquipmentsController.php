@@ -34,26 +34,6 @@ class EquipmentsController extends AppController
     }
 
     /**
-     * View method
-     *
-     * @param string|null $id Equipment id.
-     * @return \Cake\Http\Response|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $equipment = $this->Equipments->get($id, [
-            'contain' => ['Categories' => [
-                'sort' => ['Categories.name' => 'asc']
-                ]
-            ]
-        ]);
-
-        $this->set(compact('equipment'));
-        $this->set('_serialize', ['equipment']);
-    }
-
-    /**
      * Add method
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
@@ -63,7 +43,6 @@ class EquipmentsController extends AppController
         $equipment = $this->Equipments->newEntity();
         $success = false;
         if ($this->request->is('post')) {
-
             $data = $this->request->getData();
             if(!$this->isApi()){
                 $image = $data['image'];
@@ -75,76 +54,20 @@ class EquipmentsController extends AppController
             }
             $equipment = $this->Equipments->patchEntity($equipment, $data);
             if ($this->Equipments->save($equipment)) {
-                if($this->isApi()){
-                    $success = true;
-                } else {
-                    $this->Flash->success(__('The equipment has been saved.'));
-                    return $this->redirect(['action' => 'index']);
-                }
-            } else if($this->isApi()){
-                $success = false;
+                $success = true;
+
+                $this->Flash->success(__('The equipment has been saved.'));
+                return $this->redirect(['action' => 'index']);
             } else {
+                $success = false;
+
                 $this->Flash->error(__('The equipment could not be saved. Please, try again.'));
             }
         }
 
-        if($this->isApi()){
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } else {
-            $this->set(compact('equipment'));
-        }
+        $this->set(compact('equipment', 'success'));
+        $this->set('_serialize', ['success']);
     }
-
-    /**
-     * Edit method
-     *
-     * @param string|null $id Equipment id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $equipment = $this->Equipments->get($id, [
-            'contain' => ['Categories']
-        ]);
-        $success = false;
-
-        if ($this->request->is(['patch', 'post', 'put'])) {
-
-            $data = $this->request->getData();
-            if(!$this->isApi()){
-                $image = $data['image'];
-                if($image['tmp_name'] != '') {
-                    $imageData  = file_get_contents($image['tmp_name']);
-                    $b64   = base64_encode($imageData);
-                    $data['image'] = $b64;
-                }
-            }
-            $equipment = $this->Equipments->patchEntity($equipment, $data);
-            if ($this->Equipments->save($equipment)) {
-                if($this->isApi()){
-                    $success = true;
-                } else {
-                    $this->Flash->success(__('The equipment has been saved.'));
-                    return $this->redirect(['action' => 'index']);
-                }
-            } else if($this->isApi()){
-                $success = false;
-            } else {
-                $this->Flash->error(__('The equipment could not be saved. Please, try again.'));
-            }
-        }
-
-        if($this->isApi()){
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } else {
-            $categories = $this->Equipments->Categories->find('list', ['limit' => 200]);
-            $this->set(compact('equipment', 'categories'));
-        }
-    }
-
 
     /**
      * consult method
@@ -155,27 +78,37 @@ class EquipmentsController extends AppController
         $equipment = $this->Equipments->get($id, [
             'contain' => ['Categories']
         ]);
+        $success = false;
+
         if($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
-            $image = $data['image'];
-            if($image['tmp_name'] != '') {
-                $imageData  = file_get_contents($image['tmp_name']);
-                $b64   = base64_encode($imageData);
-                $data['image'] = $b64;
-            } else {
-                $data['image'] = $equipment->image;
+            if(!$this->isApi()){
+                $image = $data['image'];
+                if($image['tmp_name'] != '') {
+                    $imageData  = file_get_contents($image['tmp_name']);
+                    $b64   = base64_encode($imageData);
+                    $data['image'] = $b64;
+                } else {
+                    $data['image'] = $equipment->image;
+                }
             }
-
             $equipment = $this->Equipments->patchEntity($equipment, $data);
-            if ($this->Equipments->save($equipment)) {
-                $this->Flash->success(__('The equipment has been saved.'));
 
+            if ($this->Equipments->save($equipment)) {
+                $success = true;
+
+                $this->Flash->success(__('The equipment has been saved.'));
                 return $this->redirect(['action' => 'index']);
+            } else {
+                $success = false;
+
+                $this->Flash->error(__('The equipment could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The equipment could not be saved. Please, try again.'));
+            
         }
-        $categories = $this->Equipments->Categories->find('list', ['limit' => 200]);
-        $this->set(compact('equipment', 'categories'));
+
+        $this->set(compact('equipment', 'success'));
+        $this->set('_serialize', ['success']);
     }
 
     /**
@@ -191,25 +124,16 @@ class EquipmentsController extends AppController
         $equipment = $this->Equipments->get($id);
         $success = false;
         if ($this->Equipments->delete($equipment)) {
-            if($this->isApi()){
-                $success = true;
-            } else {
-                $this->Flash->success(__('The equipment has been deleted.'));
-            }
+            $success = true;
+            $this->Flash->success(__('The equipment has been deleted.'));
         } else {
-            if($this->isApi()){
-                $success = false;
-            } else {
-                $this->Flash->error(__('The equipment could not be deleted. Please, try again.'));
-            }
+            $success = false;
+            $this->Flash->error(__('The equipment could not be deleted. Please, try again.'));
         }
 
-        if($this->isApi()){
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } else {
-            return $this->redirect(['action' => 'index']);
-        }
+        $this->set(compact('success'));
+        $this->set('_serialize', ['success']);
+        return $this->redirect(['action' => 'index']);
     }
 
     /**
@@ -234,28 +158,25 @@ class EquipmentsController extends AppController
         $equipment->deleted = $deleted;
         $success = false;
 
-        $state = $deleted == null ? 'reactivated' : 'deactivated';
-
         if ($this->Equipments->save($equipment)) {
-            if($this->isApi()){
-                $success = true;
+            $success = true;
+            if($deleted == null){
+                $this->Flash->success(__('The equipment has been reactivated.'));
             } else {
-                $this->Flash->success(__('The equipment has been ' . $state .'.'));
+                $this->Flash->success(__('The equipment has been deactivated.'));
             }
         } else {
-            if($this->isApi()){
-                $success = false;
+            $success = false;
+            if($deleted == null){
+                $this->Flash->error(__('The equipment could not be reactivated. Please, try again.'));
             } else {
-                $this->Flash->error(__('The equipment could not be ' . $state . '. Please, try again.'));
-            }
+                $this->Flash->error(__('The equipment could not be deactivated. Please, try again.'));
+            }   
         }
 
-        if($this->isApi()){
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } else {
-            return $this->redirect($this->referer());
-        }
+        $this->set(compact('success'));
+        $this->set('_serialize', ['success']);
+        return $this->redirect($this->referer());
     }
     
     public function isTaken()
@@ -292,11 +213,7 @@ class EquipmentsController extends AppController
     {
         ini_set('memory_limit', '-1');
 
-        if($this->isApi()){
-            $this->getRequest()->allowMethod('post');
-        }else {
-            $this->getRequest()->allowMethod('get', 'ajax');
-        }
+        $this->getRequest()->allowMethod(['post', 'ajax', 'get']);
    
         $keyword = "";
         $sort_field = "name";
