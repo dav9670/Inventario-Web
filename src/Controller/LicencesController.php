@@ -193,39 +193,34 @@ class LicencesController extends AppController
         if($this->request->is(['patch', 'post', 'put']))
         {
             $data = $this->request->getData();
-            dd($data);
             $data['start_time'] = $data['start_time'] . " 00:00:00";
             if ($data['end_time'] != "")
             {
                 $data['end_time'] = $data['end_time'] . " 00:00:00";
             }
 
-            if (is_array($data["products"]["_ids"]))
+            $image = $data['image'];
+            if($image['tmp_name'] != '')
             {
-                $image = $data['image'];
-                if($image['tmp_name'] != '')
-                {
-                    $imageData  = file_get_contents($image['tmp_name']);
-                    $b64   = base64_encode($imageData);
-                    $data['image'] = $b64;
-                }
-                else
-                {
-                    $data['image'] = $licence->image;
-                }
-
-                $licence = $this->Licences->patchEntity($licence, $data);
-                if ($this->Licences->save($licence))
-                {
-                    $this->Flash->success(__('The licence has been saved.'));
-
-                    return $this->redirect(['action' => 'index']);
-                }
-                $this->Flash->error(__('The licence could not be saved. Please, try again.'));
+                $imageData  = file_get_contents($image['tmp_name']);
+                $b64   = base64_encode($imageData);
+                $data['image'] = $b64;
             }
             else
             {
-                $this->Flash->error(__('At least one Product is required. Please, try again.'));
+                $data['image'] = $licence->image;
+            }
+
+            $licence = $this->Licences->patchEntity($licence, $data);
+            if ($this->Licences->save($licence))
+            {
+                $this->Flash->success(__('The licence has been saved.'));
+
+                return $this->redirect(['action' => 'index']);
+            }
+            else
+            {
+                $this->Flash->error(__('The licence could not be saved. Please, try again.'));
             }
         }
         $products = $this->Licences->Products->find('list', ['limit' => 200]);
