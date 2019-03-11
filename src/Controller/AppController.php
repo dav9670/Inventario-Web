@@ -82,6 +82,9 @@ class AppController extends Controller
                     'controller' => 'Users',
                     'action' => 'login'
                 ],
+                //use isAuthorized in Controllers
+                'authorize' => ['Controller'],
+                
                 'storage' => 'Memory',
                 'unauthorizedRedirect' => false
             ]);
