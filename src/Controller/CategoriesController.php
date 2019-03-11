@@ -44,8 +44,8 @@ class CategoriesController extends AppController
 
             if ($this->Categories->save($category)) {
                 $success = true;
+                
                 $this->Flash->success(__('The category has been saved.'));
-
                 return $this->redirect(['action' => 'index']);
             } else {
                 $success = false;

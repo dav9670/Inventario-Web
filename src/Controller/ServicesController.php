@@ -16,7 +16,6 @@ class ServicesController extends AppController
     public function initialize()
     {
         parent::initialize();
-        $this->loadComponent('Paginator');
     }
 
     /**
@@ -31,26 +30,6 @@ class ServicesController extends AppController
     }
 
     /**
-     * View method
-     *
-     * @param string|null $id Service id.
-     * @return \Cake\Http\Response|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $service = $this->Services->get($id, [
-            'contain' => ['Rooms' => [
-                'sort' => ['Rooms.name' => 'asc']
-                ]
-            ]
-        ]);
-
-        $this->set(compact('service'));
-        $this->set('_serialize', ['service']);
-    }
-
-    /**
      * Add method
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
@@ -62,65 +41,18 @@ class ServicesController extends AppController
         if ($this->getRequest()->is('post')) {
             $service = $this->Services->patchEntity($service, $this->getRequest()->getData());
             if ($this->Services->save($service)) {
-                if($this->isApi()){
-                    $success = true;
-                } else {
-                    $this->Flash->success(__('The service has been saved.'));
+                $success = true;
 
-                    return $this->redirect(['action' => 'index']);
-                }
-            } else if($this->isApi()){
-                $success = false;
-            }else {
-                $this->Flash->error(__('The service could not be saved. Please, try again.'));
-            }
-        }
-
-        if($this->isApi()){
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } else {
-            $rooms = $this->Services->Rooms->find('list', ['limit' => 200]);
-            $this->set(compact('service', 'rooms'));
-        }
-    }
-
-    /**
-     * Edit method
-     *
-     * @param string|null $id Service id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $service = $this->Services->get($id, [
-            'contain' => ['Rooms']
-        ]);
-        $success = false;
-        if ($this->getRequest()->is(['patch', 'post', 'put'])) {
-            $service = $this->Services->patchEntity($service, $this->getRequest()->getData());
-            if ($this->Services->save($service)) {
-                if($this->isApi()){
-                    $success = true;
-                } else {
-                    $this->Flash->success(__('The service has been saved.'));
-    
-                    return $this->redirect(['action' => 'index']);
-                }
-            } else if($this->isApi()){
-                $success = false;
+                $this->Flash->success(__('The service has been saved.'));
+                return $this->redirect(['action' => 'index']);
             } else {
+                $success = false;
                 $this->Flash->error(__('The service could not be saved. Please, try again.'));
             }
         }
-        if($this->isApi()){
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } else {
-            $rooms = $this->Services->Rooms->find('list', ['limit' => 200]);
-            $this->set(compact('service', 'rooms'));
-        }
+
+        $this->set(compact('service', 'success'));
+        $this->set('_serialize', ['success']);
     }
 
     /**
@@ -135,17 +67,23 @@ class ServicesController extends AppController
         $service = $this->Services->get($id, [
             'contain' => ['Rooms']
         ]);
+        $success = false;
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             $service = $this->Services->patchEntity($service, $this->getRequest()->getData());
             if ($this->Services->save($service)) {
-                $this->Flash->success(__('The service has been saved.'));
+                $success = true;
 
+                $this->Flash->success(__('The service has been saved.'));
                 return $this->redirect(['action' => 'consult', $service->id]);
+            } else {
+                $success = false;
+
+                $this->Flash->error(__('The service could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The service could not be saved. Please, try again.'));
+            
         }
-        $mentors = $this->Services->Rooms->find('list', ['limit' => 200]);
-        $this->set(compact('service', 'mentors'));
+        $this->set(compact('service', 'success'));
+        $this->set('_serialize', ['success']);
     }
 
     /**
@@ -161,25 +99,16 @@ class ServicesController extends AppController
         $service = $this->Services->get($id);
         $success = false;
         if ($this->Services->delete($service)) {
-            if($this->isApi()){
-                $success = true;
-            } else {
-                $this->Flash->success(__('The service has been deleted.'));
-            }
+            $success = true;
+            $this->Flash->success(__('The service has been deleted.'));
         } else {
-            if($this->isApi()){
-                $success = false;
-            } else {
-                $this->Flash->error(__('The service could not be deleted. Please, try again.'));
-            }
+            $success = false;
+            $this->Flash->error(__('The service could not be deleted. Please, try again.'));
         }
 
-        if($this->isApi()){
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } else {
-            return $this->redirect(['action' => 'index']);
-        }
+        $this->set(compact('success'));
+        $this->set('_serialize', ['success']);
+        return $this->redirect(['action' => 'index']);
     }
 
     public function isTaken()
@@ -216,17 +145,11 @@ class ServicesController extends AppController
         $state = $func == 'link' ? 'created' : 'deleted';
 
         if($func == 'link' && $this->Services->Rooms->link($service, [$room]) || $func == 'unlink' && $this->Services->Rooms->unlink($service, [$room])){
-            if($this->isApi()){
-                $success = true;
-            } else {
-                //$this->Flash->success(__('The association has been ' . $state . '.'));
-            }
+            $success = true;
+            //$this->Flash->success(__('The association has been ' . $state . '.'));
         } else {
-            if($this->isApi()){
-                $success = false;
-            } else {
-                //$this->Flash->error(__('The association could not be ' . $state . '. Please, try again.'));
-            }
+            $success = false;
+            //$this->Flash->error(__('The association could not be ' . $state . '. Please, try again.'));
         }
 
         if($this->isApi()){
@@ -250,11 +173,7 @@ class ServicesController extends AppController
 
     public function search()
     {
-        if($this->isApi()){
-            $this->getRequest()->allowMethod('post');
-        } else {
-            $this->getRequest()->allowMethod(['ajax', 'get']);
-        }
+        $this->getRequest()->allowMethod(['post', 'ajax', 'get']);
    
         $keyword = "";
         $sort_field = "";
