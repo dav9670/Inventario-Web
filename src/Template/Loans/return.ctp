@@ -78,7 +78,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                         <thead>
                             <tr>
                                 <th scope="col"><?= __("Name") ?></a></th>
-                                <th scope="col"><?= __("Product") ?></a></th>
+                                <th scope="col"><?= __("Platform") ?></a></th>
                                 <th scope="col"><?= __("Description") ?></a></th>
                                 <th scope="col"><?= __("Licence count") ?></th>
                             </tr>
@@ -126,7 +126,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
             ?>
         </div>
         <div class='left half-width' style='padding-top: 50px;'>
-        <input type="hidden" name="returned" id="returned" value="<?=Time::now()->i18nFormat("yyyy-MM-dd HH:mm:ss")?>">
+        <input type="hidden" name="returned" id="returned" value="<?=Time::now()->i18nFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")?>">
             <table>
                 <thead>
                     <th><?=__("Statistics")?></th>

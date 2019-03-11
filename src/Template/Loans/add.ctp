@@ -8,7 +8,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
 ?>
 
 <div class="loans form large-12 medium-11 columns content">
-    <?= $this->Form->create($loan) ?>
+    <?= $this->Form->create($loan, ['id' => 'loan_form']) ?>
     <fieldset>
         <legend><?= __('Add Loan') ?></legend>
 
@@ -38,7 +38,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
         <div class='right half-width' style='height:700px;'>
 
             <div class='left half-width'>
-                <?= $this->Form->control('start_time', ['type' => 'text', 'class' => 'datetpicker']); ?>
+                <?= $this->Form->control('start_time', ['type' => 'text', 'class' => 'datepicker']); ?>
             </div>
             <div class='right half-width'>
                 <?= $this->Form->control('end_time', ['type' => 'text', 'class' => 'datepicker']); ?>
@@ -70,8 +70,8 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
             </div>
         </div>
     </fieldset>
-    <?= $this->Form->button(__('Save')) ?>
     <?= $this->Form->end() ?>
+    <button class="right" onclick="submitForm()"><?=__('Save')?></button>
 </div>
 <script>
     var sort = {
@@ -451,7 +451,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
         var canSelect = true;
         if(type == 'item'){
             if($('#' + type + '_' + id + '_available').attr('data-available') == 'false'){
-                alert('<?=__('You cannot select this item, it is not available during the time period.')?>');
+                alert("<?=__('You cannot select this item, it is not available during the time period.')?>");
                 canSelect = false;
             }
         }
@@ -469,6 +469,15 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
             $('#' + type + '_selected').text('');
             $('#' + type + '-id').val('');
         }
+    }
+
+    function submitForm()
+    {
+        var startTime = new Date($('#start-time').val());
+        var endTime = new Date($('#end-time').val());
+        $('#start-time').val(startTime.toISOString());
+        $('#end-time').val(endTime.toISOString());
+        $('#loan_form').submit();
     }
 
     $('document').ready(function(){
@@ -500,7 +509,6 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
 
         let showDateTime = function(datePicker, htmlObject){
             dateTimeBoundarySet(this, datePicker, htmlObject);
-            $('#item_search').keyup();
         }
 
         let changeDateTime = function(datePicker, htmlObject){
@@ -509,15 +517,8 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
             $('#item_search').keyup();
         }
 
-        $("#start-time").datetimepicker({
-            format: 'Y-m-d H:00',
-            minDate: new Date(),
-            onShow: showDateTime,
-            onChangeDateTime: changeDateTime
-        });
-
-        $("#end-time").datetimepicker({
-            format: 'Y-m-d H:00',
+        $(".datepicker").datetimepicker({
+            format: 'Y-m-d H:i',
             minDate: new Date(),
             onShow: showDateTime,
             onChangeDateTime: changeDateTime

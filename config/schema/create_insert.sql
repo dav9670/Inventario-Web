@@ -364,86 +364,221 @@ values              ('client3@gmail.com', '$2y$10$Cx3OagaMhBWn64l.MiHpRu36oBdp7J
 
 /*loans*/
 
-insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
-values                  ('2018-10-01 12:00:00', '2018-10-31 12:00:00', '2018-10-30 22:00:00', 1, 'mentors', 1);
+/*loans-mentors*/
 
 insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
-values                  ('2018-11-01 12:00:00', '2018-11-03 12:00:00', '2018-11-03 12:00:00', 6, 'mentors', 2);
+values                  (
+                            date_add(date_add(current_date(), interval -30 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval -15 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval -20 day), interval 12 hour), 
+                            1, 'mentors', 1
+                        );
 
 insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
-values                  ('2018-11-04 12:00:00', '2018-11-05 12:00:00', '2018-11-05 13:00:00', 5, 'mentors', 2);
+values                  (
+                            date_add(date_add(current_date(), interval -300 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval -297 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval -297 day), interval 12 hour),
+                            6, 'mentors', 2
+                        );
 
 insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
-values                  ('2019-02-17 12:00:00', '2019-02-20 12:00:00', null, 2, 'mentors', 4);
+values                  (
+                            date_add(date_add(current_date(), interval -10 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval -5 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval -4 day), interval 12 hour), 
+                            5, 'mentors', 2
+                        );
 
 insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
-values                  ('2019-02-24 12:00:00', '2019-03-01 12:00:00', null, 3, 'mentors', 5);
-
-
-insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
-values                  ('2019-02-18 12:00:00', '2019-02-21 12:00:00', null, 7, 'rooms', 3);
-
-insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
-values                  ('2019-01-13 12:00:00', '2019-01-15 12:00:00', '2019-01-15 12:00:00', 6, 'rooms', 1);
+values                  (
+                            date_add(date_add(current_date(), interval -5 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval 2 day), interval 12 hour),
+                            null, 
+                            2, 'mentors', 4
+                        );
 
 insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
-values                  ('2019-01-10 12:00:00', '2019-01-17 12:00:00', '2019-01-15 14:00:00', 6, 'rooms', 1);
+values                  (
+                            date_add(date_add(current_date(), interval -4 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval -1 day), interval 12 hour), 
+                            null, 
+                            3, 'mentors', 5
+                        );
+
+/*loans-rooms*/
 
 insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
-values                  ('2019-02-01 12:00:00', '2019-02-03 12:00:00', '2019-02-04 09:00:00', 1, 'rooms', 2);
+values                  (
+                            date_add(date_add(current_date(), interval -40 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval -35 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval -37 day), interval 12 hour), 
+                            7, 'rooms', 3
+                        );
 
 insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
-values                  ('2019-03-03 12:00:00', '2019-03-05 12:00:00', null, 2, 'rooms', 2);
-
-
-insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
-values                  ('2018-11-01 12:00:00', '2018-11-05 12:00:00', '2018-11-05 14:00:00', 2, 'licences', 3);
-
-insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
-values                  ('2019-02-13 12:00:00', '2019-03-01 12:00:00', null, 5, 'licences', 5);
+values                  (
+                            date_add(date_add(current_date(), interval -400 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval -354 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval -354 day), interval 12 hour),
+                            6, 'rooms', 1
+                        );
 
 insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
-values                  ('2019-02-01 12:00:00', '2019-02-03 12:00:00', '2019-02-04 09:00:00', 1, 'licences', 7);
+values                  (
+                            date_add(date_add(current_date(), interval -20 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval -13 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval -11 day), interval 12 hour), 
+                            6, 'rooms', 1
+                        );
 
 insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
-values                  ('2019-02-23 12:00:00', '2019-03-03 12:00:00', null, 1, 'licences', 1);
+values                  (
+                            date_add(date_add(current_date(), interval -600 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval 200 day), interval 12 hour),
+                            null, 
+                            1, 'rooms', 2
+                        );
 
 insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
-values                  ('2019-02-07 12:00:00', '2019-02-09 12:00:00', '2019-02-09 09:00:00', 4, 'licences', 2);
+values                  (
+                            date_add(date_add(current_date(), interval -40 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval -10 day), interval 12 hour), 
+                            null, 
+                            2, 'rooms', 2
+                        );
 
-
-insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
-values                  ('2018-11-01 12:00:00', '2018-11-05 12:00:00', '2018-11-05 14:00:00', 2, 'equipments', 3);
-
-insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
-values                  ('2019-02-13 12:00:00', '2019-03-01 12:00:00', null, 4, 'equipments', 5);
-
-insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
-values                  ('2019-02-01 12:00:00', '2019-02-03 12:00:00', '2019-02-04 09:00:00', 4, 'equipments', 7);
+/*loans-licences*/
 
 insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
-values                  ('2019-02-23 12:00:00', '2019-03-03 12:00:00', null, 2, 'equipments', 1);
+values                  (
+                            date_add(date_add(current_date(), interval -50 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval -45 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval -49 day), interval 12 hour),
+                            2, 'licences', 3
+                        );
 
 insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
-values                  ('2019-02-07 12:00:00', '2019-02-09 12:00:00', '2019-02-09 09:00:00', 3, 'equipments', 2);
+values                  (
+                            date_add(date_add(current_date(), interval -2 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval -1 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval -1 day), interval 12 hour),
+                            5, 'licences', 5
+                        );
 
 insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
-values                  ('2018-11-01 12:00:00', '2018-11-05 12:00:00', '2018-11-05 14:00:00', 1, 'equipments', 1);
+values                  (
+                            date_add(date_add(current_date(), interval -20 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval -10 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval -7 day), interval 12 hour), 
+                            1, 'licences', 7
+                        );
 
 insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
-values                  ('2018-02-13 12:00:00', '2018-03-01 12:00:00', '2018-11-05 14:00:00', 1, 'equipments', 2);
+values                  (
+                            date_add(date_add(current_date(), interval -30 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval 10 day), interval 12 hour),
+                            null, 
+                            1, 'licences', 1
+                        );
 
 insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
-values                  ('2018-02-01 12:00:00', '2018-02-03 12:00:00', '2019-02-04 09:00:00', 1, 'equipments', 2);
+values                  (
+                            date_add(date_add(current_date(), interval -90 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval -70 day), interval 12 hour), 
+                            null, 
+                            4, 'licences', 2
+                        );
+
+/*loans-equipments*/
 
 insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
-values                  ('2017-02-23 12:00:00', '2020-03-03 12:00:00', null, 1, 'equipments', 4);
+values                  (
+                            date_add(date_add(current_date(), interval -600 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval -595 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval -597 day), interval 12 hour),
+                            2, 'equipments', 3
+                        );
 
 insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
-values                  ('2017-02-07 12:00:00', '2020-02-09 12:00:00', null, 1, 'equipments', 5);
+values                  (
+                            date_add(date_add(current_date(), interval -4 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval -2 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval -2 day), interval 12 hour),
+                            4, 'equipments', 5
+                        );
 
 insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
-values                  ('2017-02-07 12:00:00', '2019-02-26 12:00:00', null, 1, 'equipments', 3);
+values                  (
+                            date_add(date_add(current_date(), interval -100 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval -50 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval -40 day), interval 12 hour), 
+                            4, 'equipments', 7
+                        );
+
+insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
+values                  (
+                            date_add(date_add(current_date(), interval -7 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval 7 day), interval 12 hour),
+                            null, 
+                            2, 'equipments', 1
+                        );
+
+insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
+values                  (
+                            date_add(date_add(current_date(), interval -21 day), interval 12 hour), 
+                            date_add(date_add(current_date(), interval -9 day), interval 12 hour), 
+                            null, 
+                            3, 'equipments', 2
+                        );
+
+insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
+values                  (
+                            '2018-11-01 12:00:00', 
+                            '2018-11-05 12:00:00', 
+                            '2018-11-05 14:00:00', 
+                            1, 'equipments', 1
+                        );
+
+insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
+values                  (
+                            '2018-02-13 12:00:00', 
+                            '2018-03-01 12:00:00', 
+                            '2018-11-05 14:00:00', 
+                            1, 'equipments', 2
+                        );
+
+insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
+values                  (
+                            '2018-02-01 12:00:00', 
+                            '2018-02-03 12:00:00', 
+                            '2019-02-04 09:00:00', 
+                            1, 'equipments', 2
+                        );
+
+insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
+values                  (
+                            '2017-02-23 12:00:00', 
+                            '2020-03-03 12:00:00', 
+                            null, 
+                            1, 'equipments', 4
+                        );
+
+insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
+values                  (
+                            '2017-02-07 12:00:00', 
+                            '2020-02-09 12:00:00', 
+                            null, 
+                            1, 'equipments', 5
+                        );
+
+insert into loans (start_time, end_time, returned, user_id, item_type, item_id)
+values                  (
+                            '2017-02-07 12:00:00', 
+                            '2019-02-26 12:00:00', 
+                            null, 
+                            1, 'equipments', 3
+                        );
 
 /*mentors & skills*/
 

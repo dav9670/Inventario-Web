@@ -16,7 +16,6 @@ class ProductsController extends AppController
     public function initialize()
     {
         parent::initialize();
-        $this->loadComponent('Paginator');
     }
 
     /**
@@ -31,26 +30,6 @@ class ProductsController extends AppController
     }
 
     /**
-     * View method
-     *
-     * @param string|null $id Product id.
-     * @return \Cake\Http\Response|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $product = $this->Products->get($id, [
-            'contain' => ['Licences' => [
-                'sort' => ['Licences.name' => 'asc']
-                ]
-            ]
-        ]);
-
-        $this->set('product', $product);
-        $this->set('_serialize', ['product']);
-    }
-
-    /**
      * Add method
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
@@ -62,64 +41,18 @@ class ProductsController extends AppController
         if ($this->getRequest()->is('post')) {
             $product = $this->Products->patchEntity($product, $this->getRequest()->getData());
             if ($this->Products->save($product)) {
-                if($this->isApi()){
-                    $success = true;
-                } else {
-                    $this->Flash->success(__('The product has been saved.'));
-
-                    return $this->redirect(['action' => 'index']);
-                }
-            } else if($this->isApi()){
-                $success = false;
+                $success = true;
+                    
+                $this->Flash->success(__('The product has been saved.'));
+                return $this->redirect(['action' => 'index']);
             } else {
+                $success = false;
                 $this->Flash->error(__('The product could not be saved. Please, try again.'));
             }
         }
-        if($this->isApi()){
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } else {
-            $licences = $this->Products->Licences->find('list', ['limit' => 200]);
-            $this->set(compact('product', 'licences'));
-        }
-    }
-
-    /**
-     * Edit method
-     *
-     * @param string|null $id Product id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $product = $this->Products->get($id, [
-            'contain' => ['Licences']
-        ]);
-        $success = false;
-        if ($this->getRequest()->is(['patch', 'post', 'put'])) {
-            $product = $this->Products->patchEntity($product, $this->getRequest()->getData());
-            if ($this->Products->save($product)) {
-                if($this->isApi()){
-                    $success = true;
-                } else {
-                    $this->Flash->success(__('The product has been saved.'));
-
-                    return $this->redirect(['action' => 'index']);
-                }
-            } else if($this->isApi()){
-                $success = false;
-            } else {
-                $this->Flash->error(__('The product could not be saved. Please, try again.'));
-            }
-        }
-        if($this->isApi()){
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } else {
-            $licences = $this->Products->Licences->find('list', ['limit' => 200]);
-            $this->set(compact('product', 'licences'));
-        }
+            
+        $this->set(compact('product', 'success'));
+        $this->set('_serialize', ['success']);
     }
 
     /**
@@ -134,17 +67,22 @@ class ProductsController extends AppController
         $product = $this->Products->get($id, [
             'contain' => ['Licences']
         ]);
+        $success = false;
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
+
             $product = $this->Products->patchEntity($product, $this->getRequest()->getData());
             if ($this->Products->save($product)) {
-                $this->Flash->success(__('The product has been saved.'));
+                $success = true;
 
+                $this->Flash->success(__('The product has been saved.'));
                 return $this->redirect(['action' => 'index']);
+            } else {
+                $success = false;
+
+                $this->Flash->error(__('The product could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The product could not be saved. Please, try again.'));
         }
-        $licences = $this->Products->Licences->find('list', ['limit' => 200]);
-        $this->set(compact('product', 'licences'));
+        $this->set(compact('product', 'success'));
     }
 
 
@@ -161,25 +99,16 @@ class ProductsController extends AppController
         $product = $this->Products->get($id);
         $success = false;
         if ($this->Products->delete($product)) {
-            if($this->isApi()){
-                $success = true;
-            } else {
-                $this->Flash->success(__('The product has been deleted.'));
-            }
+            $success = true;
+            $this->Flash->success(__('The product has been deleted.'));
         } else {
-            if($this->isApi()){
-                $success = false;
-            } else {
-                $this->Flash->error(__('The product could not be deleted. Please, try again.'));
-            }
+            $success = false;
+            $this->Flash->error(__('The product could not be deleted. Please, try again.'));
         }
 
-        if($this->isApi()){
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } else {
-            return $this->redirect(['action' => 'index']);
-        }
+        $this->set(compact('success'));
+        $this->set('_serialize', ['success']);
+        return $this->redirect(['action' => 'index']);
     }
 
     public function isTaken()
@@ -216,17 +145,11 @@ class ProductsController extends AppController
         $state = $func == 'link' ? 'created' : 'deleted';
 
         if($func == 'link' && $this->Products->Licences->link($product, [$licence]) || $func == 'unlink' && $this->Products->Licences->unlink($product, [$licence])){
-            if($this->isApi()){
-                $success = true;
-            } else {
-                //$this->Flash->success(__('The association has been ' . $state . '.'));
-            }
+            $success = true;
+            //$this->Flash->success(__('The association has been ' . $state . '.'));
         } else {
-            if($this->isApi()){
-                $success = false;
-            } else {
-                //$this->Flash->error(__('The association could not be ' . $state . '. Please, try again.'));
-            }
+            $success = false;
+            //$this->Flash->error(__('The association could not be ' . $state . '. Please, try again.'));
         }
 
         if($this->isApi()){
@@ -250,11 +173,7 @@ class ProductsController extends AppController
 
     public function search()
     {   
-        if($this->isApi()){
-            $this->getRequest()->allowMethod('post');
-        } else {
-            $this->getRequest()->allowMethod(['ajax', 'get']);
-        }
+        $this->getRequest()->allowMethod(['post', 'ajax', 'get']);
    
         $keyword = "";
         $sort_field = "";

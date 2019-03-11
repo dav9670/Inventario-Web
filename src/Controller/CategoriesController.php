@@ -17,7 +17,6 @@ class CategoriesController extends AppController
     public function initialize()
     {
         parent::initialize();
-        $this->loadComponent('Paginator');
     }
 
     /**
@@ -32,24 +31,6 @@ class CategoriesController extends AppController
     }
 
     /**
-     * View method
-     *
-     * @param string|null $id Category id.
-     * @return \Cake\Http\Response|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $category = $this->Categories->get($id, [
-            'contain' => ['Equipments']
-        ]);
-
-        $this->set(compact('category'));
-        $this->set('_serialize', ['category']);
-    }
-    
-
-    /**
      * Add method
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
@@ -62,63 +43,18 @@ class CategoriesController extends AppController
             $category = $this->Categories->patchEntity($category, $this->getRequest()->getData());
 
             if ($this->Categories->save($category)) {
-                if($this->isApi()){
-                    $success = true;
-                } else {
-                    $this->Flash->success(__('The category has been saved.'));
+                $success = true;
+                $this->Flash->success(__('The category has been saved.'));
 
-                    return $this->redirect(['action' => 'index']);
-                }
-            } else if($this->isApi()){
-                $success = false;
+                return $this->redirect(['action' => 'index']);
             } else {
+                $success = false;
                 $this->Flash->error(__('The category could not be saved. Please, try again.'));
             }
         }
-        if($this->isApi()){
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } else {
-            $equipments = $this->Categories->Equipments->find('list', ['limit' => 200]);
-            $this->set(compact('category', 'equipments'));
-        }
-    }
 
-    /**
-     * Edit method
-     *
-     * @param string|null $id Category id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $category = $this->Categories->get($id, [
-            'contain' => ['Equipments']
-        ]);
-        if ($this->getRequest()->is(['patch', 'post', 'put'])) {
-            $category = $this->Categories->patchEntity($category, $this->getRequest()->getData());
-            if ($this->Categories->save($category)) {
-                if($this->isApi()){
-                    $success = true;
-                } else {
-                    $this->Flash->success(__('The category has been saved.'));
-
-                    return $this->redirect(['action' => 'index']);
-                }
-            } else if($this->isApi()){
-                $success = false;
-            } else {
-                $this->Flash->error(__('The category could not be saved. Please, try again.'));
-            }
-        }
-        if($this->isApi()){
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } else {
-            $equipments = $this->Categories->Equipments->find('list', ['limit' => 200]);
-            $this->set(compact('category', 'equipments'));
-        }
+        $this->set(compact('category', 'success'));
+        $this->set('_serialize', ['success']);
     }
 
     /**
@@ -134,24 +70,26 @@ class CategoriesController extends AppController
         $category = $this->Categories->get($id, [
             'contain' => ['Equipments']
         ]);
+        $success = false;
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
 
             $category = $this->Categories->patchEntity($category, $this->getRequest()->getData());
             if ($this->Categories->save($category)) {
-                $this->Flash->success(__('The category has been saved.'));
+                $success = true;
                 $data = 'view';
-
+                
+                $this->Flash->success(__('The category has been saved.'));
                 return $this->redirect(['action' => 'consult', $category->id]);
-               
-            }
-            else{
-                $this->Flash->error(__('The category could not be saved. Please, try again.'));
+            } else {
+                $success = false;
                 $data = 'edit';
 
+                $this->Flash->error(__('The category could not be saved. Please, try again.'));
             }
         }
-        $equipments = $this->Categories->Equipments->find('list', ['limit' => 200]);
-        $this->set(compact('category', 'equipments','data'));
+        
+        $this->set(compact('category','data', 'success'));
+        $this->set('_serialize', ['success']);
     }
     
 
@@ -168,25 +106,16 @@ class CategoriesController extends AppController
         $category = $this->Categories->get($id);
         $success = false;
         if ($this->Categories->delete($category)) {
-            if($this->isApi()){
-                $success = true;
-            } else {
-                $this->Flash->success(__('The category has been deleted.'));
-            }
+            $success = true;
+            $this->Flash->success(__('The category has been deleted.'));
         } else {
-            if($this->isApi()){
-                $success = false;
-            } else {
-                $this->Flash->error(__('The category could not be deleted. Please, try again.'));
-            }
+            $success = false;
+            $this->Flash->error(__('The category could not be deleted. Please, try again.'));
         }
 
-        if($this->isApi()){
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } else {
-            return $this->redirect(['action' => 'index']);
-        }
+        $this->set(compact('success'));
+        $this->set('_serialize', ['success']);
+        return $this->redirect(['action' => 'index']);
     }
 
     private function modifyLink($func)
@@ -208,17 +137,11 @@ class CategoriesController extends AppController
         $state = $func == 'link' ? 'created' : 'deleted';
 
         if($func == 'link' && $this->Categories->Equipments->link($category, [$equipment]) || $func == 'unlink' && $this->Categories->Equipments->unlink($category, [$equipment])){
-            if($this->isApi()){
-                $success = true;
-            } else {
-                //$this->Flash->success(__('The association has been ' . $state . '.'));
-            }
+            $success = true;
+            //$this->Flash->success(__('The association has been ' . $state . '.'));
         } else {
-            if($this->isApi()){
-                $success = false;
-            } else {
-                //$this->Flash->error(__('The association could not be ' . $state . '. Please, try again.'));
-            }
+            $success = false;
+            //$this->Flash->error(__('The association could not be ' . $state . '. Please, try again.'));
         }
 
         if($this->isApi()){
@@ -242,11 +165,7 @@ class CategoriesController extends AppController
 
     public function search()
     {   
-        if($this->isApi()){
-            $this->getRequest()->allowMethod('post');
-        } else {
-            $this->getRequest()->allowMethod(['ajax', 'get']);
-        }
+        $this->getRequest()->allowMethod(['post', 'ajax', 'get']);
    
         $keyword = "";
         $sort_field = "";
@@ -282,7 +201,6 @@ class CategoriesController extends AppController
         $this->set('categories', $this->paginate($query));
         $this->set('_serialize', ['categories']);
     }
-    
 
     public function isAuthorized($user)
     {

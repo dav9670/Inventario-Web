@@ -3,6 +3,8 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Loan[]|\Cake\Collection\CollectionInterface $loans
  */
+echo $this->Html->css('jquery.datetimepicker.min.css');
+echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => false));
 ?>
 
 <div class="loans index large-12 medium-11 columns content">
@@ -52,7 +54,7 @@
     </div>
     <div class="tab">
         <button id='current_button' class="tablinks active" onclick="show_table('current')"><?= __("Current") ?></button>
-        <button id='returned_button' class="tablinks" onclick="show_table('returned')"><?= __("Returned") ?></button>
+        <button id='returned_button' class="tablinks" onclick="show_table('returned')"><?= __("Returned Tab") ?></button>
     </div>
     <div class="tabcontent">
         <table cellpadding="0" cellspacing="0">
@@ -60,7 +62,7 @@
                 <tr>
                     <th scope="col"></th>
                     <th scope="col"><a id='item_sort' class='asc'><?= __("Item") ?></a></th>
-                    <th scope="col"><a id='description_sort'><?= __("Description") ?></a></th>
+                    <th scope="col" style="width:30%;"><a id='description_sort'><?= __("Description") ?></a></th>
                     <th scope="col"><?= __("Labels") ?></th>
                     <th scope="col"><a id='user_sort'><?= __("User") ?></a></th>
                     <th scope="col"><a id='start_time_sort'><?= __("Start time") ?></a></th>
@@ -77,7 +79,7 @@
                     <th scope="col"><a id='user_sort'><?= __("User") ?></a></th>
                     <th scope="col"><a id='start_time_sort'><?= __("Start time") ?></a></th>
                     <th scope="col"><a id='end_time_sort'><?= __("End time") ?></a></th>
-                    <th scope="col"><a id='returned_sort'><?= __('Returned') ?></a></th>
+                    <th scope="col"><a id='returned_sort'><?= __('Returned time') ?></a></th>
                 </tr>
             </thead>
             <tbody id="body_current">
@@ -126,6 +128,14 @@
 
                         $.each(loansArray, function(idx, elem){
 
+                            var labels_list = "";
+                            var three_labels = elem.item.labels.slice(0,3);
+                            if (elem.item.labels.length > 3) {
+                                labels_list = three_labels.join("; ") + "...";
+                            } else {
+                                labels_list = three_labels.join("; ");
+                            }
+
                             var link = "";
                             if(elem.returned == null){
                                 link = link.concat('<?= $this->Html->link(__('Return'), ['action' => 'return', -1]) ?> ');
@@ -140,7 +150,7 @@
                                         <td><img src='data:image/png;base64,` + elem.item.image + `' width=100/></td>
                                         <td>` + elem.item.identifier + `</td>
                                         <td>` + elem.item.description + `</td>
-                                        <td>` + elem.item.labels + `</td>
+                                        <td>` + labels_list + `</td>
                                         <td>` + elem.user.identifier + `</td>
                                         <td>` + new Date(elem.start_time).toLocaleString([], dateOptions).replace(/\//g, '-') + `</td>
                                         <td>` + new Date(elem.end_time).toLocaleString([], dateOptions).replace(/\//g, '-') + `</td>
@@ -155,7 +165,7 @@
                                         <td><img src='data:image/png;base64,` + elem.item.image + `' width=100/></td>
                                         <td>` + elem.item.identifier + `</td>
                                         <td>` + elem.item.description + `</td>
-                                        <td>` + elem.item.labels + `</td>
+                                        <td>` + labels_list + `</td>
                                         <td>` + elem.user.identifier + `</td>
                                         <td>` + new Date(elem.start_time).toLocaleString([], dateOptions).replace(/\//g, '-') + `</td>
                                         <td>` + new Date(elem.end_time).toLocaleString([], dateOptions).replace(/\//g, '-') + `</td>
@@ -201,20 +211,46 @@
 
     $('document').ready(function(){
 
-        $(".datepicker").datepicker({
-            dateFormat: 'yy-mm-dd',
-            changeMonth: true,
-			changeYear: true,
-            onSelect: function(dateText,inst) {
-                $('#preset-dates').val('custom');
-                $('#start_time').datepicker('option', 'maxDate', $('#end_time').val());
-                $('#end_time').datepicker('option', 'minDate', $('#start_time').val());
-                $('#search').keyup();
-            }
-        });
+        let dateTimeBoundarySet = function(datePicker, date, htmlObject){
+            let pickerId = htmlObject[0].id;
+            let start_time_date = null;
+            let end_time_date = null;
+            
+            let reg_start_time_date = /(\d{4}-\d{2}-\d{2})/.exec($('#start_time').val());
+            if(reg_start_time_date != null)
+                start_time_date = reg_start_time_date[0];
+            let reg_end_time_date = /(\d{4}-\d{2}-\d{2})/.exec($('#end_time').val());
+            if(reg_end_time_date != null)
+                end_time_date = reg_end_time_date[0];
 
-        $('#start_time').datepicker('option', 'maxDate', $('#end_time').val());
-        $('#end_time').datepicker('option', 'minDate', $('#start_time').val());
+            if(pickerId == "start_time"){
+                if(end_time_date != null)
+                    datePicker.setOptions({maxDate: end_time_date});
+                else
+                    datePicker.setOptions({maxDate: false});
+            } else if(pickerId == "end_time"){
+                if(start_time_date != null)
+                    datePicker.setOptions({minDate: start_time_date});
+                else
+                    datePicker.setOptions({minDate: false});
+            }
+        }
+
+        let showDateTime = function(datePicker, htmlObject){
+            dateTimeBoundarySet(this, datePicker, htmlObject);
+        }
+
+        let changeDateTime = function(datePicker, htmlObject){
+            dateTimeBoundarySet(this, datePicker, htmlObject);
+            $('#preset-dates').val('custom');
+            $('#item_search').keyup();
+        }
+
+        $(".datepicker").datetimepicker({
+            format: 'Y-m-d H:i',
+            onShow: showDateTime,
+            onChangeDateTime: changeDateTime
+        });
 
          $('#search').keyup(function(){
             var searchkey = $(this).val();
