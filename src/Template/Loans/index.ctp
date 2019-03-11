@@ -247,7 +247,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
         }
 
         $(".datepicker").datetimepicker({
-            format: 'Y-m-d H:00',
+            format: 'Y-m-d H:i',
             onShow: showDateTime,
             onChangeDateTime: changeDateTime
         });

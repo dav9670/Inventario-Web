@@ -8,7 +8,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
 ?>
 
 <div class="loans form large-12 medium-11 columns content">
-    <?= $this->Form->create($loan) ?>
+    <?= $this->Form->create($loan, ['id' => 'loan_form']) ?>
     <fieldset>
         <legend><?= __('Add Loan') ?></legend>
 
@@ -70,8 +70,8 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
             </div>
         </div>
     </fieldset>
-    <?= $this->Form->button(__('Save')) ?>
     <?= $this->Form->end() ?>
+    <button class="right" onclick="submitForm()"><?=__('Save')?></button>
 </div>
 <script>
     var sort = {
@@ -471,6 +471,15 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
         }
     }
 
+    function submitForm()
+    {
+        var startTime = new Date($('#start-time').val());
+        var endTime = new Date($('#end-time').val());
+        $('#start-time').val(startTime.toISOString());
+        $('#end-time').val(endTime.toISOString());
+        $('#loan_form').submit();
+    }
+
     $('document').ready(function(){
 
         let dateTimeBoundarySet = function(datePicker, date, htmlObject){
@@ -509,7 +518,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
         }
 
         $(".datepicker").datetimepicker({
-            format: 'Y-m-d H:00',
+            format: 'Y-m-d H:i',
             minDate: new Date(),
             onShow: showDateTime,
             onChangeDateTime: changeDateTime

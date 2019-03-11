@@ -4,6 +4,7 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\Utility\Inflector;
 use Cake\ORM\TableRegistry;
+use Cake\I18n\Time;
 
 /**
  * Loans Controller
@@ -54,7 +55,14 @@ class LoansController extends AppController
         $loan = $this->Loans->newEntity();
         $success = false;
         if ($this->request->is('post')) {
-            $loan = $this->Loans->patchEntity($loan, $this->request->getData());
+            $data = $this->request->getData();
+            
+            $start_time_data = new Time($data["start_time"]);
+            $end_time_data = new Time($data["end_time"]);
+            $data["start_time"] = $start_time_data->i18nFormat();
+            $data["end_time"] = $end_time_data->i18nFormat(); 
+            
+            $loan = $this->Loans->patchEntity($loan, $data);
             if ($this->Loans->save($loan)) {
                 if($this->isApi()){
                     $success = true;
