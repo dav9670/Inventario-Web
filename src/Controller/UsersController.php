@@ -253,7 +253,6 @@ class UsersController extends AppController
                 $data['admin_status'] = 'admin';
             }
             $user = $this->Users->patchEntity($user, $data);
-            dd($user);
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
 
@@ -353,7 +352,6 @@ class UsersController extends AppController
             if ($user) 
             {
                 $identify = true;
-                //$this->add();
             }
             else
             {
