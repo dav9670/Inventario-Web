@@ -188,7 +188,7 @@ use Cake\I18n\I18n;
                 <th scope="col"><?= __("Platform") ?></a></th>
                 <th scope="col"><?= __("Licence") ?></th>
                 <th scope="col"><?= __("Used") ?></th>
-                <th scope="col"><?= __("Expired") ?></th>
+                <th scope="col"><?= __("Expired Report") ?></th>
                 <th scope="col"><?= __("Uses") ?></th>
                 <th scope="col"><?= __("% Used") ?></th>
             </tr>
