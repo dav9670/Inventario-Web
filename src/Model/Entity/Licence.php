@@ -90,7 +90,7 @@ class Licence extends Entity
         }
         else
         {
-            return __("Expired");
+            return __("Expired Status");
         }
     }
 

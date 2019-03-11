@@ -16,235 +16,235 @@ msgstr ""
 
 #: Controller/CategoriesController.php:68;105;141
 msgid "The category has been saved."
-msgstr "La catégorie a été sauvegardée."
+msgstr "The category has been saved."
 
 #: Controller/CategoriesController.php:75;112;148
 msgid "The category could not be saved. Please, try again."
-msgstr "La catégorie n\'a pas pu être sauvegardée. Veuillez réessayer."
+msgstr "The category could not be saved. Please, try again."
 
 #: Controller/CategoriesController.php:174
 msgid "The category has been deleted."
-msgstr "La catégorie a été supprimée."
+msgstr "The category has been deleted."
 
 #: Controller/CategoriesController.php:180
 msgid "The category could not be deleted. Please, try again."
-msgstr "La catégorie n\'a pas pu être supprimée. Veuillez réessayer."
+msgstr "The category could not be deleted. Please, try again."
 
 #: Controller/EquipmentsController.php:81;129;171
 msgid "The equipment has been saved."
-msgstr "L\'équipement a été sauvegardé."
+msgstr "The equipment has been saved."
 
 #: Controller/EquipmentsController.php:87;135;175
 msgid "The equipment could not be saved. Please, try again."
-msgstr "L\'équipement n\'a pas pu être sauvegardé. Veuillez réessayer."
+msgstr "The equipment could not be saved. Please, try again."
 
 #: Controller/EquipmentsController.php:197
 msgid "The equipment has been deleted."
-msgstr "L\'équipement a été supprimé."
+msgstr "The equipment has been deleted."
 
 #: Controller/EquipmentsController.php:203
 msgid "The equipment could not be deleted. Please, try again."
-msgstr "L\'équipement n\'a pas pu être supprimé. Veuillez réessayer."
+msgstr "The equipment could not be deleted. Please, try again."
 
 #: Controller/EquipmentsController.php:243
 msgid "The equipment has been "
-msgstr "L\'équipement a été "
+msgstr "The equipment has been "
 
 #: Controller/EquipmentsController.php:249
 msgid "The equipment could not be "
-msgstr "L\'équipement n\'a pas pu être "
+msgstr "The equipment could not be "
 
 #: Controller/LicencesController.php:95;162;220
 msgid "The licence has been saved."
-msgstr "La licence a été sauvegardée."
+msgstr "The licence has been saved."
 
 #: Controller/LicencesController.php:105;172;224
 msgid "The licence could not be saved. Please, try again."
-msgstr "La licence n\'a pas pu être sauvegardée. Veuillez réessayer."
+msgstr "The licence could not be saved. Please, try again."
 
 #: Controller/LicencesController.php:110;228
 msgid "At least one Product is required. Please, try again."
-msgstr "Au moins un Produit est requis. Veuillez réessayer."
+msgstr "At least one Product is required. Please, try again."
 
 #: Controller/LicencesController.php:255
 msgid "The licence has been deleted."
-msgstr "La licence a été supprimée."
+msgstr "The licence has been deleted."
 
 #: Controller/LicencesController.php:266
 msgid "The licence could not be deleted. Please, try again."
-msgstr "La licence n\'a pas pu être supprimée. Veuillez réessayer."
+msgstr "The licence could not be deleted. Please, try again."
 
 #: Controller/LicencesController.php:316
 msgid "The licence has been "
-msgstr "La licence a été "
+msgstr "The licence has been "
 
 #: Controller/LicencesController.php:327
 msgid "The licence could not be "
-msgstr "La licence n\'a pas pu être "
+msgstr "The licence could not be "
 
 #: Controller/LoansController.php:62;96
 msgid "The loan has been saved."
-msgstr "L\'emprunt a été sauvegardé."
+msgstr "The loan has been saved."
 
 #: Controller/LoansController.php:69;100
 msgid "The loan could not be saved. Please, try again."
-msgstr "L\'emprunt n\'a pas pu être sauvegardé. Veuillez réessayer."
+msgstr "The loan could not be saved. Please, try again."
 
 #: Controller/LoansController.php:133
 msgid "The loan has been returned."
-msgstr "L\'emprunt a été supprimé."
+msgstr "The loan has been returned."
 
 #: Controller/LoansController.php:144;149
 msgid "The loan could not be returned. Please, try again."
-msgstr "L\'emprunt n\'a pas pu être supprimé. Veuillez réessayer."
+msgstr "The loan could not be returned. Please, try again."
 
 #: Controller/MentorsController.php:81;129;166
 msgid "The mentor has been saved."
-msgstr "Le mentor a été sauvegardé."
+msgstr "The mentor has been saved."
 
 #: Controller/MentorsController.php:87;135;170
 msgid "The mentor could not be saved. Please, try again."
-msgstr "Le mentor n\'a pas pu être sauvegardé. Veuillez réessayer."
+msgstr "The mentor could not be saved. Please, try again."
 
 #: Controller/MentorsController.php:192
 msgid "The mentor has been deleted."
-msgstr "Le mentor a été supprimé."
+msgstr "The mentor has been deleted."
 
 #: Controller/MentorsController.php:198
 msgid "The mentor could not be deleted. Please, try again."
-msgstr "Le mentor n\'a pas pu être supprimé. Veuillez réessayer."
+msgstr "The mentor could not be deleted. Please, try again."
 
 #: Controller/MentorsController.php:238
 msgid "The mentor has been "
-msgstr "Le mentor a été "
+msgstr "The mentor has been "
 
 #: Controller/MentorsController.php:244
 msgid "The mentor could not be "
-msgstr "Le mentor n\'a pas pu être "
+msgstr "The mentor could not be "
 
 #: Controller/ProductsController.php:68;106;140
 msgid "The product has been saved."
-msgstr "Le produit a été sauvegardé."
+msgstr "The product has been saved."
 
 #: Controller/ProductsController.php:75;113;144
 msgid "The product could not be saved. Please, try again."
-msgstr "Le produit n\'a pas pu être sauvegardé. Veuillez réessayer."
+msgstr "The product could not be saved. Please, try again."
 
 #: Controller/ProductsController.php:167
 msgid "The product has been deleted."
-msgstr "Le produit a été supprimé."
+msgstr "The product has been deleted."
 
 #: Controller/ProductsController.php:173
 msgid "The product could not be deleted. Please, try again."
-msgstr "Le produit n\'a pas pu être supprimé. Veuillez réessayer."
+msgstr "The product could not be deleted. Please, try again."
 
 #: Controller/RoomsController.php:81;129;166
 msgid "The room has been saved."
-msgstr "La salle a été sauvegardée."
+msgstr "The room has been saved."
 
 #: Controller/RoomsController.php:87;135;170
 msgid "The room could not be saved. Please, try again."
-msgstr "La salle n\'a pas pu être sauvegardée. Veuillez réessayer."
+msgstr "The room could not be saved. Please, try again."
 
 #: Controller/RoomsController.php:192
 msgid "The room has been deleted."
-msgstr "La salle a été supprimée."
+msgstr "The room has been deleted."
 
 #: Controller/RoomsController.php:198
 msgid "The room could not be deleted. Please, try again."
-msgstr "La salle n\'a pas pu être supprimée. Veuillez réessayer."
+msgstr "The room could not be deleted. Please, try again."
 
 #: Controller/RoomsController.php:238
 msgid "The room has been "
-msgstr "La salle a été "
+msgstr "The room has been "
 
 #: Controller/RoomsController.php:244
 msgid "The room could not be "
-msgstr "La salle n\'a pas pu être "
+msgstr "The room could not be "
 
 #: Controller/ServicesController.php:68;107;141
 msgid "The service has been saved."
-msgstr "Le service a été sauvegardé."
+msgstr "The service has been saved."
 
 #: Controller/ServicesController.php:75;114;145
 msgid "The service could not be saved. Please, try again."
-msgstr "Le service n\'a pas pu être sauvegardé. Veuillez réessayer."
+msgstr "The service could not be saved. Please, try again."
 
 #: Controller/ServicesController.php:167
 msgid "The service has been deleted."
-msgstr "Le service a été supprimé."
+msgstr "The service has been deleted."
 
 #: Controller/ServicesController.php:173
 msgid "The service could not be deleted. Please, try again."
-msgstr "Le service n\'a pas pu être supprimé. Veuillez réessayer."
+msgstr "The service could not be deleted. Please, try again."
 
 #: Controller/SkillsController.php:65;102;136
 msgid "The skill has been saved."
-msgstr "La compétence a été sauvegardée."
+msgstr "The skill has been saved."
 
 #: Controller/SkillsController.php:72;109;140
 msgid "The skill could not be saved. Please, try again."
-msgstr "La compétence n\'a pas pu être sauvegardée. Veuillez réessayer."
+msgstr "The skill could not be saved. Please, try again."
 
 #: Controller/SkillsController.php:163
 msgid "The skill has been deleted."
-msgstr "La compétence a été supprimée."
+msgstr "The skill has been deleted."
 
 #: Controller/SkillsController.php:169
 msgid "The skill could not be deleted. Please, try again."
-msgstr "La compétence n\'a pas pu être supprimée. Veuillez réessayer."
+msgstr "The skill could not be deleted. Please, try again."
 
 #: Controller/UsersController.php:52
 msgid "Your email and/or password is incorrect."
-msgstr "Votre adresse courriel et/ou mot de passe est incorrect."
+msgstr "Your email and/or password is incorrect."
 
 #: Controller/UsersController.php:59
 msgid "You are now logged out."
-msgstr "Vous être maintenant déconnecté(e)"
+msgstr "You are now logged out."
 
 #: Controller/UsersController.php:139;194;258
 msgid "The user has been saved."
-msgstr "L\'utilisateur a été sauvegardé."
+msgstr "The user has been saved."
 
 #: Controller/UsersController.php:149;200;262
 msgid "The user could not be saved. Please, try again."
-msgstr "L\'utilisateur n\'a pas pu être sauvegardé. Veuillez réessayer."
+msgstr "The user could not be saved. Please, try again."
 
 #: Controller/UsersController.php:393
 msgid "Your password has been save."
-msgstr "Votre mot de passe a été sauvegardé."
+msgstr "Your password has been save."
 
 #: Controller/UsersController.php:403
 msgid "Could not save your password. Please, try again."
-msgstr "Votre mot de passe n\'a pas pu être sauvegardé. Veuillez réessayer."
+msgstr "Could not save your password. Please, try again."
 
 #: Controller/UsersController.php:406
 msgid "Make sure your new password is the same as the confirmation."
-msgstr "Assurez-vous que votre nouveau mot de passe et sa confirmation sont identiques."
+msgstr "Make sure your new password is the same as the confirmation."
 
 #: Controller/UsersController.php:410
 msgid "Your old password is incorrect."
-msgstr "Votre ancien mot de passe est incorrect."
+msgstr "Your old password is incorrect."
 
 #: Model/Entity/Licence.php:81
 msgid "Not yet active"
-msgstr "Pas encore active"
+msgstr "Not yet active"
 
 #: Model/Entity/Licence.php:85
 msgid "Ongoing"
-msgstr "Active"
+msgstr "Ongoing"
 
 #: Model/Entity/Licence.php:89
 msgid "Infinite"
-msgstr "Infinie"
+msgstr "Infinite"
 
 #: Model/Entity/Licence.php:93
 msgid "Expired Status"
-msgstr "Expirée"
+msgstr "Expired Status"
 
 #: Template/Reports/index.ctp:191
 msgid "Expired Report"
-msgstr "Expirées"
+msgstr "Expired Report"
 
 #: Model/Table/CategoriesTable.php:61
 #: Model/Table/EquipmentsTable.php:71
@@ -254,7 +254,7 @@ msgstr "Expirées"
 #: Model/Table/ServicesTable.php:61
 #: Model/Table/SkillsTable.php:61
 msgid "Name is too long. (Max 50 characters)"
-msgstr "Le nom est trop long. (Max 50 caractères)"
+msgstr "Name is too long. (Max 50 characters)"
 
 #: Model/Table/CategoriesTable.php:62;63
 #: Model/Table/EquipmentsTable.php:72;73
@@ -264,14 +264,14 @@ msgstr "Le nom est trop long. (Max 50 caractères)"
 #: Model/Table/ServicesTable.php:62;63
 #: Model/Table/SkillsTable.php:62;63
 msgid "Name cannot be empty."
-msgstr "Le nom ne peut être vide."
+msgstr "Name cannot be empty."
 
 #: Model/Table/CategoriesTable.php:64;92
 #: Model/Table/RoomsTable.php:74
 #: Model/Table/ServicesTable.php:64;83
 #: Model/Table/SkillsTable.php:64;83
 msgid "This name has already been used."
-msgstr "Ce nom est déjà en utilisation."
+msgstr "This name has already been used."
 
 #: Model/Table/CategoriesTable.php:68
 #: Model/Table/EquipmentsTable.php:77
@@ -282,15 +282,15 @@ msgstr "Ce nom est déjà en utilisation."
 #: Model/Table/ServicesTable.php:68
 #: Model/Table/SkillsTable.php:68
 msgid "Description is too long. (Max 255 characters)"
-msgstr "La decription est trop longue. (Max 255 caractères)"
+msgstr "Description is too long. (Max 255 characters)"
 
 #: Model/Table/CategoriesTable.php:72;76
 msgid "Hourly rate must be in a #.## format."
-msgstr "Le taux horaire doit être dans un format #.##"
+msgstr "Hourly rate must be in a #.## format."
 
 #: Model/Table/CategoriesTable.php:73
 msgid "Hourly rate cannot be empty."
-msgstr "Le taux horaire ne peut être vide."
+msgstr "Hourly rate cannot be empty."
 
 #: Model/Table/EquipmentsTable.php:82
 #: Model/Table/LicencesTable.php:88
@@ -298,7 +298,7 @@ msgstr "Le taux horaire ne peut être vide."
 #: Model/Table/RoomsTable.php:83
 #: Model/Table/UsersTable.php:77
 msgid "Image is too large."
-msgstr "L\'image est trop large."
+msgstr "Image is too large."
 
 #: Model/Table/EquipmentsTable.php:83;84
 #: Model/Table/LicencesTable.php:89;90
@@ -306,84 +306,84 @@ msgstr "L\'image est trop large."
 #: Model/Table/RoomsTable.php:84;85
 #: Model/Table/UsersTable.php:78;79
 msgid "Image is required."
-msgstr "L\'image est requise."
+msgstr "Image is required."
 
 #: Model/Table/LicencesTable.php:77
 msgid "Key is too long. (Max 50 characters)"
-msgstr "La clé de licence est trop longue. (Max 50 caractères)"
+msgstr "Key is too long. (Max 50 characters)"
 
 #: Model/Table/LicencesTable.php:78;79
 msgid "Key cannot be empty."
-msgstr "La clé de licence ne peut être vide."
+msgstr "Key cannot be empty."
 
 #: Model/Table/LicencesTable.php:95;96
 msgid "Start Time cannot be empty."
-msgstr "La date de début ne peut être vide."
+msgstr "Start Time cannot be empty."
 
 #: Model/Table/LicencesTable.php:101
 #: Model/Table/LoansTable.php:92
 msgid "End Time cannot be before Start Time."
-msgstr "La date de fin ne peut pas être avant la date de début."
+msgstr "End Time cannot be before Start Time."
 
 #: Model/Table/LoansTable.php:97
 msgid "The loan period must be in 1 hour intervals"
-msgstr "La période d\'emprunt doit être dans des intervalles d\'une heure."
+msgstr "The loan period must be in 1 hour intervals"
 
 #: Model/Table/LoansTable.php:122
 msgid "The item is already loaned during the period"
-msgstr "Cet objet est déjà emprunté pendant cette période."
+msgstr "The item is already loaned during the period"
 
 #: Model/Table/MentorsTable.php:71
 msgid "Email is too long. (Max 50 characters)"
-msgstr "L\'adresse courriel est trop longue. (Max 50 caractères)"
+msgstr "Email is too long. (Max 50 characters)"
 
 #: Model/Table/MentorsTable.php:72;73
 msgid "Email cannot be empty."
-msgstr "L\'adresse courriel ne peut être vide."
+msgstr "Email cannot be empty."
 
 #: Model/Table/MentorsTable.php:74
 msgid "This email has already been used."
-msgstr "Cette adresse courriel est déjà en utilisation."
+msgstr "This email has already been used."
 
 #: Model/Table/MentorsTable.php:78
 msgid "First Name is too long. (Max 50 characters)"
-msgstr "Le prénom est trop long. (Max 50 caractères)"
+msgstr "First Name is too long. (Max 50 characters)"
 
 #: Model/Table/MentorsTable.php:79;80
 msgid "First Name cannot be empty."
-msgstr "Le prénom ne peut être vide."
+msgstr "First Name cannot be empty."
 
 #: Model/Table/MentorsTable.php:84
 msgid "Last Name is too long. (Max 50 characters)"
-msgstr "Le nom est trop long. (Max 50 caractères)"
+msgstr "Last Name is too long. (Max 50 characters)"
 
 #: Model/Table/MentorsTable.php:85;86
 msgid "Last Name cannot be empty."
-msgstr "Le nom ne peut être vide."
+msgstr "Last Name cannot be empty."
 
 #: Model/Table/ProductsTable.php:68
 msgid "Platform name is too long. (Max 50 characters)"
-msgstr "Le nom de plateforme est trop long. (Max 50 caractères)"
+msgstr "Platform name is too long. (Max 50 characters)"
 
 #: Model/Table/ProductsTable.php:69;70
 msgid "Platform name cannot be empty."
-msgstr "Le nom de plateforme ne peut être vide."
+msgstr "Platform name cannot be empty."
 
 #: Model/Table/ProductsTable.php:82
 msgid "This name & platform combination has already been used."
-msgstr "Cette combinaison nom/plateforme est déjà utilisée."
+msgstr "This name & platform combination has already been used."
 
 #: Model/Table/UsersTable.php:59
 msgid "Please enter an Email."
-msgstr "Veuillez entrer une adresse courriel."
+msgstr "Please enter an Email."
 
 #: Model/Table/UsersTable.php:72
 msgid "You need to pick one."
-msgstr "Vous devez choisir le statut d\'admin."
+msgstr "You need to pick one."
 
 #: Template/Categories/add.ctp:10
 msgid "Add Category"
-msgstr "Ajouter une catégorie"
+msgstr "Add Category"
 
 #: Template/Categories/add.ctp:17
 #: Template/Equipments/add.ctp:39
@@ -396,7 +396,7 @@ msgstr "Ajouter une catégorie"
 #: Template/Skills/add.ctp:16
 #: Template/Users/add.ctp:25
 msgid "Save"
-msgstr "Sauvegarder"
+msgstr "Save"
 
 #: Template/Categories/consult.ctp:10
 #: Template/Equipments/consult.ctp:9
@@ -409,7 +409,7 @@ msgstr "Sauvegarder"
 #: Template/Users/consult.ctp:10
 #: Template/Users/view.ctp:67
 msgid "Edit"
-msgstr "Modifier"
+msgstr "Edit"
 
 #: Template/Categories/consult.ctp:11
 #: Template/Equipments/consult.ctp:10
@@ -421,12 +421,12 @@ msgstr "Modifier"
 #: Template/Skills/consult.ctp:10
 #: Template/Users/consult.ctp:11
 msgid "Done"
-msgstr "Terminer"
+msgstr "Done"
 
 #: Template/Categories/consult.ctp:13
 #: Template/Reports/index.ctp:359
 msgid "Category"
-msgstr "Catégorie"
+msgstr "Category"
 
 #: Template/Categories/consult.ctp:20
 #: Template/Equipments/consult.ctp:39
@@ -438,11 +438,11 @@ msgstr "Catégorie"
 #: Template/Skills/consult.ctp:18
 #: Template/Users/consult.ctp:41
 msgid "Cancel"
-msgstr "Annuler"
+msgstr "Cancel"
 
 #: Template/Categories/consult.ctp:22
 msgid "Delete category"
-msgstr "Supprimer la catégorie"
+msgstr "Delete category"
 
 #: Template/Categories/consult.ctp:22
 #: Template/Categories/index.ctp:66
@@ -453,15 +453,15 @@ msgstr "Supprimer la catégorie"
 #: Template/Skills/consult.ctp:20
 #: Template/Skills/index.ctp:63
 msgid "Are you sure you want to delete {0}?"
-msgstr "Êtes-vous sûr(e) de vouloir supprimer {0} ?"
+msgstr "Are you sure you want to delete {0}?"
 
 #: Template/Categories/consult.ctp:22
 msgid "Are you sure you want to delete {0}? {1} equipments are associated with it."
-msgstr "Êtes-vous sûr(e) de vouloir supprimer {0} ? {1} équipements y sont associés."
+msgstr "Are you sure you want to delete {0}? {1} equipments are associated with it."
 
 #: Template/Categories/consult.ctp:25
 msgid "Related Equipments"
-msgstr "Équipements Associés"
+msgstr "Related Equipments"
 
 #: Template/Categories/consult.ctp:30
 #: Template/Categories/index.ctp:32
@@ -485,7 +485,7 @@ msgstr "Équipements Associés"
 #: Template/Services/index.ctp:32
 #: Template/Skills/index.ctp:32
 msgid "Name"
-msgstr "Nom"
+msgstr "Name"
 
 #: Template/Categories/consult.ctp:31
 #: Template/Categories/index.ctp:33
@@ -521,7 +521,7 @@ msgstr "Description"
 #: Template/Equipments/index.ctp:14;55
 #: Template/Loans/return.ctp:103
 msgid "Categories"
-msgstr "Catégories"
+msgstr "Categories"
 
 #: Template/Categories/consult.ctp:33
 #: Template/Equipments/index.ctp:56
@@ -534,7 +534,7 @@ msgstr "Catégories"
 #: Template/Services/consult.ctp:32
 #: Template/Skills/consult.ctp:34
 msgid "Available"
-msgstr "Disponible"
+msgstr "Available"
 
 #: Template/Categories/consult.ctp:34
 #: Template/Categories/index.ctp:36
@@ -568,21 +568,21 @@ msgstr "Actions"
 #: Template/Services/consult.ctp:54
 #: Template/Skills/consult.ctp:58
 msgid "Unlink"
-msgstr "Désassocier"
+msgstr "Unlink"
 
 #: Template/Categories/consult.ctp:54
 #: Template/Products/consult.ctp:57
 #: Template/Services/consult.ctp:54
 #: Template/Skills/consult.ctp:58
 msgid "Are you sure you want to delete the association between {0} and {1}?"
-msgstr "Êtes-vous sûr(e) de vouloir désassocier {0} et {1} ?"
+msgstr "Are you sure you want to delete the association between {0} and {1}?"
 
 #: Template/Categories/consult.ctp:73
 #: Template/Products/consult.ctp:71
 #: Template/Services/consult.ctp:68
 #: Template/Skills/consult.ctp:72
 msgid "Are you sure you want to modify {0}? {1} items are associated with it."
-msgstr "Êtes-vous sûr(e) de vouloir modifier {0} ? {1} objets y sont associés."
+msgstr "Are you sure you want to modify {0}? {1} items are associated with it."
 
 #: Template/Categories/consult.ctp:85
 #: Template/Equipments/consult.ctp:81
@@ -594,7 +594,7 @@ msgstr "Êtes-vous sûr(e) de vouloir modifier {0} ? {1} objets y sont associés
 #: Template/Skills/consult.ctp:83
 #: Template/Users/consult.ctp:82
 msgid "Cancel all your changes?"
-msgstr "Annuler tous vos changements?"
+msgstr "Cancel all your changes?"
 
 #: Template/Categories/index.ctp:14
 #: Template/Equipments/index.ctp:11
@@ -603,7 +603,7 @@ msgstr "Annuler tous vos changements?"
 #: Template/Reports/index.ctp:43
 #: Template/Users/profile.ctp:37
 msgid "Equipments"
-msgstr "Équipements"
+msgstr "Equipments"
 
 #: Template/Categories/index.ctp:25
 #: Template/Equipments/index.ctp:25
@@ -618,18 +618,18 @@ msgstr "Équipements"
 #: Template/Users/index.ctp:22
 #: Template/Users/profile.ctp:19
 msgid "Search"
-msgstr "Recherche"
+msgstr "Search"
 
 #: Template/Categories/index.ctp:34
 msgid "Hourly Rate"
-msgstr "Taux horaire"
+msgstr "Hourly Rate"
 
 #: Template/Categories/index.ctp:35
 #: Template/Equipments/add.ctp:32
 #: Template/Equipments/consult.ctp:50
 #: Template/Loans/return.ctp:109
 msgid "Equipment count"
-msgstr "Équipements associés"
+msgstr "Equipment count"
 
 #: Template/Categories/index.ctp:66;68
 #: Template/Equipments/index.ctp:130
@@ -642,7 +642,7 @@ msgstr "Équipements associés"
 #: Template/Users/edit.ctp:11
 #: Template/Users/view.ctp:68
 msgid "Delete"
-msgstr "Supprimer"
+msgstr "Delete"
 
 #: Template/Categories/index.ctp:68
 #: Template/Products/consult.ctp:21
@@ -652,23 +652,23 @@ msgstr "Supprimer"
 #: Template/Skills/consult.ctp:20
 #: Template/Skills/index.ctp:65
 msgid "Are you sure you want to delete {0}? {1} items are associated with it."
-msgstr "Êtes-vous sûr(e) de vouloir supprimer {0} ? {1} objets y sont associés."
+msgstr "Are you sure you want to delete {0}? {1} items are associated with it."
 
 #: Template/Equipments/add.ctp:10
 msgid "Add Equipment"
-msgstr "Ajouter un Équipement"
+msgstr "Add Equipment"
 
 #: Template/Equipments/add.ctp:48
 msgid "Are you sure you want to remove this category?"
-msgstr "Êtes-vous sûr(e) de vouloir retirer cette Catégorie?"
+msgstr "Are you sure you want to remove this category?"
 
 #: Template/Equipments/consult.ctp:12
 msgid "Edit Equipment"
-msgstr "Modifier un Équipement"
+msgstr "Edit Equipment"
 
 #: Template/Equipments/consult.ctp:31
 msgid "Deactivate equipment"
-msgstr "Désactiver l\'Équipement"
+msgstr "Deactivate equipment"
 
 #: Template/Equipments/consult.ctp:31
 #: Template/Equipments/index.ctp:126
@@ -680,11 +680,11 @@ msgstr "Désactiver l\'Équipement"
 #: Template/Rooms/index.ctp:125
 #: Template/Users/consult.ctp:33
 msgid "Are you sure you want to deactivate {0}?"
-msgstr "Êtes-vous sûr(e) de vouloir désactiver {0} ?"
+msgstr "Are you sure you want to deactivate {0}?"
 
 #: Template/Equipments/consult.ctp:33
 msgid "Reactivate equipment"
-msgstr "Réactiver l\'Équipement"
+msgstr "Reactivate equipment"
 
 #: Template/Equipments/consult.ctp:33
 #: Template/Equipments/index.ctp:128
@@ -696,11 +696,11 @@ msgstr "Réactiver l\'Équipement"
 #: Template/Rooms/index.ctp:127
 #: Template/Users/consult.ctp:35
 msgid "Are you sure you want to reactivate {0}?"
-msgstr "Êtes-vous sûr(e) de vouloir réactiver {0} ?"
+msgstr "Are you sure you want to reactivate {0}?"
 
 #: Template/Equipments/consult.ctp:35
 msgid "Delete equipment"
-msgstr "Supprimer cet Équipement"
+msgstr "Delete equipment"
 
 #: Template/Equipments/consult.ctp:35
 #: Template/Equipments/index.ctp:130
@@ -712,7 +712,7 @@ msgstr "Supprimer cet Équipement"
 #: Template/Rooms/index.ctp:129
 #: Template/Users/consult.ctp:37
 msgid "Are you sure you want to PERMANENTLY delete {0}?"
-msgstr "Êtes-vous sûr(e) de vouloir supprimer {0} de manière PERMANENTE ?"
+msgstr "Are you sure you want to PERMANENTLY delete {0}?"
 
 #: Template/Equipments/consult.ctp:174
 #: Template/Licences/add.ctp:110
@@ -723,7 +723,7 @@ msgstr "Êtes-vous sûr(e) de vouloir supprimer {0} de manière PERMANENTE ?"
 #: Template/Rooms/consult.ctp:173
 #: Template/Users/consult.ctp:170
 msgid "Remove"
-msgstr "Retirer"
+msgstr "Remove"
 
 #: Template/Equipments/index.ctp:34
 #: Template/Licences/index.ctp:34
@@ -733,7 +733,7 @@ msgstr "Retirer"
 #: Template/Rooms/index.ctp:34
 #: Template/Users/profile.ctp:24
 msgid "Filters"
-msgstr "Filtres"
+msgstr "Filters"
 
 #: Template/Equipments/index.ctp:37
 #: Template/Licences/index.ctp:37
@@ -741,11 +741,11 @@ msgstr "Filtres"
 #: Template/Mentors/index.ctp:37
 #: Template/Rooms/index.ctp:37
 msgid "Search Available"
-msgstr "Rechercher parmi les disponibles"
+msgstr "Search Available"
 
 #: Template/Equipments/index.ctp:38
 msgid "Search by Equipments"
-msgstr "Rechercher dans les Équipements"
+msgstr "Search by Equipments"
 
 #: Template/Equipments/index.ctp:39
 #: Template/Licences/index.ctp:39
@@ -753,11 +753,11 @@ msgstr "Rechercher dans les Équipements"
 #: Template/Mentors/index.ctp:39
 #: Template/Rooms/index.ctp:39
 msgid "Search Unavailable"
-msgstr "Rechercher parmi les non-disponibles"
+msgstr "Search Unavailable"
 
 #: Template/Equipments/index.ctp:40
 msgid "Search by Categories"
-msgstr "Rechercher dans les Catégories"
+msgstr "Search by Categories"
 
 #: Template/Equipments/index.ctp:44
 #: Template/Licences/index.ctp:45
@@ -765,7 +765,7 @@ msgstr "Rechercher dans les Catégories"
 #: Template/Rooms/index.ctp:44
 #: Template/Users/index.ctp:33
 msgid "Activated"
-msgstr "Activé(e)s"
+msgstr "Activated"
 
 #: Template/Equipments/index.ctp:45
 #: Template/Licences/index.ctp:46
@@ -773,27 +773,27 @@ msgstr "Activé(e)s"
 #: Template/Rooms/index.ctp:45
 #: Template/Users/index.ctp:34
 msgid "Archived"
-msgstr "Archivé(e)s"
+msgstr "Archived"
 
 #: Template/Equipments/index.ctp:126
 #: Template/Licences/index.ctp:128
 #: Template/Mentors/index.ctp:127
 #: Template/Rooms/index.ctp:125
 msgid "Deactivate"
-msgstr "Désactiver"
+msgstr "Deactivate"
 
 #: Template/Equipments/index.ctp:128
 #: Template/Licences/index.ctp:130
 #: Template/Mentors/index.ctp:129
 #: Template/Rooms/index.ctp:127
 msgid "Reactivate"
-msgstr "Réactiver"
+msgstr "Reactivate"
 
 #: Template/Layout/default.ctp:51
 #: Template/Loans/index.ctp:13
 #: Template/Users/consult.ctp:45
 msgid "Loans"
-msgstr "Emprunts"
+msgstr "Loans"
 
 #: Template/Layout/default.ctp:52
 #: Template/Loans/index.ctp:42
@@ -811,7 +811,7 @@ msgstr "Mentors"
 #: Template/Services/index.ctp:14
 #: Template/Users/profile.ctp:35
 msgid "Rooms"
-msgstr "Salles"
+msgstr "Rooms"
 
 #: Template/Layout/default.ctp:54
 #: Template/Licences/index.ctp:11
@@ -824,34 +824,34 @@ msgstr "Licences"
 
 #: Template/Layout/default.ctp:56
 msgid "Reports"
-msgstr "Rapports"
+msgstr "Reports"
 
 #: Template/Layout/default.ctp:57
 #: Template/Users/index.ctp:11
 msgid "Users"
-msgstr "Utilisateurs"
+msgstr "Users"
 
 #: Template/Layout/default.ctp:59
 msgid "Profile"
-msgstr "Profil"
+msgstr "Profile"
 
 #: Template/Layout/default.ctp:70
 msgid "Logout"
-msgstr "Déconnexion"
+msgstr "Logout"
 
 #: Template/Layout/error.ctp:35
 #: Template/Error/error400.ctp:36
 #: Template/Error/error500.ctp:41
 msgid "Error"
-msgstr "Erreur"
+msgstr "Error"
 
 #: Template/Layout/error.ctp:43
 msgid "Back"
-msgstr "Retour"
+msgstr "Back"
 
 #: Template/Licences/add.ctp:10
 msgid "Add Licence"
-msgstr "Ajouter une Licence"
+msgstr "Add Licence"
 
 #: Template/Licences/add.ctp:34
 #: Template/Licences/consult.ctp:51
@@ -860,105 +860,105 @@ msgstr "Ajouter une Licence"
 #: Template/Products/consult.ctp:31
 #: Template/Products/index.ctp:11
 msgid "Products"
-msgstr "Produits"
+msgstr "Products"
 
 #: Template/Licences/add.ctp:41
 #: Template/Products/index.ctp:33
 #: Template/Reports/index.ctp:188
 #: Template/Loans/return.ctp:81
 msgid "Platform"
-msgstr "Plateforme"
+msgstr "Platform"
 
 #: Template/Licences/add.ctp:43
 #: Template/Licences/consult.ctp:59
 #: Template/Loans/return.ctp:83
 #: Template/Products/index.ctp:35
 msgid "Licence count"
-msgstr "Licences associées"
+msgstr "Licence count"
 
 #: Template/Licences/add.ctp:59
 msgid "Are you sure you want to remove this product?"
-msgstr "Êtes-vous sûr(e) de vouloir retirer ce Produit ?"
+msgstr "Are you sure you want to remove this product?"
 
 #: Template/Licences/consult.ctp:12
 msgid "Edit Licence"
-msgstr "Modifier une Licence"
+msgstr "Edit Licence"
 
 #: Template/Licences/consult.ctp:41
 msgid "Deactivate licence"
-msgstr "Désactiver cette Licence"
+msgstr "Deactivate licence"
 
 #: Template/Licences/consult.ctp:43
 msgid "Reactivate licence"
-msgstr "Réactiver cette Licence"
+msgstr "Reactivate licence"
 
 #: Template/Licences/consult.ctp:45
 msgid "Delete licence"
-msgstr "Supprimer cette Licence"
+msgstr "Delete licence"
 
 #: Template/Licences/consult.ctp:57
 #: Template/Products/consult.ctp:12
 #: Template/Reports/index.ctp:187
 msgid "Product"
-msgstr "Produit"
+msgstr "Product"
 
 #: Template/Licences/consult.ctp:115
 msgid "Cannot remove Product. A Licence must always have at least one Product."
-msgstr "Impossible de retirer ce Produit. Une Licence doit toujours avoir au moins un Produit."
+msgstr "Cannot remove Product. A Licence must always have at least one Product."
 
 #: Template/Licences/index.ctp:38
 msgid "Search by Licences"
-msgstr "Rechercher dans les Licences"
+msgstr "Search by Licences"
 
 #: Template/Licences/index.ctp:40
 msgid "Search by Products"
-msgstr "Rechercher dans les Produits"
+msgstr "Search by Products"
 
 #: Template/Licences/index.ctp:57
 #: Template/Loans/add.ctp:335
 #: Template/Products/consult.ctp:32
 msgid "Status"
-msgstr "Statut"
+msgstr "Status"
 
 #: Template/Loans/add.ctp:13
 msgid "Add Loan"
-msgstr "Ajouter un Emprunt"
+msgstr "Add Loan"
 
 #: Template/Loans/add.ctp:21
 msgid "Selected User: "
-msgstr "Utilisateur sélectionné: "
+msgstr "Selected User: "
 
 #: Template/Loans/add.ctp:28
 #: Template/Users/index.ctp:41
 msgid "Email Adress"
-msgstr "Adresse Courriel"
+msgstr "Email Adress"
 
 #: Template/Loans/add.ctp:29
 #: Template/Users/index.ctp:42
 #: Template/Users/view.ctp:30
 msgid "Admin Status"
-msgstr "Statut d\'admin"
+msgstr "Admin Status"
 
 #: Template/Loans/add.ctp:48
 #: Template/Loans/index.ctp:39
 #: Template/Users/profile.ctp:31
 msgid "Item type"
-msgstr "Type d\'objet"
+msgstr "Item type"
 
 #: Template/Loans/add.ctp:52
 msgid "Selected Item: "
-msgstr "Objet sélectionné: "
+msgstr "Selected Item: "
 
 #: Template/Loans/add.ctp:58
 #: Template/Loans/index.ctp:36
 #: Template/Users/profile.ctp:27
 msgid "Search by Items"
-msgstr "Recherche par Objets"
+msgstr "Search by Items"
 
 #: Template/Loans/add.ctp:60
 #: Template/Users/profile.ctp:28
 msgid "Search by Labels"
-msgstr "Recherche par Étiquettes"
+msgstr "Search by Labels"
 
 #: Template/Loans/add.ctp:220
 #: Template/Mentors/index.ctp:52
@@ -966,97 +966,97 @@ msgstr "Recherche par Étiquettes"
 #: Template/Skills/consult.ctp:29
 #: Template/Users/view.ctp:22
 msgid "Email"
-msgstr "Adresse courriel"
+msgstr "Email"
 
 #: Template/Loans/add.ctp:221
 msgid "First name"
-msgstr "Prénom"
+msgstr "First name"
 
 #: Template/Loans/add.ctp:222
 msgid "Last name"
-msgstr "Nom"
+msgstr "Last name"
 
 #: Template/Loans/add.ctp:224
 msgid "Skills list"
-msgstr "Liste de Compétences"
+msgstr "Skills list"
 
 #: Template/Loans/add.ctp:281
 msgid "Services list"
-msgstr "Liste de Services"
+msgstr "Services list"
 
 #: Template/Loans/add.ctp:334
 msgid "Products list"
-msgstr "Liste de Produits"
+msgstr "Products list"
 
 #: Template/Loans/add.ctp:389
 msgid "Categories list"
-msgstr "Liste de Catégories"
+msgstr "Categories list"
 
 #: Template/Loans/add.ctp:454
 msgid "You cannot select this item, it is not available during the time period."
-msgstr "Vous ne pouvez pas sélectionner cet objet, il n\'est pas disponible pendant cette période."
+msgstr "You cannot select this item, it is not available during the time period."
 
 #: Template/Loans/index.ctp:37
 #: Template/Users/profile.ctp:29
 msgid "Search by Users"
-msgstr "Recherche par Utilisateurs"
+msgstr "Search by Users"
 
 #: Template/Loans/index.ctp:41
 #: Template/Users/profile.ctp:33
 msgid "All"
-msgstr "Tous"
+msgstr "All"
 
 #: Template/Loans/index.ctp:48;68;80
 #: Template/Loans/return.ctp:137
 #: Template/Users/profile.ctp:40;59
 msgid "Start time"
-msgstr "Heure de début"
+msgstr "Start time"
 
 #: Template/Loans/index.ctp:51;69;81
 #: Template/Loans/return.ctp:141
 #: Template/Users/profile.ctp:43;60
 msgid "End time"
-msgstr "Heure de fin"
+msgstr "End time"
 
 #: Template/Loans/index.ctp:56
 #: Template/Users/profile.ctp:48
 msgid "Current"
-msgstr "En cours"
+msgstr "Current"
 
 #: Template/Loans/index.ctp:57;82
 #: Template/Users/consult.ctp:53
 #: Template/Users/profile.ctp:49
 #: Template/Users/view.ctp:50
 msgid "Returned Tab"
-msgstr "Retournés"
+msgstr "Returned Tab"
 
 #: Template/Loans/index.ctp:57;82
 #: Template/Loans/return.ctp:145
 msgid "Returned time"
-msgstr "Heure de retour"
+msgstr "Returned time"
 
 #: Template/Loans/index.ctp:64;76
 #: Template/Users/profile.ctp:56
 msgid "Item"
-msgstr "Objet"
+msgstr "Item"
 
 #: Template/Loans/index.ctp:66;78
 #: Template/Users/profile.ctp:58
 msgid "Labels"
-msgstr "Étiquettes"
+msgstr "Labels"
 
 #: Template/Loans/index.ctp:67;79
 msgid "User"
-msgstr "Utilisateur"
+msgstr "User"
 
 #: Template/Loans/index.ctp:133
 #: Template/Loans/return.ctp:176
 msgid "Return"
-msgstr "Retourner"
+msgstr "Return"
 
 #: Template/Loans/return.ctp:14
 msgid "Return Loan"
-msgstr "Retour d\'Emprunt"
+msgstr "Return Loan"
 
 #: Template/Loans/return.ctp:26
 #: Template/Mentors/add.ctp:25
@@ -1065,14 +1065,14 @@ msgstr "Retour d\'Emprunt"
 #: Template/Skills/consult.ctp:33
 #: Template/Skills/index.ctp:11
 msgid "Skills"
-msgstr "Compétences"
+msgstr "Skills"
 
 #: Template/Loans/return.ctp:32
 #: Template/Mentors/add.ctp:33
 #: Template/Mentors/consult.ctp:51
 #: Template/Skills/index.ctp:34
 msgid "Mentor count"
-msgstr "Mentors associés"
+msgstr "Mentor count"
 
 #: Template/Loans/return.ctp:51
 #: Template/Reports/index.ctp:257
@@ -1089,150 +1089,150 @@ msgstr "Services"
 #: Template/Rooms/consult.ctp:48
 #: Template/Services/index.ctp:34
 msgid "Room count"
-msgstr "Salles associées"
+msgstr "Room count"
 
 #: Template/Loans/return.ctp:132
 msgid "Statistics"
-msgstr "Statistiques"
+msgstr "Statistics"
 
 #: Template/Loans/return.ctp:152
 msgid "Overtime"
-msgstr "Retard"
+msgstr "Overtime"
 
 #: Template/Loans/return.ctp:156
 msgid "Total hours late"
-msgstr "Heures de retard total"
+msgstr "Total hours late"
 
 #: Template/Loans/return.ctp:160
 msgid "Hourly rate"
-msgstr "Taux horaire"
+msgstr "Hourly rate"
 
 #: Template/Loans/return.ctp:164
 #: Template/Reports/index.ctp:361
 msgid "Overtime fee"
-msgstr "Frais de retard"
+msgstr "Overtime fee"
 
 #: Template/Loans/return.ctp:181
 msgid "Are you sure you want to return this loan? "
-msgstr "Êtes-vous sûr(e) vous voulez retourner cet emprunt ? "
+msgstr "Are you sure you want to return this loan? "
 
 #: Template/Loans/return.ctp:181
 msgid "This loan has {0}$ in overtime fees."
-msgstr "Cet emprunt a des frais de retard de {0}$."
+msgstr "This loan has {0}$ in overtime fees."
 
 #: Template/Mentors/add.ctp:10
 msgid "Add Mentor"
-msgstr "Ajouter un Mentor"
+msgstr "Add Mentor"
 
 #: Template/Mentors/add.ctp:64
 msgid "Are you sure you want to remove this skill?"
-msgstr "Êtes-vous sûr(e) de vouloir retirer cette Compétence ?"
+msgstr "Are you sure you want to remove this skill?"
 
 #: Template/Mentors/consult.ctp:12
 msgid "Edit Mentor"
-msgstr "Modifier un Mentor"
+msgstr "Edit Mentor"
 
 #: Template/Mentors/consult.ctp:32
 msgid "Deactivate mentor"
-msgstr "Désactiver ce Mentor"
+msgstr "Deactivate mentor"
 
 #: Template/Mentors/consult.ctp:34
 msgid "Reactivate mentor"
-msgstr "Réactiver ce Mentor"
+msgstr "Reactivate mentor"
 
 #: Template/Mentors/consult.ctp:36
 msgid "Delete mentor"
-msgstr "Supprimer ce Mentor"
+msgstr "Delete mentor"
 
 #: Template/Mentors/index.ctp:38
 msgid "Search by Mentors"
-msgstr "Rechercher dans les Mentors"
+msgstr "Search by Mentors"
 
 #: Template/Mentors/index.ctp:40
 msgid "Search by Skills"
-msgstr "Rechercher dans les Compétences"
+msgstr "Search by Skills"
 
 #: Template/Mentors/index.ctp:53
 #: Template/Skills/consult.ctp:30
 msgid "First Name"
-msgstr "Prénom"
+msgstr "First Name"
 
 #: Template/Mentors/index.ctp:54
 #: Template/Skills/consult.ctp:31
 msgid "Last Name"
-msgstr "Nom"
+msgstr "Last Name"
 
 #: Template/Products/add.ctp:10
 msgid "Add Product"
-msgstr "Ajouter un Produit"
+msgstr "Add Product"
 
 #: Template/Products/consult.ctp:21
 msgid "Delete product"
-msgstr "Supprimer ce Produit"
+msgstr "Delete product"
 
 #: Template/Products/consult.ctp:24
 msgid "Related Licences"
-msgstr "Licences associées"
+msgstr "Related Licences"
 
 #: Template/Reports/index.ctp:11
 msgid "Report settings"
-msgstr "Options du Rapport"
+msgstr "Report settings"
 
 #: Template/Reports/index.ctp:14
 msgid "Date Presets"
-msgstr "Intervalles Prédéfinies"
+msgstr "Date Presets"
 
 #: Template/Reports/index.ctp:16
 msgid "This year"
-msgstr "Cette année"
+msgstr "This year"
 
 #: Template/Reports/index.ctp:17
 msgid "Last year"
-msgstr "L\'année dernière"
+msgstr "Last year"
 
 #: Template/Reports/index.ctp:18
 msgid "This month"
-msgstr "Ce mois-ci"
+msgstr "This month"
 
 #: Template/Reports/index.ctp:19
 msgid "Last month"
-msgstr "Le mois dernier"
+msgstr "Last month"
 
 #: Template/Reports/index.ctp:20
 msgid "This week"
-msgstr "Cette semaine"
+msgstr "This week"
 
 #: Template/Reports/index.ctp:21
 msgid "Last week"
-msgstr "La semaine dernière"
+msgstr "Last week"
 
 #: Template/Reports/index.ctp:22
 msgid "Custom"
-msgstr "Personnalisé"
+msgstr "Custom"
 
 #: Template/Reports/index.ctp:27
 msgid "To"
-msgstr "À"
+msgstr "To"
 
 #: Template/Reports/index.ctp:32
 msgid "From"
-msgstr "De"
+msgstr "From"
 
 #: Template/Reports/index.ctp:38
 msgid "Report type"
-msgstr "Type de Rapport"
+msgstr "Report type"
 
 #: Template/Reports/index.ctp:48
 msgid "Generate report"
-msgstr "Générer le Rapport"
+msgstr "Generate report"
 
 #: Template/Reports/index.ctp:98
 msgid "Hours loaned"
-msgstr "Heures d\'emprunt"
+msgstr "Hours loaned"
 
 #: Template/Reports/index.ctp:99
 msgid "Times loaned"
-msgstr "Quantité d\'emprunts"
+msgstr "Times loaned"
 
 #: Template/Reports/index.ctp:189
 msgid "Licence"
@@ -1240,19 +1240,19 @@ msgstr "Licence"
 
 #: Template/Reports/index.ctp:190
 msgid "Used"
-msgstr "Utilisé"
+msgstr "Used"
 
 #: Template/Reports/index.ctp:192
 msgid "Uses"
-msgstr "Utilisations"
+msgstr "Uses"
 
 #: Template/Reports/index.ctp:193
 msgid "% Used"
-msgstr "% d\'utilisation"
+msgstr "% Used"
 
 #: Template/Reports/index.ctp:258
 msgid "Total by room"
-msgstr "Total par chambre"
+msgstr "Total by room"
 
 #: Template/Reports/index.ctp:327
 msgid "Total"
@@ -1260,51 +1260,51 @@ msgstr "Total"
 
 #: Template/Reports/index.ctp:360
 msgid "Time loaned"
-msgstr "Durée d\'emprunt"
+msgstr "Time loaned"
 
 #: Template/Reports/index.ctp:362
 msgid "Late loans"
-msgstr "Emprunts en retard"
+msgstr "Late loans"
 
 #: Template/Reports/index.ctp:415
 msgid "\"From\" date cannot be higher than \"To\" date."
-msgstr "La Date \"De\" ne peut être après la Date \"À\""
+msgstr "\"From\" date cannot be higher than \"To\" date."
 
 #: Template/Rooms/add.ctp:10
 msgid "Add Room"
-msgstr "Ajouter une Salle"
+msgstr "Add Room"
 
 #: Template/Rooms/add.ctp:63
 msgid "Are you sure you want to remove this service?"
-msgstr "Êtes-vous sûr(e) de vouloir retirer ce Service ?"
+msgstr "Are you sure you want to remove this service?"
 
 #: Template/Rooms/consult.ctp:12
 msgid "Edit Room"
-msgstr "Modifier une Salle"
+msgstr "Edit Room"
 
 #: Template/Rooms/consult.ctp:29
 msgid "Deactivate room"
-msgstr "Désactiver cette Salle"
+msgstr "Deactivate room"
 
 #: Template/Rooms/consult.ctp:31
 msgid "Reactivate room"
-msgstr "Réactiver cette Salle"
+msgstr "Reactivate room"
 
 #: Template/Rooms/consult.ctp:33
 msgid "Delete room"
-msgstr "Supprimer cette Salle"
+msgstr "Delete room"
 
 #: Template/Rooms/index.ctp:38
 msgid "Search by Rooms"
-msgstr "Rechercher dans les Salles"
+msgstr "Search by Rooms"
 
 #: Template/Rooms/index.ctp:40
 msgid "Search by Services"
-msgstr "Rechercher dans les Services"
+msgstr "Search by Services"
 
 #: Template/Services/add.ctp:10
 msgid "Add Service"
-msgstr "Ajouter un Service"
+msgstr "Add Service"
 
 #: Template/Services/consult.ctp:12
 msgid "Service"
@@ -1312,262 +1312,262 @@ msgstr "Service"
 
 #: Template/Services/consult.ctp:20
 msgid "Delete service"
-msgstr "Supprimer ce Service"
+msgstr "Delete service"
 
 #: Template/Services/consult.ctp:24
 msgid "Related Rooms"
-msgstr "Salles associées"
+msgstr "Related Rooms"
 
 #: Template/Skills/add.ctp:10
 msgid "Add Skill"
-msgstr "Ajouter une Compétence"
+msgstr "Add Skill"
 
 #: Template/Skills/consult.ctp:12
 msgid "Skill"
-msgstr "Compétence"
+msgstr "Skill"
 
 #: Template/Skills/consult.ctp:20
 msgid "Delete skill"
-msgstr "Supprimer cette Compétence"
+msgstr "Delete skill"
 
 #: Template/Skills/consult.ctp:24
 msgid "Related Mentors"
-msgstr "Mentors associés"
+msgstr "Related Mentors"
 
 #: Template/Users/add.ctp:11
 msgid "Add User"
-msgstr "Ajouter un Utilisateur"
+msgstr "Add User"
 
 #: Template/Users/change_password.ctp:2
 msgid "Change your password."
-msgstr "Changement de mot de passe"
+msgstr "Change your password."
 
 #: Template/Users/change_password.ctp:7
 msgid "Change it!"
-msgstr "Changer"
+msgstr "Change it!"
 
 #: Template/Users/consult.ctp:13
 msgid "Edit User"
-msgstr "Modifier cet Utilisateur"
+msgstr "Edit User"
 
 #: Template/Users/consult.ctp:33
 msgid "Deactivate user"
-msgstr "Désactiver cet Utilisateur"
+msgstr "Deactivate user"
 
 #: Template/Users/consult.ctp:35
 msgid "Reactivate user"
-msgstr "Réactiver cet Utilisateur"
+msgstr "Reactivate user"
 
 #: Template/Users/consult.ctp:37
 msgid "Delete user"
-msgstr "Supprimer cet Utilisateur"
+msgstr "Delete user"
 
 #: Template/Users/consult.ctp:50
 msgid "Loan type"
-msgstr "Type d\'Emprunt"
+msgstr "Loan type"
 
 #: Template/Users/consult.ctp:51
 msgid "Start date"
-msgstr "Date de début"
+msgstr "Start date"
 
 #: Template/Users/consult.ctp:52
 msgid "End Date"
-msgstr "Date de fin"
+msgstr "End Date"
 
 #: Template/Users/consult.ctp:54
 #: Template/Users/profile.ctp:61
 msgid "Overtime Fee"
-msgstr "Frais de Retard"
+msgstr "Overtime Fee"
 
 #: Template/Users/login.ctp:5;9
 msgid "Login"
-msgstr "Connexion"
+msgstr "Login"
 
 #: Template/Users/profile.ctp:9
 msgid "Change password"
-msgstr "Changement de mot de passe"
+msgstr "Change password"
 
 #: Template/Users/profile.ctp:12
 msgid "Related Loans"
-msgstr "Emprunts associés"
+msgstr "Related Loans"
 
 #: Template/Error/error400.ctp:37
 msgid "The requested address {0} was not found on this server."
-msgstr "L\'adresse demandée {0} n\'a pas été trouvée sur ce serveur."
+msgstr "The requested address {0} was not found on this server."
 
 #: Template/Error/error500.ctp:39
 msgid "An Internal Error Has Occurred"
-msgstr "Une Erreur Interne S\'est Produite"
+msgstr "An Internal Error Has Occurred"
 
 #: Controller/Component/AuthComponent.php:500
 msgid "You are not authorized to access that location."
-msgstr "Vous n\'êtes pas autorisé(e) à accéder à cet adresse."
+msgstr "You are not authorized to access that location."
 
 #: Controller/Component/CsrfComponent.php:182
 #: Http/Middleware/CsrfProtectionMiddleware.php:196
 msgid "Missing CSRF token cookie"
-msgstr "Cookie du jeton CSRF manquant"
+msgstr "Missing CSRF token cookie"
 
 #: Controller/Component/CsrfComponent.php:186
 #: Http/Middleware/CsrfProtectionMiddleware.php:200
 msgid "CSRF token mismatch."
-msgstr "Non-concordance du jeton CSRF."
+msgstr "CSRF token mismatch."
 
 #: Error/ExceptionRenderer.php:301
 msgid "Not Found"
-msgstr "Introuvable"
+msgstr "Not Found"
 
 #: Error/ExceptionRenderer.php:303
 msgid "An Internal Error Has Occurred."
-msgstr "Une Erreur Interne S\'est Produite."
+msgstr "An Internal Error Has Occurred."
 
 #: Http/Response.php:2630
 msgid "The requested file contains `..` and will not be read."
-msgstr "Le fichier demandé contient `..` et ne peut pas être lu."
+msgstr "The requested file contains `..` and will not be read."
 
 #: Http/Response.php:2651
 msgid "The requested file was not found"
-msgstr "Le fichier demandé est introuvable"
+msgstr "The requested file was not found"
 
 #: I18n/Number.php:90
 msgid "{0,number,#,###.##} KB"
-msgstr "{0,number,#,###.##} Ko"
+msgstr "{0,number,#,###.##} KB"
 
 #: I18n/Number.php:92
 msgid "{0,number,#,###.##} MB"
-msgstr "{0,number,#,###.##} Mo"
+msgstr "{0,number,#,###.##} MB"
 
 #: I18n/Number.php:94
 msgid "{0,number,#,###.##} GB"
-msgstr "{0,number,#,###.##} Go"
+msgstr "{0,number,#,###.##} GB"
 
 #: I18n/Number.php:96
 msgid "{0,number,#,###.##} TB"
-msgstr "{0,number,#,###.##} To"
+msgstr "{0,number,#,###.##} TB"
 
 #: I18n/Number.php:88
 msgid "{0,number,integer} Byte"
 msgid_plural "{0,number,integer} Bytes"
-msgstr[0] "{0,number,integer} Octet"
-msgstr[1] "{0,number,integer} Octets"
+msgstr[0] "{0,number,integer} Byte"
+msgstr[1] "{0,number,integer} Bytes"
 
 #: I18n/RelativeTimeFormatter.php:80
 msgid "{0} from now"
-msgstr "Dans {0}"
+msgstr "{0} from now"
 
 #: I18n/RelativeTimeFormatter.php:80
 msgid "{0} ago"
-msgstr "Il y a {0}"
+msgstr "{0} ago"
 
 #: I18n/RelativeTimeFormatter.php:83
 msgid "{0} after"
-msgstr "{0} après"
+msgstr "{0} after"
 
 #: I18n/RelativeTimeFormatter.php:83
 msgid "{0} before"
-msgstr "{0} avant"
+msgstr "{0} before"
 
 #: I18n/RelativeTimeFormatter.php:114
 msgid "just now"
-msgstr "maintenant"
+msgstr "just now"
 
 #: I18n/RelativeTimeFormatter.php:151
 msgid "about a second ago"
-msgstr "il y a environ une seconde"
+msgstr "about a second ago"
 
 #: I18n/RelativeTimeFormatter.php:152
 msgid "about a minute ago"
-msgstr "il y a environ une minute"
+msgstr "about a minute ago"
 
 #: I18n/RelativeTimeFormatter.php:153
 msgid "about an hour ago"
-msgstr "il y a environ une heure"
+msgstr "about an hour ago"
 
 #: I18n/RelativeTimeFormatter.php:154;332
 msgid "about a day ago"
-msgstr "il y a environ un jour"
+msgstr "about a day ago"
 
 #: I18n/RelativeTimeFormatter.php:155;333
 msgid "about a week ago"
-msgstr "il y a environ une semaine"
+msgstr "about a week ago"
 
 #: I18n/RelativeTimeFormatter.php:156;334
 msgid "about a month ago"
-msgstr "il y a environ un mois"
+msgstr "about a month ago"
 
 #: I18n/RelativeTimeFormatter.php:157;335
 msgid "about a year ago"
-msgstr "il y a environ un an"
+msgstr "about a year ago"
 
 #: I18n/RelativeTimeFormatter.php:168
 msgid "in about a second"
-msgstr "dans environ une seconde"
+msgstr "in about a second"
 
 #: I18n/RelativeTimeFormatter.php:169
 msgid "in about a minute"
-msgstr "dans environ une minute"
+msgstr "in about a minute"
 
 #: I18n/RelativeTimeFormatter.php:170
 msgid "in about an hour"
-msgstr "dans environ une heure"
+msgstr "in about an hour"
 
 #: I18n/RelativeTimeFormatter.php:171;346
 msgid "in about a day"
-msgstr "dans environ un jour"
+msgstr "in about a day"
 
 #: I18n/RelativeTimeFormatter.php:172;347
 msgid "in about a week"
-msgstr "dans environ une semaine"
+msgstr "in about a week"
 
 #: I18n/RelativeTimeFormatter.php:173;348
 msgid "in about a month"
-msgstr "dans environ un mois"
+msgstr "in about a month"
 
 #: I18n/RelativeTimeFormatter.php:174;349
 msgid "in about a year"
-msgstr "dans environ un an"
+msgstr "in about a year"
 
 #: I18n/RelativeTimeFormatter.php:304
 msgid "today"
-msgstr "aujourd\'hui"
+msgstr "today"
 
 #: I18n/RelativeTimeFormatter.php:370
 msgid "%s ago"
-msgstr "il y a %s"
+msgstr "%s ago"
 
 #: I18n/RelativeTimeFormatter.php:371
 msgid "on %s"
-msgstr "le %s"
+msgstr "on %s"
 
 #: I18n/RelativeTimeFormatter.php:47;126;316
 msgid "{0} year"
 msgid_plural "{0} years"
-msgstr[0] "{0} an"
-msgstr[1] "{0} ans"
+msgstr[0] "{0} year"
+msgstr[1] "{0} years"
 
 #: I18n/RelativeTimeFormatter.php:51;129;319
 msgid "{0} month"
 msgid_plural "{0} months"
-msgstr[0] "{0} mois"
-msgstr[1] "{0} mois"
+msgstr[0] "{0} month"
+msgstr[1] "{0} months"
 
 #: I18n/RelativeTimeFormatter.php:57;132;322
 msgid "{0} week"
 msgid_plural "{0} weeks"
-msgstr[0] "{0} semaine"
-msgstr[1] "{0} semaines"
+msgstr[0] "{0} week"
+msgstr[1] "{0} weeks"
 
 #: I18n/RelativeTimeFormatter.php:59;135;325
 msgid "{0} day"
 msgid_plural "{0} days"
-msgstr[0] "{0} jour"
-msgstr[1] "{0} jours"
+msgstr[0] "{0} day"
+msgstr[1] "{0} days"
 
 #: I18n/RelativeTimeFormatter.php:64;138
 msgid "{0} hour"
 msgid_plural "{0} hours"
-msgstr[0] "{0} heure"
-msgstr[1] "{0} heures"
+msgstr[0] "{0} hour"
+msgstr[1] "{0} hours"
 
 #: I18n/RelativeTimeFormatter.php:68;141
 msgid "{0} minute"
@@ -1578,94 +1578,94 @@ msgstr[1] "{0} minutes"
 #: I18n/RelativeTimeFormatter.php:72;144
 msgid "{0} second"
 msgid_plural "{0} seconds"
-msgstr[0] "{0} seconde"
-msgstr[1] "{0} secondes"
+msgstr[0] "{0} second"
+msgstr[1] "{0} seconds"
 
 #: ORM/RulesChecker.php:57
 msgid "This value is already in use"
-msgstr "Cette valeur est déjà utilisée"
+msgstr "This value is already in use"
 
 #: ORM/RulesChecker.php:104
 msgid "This value does not exist"
-msgstr "Cette valeur n\'existe pas"
+msgstr "This value does not exist"
 
 #: ORM/RulesChecker.php:128
 msgid "The count does not match {0}{1}"
-msgstr "Le compte ne correspond pas {0}{1}"
+msgstr "The count does not match {0}{1}"
 
 #: Utility/Text.php:924
 msgid "and"
-msgstr "et"
+msgstr "and"
 
 #: Validation/Validator.php:2223
 #: View/Form/ArrayContext.php:226
 msgid "This field is required"
-msgstr "Ce champ est obligatoire"
+msgstr "This field is required"
 
 #: Validation/Validator.php:2245
 msgid "This field cannot be left empty"
-msgstr "Ce champ ne peut être vide"
+msgstr "This field cannot be left empty"
 
 #: Validation/Validator.php:2394
 msgid "The provided value is invalid"
-msgstr "La valeur fournie n\'est pas valide"
+msgstr "The provided value is invalid"
 
 #: View/Helper/FormHelper.php:1107
 msgid "Edit {0}"
-msgstr "Modifier {0}"
+msgstr "Edit {0}"
 
 #: View/Helper/FormHelper.php:1109
 msgid "New {0}"
-msgstr "Nouveau {0}"
+msgstr "New {0}"
 
 #: View/Helper/HtmlHelper.php:819
 msgid "Home"
-msgstr "Accueil"
+msgstr "Home"
 
 #: View/Widget/DateTimeWidget.php:540
 msgid "January"
-msgstr "Janvier"
+msgstr "January"
 
 #: View/Widget/DateTimeWidget.php:541
 msgid "February"
-msgstr "Février"
+msgstr "February"
 
 #: View/Widget/DateTimeWidget.php:542
 msgid "March"
-msgstr "Mars"
+msgstr "March"
 
 #: View/Widget/DateTimeWidget.php:543
 msgid "April"
-msgstr "Avril"
+msgstr "April"
 
 #: View/Widget/DateTimeWidget.php:544
 msgid "May"
-msgstr "Mai"
+msgstr "May"
 
 #: View/Widget/DateTimeWidget.php:545
 msgid "June"
-msgstr "Juin"
+msgstr "June"
 
 #: View/Widget/DateTimeWidget.php:546
 msgid "July"
-msgstr "Juiller"
+msgstr "July"
 
 #: View/Widget/DateTimeWidget.php:547
 msgid "August"
-msgstr "Août"
+msgstr "August"
 
 #: View/Widget/DateTimeWidget.php:548
 msgid "September"
-msgstr "Septembre"
+msgstr "September"
 
 #: View/Widget/DateTimeWidget.php:549
 msgid "October"
-msgstr "Octobre"
+msgstr "October"
 
 #: View/Widget/DateTimeWidget.php:550
 msgid "November"
-msgstr "Novembre"
+msgstr "November"
 
 #: View/Widget/DateTimeWidget.php:551
 msgid "December"
-msgstr "Décembre"
+msgstr "December"
