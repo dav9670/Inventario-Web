@@ -128,6 +128,14 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
 
                         $.each(loansArray, function(idx, elem){
 
+                            var labels_list = "";
+                            var three_labels = elem.item.labels.slice(0,3);
+                            if (elem.item.labels.length > 3) {
+                                labels_list = three_labels.join("; ") + "...";
+                            } else {
+                                labels_list = three_labels.join("; ");
+                            }
+
                             var link = "";
                             if(elem.returned == null){
                                 link = link.concat('<?= $this->Html->link(__('Return'), ['action' => 'return', -1]) ?> ');
@@ -142,7 +150,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                                         <td><img src='data:image/png;base64,` + elem.item.image + `' width=100/></td>
                                         <td>` + elem.item.identifier + `</td>
                                         <td>` + elem.item.description + `</td>
-                                        <td>` + elem.item.labels + `</td>
+                                        <td>` + labels_list + `</td>
                                         <td>` + elem.user.identifier + `</td>
                                         <td>` + new Date(elem.start_time).toLocaleString([], dateOptions).replace(/\//g, '-') + `</td>
                                         <td>` + new Date(elem.end_time).toLocaleString([], dateOptions).replace(/\//g, '-') + `</td>
@@ -157,7 +165,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                                         <td><img src='data:image/png;base64,` + elem.item.image + `' width=100/></td>
                                         <td>` + elem.item.identifier + `</td>
                                         <td>` + elem.item.description + `</td>
-                                        <td>` + elem.item.labels + `</td>
+                                        <td>` + labels_list + `</td>
                                         <td>` + elem.user.identifier + `</td>
                                         <td>` + new Date(elem.start_time).toLocaleString([], dateOptions).replace(/\//g, '-') + `</td>
                                         <td>` + new Date(elem.end_time).toLocaleString([], dateOptions).replace(/\//g, '-') + `</td>
