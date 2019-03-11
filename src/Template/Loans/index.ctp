@@ -62,7 +62,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                 <tr>
                     <th scope="col"></th>
                     <th scope="col"><a id='item_sort' class='asc'><?= __("Item") ?></a></th>
-                    <th scope="col"><a id='description_sort'><?= __("Description") ?></a></th>
+                    <th scope="col" style="width:30%;"><a id='description_sort'><?= __("Description") ?></a></th>
                     <th scope="col"><?= __("Labels") ?></th>
                     <th scope="col"><a id='user_sort'><?= __("User") ?></a></th>
                     <th scope="col"><a id='start_time_sort'><?= __("Start time") ?></a></th>
