@@ -240,11 +240,11 @@ msgstr "Infinite"
 
 #: Model/Entity/Licence.php:93
 msgid "Expired Status"
-msgstr "Expired Status"
+msgstr "Expired"
 
 #: Template/Reports/index.ctp:191
 msgid "Expired Report"
-msgstr "Expired Report"
+msgstr "Expired"
 
 #: Model/Table/CategoriesTable.php:61
 #: Model/Table/EquipmentsTable.php:71
@@ -1028,12 +1028,12 @@ msgstr "Current"
 #: Template/Users/profile.ctp:49
 #: Template/Users/view.ctp:50
 msgid "Returned Tab"
-msgstr "Returned Tab"
+msgstr "Returned"
 
 #: Template/Loans/index.ctp:57;82
 #: Template/Loans/return.ctp:145
 msgid "Returned time"
-msgstr "Returned time"
+msgstr "Returned"
 
 #: Template/Loans/index.ctp:64;76
 #: Template/Users/profile.ctp:56
