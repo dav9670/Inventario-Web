@@ -130,7 +130,7 @@ class LoansController extends AppController
                         $this->set('_serialize', ['success']);
                         return;
                     } else {
-                        $this->Flash->success(__('The loan has been saved.'));
+                        $this->Flash->success(__('The loan has been returned.'));
 
                         return $this->redirect(['action' => 'index']);
                     }
@@ -141,12 +141,12 @@ class LoansController extends AppController
                     $this->set('_serialize', ['success']);
                     return;
                 } else {
-                    $this->Flash->error(__('The loan could not be saved. Please, try again.'));
+                    $this->Flash->error(__('The loan could not be returned. Please, try again.'));
                 }
             }
             else
             {
-                $this->Flash->error(__('The loan could not be saved. Please, try again.'));
+                $this->Flash->error(__('The loan could not be returned. Please, try again.'));
             }
         }
         $this->set(compact('loan'));

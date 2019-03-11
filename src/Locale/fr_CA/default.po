@@ -20,7 +20,7 @@ msgstr "La catégorie a été sauvegardée."
 
 #: Controller/CategoriesController.php:73;110;141
 msgid "The category could not be saved. Please, try again."
-msgstr "La catégorie n'a pas pu être sauvegardée. Veuillez réessayer."
+msgstr "La catégorie n\'a pas pu être sauvegardée. Veuillez réessayer."
 
 #: Controller/CategoriesController.php:164
 msgid "The category has been deleted."
@@ -28,31 +28,31 @@ msgstr "La catégorie a été supprimée."
 
 #: Controller/CategoriesController.php:170
 msgid "The category could not be deleted. Please, try again."
-msgstr "La catégorie n'a pas pu être supprimée. Veuillez réessayer."
+msgstr "La catégorie n\'a pas pu être supprimée. Veuillez réessayer."
 
 #: Controller/EquipmentsController.php:61;86
 msgid "The equipment has been saved."
-msgstr "L'équipement a été sauvegardé."
+msgstr "L\'équipement a été sauvegardé."
 
 #: Controller/EquipmentsController.php:65;90
 msgid "The equipment could not be saved. Please, try again."
-msgstr "L'équipement n'a pas pu être sauvegardé. Veuillez réessayer."
+msgstr "L\'équipement n\'a pas pu être sauvegardé. Veuillez réessayer."
 
 #: Controller/EquipmentsController.php:108
 msgid "The equipment has been deleted."
-msgstr "L'équipement a été supprimé."
+msgstr "L\'équipement a été supprimé."
 
 #: Controller/EquipmentsController.php:110
 msgid "The equipment could not be deleted. Please, try again."
-msgstr "L'équipement n'a pas pu être supprimé. Veuillez réessayer."
+msgstr "L\'équipement n\'a pas pu être supprimé. Veuillez réessayer."
 
 #: Controller/EquipmentsController.php:243
 msgid "The equipment has been "
-msgstr "L'équipement a été "
+msgstr "L\'équipement a été "
 
 #: Controller/EquipmentsController.php:249
 msgid "The equipment could not be "
-msgstr "L'équipement n'a pas pu être "
+msgstr "L\'équipement n\'a pas pu être "
 
 #: Controller/LicencesController.php:61;86
 msgid "The licence has been saved."
@@ -60,7 +60,7 @@ msgstr "La licence a été sauvegardée."
 
 #: Controller/LicencesController.php:65;90
 msgid "The licence could not be saved. Please, try again."
-msgstr "La licence n'a pas pu être sauvegardée. Veuillez réessayer."
+msgstr "La licence n\'a pas pu être sauvegardée. Veuillez réessayer."
 
 #: Controller/LicencesController.php:110;227
 msgid "At least one Product is required. Please, try again."
@@ -72,7 +72,7 @@ msgstr "La licence a été supprimée."
 
 #: Controller/LicencesController.php:110
 msgid "The licence could not be deleted. Please, try again."
-msgstr "La licence n'a pas pu être supprimée. Veuillez réessayer."
+msgstr "La licence n\'a pas pu être supprimée. Veuillez réessayer."
 
 #: Controller/LicencesController.php:315
 msgid "The licence has been "
@@ -80,23 +80,23 @@ msgstr "La licence a été "
 
 #: Controller/LicencesController.php:326
 msgid "The licence could not be "
-msgstr "La licence n'a pas pu être "
+msgstr "La licence n\'a pas pu être "
 
 #: Controller/LoansController.php:58;84
 msgid "The loan has been saved."
-msgstr "L'emprunt a été sauvegardé."
+msgstr "L\'emprunt a été sauvegardé."
 
 #: Controller/LoansController.php:62;88
 msgid "The loan could not be saved. Please, try again."
-msgstr "L'emprunt n'a pas pu être sauvegardé. Veuillez réessayer."
+msgstr "L\'emprunt n\'a pas pu être sauvegardé. Veuillez réessayer."
 
 #: Controller/LoansController.php:107
 msgid "The loan has been deleted."
-msgstr "L'emprunt a été supprimé."
+msgstr "L\'emprunt a été supprimé."
 
 #: Controller/LoansController.php:109
 msgid "The loan could not be deleted. Please, try again."
-msgstr "L'emprunt n'a pas pu être supprimé. Veuillez réessayer."
+msgstr "L\'emprunt n\'a pas pu être supprimé. Veuillez réessayer."
 
 #: Controller/MentorsController.php:62;87
 msgid "The mentor has been saved."
@@ -104,7 +104,7 @@ msgstr "Le mentor a été sauvegardé."
 
 #: Controller/MentorsController.php:66;91
 msgid "The mentor could not be saved. Please, try again."
-msgstr "Le mentor n'a pas pu être sauvegardé. Veuillez réessayer."
+msgstr "Le mentor n\'a pas pu être sauvegardé. Veuillez réessayer."
 
 #: Controller/MentorsController.php:109
 msgid "The mentor has been deleted."
@@ -112,7 +112,7 @@ msgstr "Le mentor a été supprimé."
 
 #: Controller/MentorsController.php:111
 msgid "The mentor could not be deleted. Please, try again."
-msgstr "Le mentor n'a pas pu être supprimé. Veuillez réessayer."
+msgstr "Le mentor n\'a pas pu être supprimé. Veuillez réessayer."
 
 #: Controller/MentorsController.php:237
 msgid "The mentor has been "
@@ -120,7 +120,7 @@ msgstr "Le mentor a été "
 
 #: Controller/MentorsController.php:243
 msgid "The mentor could not be "
-msgstr "Le mentor n'a pas pu être "
+msgstr "Le mentor n\'a pas pu être "
 
 #: Controller/ProductsController.php:65;103;137
 msgid "The product has been saved."
@@ -128,7 +128,7 @@ msgstr "Le produit a été sauvegardé."
 
 #: Controller/ProductsController.php:72;110;141
 msgid "The product could not be saved. Please, try again."
-msgstr "Le produit n'a pas pu être sauvegardé. Veuillez réessayer."
+msgstr "Le produit n\'a pas pu être sauvegardé. Veuillez réessayer."
 
 #: Controller/ProductsController.php:164
 msgid "The product has been deleted."
@@ -136,7 +136,7 @@ msgstr "Le produit a été supprimé."
 
 #: Controller/ProductsController.php:170
 msgid "The product could not be deleted. Please, try again."
-msgstr "Le produit n'a pas pu être supprimé. Veuillez réessayer."
+msgstr "Le produit n\'a pas pu être supprimé. Veuillez réessayer."
 
 #: Controller/RoomsController.php:61;86
 msgid "The room has been saved."
@@ -144,7 +144,7 @@ msgstr "La salle a été sauvegardée."
 
 #: Controller/RoomsController.php:65;90
 msgid "The room could not be saved. Please, try again."
-msgstr "La salle n'a pas pu être sauvegardée. Veuillez réessayer."
+msgstr "La salle n\'a pas pu être sauvegardée. Veuillez réessayer."
 
 #: Controller/RoomsController.php:108
 msgid "The room has been deleted."
@@ -152,7 +152,7 @@ msgstr "La salle a été supprimée."
 
 #: Controller/RoomsController.php:110
 msgid "The room could not be deleted. Please, try again."
-msgstr "La salle n'a pas pu être supprimée. Veuillez réessayer."
+msgstr "La salle n\'a pas pu être supprimée. Veuillez réessayer."
 
 #: Controller/RoomsController.php:237
 msgid "The room has been "
@@ -160,7 +160,7 @@ msgstr "La salle a été "
 
 #: Controller/RoomsController.php:243
 msgid "The room could not be "
-msgstr "La salle n'a pas pu être "
+msgstr "La salle n\'a pas pu être "
 
 #: Controller/ServicesController.php:65;104;138
 msgid "The service has been saved."
@@ -168,7 +168,7 @@ msgstr "Le service a été sauvegardé."
 
 #: Controller/ServicesController.php:72;111;142
 msgid "The service could not be saved. Please, try again."
-msgstr "Le service n'a pas pu être sauvegardé. Veuillez réessayer."
+msgstr "Le service n\'a pas pu être sauvegardé. Veuillez réessayer."
 
 #: Controller/ServicesController.php:164
 msgid "The service has been deleted."
@@ -176,7 +176,7 @@ msgstr "Le service a été supprimé."
 
 #: Controller/ServicesController.php:170
 msgid "The service could not be deleted. Please, try again."
-msgstr "Le service n'a pas pu être supprimé. Veuillez réessayer."
+msgstr "Le service n\'a pas pu être supprimé. Veuillez réessayer."
 
 #: Controller/SkillsController.php:65;102;136
 msgid "The skill has been saved."
@@ -184,7 +184,7 @@ msgstr "La compétence a été sauvegardée."
 
 #: Controller/SkillsController.php:72;109;140
 msgid "The skill could not be saved. Please, try again."
-msgstr "La compétence n'a pas pu être sauvegardée. Veuillez réessayer."
+msgstr "La compétence n\'a pas pu être sauvegardée. Veuillez réessayer."
 
 #: Controller/SkillsController.php:163
 msgid "The skill has been deleted."
@@ -192,7 +192,7 @@ msgstr "La compétence a été supprimée."
 
 #: Controller/SkillsController.php:169
 msgid "The skill could not be deleted. Please, try again."
-msgstr "La compétence n'a pas pu être supprimée. Veuillez réessayer."
+msgstr "La compétence n\'a pas pu être supprimée. Veuillez réessayer."
 
 #: Controller/UsersController.php:49
 msgid "Your email and/or password is incorrect."
@@ -204,11 +204,11 @@ msgstr "Vous être maintenant déconnecté(e)"
 
 #: Controller/UsersController.php:101;125
 msgid "The user has been saved."
-msgstr "L'utilisateur a été sauvegardé."
+msgstr "L\'utilisateur a été sauvegardé."
 
 #: Controller/UsersController.php:105;129
 msgid "The user could not be saved. Please, try again."
-msgstr "L'utilisateur n'a pas pu être sauvegardé. Veuillez réessayer."
+msgstr "L\'utilisateur n\'a pas pu être sauvegardé. Veuillez réessayer."
 
 #: Controller/UsersController.php:393
 msgid "Your password has been save."
@@ -216,7 +216,7 @@ msgstr "Votre mot de passe a été sauvegardé."
 
 #: Controller/UsersController.php:403
 msgid "Could not save your password. Please, try again."
-msgstr "Votre mot de passe n'a pas pu être sauvegardé. Veuillez réessayer."
+msgstr "Votre mot de passe n\'a pas pu être sauvegardé. Veuillez réessayer."
 
 #: Controller/UsersController.php:406
 msgid "Make sure your new password is the same as the confirmation."
@@ -293,14 +293,14 @@ msgstr "Le taux horaire ne peut être vide."
 #: Model/Table/MentorsTable.php:95
 #: Model/Table/RoomsTable.php:83
 msgid "Image is too large."
-msgstr "L'image est trop large."
+msgstr "L\'image est trop large."
 
 #: Model/Table/EquipmentsTable.php:83;84
 #: Model/Table/LicencesTable.php:89;90
 #: Model/Table/MentorsTable.php:96;97
 #: Model/Table/RoomsTable.php:84;85
 msgid "Image is required."
-msgstr "L'image est requise."
+msgstr "L\'image est requise."
 
 #: Model/Table/LicencesTable.php:77
 msgid "Key is too long. (Max 50 characters)"
@@ -316,11 +316,11 @@ msgstr "La date de début ne peut être vide."
 
 #: Model/Table/MentorsTable.php:71
 msgid "Email is too long. (Max 50 characters)"
-msgstr "L'adresse courriel est trop longue. (Max 50 caractères)"
+msgstr "L\'adresse courriel est trop longue. (Max 50 caractères)"
 
 #: Model/Table/MentorsTable.php:72;73
 msgid "Email cannot be empty."
-msgstr "L'adresse courriel ne peut être vide."
+msgstr "L\'adresse courriel ne peut être vide."
 
 #: Model/Table/MentorsTable.php:74
 msgid "This email has already been used."
@@ -652,7 +652,7 @@ msgstr "Modifier un Équipement"
 
 #: Template/Equipments/consult.ctp:31
 msgid "Deactivate equipment"
-msgstr "Désactiver l'Équipement"
+msgstr "Désactiver l\'Équipement"
 
 #: Template/Equipments/consult.ctp:31
 #: Template/Licences/consult.ctp:42
@@ -666,7 +666,7 @@ msgstr "Êtes-vous sûr(e) de vouloir désactiver {0} ?"
 
 #: Template/Equipments/consult.ctp:33
 msgid "Reactivate equipment"
-msgstr "Réactiver l'Équipement"
+msgstr "Réactiver l\'Équipement"
 
 #: Template/Equipments/consult.ctp:33
 #: Template/Licences/consult.ctp:44
@@ -872,11 +872,11 @@ msgstr "Adresse Courriel"
 #: Template/Users/profile.ctp:30
 #: Template/Users/view.ctp:30
 msgid "Admin Status"
-msgstr "Statut d'admin"
+msgstr "Statut d\'admin"
 
 #: Template/Loans/view.ctp:26
 msgid "Item type"
-msgstr "Type d'objet"
+msgstr "Type d\'objet"
 
 #: Template/Loans/add.ctp:52
 msgid "Item: "
@@ -931,7 +931,7 @@ msgstr "Liste de Catégories"
 
 #: Template/Loans/add.ctp:437
 msgid "You cannot select this item, it is not available during the time period."
-msgstr "Vous ne pouvez pas sélectionner cet objet, il n'est pas disponible pendant cette période."
+msgstr "Vous ne pouvez pas sélectionner cet objet, il n\'est pas disponible pendant cette période."
 
 #: Template/Loans/index.ctp:36
 #: Template/Users/profile.ctp:29
@@ -981,7 +981,7 @@ msgstr "Retourner"
 
 #: Template/Loans/return.ctp:12
 msgid "Return Loan"
-msgstr "Retour d'Emprunt"
+msgstr "Retour d\'Emprunt"
 
 #: Template/Mentors/index.ctp:14;56
 #: Template/Skills/consult.ctp:33
@@ -1096,7 +1096,7 @@ msgstr "Cette année"
 
 #: Template/Reports/index.ctp:17
 msgid "Last year"
-msgstr "L'année dernière"
+msgstr "L\'année dernière"
 
 #: Template/Reports/index.ctp:18
 msgid "This month"
@@ -1140,7 +1140,7 @@ msgstr "Heures emprunté"
 
 #: Template/Reports/index.ctp:95
 msgid "Times loaned"
-msgstr "Quantité d'emprunts"
+msgstr "Quantité d\'emprunts"
 
 #: Template/Reports/index.ctp:132
 msgid "Licence"
@@ -1156,7 +1156,7 @@ msgstr "Utilisations"
 
 #: Template/Reports/index.ctp:136
 msgid "% Used"
-msgstr "% d'utilisation"
+msgstr "% d\'utilisation"
 
 #: Template/Reports/index.ctp:201
 msgid "Total by room"
@@ -1168,7 +1168,7 @@ msgstr "Total"
 
 #: Template/Reports/index.ctp:360
 msgid "Time loaned"
-msgstr "Durée d'emprunt"
+msgstr "Durée d\'emprunt"
 
 #: Template/Reports/index.ctp:361
 msgid "Overtime fee"
@@ -1280,7 +1280,7 @@ msgstr "Supprimer cet Utilisateur"
 #: Template/Users/profile.ctp:52
 #: Template/Users/view.ctp:52
 msgid "Loan Type"
-msgstr "Type d'Emprunt"
+msgstr "Type d\'Emprunt"
 
 #: Template/Users/consult.ctp:51
 msgid "Start date"
@@ -1366,15 +1366,15 @@ msgstr "Date de fin"
 
 #: Template/Users/view.ctp:51
 msgid "User Id"
-msgstr "Id de l'Utilisateur"
+msgstr "Id de l\'Utilisateur"
 
 #: Template/Users/view.ctp:52
 msgid "Loan Type"
-msgstr "Type d'Emprunt"
+msgstr "Type d\'Emprunt"
 
 #: Template/Users/view.ctp:53
 msgid "Item Id"
-msgstr "ID de l'objet"
+msgstr "ID de l\'objet"
 
 #: Template/Users/view.ctp:66
 #: View/Helper/PaginatorHelper.php:1258
@@ -1383,15 +1383,15 @@ msgstr "Voir"
 
 #: Template/Error/error400.ctp:37
 msgid "The requested address {0} was not found on this server."
-msgstr "L'adresse demandée {0} n'a pas été trouvée sur ce serveur."
+msgstr "L\'adresse demandée {0} n\'a pas été trouvée sur ce serveur."
 
 #: Template/Error/error500.ctp:39
 msgid "An Internal Error Has Occurred"
-msgstr "Une Erreur Interne S'est Produite"
+msgstr "Une Erreur Interne S\'est Produite"
 
 #: Controller/Component/AuthComponent.php:500
 msgid "You are not authorized to access that location."
-msgstr "Vous n'êtes pas autorisé(e) à accéder à cet adresse."
+msgstr "Vous n\'êtes pas autorisé(e) à accéder à cet adresse."
 
 #: Controller/Component/CsrfComponent.php:182
 #: Http/Middleware/CsrfProtectionMiddleware.php:196
@@ -1409,7 +1409,7 @@ msgstr "Introuvable"
 
 #: Error/ExceptionRenderer.php:303
 msgid "An Internal Error Has Occurred."
-msgstr "Une Erreur Interne S'est Produite."
+msgstr "Une Erreur Interne S\'est Produite."
 
 #: Http/Response.php:2630
 msgid "The requested file contains `..` and will not be read."
@@ -1519,7 +1519,7 @@ msgstr "dans environ un an"
 
 #: I18n/RelativeTimeFormatter.php:304
 msgid "today"
-msgstr "aujourd'hui"
+msgstr "aujourd\'hui"
 
 #: I18n/RelativeTimeFormatter.php:370
 msgid "%s ago"
@@ -1577,7 +1577,7 @@ msgstr "Cette valeur est déjà utilisée"
 
 #: ORM/RulesChecker.php:104
 msgid "This value does not exist"
-msgstr "Cette valeur n'existe pas"
+msgstr "Cette valeur n\'existe pas"
 
 #: ORM/RulesChecker.php:128
 msgid "The count does not match {0}{1}"
@@ -1598,7 +1598,7 @@ msgstr "Ce champ ne peut être vide"
 
 #: Validation/Validator.php:2394
 msgid "The provided value is invalid"
-msgstr "La valeur fournie n'est pas valide"
+msgstr "La valeur fournie n\'est pas valide"
 
 #: View/Helper/FormHelper.php:1107
 msgid "Edit {0}"

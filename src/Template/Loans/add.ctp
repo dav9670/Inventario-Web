@@ -38,7 +38,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
         <div class='right half-width' style='height:700px;'>
 
             <div class='left half-width'>
-                <?= $this->Form->control('start_time', ['type' => 'text', 'class' => 'datetpicker']); ?>
+                <?= $this->Form->control('start_time', ['type' => 'text', 'class' => 'datepicker']); ?>
             </div>
             <div class='right half-width'>
                 <?= $this->Form->control('end_time', ['type' => 'text', 'class' => 'datepicker']); ?>
@@ -451,7 +451,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
         var canSelect = true;
         if(type == 'item'){
             if($('#' + type + '_' + id + '_available').attr('data-available') == 'false'){
-                alert('<?=__('You cannot select this item, it is not available during the time period.')?>');
+                alert("<?=__('You cannot select this item, it is not available during the time period.')?>");
                 canSelect = false;
             }
         }
@@ -500,7 +500,6 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
 
         let showDateTime = function(datePicker, htmlObject){
             dateTimeBoundarySet(this, datePicker, htmlObject);
-            $('#item_search').keyup();
         }
 
         let changeDateTime = function(datePicker, htmlObject){
@@ -509,14 +508,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
             $('#item_search').keyup();
         }
 
-        $("#start-time").datetimepicker({
-            format: 'Y-m-d H:00',
-            minDate: new Date(),
-            onShow: showDateTime,
-            onChangeDateTime: changeDateTime
-        });
-
-        $("#end-time").datetimepicker({
+        $(".datepicker").datetimepicker({
             format: 'Y-m-d H:00',
             minDate: new Date(),
             onShow: showDateTime,
