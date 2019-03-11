@@ -155,6 +155,8 @@
             dateFormat: 'yy-mm-dd',
             onSelect: function(date, i) {
                 $('#preset-dates').val('custom');
+                $("#licence_form").data("changed",true);
+                $('#cancelButton').show();
             }
         }).attr("autocomplete", "off");
 

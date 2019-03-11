@@ -54,7 +54,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
     </div>
     <div class="tab">
         <button id='current_button' class="tablinks active" onclick="show_table('current')"><?= __("Current") ?></button>
-        <button id='returned_button' class="tablinks" onclick="show_table('returned')"><?= __("Returned") ?></button>
+        <button id='returned_button' class="tablinks" onclick="show_table('returned')"><?= __("Returned Tab") ?></button>
     </div>
     <div class="tabcontent">
         <table cellpadding="0" cellspacing="0">
@@ -79,7 +79,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                     <th scope="col"><a id='user_sort'><?= __("User") ?></a></th>
                     <th scope="col"><a id='start_time_sort'><?= __("Start time") ?></a></th>
                     <th scope="col"><a id='end_time_sort'><?= __("End time") ?></a></th>
-                    <th scope="col"><a id='returned_sort'><?= __('Returned') ?></a></th>
+                    <th scope="col"><a id='returned_sort'><?= __('Returned time') ?></a></th>
                 </tr>
             </thead>
             <tbody id="body_current">

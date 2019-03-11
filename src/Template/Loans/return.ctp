@@ -78,7 +78,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                         <thead>
                             <tr>
                                 <th scope="col"><?= __("Name") ?></a></th>
-                                <th scope="col"><?= __("Product") ?></a></th>
+                                <th scope="col"><?= __("Platform") ?></a></th>
                                 <th scope="col"><?= __("Description") ?></a></th>
                                 <th scope="col"><?= __("Licence count") ?></th>
                             </tr>
