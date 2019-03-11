@@ -17,7 +17,6 @@ class CategoriesController extends AppController
     public function initialize()
     {
         parent::initialize();
-        $this->loadComponent('Paginator');
     }
 
     /**
@@ -44,26 +43,18 @@ class CategoriesController extends AppController
             $category = $this->Categories->patchEntity($category, $this->getRequest()->getData());
 
             if ($this->Categories->save($category)) {
-                if($this->isApi()){
-                    $success = true;
-                } else {
-                    $this->Flash->success(__('The category has been saved.'));
+                $success = true;
+                $this->Flash->success(__('The category has been saved.'));
 
-                    return $this->redirect(['action' => 'index']);
-                }
-            } else if($this->isApi()){
-                $success = false;
+                return $this->redirect(['action' => 'index']);
             } else {
+                $success = false;
                 $this->Flash->error(__('The category could not be saved. Please, try again.'));
             }
         }
-        if($this->isApi()){
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } else {
-            $equipments = $this->Categories->Equipments->find('list', ['limit' => 200]);
-            $this->set(compact('category', 'equipments'));
-        }
+
+        $this->set(compact('category', 'success'));
+        $this->set('_serialize', ['success']);
     }
 
     /**
@@ -79,6 +70,7 @@ class CategoriesController extends AppController
         $category = $this->Categories->get($id, [
             'contain' => ['Equipments']
         ]);
+        $success = false;
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
 
             $category = $this->Categories->patchEntity($category, $this->getRequest()->getData());
@@ -88,17 +80,15 @@ class CategoriesController extends AppController
                 
                 $this->Flash->success(__('The category has been saved.'));
                 return $this->redirect(['action' => 'consult', $category->id]);
-            }
-            else {
+            } else {
                 $success = false;
                 $data = 'edit';
 
                 $this->Flash->error(__('The category could not be saved. Please, try again.'));
             }
         }
-        $equipments = $this->Categories->Equipments->find('list', ['limit' => 200]);
         
-        $this->set(compact('category', 'equipments','data', 'success'));
+        $this->set(compact('category','data', 'success'));
         $this->set('_serialize', ['success']);
     }
     
