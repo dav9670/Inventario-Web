@@ -5,8 +5,7 @@
  */
 use Cake\I18n\Time;
 
-echo $this->Html->css('jquery.datetimepicker.min.css');
-echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => false));
+echo $this->Html->script('moment-with-locales.js', array('inline' => false));
 ?>
 <div class="loans form large-12 medium-11 columns content">
     <?= $this->Form->create($loan, ['id' => 'return_form']) ?>
@@ -184,11 +183,10 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
     }
 
     $('document').ready(function(){
-        let dateOptions = {hour12: false, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit"};
         let dates = ['start_time', 'end_time', 'return_time'];
 
         dates.forEach(function(elem, index){
-            $('#' + elem).text(new Date($('#' + elem).text()).toLocaleString([], dateOptions).replace(/\//g, '-'));
+            $('#' + elem).text(moment($('#' + elem).text()).format("YYYY-MM-DD HH:mm"));
         });
     });
 </script>

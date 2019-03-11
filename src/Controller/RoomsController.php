@@ -34,26 +34,6 @@ class RoomsController extends AppController
     }
 
     /**
-     * View method
-     *
-     * @param string|null $id Room id.
-     * @return \Cake\Http\Response|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $room = $this->Rooms->get($id, [
-            'contain' => ['Services' => [
-                'sort' => ['Services.name' => 'asc']
-                ]
-            ]
-        ]);
-
-        $this->set(compact('room'));
-        $this->set('_serialize', ['room']);
-    }
-
-    /**
      * Add method
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
@@ -63,7 +43,6 @@ class RoomsController extends AppController
         $room = $this->Rooms->newEntity();
         $success = false;
         if ($this->request->is('post')) {
-
             $data = $this->request->getData();
             if(!$this->isApi()){
                 $image = $data['image'];
@@ -75,74 +54,19 @@ class RoomsController extends AppController
             }
             $room = $this->Rooms->patchEntity($room, $data);
             if ($this->Rooms->save($room)) {
-                if($this->isApi()){
-                    $success = true;
-                } else {
-                    $this->Flash->success(__('The room has been saved.'));
-                    return $this->redirect(['action' => 'index']);
-                }
-            } else if($this->isApi()){
-                $success = false;
+                $success = true;
+
+                $this->Flash->success(__('The room has been saved.'));
+                return $this->redirect(['action' => 'index']);
             } else {
+                $success = false;
+
                 $this->Flash->error(__('The room could not be saved. Please, try again.'));
             }
         }
 
-        if($this->isApi()){
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } else {
-            $this->set(compact('room'));
-        }
-    }
-
-    /**
-     * Edit method
-     *
-     * @param string|null $id Room id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $room = $this->Rooms->get($id, [
-            'contain' => ['Services']
-        ]);
-        $success = false;
-
-        if ($this->request->is(['patch', 'post', 'put'])) {
-
-            $data = $this->request->getData();
-            if(!$this->isApi()){
-                $image = $data['image'];
-                if($image['tmp_name'] != '') {
-                    $imageData  = file_get_contents($image['tmp_name']);
-                    $b64   = base64_encode($imageData);
-                    $data['image'] = $b64;
-                }
-            }
-            $room = $this->Rooms->patchEntity($room, $data);
-            if ($this->Rooms->save($room)) {
-                if($this->isApi()){
-                    $success = true;
-                } else {
-                    $this->Flash->success(__('The room has been saved.'));
-                    return $this->redirect(['action' => 'index']);
-                }
-            } else if($this->isApi()){
-                $success = false;
-            } else {
-                $this->Flash->error(__('The room could not be saved. Please, try again.'));
-            }
-        }
-
-        if($this->isApi()){
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } else {
-            $services = $this->Rooms->Services->find('list', ['limit' => 200]);
-            $this->set(compact('room', 'services'));
-        }
+        $this->set(compact('room', 'success'));
+        $this->set('_serialize', ['success']);
     }
 
     public function consult($id = null)
@@ -150,27 +74,37 @@ class RoomsController extends AppController
         $room = $this->Rooms->get($id, [
             'contain' => ['Services']
         ]);
+        $success = false;
+
         if($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
-            $image = $data['image'];
-            if($image['tmp_name'] != '') {
-                $imageData  = file_get_contents($image['tmp_name']);
-                $b64   = base64_encode($imageData);
-                $data['image'] = $b64;
-            } else {
-                $data['image'] = $room->image;
+            if(!$this->isApi()){
+                $image = $data['image'];
+                if($image['tmp_name'] != '') {
+                    $imageData  = file_get_contents($image['tmp_name']);
+                    $b64   = base64_encode($imageData);
+                    $data['image'] = $b64;
+                } else {
+                    $data['image'] = $room->image;
+                }
             }
-
             $room = $this->Rooms->patchEntity($room, $data);
-            if ($this->Rooms->save($room)) {
-                $this->Flash->success(__('The room has been saved.'));
 
+            if ($this->Rooms->save($room)) {
+                $success = true;
+
+                $this->Flash->success(__('The room has been saved.'));
                 return $this->redirect(['action' => 'index']);
+            } else {
+                $success = false;
+
+                $this->Flash->error(__('The room could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The room could not be saved. Please, try again.'));
+            
         }
-        $services = $this->Rooms->Services->find('list', ['limit' => 200]);
-        $this->set(compact('room', 'services'));
+
+        $this->set(compact('room', 'success'));
+        $this->set('_serialize', ['success']);
     }
 
     /**
@@ -186,25 +120,16 @@ class RoomsController extends AppController
         $room = $this->Rooms->get($id);
         $success = false;
         if ($this->Rooms->delete($room)) {
-            if($this->isApi()){
-                $success = true;
-            } else {
-                $this->Flash->success(__('The room has been deleted.'));
-            }
+            $success = true;
+            $this->Flash->success(__('The room has been deleted.'));
         } else {
-            if($this->isApi()){
-                $success = false;
-            } else {
-                $this->Flash->error(__('The room could not be deleted. Please, try again.'));
-            }
+            $success = false;
+            $this->Flash->error(__('The room could not be deleted. Please, try again.'));
         }
 
-        if($this->isApi()){
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } else {
-            return $this->redirect(['action' => 'index']);
-        }
+        $this->set(compact('success'));
+        $this->set('_serialize', ['success']);
+        return $this->redirect(['action' => 'index']);
     }
 
     /**
@@ -229,28 +154,25 @@ class RoomsController extends AppController
         $room->deleted = $deleted;
         $success = false;
 
-        $state = $deleted == null ? 'reactivated' : 'deactivated';
-
         if ($this->Rooms->save($room)) {
-            if($this->isApi()){
-                $success = true;
+            $success = true;
+            if($deleted == null){
+                $this->Flash->success(__('The room has been reactivated.'));
             } else {
-                $this->Flash->success(__('The room has been ' . $state .'.'));
+                $this->Flash->success(__('The room has been deactivated.'));
             }
         } else {
-            if($this->isApi()){
-                $success = false;
+            $success = false;
+            if($deleted == null){
+                $this->Flash->error(__('The room could not be reactivated. Please, try again.'));
             } else {
-                $this->Flash->error(__('The room could not be ' . $state . '. Please, try again.'));
-            }
+                $this->Flash->error(__('The room could not be deactivated. Please, try again.'));
+            }   
         }
 
-        if($this->isApi()){
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } else {
-            return $this->redirect($this->referer());
-        }
+        $this->set(compact('success'));
+        $this->set('_serialize', ['success']);
+        return $this->redirect($this->referer());
     }
 
     public function isAuthorized($user)
@@ -282,11 +204,7 @@ class RoomsController extends AppController
     {
         ini_set('memory_limit', '-1');
 
-        if($this->isApi()){
-            $this->getRequest()->allowMethod('post');
-        }else {
-            $this->getRequest()->allowMethod('get', 'ajax');
-        }
+        $this->getRequest()->allowMethod(['post', 'ajax', 'get']);
    
         $keyword = "";
         $sort_field = "name";

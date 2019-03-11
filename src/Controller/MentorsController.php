@@ -34,26 +34,6 @@ class MentorsController extends AppController
     }
 
     /**
-     * View method
-     *
-     * @param string|null $id Mentor id.
-     * @return \Cake\Http\Response|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $mentor = $this->Mentors->get($id, [
-            'contain' => ['Skills' => [
-                'sort' => ['Skills.name' => 'asc']
-                ]
-            ]
-        ]);
-
-        $this->set(compact('mentor'));
-        $this->set('_serialize', ['mentor']);
-    }
-
-    /**
      * Add method
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
@@ -63,7 +43,6 @@ class MentorsController extends AppController
         $mentor = $this->Mentors->newEntity();
         $success = false;
         if ($this->request->is('post')) {
-
             $data = $this->request->getData();
             if(!$this->isApi()){
                 $image = $data['image'];
@@ -75,74 +54,19 @@ class MentorsController extends AppController
             }
             $mentor = $this->Mentors->patchEntity($mentor, $data);
             if ($this->Mentors->save($mentor)) {
-                if($this->isApi()){
-                    $success = true;
-                } else {
-                    $this->Flash->success(__('The mentor has been saved.'));
-                    return $this->redirect(['action' => 'index']);
-                }
-            } else if($this->isApi()){
-                $success = false;
+                $success = true;
+
+                $this->Flash->success(__('The mentor has been saved.'));
+                return $this->redirect(['action' => 'index']);
             } else {
+                $success = false;
+
                 $this->Flash->error(__('The mentor could not be saved. Please, try again.'));
             }
         }
 
-        if($this->isApi()){
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } else {
-            $this->set(compact('mentor'));
-        }
-    }
-
-    /**
-     * Edit method
-     *
-     * @param string|null $id Mentor id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $mentor = $this->Mentors->get($id, [
-            'contain' => ['Skills']
-        ]);
-        $success = false;
-
-        if ($this->request->is(['patch', 'post', 'put'])) {
-
-            $data = $this->request->getData();
-            if(!$this->isApi()){
-                $image = $data['image'];
-                if($image['tmp_name'] != '') {
-                    $imageData  = file_get_contents($image['tmp_name']);
-                    $b64   = base64_encode($imageData);
-                    $data['image'] = $b64;
-                }
-            }
-            $mentor = $this->Mentors->patchEntity($mentor, $data);
-            if ($this->Mentors->save($mentor)) {
-                if($this->isApi()){
-                    $success = true;
-                } else {
-                    $this->Flash->success(__('The mentor has been saved.'));
-                    return $this->redirect(['action' => 'index']);
-                }
-            } else if($this->isApi()){
-                $success = false;
-            } else {
-                $this->Flash->error(__('The mentor could not be saved. Please, try again.'));
-            }
-        }
-
-        if($this->isApi()){
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } else {
-            $skills = $this->Mentors->Skills->find('list', ['limit' => 200]);
-            $this->set(compact('mentor', 'skills'));
-        }
+        $this->set(compact('mentor', 'success'));
+        $this->set('_serialize', ['success']);
     }
 
     public function consult($id = null)
@@ -150,27 +74,37 @@ class MentorsController extends AppController
         $mentor = $this->Mentors->get($id, [
             'contain' => ['Skills']
         ]);
+        $success = false;
+
         if($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
-            $image = $data['image'];
-            if($image['tmp_name'] != '') {
-                $imageData  = file_get_contents($image['tmp_name']);
-                $b64   = base64_encode($imageData);
-                $data['image'] = $b64;
-            } else {
-                $data['image'] = $mentor->image;
+            if(!$this->isApi()){
+                $image = $data['image'];
+                if($image['tmp_name'] != '') {
+                    $imageData  = file_get_contents($image['tmp_name']);
+                    $b64   = base64_encode($imageData);
+                    $data['image'] = $b64;
+                } else {
+                    $data['image'] = $mentor->image;
+                }
             }
-
             $mentor = $this->Mentors->patchEntity($mentor, $data);
-            if ($this->Mentors->save($mentor)) {
-                $this->Flash->success(__('The mentor has been saved.'));
 
+            if ($this->Mentors->save($mentor)) {
+                $success = true;
+
+                $this->Flash->success(__('The mentor has been saved.'));
                 return $this->redirect(['action' => 'index']);
+            } else {
+                $success = false;
+
+                $this->Flash->error(__('The mentor could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The mentor could not be saved. Please, try again.'));
+            
         }
-        $skills = $this->Mentors->Skills->find('list', ['limit' => 200]);
-        $this->set(compact('mentor', 'skills'));
+
+        $this->set(compact('mentor', 'success'));
+        $this->set('_serialize', ['success']);
     }
 
     /**
@@ -186,25 +120,16 @@ class MentorsController extends AppController
         $mentor = $this->Mentors->get($id);
         $success = false;
         if ($this->Mentors->delete($mentor)) {
-            if($this->isApi()){
-                $success = true;
-            } else {
-                $this->Flash->success(__('The mentor has been deleted.'));
-            }
+            $success = true;
+            $this->Flash->success(__('The mentor has been deleted.'));
         } else {
-            if($this->isApi()){
-                $success = false;
-            } else {
-                $this->Flash->error(__('The mentor could not be deleted. Please, try again.'));
-            }
+            $success = false;
+            $this->Flash->error(__('The mentor could not be deleted. Please, try again.'));
         }
 
-        if($this->isApi()){
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } else {
-            return $this->redirect(['action' => 'index']);
-        }
+        $this->set(compact('success'));
+        $this->set('_serialize', ['success']);
+        return $this->redirect(['action' => 'index']);
     }
 
     /**
@@ -229,28 +154,25 @@ class MentorsController extends AppController
         $mentor->deleted = $deleted;
         $success = false;
 
-        $state = $deleted == null ? 'reactivated' : 'deactivated';
-
         if ($this->Mentors->save($mentor)) {
-            if($this->isApi()){
-                $success = true;
+            $success = true;
+            if($deleted == null){
+                $this->Flash->success(__('The mentor has been reactivated.'));
             } else {
-                $this->Flash->success(__('The mentor has been ' . $state .'.'));
+                $this->Flash->success(__('The mentor has been deactivated.'));
             }
         } else {
-            if($this->isApi()){
-                $success = false;
+            $success = false;
+            if($deleted == null){
+                $this->Flash->error(__('The mentor could not be reactivated. Please, try again.'));
             } else {
-                $this->Flash->error(__('The mentor could not be ' . $state . '. Please, try again.'));
-            }
+                $this->Flash->error(__('The mentor could not be deactivated. Please, try again.'));
+            }   
         }
 
-        if($this->isApi()){
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } else {
-            return $this->redirect($this->referer());
-        }
+        $this->set(compact('success'));
+        $this->set('_serialize', ['success']);
+        return $this->redirect($this->referer());
     }
     
     public function isTaken()
@@ -282,11 +204,7 @@ class MentorsController extends AppController
     {
         ini_set('memory_limit', '-1');
 
-        if($this->isApi()){
-            $this->getRequest()->allowMethod('post');
-        }else {
-            $this->getRequest()->allowMethod('get', 'ajax');
-        }
+        $this->getRequest()->allowMethod(['post', 'ajax', 'get']);
    
         $keyword = "";
         $sort_field = "email";

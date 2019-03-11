@@ -5,6 +5,7 @@
  */
 echo $this->Html->css('jquery.datetimepicker.min.css');
 echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => false));
+echo $this->Html->script('moment-with-locales.js', array('inline' => false));
 ?>
 
 <div class="loans form large-12 medium-11 columns content">
@@ -500,6 +501,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                 else
                     datePicker.setOptions({maxDate: false});
             } else if(pickerId == "end-time"){
+                datePicker.setOptions({maxDate: false});
                 if(start_time_date != null)
                     datePicker.setOptions({minDate: start_time_date});
                 else
@@ -569,5 +571,10 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
         $('#item_type').change();
 
         rowSelected('item', <?=isset($loan->item_id) ? "'" . $loan->item_id . "'" : null ?>);
+
+        if($("#start-time").val() != '') 
+            $("#start-time").val(moment($("#start-time").val()).format("YYYY-MM-DD HH:mm"));
+        if($("#end-time").val() != '')
+            $("#end-time").val(moment($("#end-time").val()).format("YYYY-MM-DD HH:mm"));
     });
 </script>

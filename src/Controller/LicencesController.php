@@ -33,31 +33,11 @@ class LicencesController extends AppController
     }
 
     /**
-     * View method
-     *
-     * @param string|null $id Licence id.
-     * @return \Cake\Http\Response|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $licence = $this->Licences->get($id, [
-            'contain' => ['Products' => [
-                'sort' => ['Products.name' => 'asc']
-                ]
-            ]
-        ]);
-
-        $this->set('licence', $licence);
-        $this->set('_serialize', ['licence']);
-    }
-
-    /**
      * Add method
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function add()
+    /*public function add()
     {
         $licence = $this->Licences->newEntity();
         $success = false;
@@ -120,72 +100,57 @@ class LicencesController extends AppController
         {
             $this->set(compact('licence'));
         }
-    }
+    }*/
 
     /**
-     * Edit method
+     * Add method
      *
-     * @param string|null $id Licence id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function edit($id = null)
+    public function add()
     {
-        $licence = $this->Licences->get($id, [
-            'contain' => ['Products']
-        ]);
+        $licence = $this->Licences->newEntity();
         $success = false;
-
-        if ($this->request->is(['patch', 'post', 'put']))
-        {
+        if ($this->request->is('post')) {
             $data = $this->request->getData();
-            if(!$this->isApi())
-            {
-                $image = $data['image'];
-                if($image['tmp_name'] != '')
-                {
-                    $imageData  = file_get_contents($image['tmp_name']);
-                    $b64   = base64_encode($imageData);
-                    $data['image'] = $b64;
-                }
-            }
 
-            $licence = $this->Licences->patchEntity($licence, $data);
-            if ($this->Licences->save($licence))
-            {
-                if($this->isApi())
-                {
-                    $success = true;
+            if (is_array($data["products"]["_ids"])){
+                $data['start_time'] = $data['start_time'] . " 00:00:00";
+                if ($data['end_time'] != ""){
+                    $data['end_time'] = $data['end_time'] . " 00:00:00";
                 }
-                else
-                {
+
+                if(!$this->isApi()){
+                    $image = $data['image'];
+                    if($image['tmp_name'] != '') {
+                        $imageData  = file_get_contents($image['tmp_name']);
+                        $b64   = base64_encode($imageData);
+                        $data['image'] = $b64;
+                    }
+                }
+                $licence = $this->Licences->patchEntity($licence, $data);
+                if ($this->Licences->save($licence)) {
+                    $success = true;
+
                     $this->Flash->success(__('The licence has been saved.'));
                     return $this->redirect(['action' => 'index']);
+                } else {
+                    $success = false;
+
+                    $this->Flash->error(__('The licence could not be saved. Please, try again.'));
                 }
-            }
-            else if($this->isApi())
-            {
+            } else {
                 $success = false;
-            }
-            else
-            {
-                $this->Flash->error(__('The licence could not be saved. Please, try again.'));
+
+                $this->Flash->error(__('At least one Product is required. Please, try again.'));
             }
         }
 
-        if($this->isApi())
-        {
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        }
-        else
-        {
-            $products = $this->Licences->Products->find('list', ['limit' => 200]);
-            $this->set(compact('licence', 'products'));
-        }
+        $this->set(compact('licence', 'success'));
+        $this->set('_serialize', ['success']);
     }
 
-    public function consult($id = null)
+    /*public function consult($id = null)
     {
         $licence = $this->Licences->get($id, [
             'contain' => ['Products']
@@ -225,6 +190,51 @@ class LicencesController extends AppController
         }
         $products = $this->Licences->Products->find('list', ['limit' => 200]);
         $this->set(compact('licence', 'products'));
+    }*/
+
+    public function consult($id = null)
+    {
+        $licence = $this->Licences->get($id, [
+            'contain' => ['Products']
+        ]);
+        $success = false;
+
+        if($this->request->is(['patch', 'post', 'put'])) {
+            $data = $this->request->getData();
+
+            $data['start_time'] = $data['start_time'] . " 00:00:00";
+            if ($data['end_time'] != "")
+            {
+                $data['end_time'] = $data['end_time'] . " 00:00:00";
+            }
+
+            if(!$this->isApi()){
+                $image = $data['image'];
+                if($image['tmp_name'] != '') {
+                    $imageData  = file_get_contents($image['tmp_name']);
+                    $b64   = base64_encode($imageData);
+                    $data['image'] = $b64;
+                } else {
+                    $data['image'] = $licence->image;
+                }
+            }
+            $licence = $this->Licences->patchEntity($licence, $data);
+
+            if ($this->Licences->save($licence)) {
+                $success = true;
+
+                $this->Flash->success(__('The licence has been saved.'));
+                return $this->redirect(['action' => 'index']);
+            } else {
+                $success = false;
+
+                $this->Flash->error(__('The licence could not be saved. Please, try again.'));
+            }
+            
+        }
+
+        $this->set(compact('licence', 'success'));
+        $this->set('_serialize', ['success']);
     }
 
     /**
@@ -239,38 +249,17 @@ class LicencesController extends AppController
         $this->getRequest()->allowMethod(['get', 'post', 'delete']);
         $licence = $this->Licences->get($id);
         $success = false;
-        if ($this->Licences->delete($licence))
-        {
-            if($this->isApi())
-            {
-                $success = true;
-            }
-            else
-            {
-                $this->Flash->success(__('The licence has been deleted.'));
-            }
-        }
-        else
-        {
-            if($this->isApi())
-            {
-                $success = false;
-            }
-            else
-            {
-                $this->Flash->error(__('The licence could not be deleted. Please, try again.'));
-            }
+        if ($this->Licences->delete($licence)) {
+            $success = true;
+            $this->Flash->success(__('The licence has been deleted.'));
+        } else {
+            $success = false;
+            $this->Flash->error(__('The licence could not be deleted. Please, try again.'));
         }
 
-        if($this->isApi())
-        {
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        }
-        else
-        {
-            return $this->redirect(['action' => 'index']);
-        }
+        $this->set(compact('success'));
+        $this->set('_serialize', ['success']);
+        return $this->redirect(['action' => 'index']);
     }
 
     /**
@@ -298,40 +287,25 @@ class LicencesController extends AppController
         $licence->deleted = $deleted;
         $success = false;
 
-        $state = $deleted == null ? 'reactivated' : 'deactivated';
-
-        if ($this->Licences->save($licence))
-        {
-            if($this->isApi())
-            {
-                $success = true;
+        if ($this->Licences->save($licence)) {
+            $success = true;
+            if($deleted == null){
+                $this->Flash->success(__('The licence has been reactivated.'));
+            } else {
+                $this->Flash->success(__('The licence has been deactivated.'));
             }
-            else
-            {
-                $this->Flash->success(__('The licence has been ' . $state .'.'));
-            }
-        }
-        else
-        {
-            if($this->isApi())
-            {
-                $success = false;
-            }
-            else
-            {
-                $this->Flash->error(__('The licence could not be ' . $state . '. Please, try again.'));
-            }
+        } else {
+            $success = false;
+            if($deleted == null){
+                $this->Flash->error(__('The licence could not be reactivated. Please, try again.'));
+            } else {
+                $this->Flash->error(__('The licence could not be deactivated. Please, try again.'));
+            }   
         }
 
-        if($this->isApi())
-        {
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        }
-        else
-        {
-            return $this->redirect($this->referer());
-        }
+        $this->set(compact('success'));
+        $this->set('_serialize', ['success']);
+        return $this->redirect($this->referer());
     }
 
     public function isAuthorized($user)
@@ -367,11 +341,7 @@ class LicencesController extends AppController
     {
         ini_set('memory_limit', '-1');
 
-        if($this->isApi()){
-            $this->getRequest()->allowMethod('post');
-        }else {
-            $this->getRequest()->allowMethod('get', 'ajax');
-        }
+        $this->getRequest()->allowMethod(['post', 'ajax', 'get']);
    
         $keyword = "";
         $sort_field = "name";

@@ -16,7 +16,6 @@ class SkillsController extends AppController
     public function initialize()
     {
         parent::initialize();
-        $this->loadComponent('Paginator');
     }
 
     /**
@@ -31,23 +30,6 @@ class SkillsController extends AppController
     }
 
     /**
-     * View method
-     *
-     * @param string|null $id Skill id.
-     * @return \Cake\Http\Response|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $skill = $this->Skills->get($id, [
-            'contain' => ['Mentors']
-        ]);
-
-        $this->set('skill', $skill);
-        $this->set('_serialize', ['skill']);
-    }
-
-    /**
      * Add method
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
@@ -59,63 +41,19 @@ class SkillsController extends AppController
         if ($this->getRequest()->is('post')) {
             $skill = $this->Skills->patchEntity($skill, $this->getRequest()->getData());
             if ($this->Skills->save($skill)) {
-                if($this->isApi()){
                     $success = true;
-                } else {
-                    $this->Flash->success(__('The skill has been saved.'));
 
+                    $this->Flash->success(__('The skill has been saved.'));
                     return $this->redirect(['action' => 'index']);
-                }
-            } else if($this->isApi()){
-                $success = false;
             } else {
+                $success = false;
+
                 $this->Flash->error(__('The skill could not be saved. Please, try again.'));
             }
         }
-        if($this->isApi()){
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } else {
-            $mentors = $this->Skills->Mentors->find('list', ['limit' => 200]);
-            $this->set(compact('skill', 'mentors'));
-        }
-    }
 
-    /**
-     * Edit method
-     *
-     * @param string|null $id Skill id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $skill = $this->Skills->get($id, [
-            'contain' => ['Mentors']
-        ]);
-        if ($this->getRequest()->is(['patch', 'post', 'put'])) {
-            $skill = $this->Skills->patchEntity($skill, $this->getRequest()->getData());
-            if ($this->Skills->save($skill)) {
-                if($this->isApi()){
-                    $success = true;
-                } else {
-                    $this->Flash->success(__('The skill has been saved.'));
-
-                    return $this->redirect(['action' => 'index']);
-                }
-            } else if($this->isApi()){
-                $success = false;
-            } else {
-                $this->Flash->error(__('The skill could not be saved. Please, try again.'));
-            }
-        }
-        if($this->isApi()){
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } else {
-            $mentors = $this->Skills->Mentors->find('list', ['limit' => 200]);
-            $this->set(compact('skill', 'mentors'));
-        }
+        $this->set(compact('skill', 'success'));
+        $this->set('_serialize', ['success']);
     }
 
     /**
@@ -130,17 +68,22 @@ class SkillsController extends AppController
         $skill = $this->Skills->get($id, [
             'contain' => ['Mentors']
         ]);
+        $success = false;
         if ($this->getRequest()->is(['patch', 'post', 'put'])) {
             $skill = $this->Skills->patchEntity($skill, $this->getRequest()->getData());
             if ($this->Skills->save($skill)) {
-                $this->Flash->success(__('The skill has been saved.'));
+                $success = true;
 
+                $this->Flash->success(__('The skill has been saved.'));
                 return $this->redirect(['action' => 'consult', $skill->id]);
-            }
-            $this->Flash->error(__('The skill could not be saved. Please, try again.'));
+            } else {
+                $success = false;
+
+                $this->Flash->error(__('The skill could not be saved. Please, try again.'));
+            }            
         }
-        $mentors = $this->Skills->Mentors->find('list', ['limit' => 200]);
-        $this->set(compact('skill', 'mentors'));
+        $this->set(compact('skill', 'success'));
+        $this->set('_serialize', ['success']);
     }
     
 
@@ -157,25 +100,16 @@ class SkillsController extends AppController
         $skill = $this->Skills->get($id);
         $success = false;
         if ($this->Skills->delete($skill)) {
-            if($this->isApi()){
-                $success = true;
-            } else {
-                $this->Flash->success(__('The skill has been deleted.'));
-            }
+            $success = true;
+            $this->Flash->success(__('The skill has been deleted.'));
         } else {
-            if($this->isApi()){
-                $success = false;
-            } else {
-                $this->Flash->error(__('The skill could not be deleted. Please, try again.'));
-            }
+            $success = false;
+            $this->Flash->error(__('The skill could not be deleted. Please, try again.'));
         }
 
-        if($this->isApi()){
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } else {
-            return $this->redirect(['action' => 'index']);
-        }
+        $this->set(compact('success'));
+        $this->set('_serialize', ['success']);
+        return $this->redirect(['action' => 'index']);
     }
 
     public function isTaken()
@@ -212,17 +146,11 @@ class SkillsController extends AppController
         $state = $func == 'link' ? 'created' : 'deleted';
 
         if($func == 'link' && $this->Skills->Mentors->link($skill, [$mentor]) || $func == 'unlink' && $this->Skills->Mentors->unlink($skill, [$mentor])){
-            if($this->isApi()){
-                $success = true;
-            } else {
-                //$this->Flash->success(__('The association has been ' . $state . '.'));
-            }
+            $success = true;
+            //$this->Flash->success(__('The association has been ' . $state . '.'));
         } else {
-            if($this->isApi()){
-                $success = false;
-            } else {
-                //$this->Flash->error(__('The association could not be ' . $state . '. Please, try again.'));
-            }
+            $success = false;
+            //$this->Flash->error(__('The association could not be ' . $state . '. Please, try again.'));
         }
 
         if($this->isApi()){
@@ -246,11 +174,7 @@ class SkillsController extends AppController
 
     public function search()
     {   
-        if($this->isApi()){
-            $this->getRequest()->allowMethod('post');
-        } else {
-            $this->getRequest()->allowMethod(['ajax', 'get']);
-        }
+        $this->getRequest()->allowMethod(['post', 'ajax', 'get']);
    
         $keyword = "";
         $sort_field = "";

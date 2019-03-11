@@ -46,26 +46,19 @@ class LoansController extends AppController
             $loan = $this->Loans->patchEntity($loan, $data);
 
             if ($this->Loans->save($loan)) {
-                if($this->isApi()){
-                    $success = true;
-                } else {
-                    $this->Flash->success(__('The loan has been saved.'));
+                $success = true;
 
-                    return $this->redirect(['action' => 'index']);
-                }
-            }else if($this->isApi()){
+                $this->Flash->success(__('The loan has been saved.'));
+                return $this->redirect(['action' => 'index']);
+            } else {
                 $success = false;
-            }else {
+
                 $this->Flash->error(__('The loan could not be saved. Please, try again.'));
             }
         }
 
-        if($this->isApi()){
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } else {
-            $this->set(compact('loan'));
-        }
+        $this->set(compact('loan', 'success'));
+        $this->set('_serialize', ['success']);
     }
 
     /**
@@ -93,34 +86,26 @@ class LoansController extends AppController
 
                 if ($this->Loans->save($loan)) {
                     $success = true;
-                    if($this->isApi()){
-                        $this->set(compact('success'));
-                        $this->set('_serialize', ['success']);
-                        return;
-                    } else {
-                        $this->Flash->success(__('The loan has been returned.'));
 
-                        return $this->redirect(['action' => 'index']);
-                    }
-                }
-                $success = false;
-                if($this->isApi()){
-                    $this->set(compact('success'));
-                    $this->set('_serialize', ['success']);
-                    return;
+                    $this->Flash->success(__('The loan has been returned.'));
+                    return $this->redirect(['action' => 'index']);
                 } else {
+                    $success = false;
+
                     $this->Flash->error(__('The loan could not be returned. Please, try again.'));
                 }
             }
             else
             {
+                $success = false;
+
                 $this->Flash->error(__('The loan could not be returned. Please, try again.'));
             }
         }
-        $this->set(compact('loan'));
-        if($this->isApi()){
-            $this->set('_serialize', 'loan');
-        }
+                    
+        $this->set(compact('loan', 'success'));
+        $this->set('_serialize', 'loan');
+        $this->set('_serialize', ['success']);
     }
 
     /**
