@@ -5,6 +5,7 @@
  */
 echo $this->Html->css('jquery.datetimepicker.min.css');
 echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => false));
+echo $this->Html->script('moment-with-locales.js', array('inline' => false));
 ?>
 
 <div class="loans index large-12 medium-11 columns content">
@@ -152,8 +153,8 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                                         <td>` + elem.item.description + `</td>
                                         <td>` + labels_list + `</td>
                                         <td>` + elem.user.identifier + `</td>
-                                        <td>` + new Date(elem.start_time).toLocaleString([], dateOptions).replace(/\//g, '-') + `</td>
-                                        <td>` + new Date(elem.end_time).toLocaleString([], dateOptions).replace(/\//g, '-') + `</td>
+                                        <td>` + moment(elem.start_time).format("YYYY-MM-DD HH:mm") + `</td>
+                                        <td>` + moment(elem.end_time).format("YYYY-MM-DD HH:mm") + `</td>
                                         <td class='actions'>
                                             ` + link + `
                                         </td>
@@ -167,9 +168,9 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                                         <td>` + elem.item.description + `</td>
                                         <td>` + labels_list + `</td>
                                         <td>` + elem.user.identifier + `</td>
-                                        <td>` + new Date(elem.start_time).toLocaleString([], dateOptions).replace(/\//g, '-') + `</td>
-                                        <td>` + new Date(elem.end_time).toLocaleString([], dateOptions).replace(/\//g, '-') + `</td>
-                                        <td>` + new Date(elem.returned).toLocaleString([], dateOptions).replace(/\//g, '-') + `</td>
+                                        <td>` + moment(elem.start_time).format("YYYY-MM-DD HH:mm") + `</td>
+                                        <td>` + moment(elem.end_time).format("YYYY-MM-DD HH:mm") + `</td>
+                                        <td>` + moment(elem.returned).format("YYYY-MM-DD HH:mm") + `</td>
                                     </tr>
                                 `);
                             }
@@ -229,6 +230,7 @@ echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => fals
                 else
                     datePicker.setOptions({maxDate: false});
             } else if(pickerId == "end_time"){
+                datePicker.setOptions({maxDate: false});
                 if(start_time_date != null)
                     datePicker.setOptions({minDate: start_time_date});
                 else
