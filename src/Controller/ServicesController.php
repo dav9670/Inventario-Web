@@ -47,6 +47,7 @@ class ServicesController extends AppController
                 return $this->redirect(['action' => 'index']);
             } else {
                 $success = false;
+
                 $this->Flash->error(__('The service could not be saved. Please, try again.'));
             }
         }
@@ -80,7 +81,6 @@ class ServicesController extends AppController
 
                 $this->Flash->error(__('The service could not be saved. Please, try again.'));
             }
-            
         }
         $this->set(compact('service', 'success'));
         $this->set('_serialize', ['success']);
