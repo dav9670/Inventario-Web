@@ -357,9 +357,10 @@ use Cake\I18n\I18n;
         $('#report-table-head').append(`
             <tr>
                 <th scope="col"><a id="cat_sort" onclick="sortSetter('cat'); setBodyEquipments();"><?= __("Category") ?></a></th>
+                <th scope="col"><?= __("Equipment Name") ?></th>
                 <th scope="col"><a id="time_loans_sort" onclick="sortSetter('time_loans'); setBodyEquipments();"><?= __("Time loaned") ?></th>
-                <th scope="col"><a id="hour_loans_sort" onclick="sortSetter('hour_loans'); setBodyEquipments();"><?= __("Overtime fee") ?></th>
                 <th scope="col"><a id="late_loans_sort" onclick="sortSetter('late_loans'); setBodyEquipments();"><?= __("Late loans") ?></th>
+                <th scope="col"><a id="hour_loans_sort" onclick="sortSetter('hour_loans'); setBodyEquipments();"><?= __("Overtime fee") ?></th>
                 <th scope="col"><a id="available_sort" onclick="sortSetter('available'); setBodyEquipments();"><?= __("Available") ?></th>
             </tr>
         `);
@@ -381,6 +382,7 @@ use Cake\I18n\I18n;
                         $('#report-table-body').append(`
                         <tr id = \"highlight\">
                             <td>` + elem.cat + `</td>
+                            <td>` + elem.equipmentName + `</td>
                             <td>` + elem.time_loans + `</td>
                             <td class=\"money\">` + elem.hour_loans + `</td>
                             <td>` + elem.late_loans + `</td>
@@ -391,12 +393,27 @@ use Cake\I18n\I18n;
                         $('#report-table-body').append(`
                             <tr>
                                 <td>` + elem.cat + `</td>
+                                <td>` + elem.equipmentName + `</td>
                                 <td>` + elem.time_loans + `</td>
                                 <td class=\"money\">` + elem.hour_loans + `</td>
                                 <td>` + elem.late_loans + `</td>
                                 <td>` + elem.available + `</td>
                             </tr>
                         `);
+                        if(elem.equipments.length > 0){
+                            elem.equipments.forEach(function(equipment){
+                                $('#report-table-body').append(`
+                                    <tr>
+                                        <td>` + equipment.cat + `</td>
+                                        <td>` + equipment.equipmentName + `</td>
+                                        <td>` + equipment.time_loans + `</td>
+                                        <td class=\"money\">` + equipment.hour_loans + `</td>
+                                        <td>` + equipment.late_loans + `</td>
+                                        <td>` + equipment.available + `</td>
+                                    </tr>
+                                `);
+                            });
+                        }
                     }
                 });
             },
