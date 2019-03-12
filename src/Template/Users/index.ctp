@@ -39,7 +39,7 @@
                 <tr>
                     <th scope="col"></th>
                     <th scope="col"><a id='email_sort'><?= __("Email Adress") ?></a></th>
-                    <th scope="col"><a id='admin_sort'><?= __("Admin Status") ?></a></th>
+                    <th scope="col"><a id='admin_status_sort'><?= __("Admin Status") ?></a></th>
                     
                 </tr>
             </thead>

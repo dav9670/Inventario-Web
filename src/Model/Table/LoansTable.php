@@ -23,7 +23,7 @@ use Cake\I18n\Time;
  * @method \App\Model\Entity\Loan[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\Loan findOrCreate($search, callable $callback = null, $options = [])
  */
-class LoansTable extends Table
+class LoansTable extends SanitizeTable
 {
 
     /**
