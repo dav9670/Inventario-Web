@@ -41,7 +41,11 @@ $cakeDescription = 'Inventar.io';
     <nav class="top-bar expanded" data-topbar role="navigation">
         <ul class="title-area large-2 medium-3 columns">
             <li class="name">
-                <h1><?= $this->Html->link(__($this->getRequest()->getParam('controller')), ['controller' => $this->getRequest()->getParam('controller'), 'action' => 'index']); ?></h1>
+                <?php if($this->getRequest()->getParam('controller') == 'Users' && $this->getRequest()->getParam('action') == 'profile'){ ?>
+                    <h1><?= $this->Html->link(__('Profile'), ['controller' => 'Users', 'action' => 'profile']); ?></h1>
+                <?php } else { ?>
+                    <h1><?= $this->Html->link(__($this->getRequest()->getParam('controller')), ['controller' => $this->getRequest()->getParam('controller'), 'action' => 'index']); ?></h1>
+                <?php } ?>
             </li>
         </ul>
         <div class="top-bar-section">

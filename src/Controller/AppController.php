@@ -22,6 +22,7 @@ use Cake\I18n\Time;
 use Cake\I18n\FrozenTime;
 use Cake\I18n\Date;
 use Cake\I18n\FrozenDate;
+use Cake\ORM\TableRegistry;
 
 
 /**
@@ -107,6 +108,7 @@ class AppController extends Controller
                  // If unauthorized, return them to page they were just on
                 'unauthorizedRedirect' => $this->referer()
             ]);
+            $this->Auth->config('checkAuthIn', 'Controller.initialize');
         }
 
         // Allow the display action so our PagesController
@@ -142,6 +144,18 @@ class AppController extends Controller
           $session->write('Config.language', 'en_US');
         }
         I18n::setLocale($session->read('Config.language'));
+
+        if ($this->Auth->user('id') != null)
+        {
+            $table = TableRegistry::get('Users');
+            $new_user = $table->get($this->Auth->user('id'));
+            if ($new_user != null)
+            {
+                $old_user = $this->Auth->user();
+                $old_user['admin_status'] = $new_user->admin_status;
+                $this->Auth->setUser($old_user);
+            }
+        }
     }
 
     public function isAuthorized($user)
