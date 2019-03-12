@@ -231,6 +231,11 @@ class ReportsController extends AppController
         $conn = ConnectionManager::get('default');
         $proc_result = $conn->execute("call equipments_report(?,?,?,?)", [$start_date, $end_date, $sort_field, $sort_dir])->fetchAll('assoc');
         
+        /**
+         * Partie qui construit une array avec les valeurs finales. 
+         * Fait en PHP car suite avec les modifications de dernière minute modifier la procedure aurait été trop long.
+         */
+
         $time = 0;
         $hour = 0;
         $avai = 0;
@@ -302,6 +307,10 @@ class ReportsController extends AppController
             $time += $timesLoans;
         }
 
+
+        /**
+         * Fonctions qui trient l'array en fonction des param sort_dir et sort_field.
+         */
 
         $change = true;
         while($change){
@@ -400,7 +409,9 @@ class ReportsController extends AppController
             }
         }
 
-
+        /**
+         * Ajout de la ligne total et vérification qu'ucun champ n'est nul.
+         */
 
         $finalArray[$id]["cat"] = "Total";
         $finalArray[$id]["equipmentName"] = "";
