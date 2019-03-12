@@ -246,34 +246,40 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
         }
     }
 
+    function submitPassword(){
+        var password = $('#password-test').val();
+        var name = "<?php echo $this->request->getSession()->read('Auth.User.email'); ?>";
+        $.ajax({
+            method: 'post',
+            url : "/users/verify.json",
+            data: {email:name, password:password},
+            beforeSend: function (xhr) { // Add this line
+                xhr.setRequestHeader('X-CSRF-Token', $('[name="_csrfToken"]').val());
+            },
+            success: function( response ){
+                if(response){
+                    $('#user_form').submit();
+                }
+                else{
+                    showFlash("<strong>Alert:</strong> Wrong password");
+                }
+                dialog.dialog( "close" );
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                alert("Failed");
+                console.log(jqXHR.responseText);
+                dialog.dialog( "close" );
+            }
+        });
+    }
+
     function doneEditing(){
 
         if ($("#user_form").data("changed")){
 
             if ($('#admin').val() == 1){
-                
-                var password = prompt("Please enter your password to add an admin", "");
-                var name = "<?php echo $this->request->getSession()->read('Auth.User.email'); ?>";
-                $.ajax({
-                    method: 'post',
-                    url : "/users/verify.json",
-                    data: {email:name, password:password},
-                    beforeSend: function (xhr) { // Add this line
-                        xhr.setRequestHeader('X-CSRF-Token', $('[name="_csrfToken"]').val());
-                    },
-                    success: function( response ){
-                        if(response){
-                            $('#user_form').submit();
-                        }
-                        else{
-                            showFlash("<strong>Alert:</strong> Wrong password");
-                        }
-                    },
-                    error: function(jqXHR, textStatus, errorThrown){
-                        alert("Failed");
-                        console.log(jqXHR.responseText);
-                    }
-                });
+                dialog.dialog( "open" );
+
             }else{
                 $('#user_form').submit();
             }
@@ -304,6 +310,25 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
             $("#user_form").data("changed",true);
             $('#cancelButton').show();
         }));
+
+        dialog = $("#dialog-prompt").dialog({
+            autoOpen: false,
+            height: 300,
+            width: 400,
+            modal: true,
+            buttons: {
+                "Confirm": submitPassword,
+                Cancel: function() {
+                    dialog.dialog("close");
+                }
+            },
+            close: function() {
+                form[0].reset();
+                dialog.dialog("close");
+            }
+        });
+    
+        form = dialog.find("form").on("submit", submitPassword);
 
         let dateTimeBoundarySet = function(datePicker, date, htmlObject){
             let pickerId = htmlObject[0].id;
@@ -390,3 +415,15 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
     });
 
 </script>
+
+<div id="dialog-prompt" title="Confirm">
+    <form>
+        <fieldset>
+            <label for="password-test">Password</label>
+            <input type="password" name="password-test" id="password-test" value="" class="text ui-widget-content ui-corner-all">
+
+            <!-- Allow form submission with keyboard without duplicating the dialog button -->
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </fieldset>
+    </form>
+</div>
