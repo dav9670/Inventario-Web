@@ -129,8 +129,7 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
                                         <td>` + labels_list + `</td>
                                         <td>` + moment(elem.start_time).format("YYYY-MM-DD HH:mm") + `</td>
                                         <td>` + moment(elem.end_time).format("YYYY-MM-DD HH:mm") + `</td>
-                                        <
-                                        td class=\"money\">` + parseFloat(elem.overtime_fee).toFixed(2) + "$" + `</td>
+                                        <td class=\"money\">` + parseFloat(elem.overtime_fee).toFixed(2) + "$" + `</td>
                                     </tr>
                                 `);
                             }
