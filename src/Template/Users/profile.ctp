@@ -3,13 +3,14 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\User $user
  */
+echo $this->Html->css('jquery.datetimepicker.min.css');
+echo $this->Html->script('jquery.datetimepicker.full.js', array('inline' => false));
 echo $this->Html->script('moment-with-locales.js', array('inline' => false));
 ?>
 <div class="loans index large-12 medium-11 columns content">
 <h3><?= __($user->email) ?></h3>
 <button type="button" id="passwordButton" class='right passwordButton' onClick='changePassword()' ><?=__('Change password')?></button>
     <div class="related">
-        
         <h4><?= __('Related Loans') ?></h4>
     </div>
 
@@ -168,20 +169,47 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
 
     $('document').ready(function(){
 
-        $(".datepicker").datepicker({
-            dateFormat: 'yy-mm-dd',
-            changeMonth: true,
-			changeYear: true,
-            onSelect: function(dateText,inst) {
-                $('#preset-dates').val('custom');
-                $('#start_time').datepicker('option', 'maxDate', $('#end_time').val());
-                $('#end_time').datepicker('option', 'minDate', $('#start_time').val());
-                $('#search').keyup();
-            }
-        });
+        let dateTimeBoundarySet = function(datePicker, date, htmlObject){
+            let pickerId = htmlObject[0].id;
+            let start_time_date = null;
+            let end_time_date = null;
+            
+            let reg_start_time_date = /(\d{4}-\d{2}-\d{2})/.exec($('#start_time').val());
+            if(reg_start_time_date != null)
+                start_time_date = reg_start_time_date[0];
+            let reg_end_time_date = /(\d{4}-\d{2}-\d{2})/.exec($('#end_time').val());
+            if(reg_end_time_date != null)
+                end_time_date = reg_end_time_date[0];
 
-        $('#start_time').datepicker('option', 'maxDate', $('#end_time').val());
-        $('#end_time').datepicker('option', 'minDate', $('#start_time').val());
+            if(pickerId == "start_time"){
+                if(end_time_date != null)
+                    datePicker.setOptions({maxDate: end_time_date});
+                else
+                    datePicker.setOptions({maxDate: false});
+            } else if(pickerId == "end_time"){
+                datePicker.setOptions({maxDate: false});
+                if(start_time_date != null)
+                    datePicker.setOptions({minDate: start_time_date});
+                else
+                    datePicker.setOptions({minDate: false});
+            }
+        }
+
+        let showDateTime = function(datePicker, htmlObject){
+            dateTimeBoundarySet(this, datePicker, htmlObject);
+        }
+
+        let changeDateTime = function(datePicker, htmlObject){
+            dateTimeBoundarySet(this, datePicker, htmlObject);
+            $('#preset-dates').val('custom');
+            $('#item_search').keyup();
+        }
+
+        $(".datepicker").datetimepicker({
+            format: 'Y-m-d H:i',
+            onShow: showDateTime,
+            onChangeDateTime: changeDateTime
+        });
 
          $('#search').keyup(function(){
             var searchkey = $(this).val();
@@ -227,7 +255,7 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
     });
 
     function changePassword(){
-             window.location.href = "/users/changePassword";
-         }
+        window.location.href = "/users/changePassword";
+    }
 </script>
 
