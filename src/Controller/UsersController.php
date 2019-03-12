@@ -195,6 +195,11 @@ class UsersController extends AppController
                     $data['admin_status'] = 'admin';
                 }
             }
+
+            if($data['password'] == "") {
+                $data['password'] = $user->password;
+            }
+
             $user = $this->Users->patchEntity($user, $data);
 
             if ($this->Users->save($user)) {
