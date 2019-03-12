@@ -3,6 +3,7 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\User $user
  */
+echo $this->Html->script('moment-with-locales.js', array('inline' => false));
 ?>
 <div class="loans index large-12 medium-11 columns content">
 <h3><?= __($user->email) ?></h3>
@@ -54,7 +55,7 @@
                 <tr>
                     <th scope="col"></th>
                     <th scope="col"><a id='item_sort' class='asc'><?= __("Item") ?></a></th>
-                    <th scope="col"><a id='description_sort'><?= __("Description") ?></a></th>
+                    <th scope="col" style="width:30%;"><a id='description_sort'><?= __("Description") ?></a></th>
                     <th scope="col"><?= __("Labels") ?></th>
                     <th scope="col"><a id='start_time_sort'><?= __("Start time") ?></a></th>
                     <th scope="col"><a id='end_time_sort'><?= __("End time") ?></a></th>
@@ -110,16 +111,24 @@
                         $.each(loansArray, function(idx, elem){
                         
                             if(elem.user['id'] == id){
-                                console.log(elem);
+                                
+                                var labels_list = "";
+                                var three_labels = elem.item.labels.slice(0,3);
+                                if (elem.item.labels.length > 3) {
+                                    labels_list = three_labels.join("; ") + "...";
+                                } else {
+                                    labels_list = three_labels.join("; ");
+                                }
+
                                 table.append(`
                                     <tr` + (new Date(elem.end_time) < new Date() && elem.returned == null ? " class='late'" : "") + `>
                                         <td><img src='data:image/png;base64,` + elem.item.image + `' width=100/></td>
                                         <td>` + elem.item.identifier + `</td>
                                         <td>` + elem.item.description + `</td>
-                                        <td>` + elem.item.labels + `</td>
-                                        <td>` + elem.start_time + `</td>
-                                        <td>` + elem.end_time + `</td>
-                                        <td>` + elem.overtime_fee + `</td>
+                                        <td>` + labels_list + `</td>
+                                        <td>` + moment(elem.start_time).format("YYYY-MM-DD HH:mm") + `</td>
+                                        <td>` + moment(elem.end_time).format("YYYY-MM-DD HH:mm") + `</td>
+                                        <td>` + parseFloat(elem.overtime_fee).toFixed(2) + "$" + `</td>
                                     </tr>
                                 `);
                             }
