@@ -277,7 +277,7 @@ class ReportsController extends AppController
                 ->bind(':end', $end_date);
                 $equipArray['cat'] = " ";
                 $equipArray['equipmentName'] = $equipment['name'];
-                $equipArray["hour_loans"] =  money_format('%.2n', $value);
+                $equipArray["hour_loans"] =  money_format('%.2n', $value) . "$";
                 $equipArray["late_loans"] = $lateLoans;
                 $equipArray["time_loans"] = sizeof($query3->toArray());
                 $equipArray["available"] = $equipment["available"];
@@ -404,7 +404,7 @@ class ReportsController extends AppController
         $totalLate = sizeof($query4->toArray());
         $finalArray[$id]["cat"] = "Total";
         $finalArray[$id]["equipmentName"] = "";
-        $finalArray[$id]["hour_loans"] =  money_format('%.2n', $hour);
+        $finalArray[$id]["hour_loans"] =  money_format('%.2n', $hour) . "$";
         $finalArray[$id]["late_loans"] = $totalLate;
         $finalArray[$id]["time_loans"] = $time;
         $finalArray[$id]["available"] = $totalAvailable;

@@ -421,7 +421,8 @@ use Cake\I18n\I18n;
                                     </tr>
                                 `);
                             });
-                            $('#report-table-body').append(`
+                        }
+                        $('#report-table-body').append(`
                                 <tr>
                                     <td>` + " " + `</td>
                                     <td>` + " " + `</td>
@@ -430,8 +431,7 @@ use Cake\I18n\I18n;
                                     <td>` + " " + `</td>
                                     <td>` + " " + `</td>
                                 </tr>
-                        `   );
-                        }
+                        `);
                     }
                 });
             },
