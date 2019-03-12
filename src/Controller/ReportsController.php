@@ -302,7 +302,7 @@ class ReportsController extends AppController
             $change = false;
             if($sort_field == "hour_loans" && $sort_dir == "asc"){
                 for($i = 0; $i < sizeof($finalArray) - 1; $i++){
-                    if ($finalArray[$i]['hour_loans'] < $finalArray[$i + 1]['hour_loans']){
+                    if ($finalArray[$i]['hour_loans'] > $finalArray[$i + 1]['hour_loans']){
                         $temp = $finalArray[$i];
                         $finalArray[$i] = $finalArray[$i + 1];
                         $finalArray[$i + 1] = $temp;
@@ -311,7 +311,7 @@ class ReportsController extends AppController
                 }
             } elseif($sort_field == "hour_loans" && $sort_dir == "desc"){
                 for($i = 0; $i < sizeof($finalArray) - 1; $i++){
-                    if ($finalArray[$i]['hour_loans'] > $finalArray[$i + 1]['hour_loans']){
+                    if ($finalArray[$i]['hour_loans'] < $finalArray[$i + 1]['hour_loans']){
                         $temp = $finalArray[$i];
                         $finalArray[$i] = $finalArray[$i + 1];
                         $finalArray[$i + 1] = $temp;
@@ -320,7 +320,7 @@ class ReportsController extends AppController
                 }
             } elseif($sort_field == "late_loans" && $sort_dir == "asc"){
                 for($i = 0; $i < sizeof($finalArray) - 1; $i++){
-                    if ($finalArray[$i]['late_loans'] < $finalArray[$i + 1]['late_loans']){
+                    if ($finalArray[$i]['late_loans'] > $finalArray[$i + 1]['late_loans']){
                         $temp = $finalArray[$i];
                         $finalArray[$i] = $finalArray[$i + 1];
                         $finalArray[$i + 1] = $temp;
@@ -329,7 +329,7 @@ class ReportsController extends AppController
                 }
             } elseif($sort_field == "late_loans" && $sort_dir == "desc"){
                 for($i = 0; $i < sizeof($finalArray) - 1; $i++){
-                    if ($finalArray[$i]['late_loans'] > $finalArray[$i + 1]['late_loans']){
+                    if ($finalArray[$i]['late_loans'] < $finalArray[$i + 1]['late_loans']){
                         $temp = $finalArray[$i];
                         $finalArray[$i] = $finalArray[$i + 1];
                         $finalArray[$i + 1] = $temp;
@@ -338,7 +338,7 @@ class ReportsController extends AppController
                 }
             } elseif($sort_field == "available" && $sort_dir == "asc"){
                 for($i = 0; $i < sizeof($finalArray) - 1; $i++){
-                    if ($finalArray[$i]['available'] < $finalArray[$i + 1]['available']){
+                    if ($finalArray[$i]['available'] > $finalArray[$i + 1]['available']){
                         $temp = $finalArray[$i];
                         $finalArray[$i] = $finalArray[$i + 1];
                         $finalArray[$i + 1] = $temp;
@@ -347,7 +347,7 @@ class ReportsController extends AppController
                 }
             } elseif($sort_field == "available" && $sort_dir == "desc"){
                 for($i = 0; $i < sizeof($finalArray) - 1; $i++){
-                    if ($finalArray[$i]['available'] > $finalArray[$i + 1]['available']){
+                    if ($finalArray[$i]['available'] < $finalArray[$i + 1]['available']){
                         $temp = $finalArray[$i];
                         $finalArray[$i] = $finalArray[$i + 1];
                         $finalArray[$i + 1] = $temp;
@@ -356,7 +356,7 @@ class ReportsController extends AppController
                 }
             } elseif($sort_field == "time_loans" && $sort_dir == "asc"){
                 for($i = 0; $i < sizeof($finalArray) - 1; $i++){
-                    if ($finalArray[$i]['time_loans'] < $finalArray[$i + 1]['time_loans']){
+                    if ($finalArray[$i]['time_loans'] > $finalArray[$i + 1]['time_loans']){
                         $temp = $finalArray[$i];
                         $finalArray[$i] = $finalArray[$i + 1];
                         $finalArray[$i + 1] = $temp;
@@ -366,7 +366,7 @@ class ReportsController extends AppController
                 }
             } elseif($sort_field == "time_loans" && $sort_dir == "desc"){
                 for($i = 0; $i < sizeof($finalArray) - 1; $i++){
-                    if ($finalArray[$i]['time_loans'] > $finalArray[$i + 1]['time_loans']){
+                    if ($finalArray[$i]['time_loans'] < $finalArray[$i + 1]['time_loans']){
                         $temp = $finalArray[$i];
                         $finalArray[$i] = $finalArray[$i + 1];
                         $finalArray[$i + 1] = $temp;
@@ -375,7 +375,7 @@ class ReportsController extends AppController
                 }
             } elseif($sort_field == "cat" && $sort_dir == "asc"){
                 for($i = 0; $i < sizeof($finalArray) - 1; $i++){
-                    if ($finalArray[$i]['cat'] < $finalArray[$i + 1]['cat']){
+                    if ($finalArray[$i]['cat'] > $finalArray[$i + 1]['cat']){
                         $temp = $finalArray[$i];
                         $finalArray[$i] = $finalArray[$i + 1];
                         $finalArray[$i + 1] = $temp;
@@ -384,7 +384,7 @@ class ReportsController extends AppController
                 }
             } elseif($sort_field == "cat" && $sort_dir == "desc"){
                 for($i = 0; $i < sizeof($finalArray) - 1; $i++){
-                    if ($finalArray[$i]['cat'] > $finalArray[$i + 1]['cat']){
+                    if ($finalArray[$i]['cat'] < $finalArray[$i + 1]['cat']){
                         $temp = $finalArray[$i];
                         $finalArray[$i] = $finalArray[$i + 1];
                         $finalArray[$i + 1] = $temp;

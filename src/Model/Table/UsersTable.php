@@ -5,6 +5,8 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\TableRegistry;
+use Cake\I18n\Time;
 
 /**
  * Users Model
@@ -70,7 +72,14 @@ class UsersTable extends Table
             ->scalar('admin_status')
             ->maxLength('admin_status', 50)
             ->requirePresence('admin_status', 'create',__('You need to pick one.'))
-            ->allowEmptyString('admin_status', false);
+            ->allowEmptyString('admin_status', false)
+            ->add('admin_status',[
+                'moreThanOneAdmin' => [
+                    'rule' => 'moreThanOneAdmin',
+                    'provider' => 'table',
+                    'message' => __('There must always be at least one administrator.')
+                ]
+            ]);
 
         $validator
             ->scalar('image')
@@ -94,5 +103,26 @@ class UsersTable extends Table
         $rules->add($rules->isUnique(['email']));
 
         return $rules;
+    }
+
+    public function moreThanOneAdmin($value, $context)
+    {
+        $table = TableRegistry::get('Users');
+        if ($value == 'user')
+        {
+            $items = $table->find()->where(['admin_status' => 'admin'])->toList();
+            if (count($items) <= 1)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        else
+        {
+            return true;
+        }
     }
 }

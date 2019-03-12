@@ -83,10 +83,6 @@ class UsersController extends AppController
             'contain' => ['Loans']
         ]);
 
-        foreach($user->loans as $loan) {
-            $loan['overtime_string'] = money_format('%.2n', $loan['overtime_fee']) . "$";
-        }
-
         $this->set('user', $user);
         $this->set('_serialize', ['user']);
     }
@@ -176,38 +172,50 @@ class UsersController extends AppController
         ]);
         $success = false;
 
-        if($this->request->is(['patch', 'post', 'put'])) {
-            $data = $this->request->getData();
-            
-            if(!$this->isApi()){
-                $image = $data['image'];
-                if($image['tmp_name'] != '') {
-                    $imageData  = file_get_contents($image['tmp_name']);
-                    $b64   = base64_encode($imageData);
-                    $data['image'] = $b64;
+        if ($id != $this->Auth->user('id')){
+            if($this->request->is(['patch', 'post', 'put'])) {
+                $data = $this->request->getData();
+                
+                if(!$this->isApi()){
+                    $image = $data['image'];
+                    if($image['tmp_name'] != '') {
+                        $imageData  = file_get_contents($image['tmp_name']);
+                        $b64   = base64_encode($imageData);
+                        $data['image'] = $b64;
+                    } else {
+                        $data['image'] = $user->image;
+                    }
+
+                    if($data['admin_status'] == 0){
+                        $data['admin_status'] = 'user';
+                    }else{
+                        $data['admin_status'] = 'admin';
+                    }
+                }
+
+                if($data['password'] == "") {
+                    $data['password'] = $user->password;
+                }
+
+                $user = $this->Users->patchEntity($user, $data);
+
+                if ($this->Users->save($user)) {
+                    $success = true;
+
+                    $this->Flash->success(__('The user has been saved.'));
+                    return $this->redirect(['action' => 'index']);
                 } else {
-                    $data['image'] = $user->image;
+                    $success = false;
+
+                    $this->Flash->error(__('The user could not be saved. Please, try again.'));
                 }
-
-                if($data['admin_status'] == 0){
-                    $data['admin_status'] = 'user';
-                }else{
-                    $data['admin_status'] = 'admin';
-                }
+                
             }
-            $user = $this->Users->patchEntity($user, $data);
-
-            if ($this->Users->save($user)) {
-                $success = true;
-
-                $this->Flash->success(__('The user has been saved.'));
-                return $this->redirect(['action' => 'index']);
-            } else {
-                $success = false;
-
-                $this->Flash->error(__('The user could not be saved. Please, try again.'));
-            }
-            
+        } else {
+            $success = false;
+            $this->Flash->error(__('You cannot edit your own user.'));
+            $this->redirect(['action' => 'index']);
+            var_dump("dfafd");
         }
 
         $loans = $this->Users->Loans->find('list', ['limit' => 200]);

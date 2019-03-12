@@ -19,7 +19,7 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
             <?php
                 $value = $user->admin_status == 'admin' ? "1" : "0";
                 echo $this->Form->control('email', ['readOnly' => 'readOnly']);
-                echo $this->Form->control('password', ['readOnly' => 'readOnly']);
+                echo $this->Form->control('password', ['readOnly' => 'readOnly', 'value' => '']);
                 echo $this->Form->select('admin_status', ['user', 'admin'], ['disabled' => 'disabled', 'id' => 'admin', 'value' => $value]);
             ?>
         </div>

@@ -56,7 +56,7 @@ class RoomsControllerTest extends TestCase
 
         $roomsTable = TableRegistry::get('Rooms');
         $expectedRooms = $roomsTable->find('all')
-            ->where('name like "1133A" or name like "Conference room"')
+            ->where('name like "1133A" or name like "Conference room" or name like "Cafeteria"')
             ->order(['name' => 'asc'])
             ->toList();
 

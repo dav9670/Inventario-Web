@@ -87,11 +87,11 @@ class ReportControllerTest extends TestCase
         $response = (array) json_decode((string)$this->_response->getBody());
         $first = $response[0];
         
-
         $this->assertEquals('4K', $first->cat);
-        $this->assertEquals('0', $first->time_loans);
-        $this->assertEquals('0', $first->hour_loans);
-        $this->assertEquals('0', $first->late_loans);
+        $this->assertEquals(' ', $first->equipmentName);
+        $this->assertEquals('---', $first->time_loans);
+        $this->assertEquals('---', $first->hour_loans);
+        $this->assertEquals('---', $first->late_loans);
         $this->assertEquals('1', $first->available);
         
         //Negative test
