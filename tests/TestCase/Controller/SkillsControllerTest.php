@@ -57,7 +57,7 @@ class SkillsControllerTest extends TestCase
 
         $skillsTable = TableRegistry::get('Skills');
         $expectedSkills = $skillsTable->find('all')
-            ->where('name like "First aid" or name like "Haskell"')
+            ->where('name like "First aid" or name like "Haskell" or name like "Chemistry"')
             ->order(['name' => 'asc'])
             ->toList();
 

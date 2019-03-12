@@ -1,7 +1,5 @@
 use my_app;
 
-/*SET GLOBAL max_allowed_packet=1073741824;*/
-
 /*------------------------ create ------------------------*/
 
 drop table if exists loans;

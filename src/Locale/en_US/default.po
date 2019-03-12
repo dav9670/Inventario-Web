@@ -46,13 +46,21 @@ msgstr "The equipment has been deleted."
 msgid "The equipment could not be deleted. Please, try again."
 msgstr "The equipment could not be deleted. Please, try again."
 
-#: Controller/EquipmentsController.php:243
-msgid "The equipment has been "
-msgstr "The equipment has been "
+#: Controller/EquipmentsController.php:168
+msgid "The equipment has been reactivated."
+msgstr "The equipment has been reactivated."
 
-#: Controller/EquipmentsController.php:249
-msgid "The equipment could not be "
-msgstr "The equipment could not be "
+#: Controller/EquipmentsController.php:170
+msgid "The equipment has been deactivated."
+msgstr "The equipment has been deactivated."
+
+#: Controller/EquipmentsController.php:175
+msgid "The equipment could not be reactivated. Please, try again."
+msgstr "The equipment could not be reactivated. Please, try again."
+
+#: Controller/EquipmentsController.php:177
+msgid "The equipment could not be deactivated. Please, try again."
+msgstr "The equipment could not be deactivated. Please, try again."
 
 #: Controller/LicencesController.php:95;162;220
 msgid "The licence has been saved."
@@ -74,13 +82,21 @@ msgstr "The licence has been deleted."
 msgid "The licence could not be deleted. Please, try again."
 msgstr "The licence could not be deleted. Please, try again."
 
-#: Controller/LicencesController.php:316
-msgid "The licence has been "
-msgstr "The licence has been "
+#: Controller/LicencesController.php:255
+msgid "The licence has been reactivated."
+msgstr "The licence has been reactivated."
 
-#: Controller/LicencesController.php:327
-msgid "The licence could not be "
-msgstr "The licence could not be "
+#: Controller/LicencesController.php:257
+msgid "The licence has been deactivated."
+msgstr "The licence has been deactivated."
+
+#: Controller/LicencesController.php:262
+msgid "The licence could not be reactivated. Please, try again."
+msgstr "The licence could not be reactivated. Please, try again."
+
+#: Controller/LicencesController.php:264
+msgid "The licence could not be deactivated. Please, try again."
+msgstr "The licence could not be deactivated. Please, try again."
 
 #: Controller/LoansController.php:62;96
 msgid "The loan has been saved."
@@ -114,13 +130,21 @@ msgstr "The mentor has been deleted."
 msgid "The mentor could not be deleted. Please, try again."
 msgstr "The mentor could not be deleted. Please, try again."
 
-#: Controller/MentorsController.php:238
-msgid "The mentor has been "
-msgstr "The mentor has been "
+#: Controller/MentorsController.php:163
+msgid "The mentor has been reactivated."
+msgstr "The mentor has been reactivated."
 
-#: Controller/MentorsController.php:244
-msgid "The mentor could not be "
-msgstr "The mentor could not be "
+#: Controller/MentorsController.php:165
+msgid "The mentor has been deactivated."
+msgstr "The mentor has been deactivated."
+
+#: Controller/MentorsController.php:170
+msgid "The mentor could not be reactivated. Please, try again."
+msgstr "The mentor could not be reactivated. Please, try again."
+
+#: Controller/MentorsController.php:172
+msgid "The mentor could not be deactivated. Please, try again."
+msgstr "The mentor could not be deactivated. Please, try again."
 
 #: Controller/ProductsController.php:68;106;140
 msgid "The product has been saved."
@@ -154,13 +178,21 @@ msgstr "The room has been deleted."
 msgid "The room could not be deleted. Please, try again."
 msgstr "The room could not be deleted. Please, try again."
 
-#: Controller/RoomsController.php:238
-msgid "The room has been "
-msgstr "The room has been "
+#: Controller/RoomsController.php:164
+msgid "The room has been reactivated."
+msgstr "The room has been reactivated."
 
-#: Controller/RoomsController.php:244
-msgid "The room could not be "
-msgstr "The room could not be "
+#: Controller/RoomsController.php:166
+msgid "The room has been deactivated."
+msgstr "The room has been deactivated."
+
+#: Controller/RoomsController.php:171
+msgid "The room could not be reactivated. Please, try again."
+msgstr "The room could not be reactivated. Please, try again."
+
+#: Controller/RoomsController.php:173
+msgid "The room could not be deactivated. Please, try again."
+msgstr "The room could not be deactivated. Please, try again."
 
 #: Controller/ServicesController.php:68;107;141
 msgid "The service has been saved."
@@ -210,9 +242,13 @@ msgstr "The user has been saved."
 msgid "The user could not be saved. Please, try again."
 msgstr "The user could not be saved. Please, try again."
 
+#: Controller/UsersController.php:216
+msgid "You cannot edit your own user."
+msgstr "You cannot edit your own user."
+
 #: Controller/UsersController.php:393
 msgid "Your password has been save."
-msgstr "Your password has been save."
+msgstr "Your password has been saved."
 
 #: Controller/UsersController.php:403
 msgid "Could not save your password. Please, try again."
@@ -240,11 +276,11 @@ msgstr "Infinite"
 
 #: Model/Entity/Licence.php:93
 msgid "Expired Status"
-msgstr "Expired"
+msgstr "Expired Status"
 
 #: Template/Reports/index.ctp:191
 msgid "Expired Report"
-msgstr "Expired"
+msgstr "Expired Report"
 
 #: Model/Table/CategoriesTable.php:61
 #: Model/Table/EquipmentsTable.php:71
@@ -379,7 +415,11 @@ msgstr "Please enter an Email."
 
 #: Model/Table/UsersTable.php:72
 msgid "You need to pick one."
-msgstr "You need to pick one."
+msgstr "You need to pick an admin status."
+
+#: Model/Table/UsersTable.php:80
+msgid "There must always be at least one administrator."
+msgstr "There must always be at least one administrator."
 
 #: Template/Categories/add.ctp:10
 msgid "Add Category"
@@ -931,7 +971,7 @@ msgstr "Selected User: "
 #: Template/Loans/add.ctp:28
 #: Template/Users/index.ctp:41
 msgid "Email Adress"
-msgstr "Email Adress"
+msgstr "Email Address"
 
 #: Template/Loans/add.ctp:29
 #: Template/Users/index.ctp:42
@@ -1259,6 +1299,10 @@ msgid "Total"
 msgstr "Total"
 
 #: Template/Reports/index.ctp:360
+msgid "Equipment Name"
+msgstr "Equipment Name"
+
+#: Template/Reports/index.ctp:360
 msgid "Time loaned"
 msgstr "Time loaned"
 
@@ -1349,30 +1393,6 @@ msgstr "Change it!"
 #: Template/Users/consult.ctp:13
 msgid "Edit User"
 msgstr "Edit User"
-
-#: Template/Users/consult.ctp:33
-msgid "Deactivate user"
-msgstr "Deactivate user"
-
-#: Template/Users/consult.ctp:35
-msgid "Reactivate user"
-msgstr "Reactivate user"
-
-#: Template/Users/consult.ctp:37
-msgid "Delete user"
-msgstr "Delete user"
-
-#: Template/Users/consult.ctp:50
-msgid "Loan type"
-msgstr "Loan type"
-
-#: Template/Users/consult.ctp:51
-msgid "Start date"
-msgstr "Start date"
-
-#: Template/Users/consult.ctp:52
-msgid "End Date"
-msgstr "End Date"
 
 #: Template/Users/consult.ctp:54
 #: Template/Users/profile.ctp:61
@@ -1669,3 +1689,16 @@ msgstr "November"
 #: View/Widget/DateTimeWidget.php:551
 msgid "December"
 msgstr "December"
+
+
+msgid "Start Time"
+msgstr "Start Time"
+
+msgid "End Time"
+msgstr "End Time"
+
+msgid "Key Text"
+msgstr "Key Text"
+
+msgid "Password"
+msgstr "Password"

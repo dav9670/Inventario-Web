@@ -62,25 +62,25 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
             <thead id="header_current">
                 <tr>
                     <th scope="col"></th>
-                    <th scope="col"><a id='item_sort' class='asc'><?= __("Item") ?></a></th>
-                    <th scope="col" style="width:30%;"><a id='description_sort'><?= __("Description") ?></a></th>
+                    <th scope="col"><a class='asc item_sort' onclick="sort_reload('item');"><?= __("Item") ?></a></th>
+                    <th scope="col" class="description-header"><a class='description_sort' onclick="sort_reload('description');"><?= __("Description") ?></a></th>
                     <th scope="col"><?= __("Labels") ?></th>
-                    <th scope="col"><a id='user_sort'><?= __("User") ?></a></th>
-                    <th scope="col"><a id='start_time_sort'><?= __("Start time") ?></a></th>
-                    <th scope="col"><a id='end_time_sort'><?= __("End time") ?></a></th>
+                    <th scope="col"><a class='user_sort' onclick="sort_reload('user');"><?= __("User") ?></a></th>
+                    <th scope="col" class="date-header"><a class='start_time_sort' onclick="sort_reload('start_time');"><?= __("Start time") ?></a></th>
+                    <th scope="col" class="date-header"><a class='end_time_sort' onclick="sort_reload('end_time');"><?= __("End time") ?></a></th>
                     <th scope="col" class="actions"><?= __('Actions') ?></th>
                 </tr>
             </thead>
             <thead id="header_returned" hidden>
                 <tr>
                     <th scope="col"></th>
-                    <th scope="col"><a id='item_sort' class='asc'><?= __("Item") ?></a></th>
-                    <th scope="col" style="width:30%;"><a id='description_sort'><?= __("Description") ?></a></th>
+                    <th scope="col"><a class='asc item_sort' onclick="sort_reload('item');"><?= __("Item") ?></a></th>
+                    <th scope="col" class="description-header"><a class='description_sort' onclick="sort_reload('description');"><?= __("Description") ?></a></th>
                     <th scope="col"><?= __("Labels") ?></th>
-                    <th scope="col"><a id='user_sort'><?= __("User") ?></a></th>
-                    <th scope="col"><a id='start_time_sort'><?= __("Start time") ?></a></th>
-                    <th scope="col"><a id='end_time_sort'><?= __("End time") ?></a></th>
-                    <th scope="col"><a id='returned_sort'><?= __('Returned time') ?></a></th>
+                    <th scope="col"><a class="user_sort" onclick="sort_reload('user');"><?= __("User") ?></a></th>
+                    <th scope="col" class="date-header"><a class='start_time_sort' onclick="sort_reload('start_time');"><?= __("Start time") ?></a></th>
+                    <th scope="col" class="date-header"><a class='end_time_sort' onclick="sort_reload('end_time');"><?= __("End time") ?></a></th>
+                    <th scope="col" class="date-header"><a class='returned_sort' onclick="sort_reload('returned');"><?= __('Returned time') ?></a></th>
                 </tr>
             </thead>
             <tbody id="body_current">
@@ -92,8 +92,10 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
 </div>
 
 <script>
-    var sort_field = "item";
-    var sort_dir = "asc";
+    var sort = {
+        field: "item",
+        dir: "asc"
+    };
 
     var current_table = "current";
 
@@ -109,7 +111,7 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
         $.ajax({
                 method: 'get',
                 url : "/loans/search.json",
-                data: {keyword:keyword, sort_field:sort_field, sort_dir:sort_dir, filters: filters},
+                data: {keyword:keyword, sort_field:sort.field, sort_dir:sort.dir, filters: filters},
                 success: function( response ){
 
                     for(var i=0; i<2; i++){
@@ -193,19 +195,24 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
         $('#' + current_table + '_button').addClass('active');
     }
 
-    function sort_setter( sort_field_param ){
-        var oldHtmlFieldId = '#' + sort_field +'_sort';
-        var newHtmlFieldId = '#' + sort_field_param +'_sort';
+    function sort_setter( sort_field ){
+        var oldHtmlFieldId = '.' + sort.field +'_sort';
+        var newHtmlFieldId = '.' + sort_field +'_sort';
         
         $(oldHtmlFieldId).removeClass('asc');
         $(oldHtmlFieldId).removeClass('desc');
         $(newHtmlFieldId).removeClass('asc');
         $(newHtmlFieldId).removeClass('desc');
 
-        sort_dir = sort_field != sort_field_param ? "asc" : sort_dir == "asc" ? "desc" : "asc";
-        sort_field = sort_field_param;
+        sort.dir = sort.field != sort_field ? "asc" : sort.dir == "asc" ? "desc" : "asc";
+        sort.field = sort_field;
 
-        $(newHtmlFieldId).addClass(sort_dir);
+        $(newHtmlFieldId).addClass(sort.dir);
+    }
+
+    function sort_reload(sort_field){
+        sort_setter(sort_field);
+        $('#search').keyup();
     }
 
     $('document').ready(function(){
@@ -258,31 +265,6 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
          });
 
          $('#item_type').change(function(){
-            $('#search').keyup();
-         });
-
-         $('#item_sort').click( function(e) {
-            sort_setter('item');
-            $('#search').keyup();
-         });
-         $('#description_sort').click( function(e) {
-            sort_setter('description');
-            $('#search').keyup();
-         });
-         $('#user_sort').click( function(e) {
-            sort_setter('user');
-            $('#search').keyup();
-         });
-         $('#start_time_sort').click( function(e) {
-            sort_setter('start_time');
-            $('#search').keyup();
-         });
-         $('#end_time_sort').click( function(e) {
-            sort_setter('end_time');
-            $('#search').keyup();
-         });
-         $('#returned_sort').click( function(e) {
-            sort_setter('returned');
             $('#search').keyup();
          });
 
