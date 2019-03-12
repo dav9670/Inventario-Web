@@ -236,7 +236,6 @@ class ReportsController extends AppController
         $avai = 0;
         $late = 0;
 
-        $totalAvailable = 0;
         $finalArray = array();
         $id = 0;
         $categories = TableRegistry::get('Categories')->find('all', ['contain' => ['Equipments']]);
@@ -253,22 +252,26 @@ class ReportsController extends AppController
 
             $available =0;
             $price = 0;
-            $late = 0;
+            $loanLate = 0;
             $timesLoans =0;
+
             foreach ($category->toArray()['equipments'] as $key => $equipment){
+                
                 $equipArray = array();
                 $value = 0;
                 $lateLoans = 0;
+                
                 $query2 = TableRegistry::get('Loans')->find('all', ['contain' => ['Equipments']])
                 ->where('Loans.item_type like \'equipments\' and Loans.item_id = :id')
                 ->bind(':id', $equipment['id']);
                 $equipmentLoans = $query2->toArray();
+                
                 foreach($equipmentLoans as $loan){
+                    
                     if($loan["overtime_fee"] != 0){
                         $value += $loan['overtime_fee'];
                         $lateLoans += 1;
                     }
-                    
                 }
                 $query3 = TableRegistry::get('Loans')->find('all', ['contain' => ['Equipments']])
                 ->where('Loans.item_type like \'equipments\' and Loans.item_id = :id and (Loans.start_time >= :start and Loans.end_time <= :end)')
@@ -283,17 +286,20 @@ class ReportsController extends AppController
                 $equipArray["available"] = $equipment["available"];
                 $finalArray[$id]["equipments"][$key] = $equipArray;
                 $price += $value;
-                $late += $lateLoans;
+                $loanLate += $lateLoans;
                 $available += $equipment['available'] ? 1 :0;
                 $timesLoans += sizeof($query3->toArray());
             }
 
             $finalArray[$id]['time_loans'] = $timesLoans;
             $finalArray[$id]['available'] = $available;
-            $finalArray[$id]['late_loans'] =$late;
+            $finalArray[$id]['late_loans'] =$loanLate;
             $finalArray[$id]['hour_loans'] =money_format('%.2n', $price);
             $id = $id +1;
             $hour += money_format('%.2n', $price);
+            $avai += $available;
+            $late += $loanLate;
+            $time += $timesLoans;
         }
 
 
@@ -394,20 +400,14 @@ class ReportsController extends AppController
             }
         }
 
-        $query4 = TableRegistry::get('Loans')->find('all', ['contain' => ['Equipments']])
-        ->where('Loans.item_type like \'equipments\' and (Loans.end_time <= Loans.returned or (Loans.end_time <= now() and returned is null))');
-        $availables = TableRegistry::get('Equipments')->find('all', ['contain' => ['Loans']])->toArray();
 
-        foreach($availables as $value){
-            $totalAvailable += $value['available'] ? 1 : 0;
-        }
-        $totalLate = sizeof($query4->toArray());
+
         $finalArray[$id]["cat"] = "Total";
         $finalArray[$id]["equipmentName"] = "";
         $finalArray[$id]["hour_loans"] =  money_format('%.2n', $hour) . "$";
-        $finalArray[$id]["late_loans"] = $totalLate;
+        $finalArray[$id]["late_loans"] = $late;
         $finalArray[$id]["time_loans"] = $time;
-        $finalArray[$id]["available"] = $totalAvailable;
+        $finalArray[$id]["available"] = $avai;
         
         for($i = 0; $i < sizeof($finalArray) - 1; $i++){
             $finalArray[$i]['hour_loans'] = $finalArray[$i]['hour_loans'] == 0 ? '---' : $finalArray[$i]['hour_loans'] . '$';
