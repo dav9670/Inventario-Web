@@ -133,7 +133,9 @@ class RoomsController extends AppController
 
         $this->set(compact('success'));
         $this->set('_serialize', ['success']);
-        return $this->redirect(['action' => 'index']);
+        if (!$this->isApi()) {
+            return $this->redirect(['action' => 'index']);
+        }
     }
 
     /**
@@ -176,7 +178,9 @@ class RoomsController extends AppController
 
         $this->set(compact('success'));
         $this->set('_serialize', ['success']);
-        return $this->redirect($this->referer());
+        if (!$this->isApi()) {
+            return $this->redirect($this->referer());
+        }
     }
 
     public function isAuthorized($user)

@@ -49,7 +49,9 @@ class LoansController extends AppController
                 $success = true;
 
                 $this->Flash->success(__('The loan has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                if (!$this->isApi()) {
+                    return $this->redirect(['action' => 'index']);
+                }
             } else {
                 $success = false;
 
