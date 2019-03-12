@@ -143,14 +143,11 @@ class AppController extends Controller
           $session->write('Config.language', 'en_US');
         }
         I18n::setLocale($session->read('Config.language'));
-<<<<<<< HEAD
     }
 
     protected function currentUser()
     {
         return TableRegistry::get('Users')->get($this->Auth->user('id'));
-=======
->>>>>>> master
     }
 
     public function isAuthorized($user)
