@@ -57,7 +57,9 @@ class RoomsController extends AppController
                 $success = true;
 
                 $this->Flash->success(__('The room has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                if (!$this->isApi()) {
+                    return $this->redirect(['action' => 'index']);
+                }
             } else {
                 $success = false;
 
@@ -94,7 +96,9 @@ class RoomsController extends AppController
                 $success = true;
 
                 $this->Flash->success(__('The room has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                if (!$this->isApi()) {
+                    return $this->redirect(['action' => 'consult', $room->id]);
+                }
             } else {
                 $success = false;
 
@@ -104,7 +108,7 @@ class RoomsController extends AppController
         }
 
         $this->set(compact('room', 'success'));
-        $this->set('_serialize', ['success']);
+        $this->set('_serialize', ['room','success']);
     }
 
     /**
