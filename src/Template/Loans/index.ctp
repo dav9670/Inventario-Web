@@ -143,8 +143,6 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
                             }
                             link = link.replace(/-1/g, elem.id);
 
-                            let dateOptions = {hour12: false, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit"};
-
                             if(body_name == "body_current"){
                                 body.append(`
                                     <tr` + (new Date(elem.end_time) < new Date() && elem.returned == null ? " class='late'" : "") + `>
