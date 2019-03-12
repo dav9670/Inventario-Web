@@ -20,7 +20,7 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Skill[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\Skill findOrCreate($search, callable $callback = null, $options = [])
  */
-class SkillsTable extends Table
+class SkillsTable extends SanitizeTable
 {
 
     /**

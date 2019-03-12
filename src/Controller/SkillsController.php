@@ -113,7 +113,9 @@ class SkillsController extends AppController
 
         $this->set(compact('success'));
         $this->set('_serialize', ['success']);
-        return $this->redirect(['action' => 'index']);
+        if (!$this->isApi()) {
+            return $this->redirect(['action' => 'index']);
+        }
     }
 
     public function isTaken()

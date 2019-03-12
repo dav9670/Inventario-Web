@@ -22,7 +22,7 @@ use Cake\I18n\Time;
  * @method \App\Model\Entity\User[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\User findOrCreate($search, callable $callback = null, $options = [])
  */
-class UsersTable extends Table
+class UsersTable extends SanitizeTable
 {
 
     /**
