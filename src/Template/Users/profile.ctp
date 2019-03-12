@@ -119,7 +119,7 @@
                                         <td>` + elem.item.labels + `</td>
                                         <td>` + elem.start_time + `</td>
                                         <td>` + elem.end_time + `</td>
-                                        <td>` + elem.overtime_fee + `</td>
+                                        <td class=\"money\">` + elem.overtime_string + `</td>
                                     </tr>
                                 `);
                             }

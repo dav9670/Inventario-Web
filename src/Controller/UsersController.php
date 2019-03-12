@@ -73,27 +73,19 @@ class UsersController extends AppController
     }
 
     /**
-     * View method
-     *
-     * @param string|null $id User id.
+     * Profile method
+     * 
      * @return \Cake\Http\Response|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
-    {
-        $user = $this->Users->get($id, [
-            'contain' => ['Loans']
-        ]);
-
-        $this->set('user', $user);
-        $this->set('_serialize', ['user']);
-    }
-
     public function profile()
     {
         $user = $this->Users->get($this->Auth->user('id'), [
             'contain' => ['Loans']
         ]);
+
+        foreach($user->loans as $loan) {
+            $loan['overtime_string'] = money_format('%.2n', $loan['overtime_fee']) . "$";
+        }
 
         $this->set('user', $user);
         $this->set('_serialize', ['user']);
@@ -157,59 +149,6 @@ class UsersController extends AppController
             $this->set(compact('user'));
         }
     }
-
-    /**
-     * Edit method
-     *
-     * @param string|null $id User id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $user = $this->Users->get($id);
-        $success = false;
-
-        if ($this->request->is(['patch', 'post', 'put'])) {
-
-            $data = $this->request->getData();
-            if(!$this->isApi()){
-                $image = $data['image'];
-                if($image['tmp_name'] != '') {
-                    $imageData  = file_get_contents($image['tmp_name']);
-                    $b64   = base64_encode($imageData);
-                    $data['image'] = $b64;
-                }
-            }
-            else{
-                if($data['password'] == ""){
-                    $data['password'] = $user->password;
-                }
-            }
-            $user = $this->Users->patchEntity($user, $data);
-            if ($this->Users->save($user)) {
-                if($this->isApi()){
-                    $success = true;
-                } else {
-                    $this->Flash->success(__('The user has been saved.'));
-                    return $this->redirect(['action' => 'index']);
-                }
-            } else if($this->isApi()){
-                $success = false;
-            } else {
-                $this->Flash->error(__('The user could not be saved. Please, try again.'));
-            }
-        }
-
-        if($this->isApi()){
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } else {
-            $this->set(compact('user'));
-        }
-    }
-
-    
     
     public function isTaken()
     {
@@ -235,33 +174,45 @@ class UsersController extends AppController
         $user = $this->Users->get($id, [
             'contain' => ['Loans']
         ]);
+        $success = false;
+
         if($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
             
-            $image = $data['image'];
-            if($image['tmp_name'] != '') {
-                $imageData  = file_get_contents($image['tmp_name']);
-                $b64   = base64_encode($imageData);
-                $data['image'] = $b64;
-            } else {
-                $data['image'] = $user->image;
-            }
+            if(!$this->isApi()){
+                $image = $data['image'];
+                if($image['tmp_name'] != '') {
+                    $imageData  = file_get_contents($image['tmp_name']);
+                    $b64   = base64_encode($imageData);
+                    $data['image'] = $b64;
+                } else {
+                    $data['image'] = $user->image;
+                }
 
-            if($data['admin_status'] == 0){
-                $data['admin_status'] = 'user';
-            }else{
-                $data['admin_status'] = 'admin';
+                if($data['admin_status'] == 0){
+                    $data['admin_status'] = 'user';
+                }else{
+                    $data['admin_status'] = 'admin';
+                }
             }
             $user = $this->Users->patchEntity($user, $data);
-            if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
 
+            if ($this->Users->save($user)) {
+                $success = true;
+
+                $this->Flash->success(__('The user has been saved.'));
                 return $this->redirect(['action' => 'index']);
+            } else {
+                $success = false;
+
+                $this->Flash->error(__('The user could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            
         }
+
         $loans = $this->Users->Loans->find('list', ['limit' => 200]);
-        $this->set(compact('user', 'loans'));
+        $this->set(compact('user', 'loans', 'success'));
+        $this->set('_serialize', ['success']);
     }
 
     /**
