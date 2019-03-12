@@ -108,7 +108,6 @@ class AppController extends Controller
                  // If unauthorized, return them to page they were just on
                 'unauthorizedRedirect' => $this->referer()
             ]);
-            $this->Auth->config('checkAuthIn', 'Controller.initialize');
         }
 
         // Allow the display action so our PagesController
