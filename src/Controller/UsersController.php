@@ -203,7 +203,9 @@ class UsersController extends AppController
                     $success = true;
 
                     $this->Flash->success(__('The user has been saved.'));
-                    return $this->redirect(['action' => 'index']);
+                    if (!$this->isApi()) {
+                        return $this->redirect(['action' => 'index']);
+                    }
                 } else {
                     $success = false;
 
@@ -214,8 +216,9 @@ class UsersController extends AppController
         } else {
             $success = false;
             $this->Flash->error(__('You cannot edit your own user.'));
-            $this->redirect(['action' => 'index']);
-            var_dump("dfafd");
+            if (!$this->isApi()) {
+                return $this->redirect(['action' => 'index']);
+            }
         }
 
         $loans = $this->Users->Loans->find('list', ['limit' => 200]);
