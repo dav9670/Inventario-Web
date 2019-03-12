@@ -1068,12 +1068,12 @@ msgstr "Current"
 #: Template/Users/profile.ctp:49
 #: Template/Users/view.ctp:50
 msgid "Returned Tab"
-msgstr "Returned Tab"
+msgstr "Returned"
 
 #: Template/Loans/index.ctp:57;82
 #: Template/Loans/return.ctp:145
 msgid "Returned time"
-msgstr "Returned time"
+msgstr "Returned"
 
 #: Template/Loans/index.ctp:64;76
 #: Template/Users/profile.ctp:56
@@ -1699,3 +1699,6 @@ msgstr "End Time"
 
 msgid "Key Text"
 msgstr "Key Text"
+
+msgid "Password"
+msgstr "Password"

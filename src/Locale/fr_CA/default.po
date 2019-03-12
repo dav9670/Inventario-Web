@@ -1699,3 +1699,6 @@ msgstr "Date de fin"
 
 msgid "Key Text"
 msgstr "Clé de licence"
+
+msgid "Password"
+msgstr "Mot de passe"
