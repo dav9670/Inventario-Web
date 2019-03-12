@@ -359,8 +359,8 @@ use Cake\I18n\I18n;
                 <th scope="col"><a id="cat_sort" onclick="sortSetter('cat'); setBodyEquipments();"><?= __("Category") ?></a></th>
                 <th scope="col"><?= __("Equipment Name") ?></th>
                 <th scope="col"><a id="time_loans_sort" onclick="sortSetter('time_loans'); setBodyEquipments();"><?= __("Time loaned") ?></th>
-                <th scope="col"><a id="late_loans_sort" onclick="sortSetter('late_loans'); setBodyEquipments();"><?= __("Late loans") ?></th>
                 <th scope="col"><a id="hour_loans_sort" onclick="sortSetter('hour_loans'); setBodyEquipments();"><?= __("Overtime fee") ?></th>
+                <th scope="col"><a id="late_loans_sort" onclick="sortSetter('late_loans'); setBodyEquipments();"><?= __("Late loans") ?></th>
                 <th scope="col"><a id="available_sort" onclick="sortSetter('available'); setBodyEquipments();"><?= __("Available") ?></th>
             </tr>
         `);
@@ -388,6 +388,14 @@ use Cake\I18n\I18n;
                             <td>` + elem.late_loans + `</td>
                             <td>` + elem.available + `</td>
                         </tr>
+                        <tr>
+                            <td>` + " " + `</td>
+                            <td>` + " " + `</td>
+                            <td>` + " " + `</td>
+                            <td>` + " " + `</td>
+                            <td>` + " " + `</td>
+                            <td>` + " " + `</td>
+                        </tr>
                     `);
                     }else{
                         $('#report-table-body').append(`
@@ -409,10 +417,20 @@ use Cake\I18n\I18n;
                                         <td>` + equipment.time_loans + `</td>
                                         <td class=\"money\">` + equipment.hour_loans + `</td>
                                         <td>` + equipment.late_loans + `</td>
-                                        <td>` + equipment.available + `</td>
+                                        <td><img src='/img/` + (equipment.available ? "good" : "bad") + `.png' alt='Available' width=20 height=20></td>
                                     </tr>
                                 `);
                             });
+                            $('#report-table-body').append(`
+                                <tr>
+                                    <td>` + " " + `</td>
+                                    <td>` + " " + `</td>
+                                    <td>` + " " + `</td>
+                                    <td>` + " " + `</td>
+                                    <td>` + " " + `</td>
+                                    <td>` + " " + `</td>
+                                </tr>
+                        `   );
                         }
                     }
                 });
