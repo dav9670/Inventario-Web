@@ -702,3 +702,11 @@ tr#highlight {
     margin: auto;
     float: none !important;
 }
+
+.date-header {
+    width: 150px;
+}
+
+.description-header{
+    width: 25%;
+}
