@@ -20,7 +20,7 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Service[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\Service findOrCreate($search, callable $callback = null, $options = [])
  */
-class ServicesTable extends Table
+class ServicesTable extends SanitizeTable
 {
 
     /**

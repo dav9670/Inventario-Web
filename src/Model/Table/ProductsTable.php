@@ -21,7 +21,7 @@ use Cake\ORM\Rule\IsUnique;
  * @method \App\Model\Entity\Product[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\Product findOrCreate($search, callable $callback = null, $options = [])
  */
-class ProductsTable extends Table
+class ProductsTable extends SanitizeTable
 {
 
     /**

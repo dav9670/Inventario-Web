@@ -22,7 +22,7 @@ use Cake\Validation\Validator;
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
-class MentorsTable extends Table
+class MentorsTable extends SanitizeTable
 {
 
     /**

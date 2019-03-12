@@ -20,7 +20,7 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Category[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\Category findOrCreate($search, callable $callback = null, $options = [])
  */
-class CategoriesTable extends Table
+class CategoriesTable extends SanitizeTable
 {
 
     /**
