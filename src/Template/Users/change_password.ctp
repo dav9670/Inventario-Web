@@ -1,9 +1,13 @@
-<div class="users form large-12 medium-11 columns content">
-    <h1><?= __('Change your password.') ?></h1>
+<div class="users form content centered twothirds-width">
+
     <?= $this->Form->create() ?>
-    <?= $this->Form->control('Old password',['type' => 'password']) ?>
-    <?= $this->Form->control('New password',['type' => 'password']) ?>
-    <?= $this->Form->control('Confirm your new password',['type' => 'password']) ?>
-    <?= $this->Form->button(__('Change it!')) ?>
+    <fieldset>
+        <legend><?= __('Change your password') ?></legend>
+        <?= $this->Form->control('Old password',['type' => 'password']) ?>
+        <?= $this->Form->control('New password',['type' => 'password']) ?>
+        <?= $this->Form->control('Confirm your new password',['type' => 'password']) ?>
+    </fieldset>
+    <?= $this->Form->button(__('Change')) ?>
+
     <?= $this->Form->end() ?>
 </div>

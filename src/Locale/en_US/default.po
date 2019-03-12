@@ -1383,12 +1383,12 @@ msgid "Add User"
 msgstr "Add User"
 
 #: Template/Users/change_password.ctp:2
-msgid "Change your password."
-msgstr "Change your password."
+msgid "Change your password"
+msgstr "Change your password"
 
 #: Template/Users/change_password.ctp:7
-msgid "Change it!"
-msgstr "Change it!"
+msgid "Change"
+msgstr "Change"
 
 #: Template/Users/consult.ctp:13
 msgid "Edit User"

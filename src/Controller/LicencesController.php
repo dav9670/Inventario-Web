@@ -37,76 +37,6 @@ class LicencesController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
-    /*public function add()
-    {
-        $licence = $this->Licences->newEntity();
-        $success = false;
-        if ($this->request->is('post'))
-        {
-            $data = $this->request->getData();
-            $data['start_time'] = $data['start_time'] . " 00:00:00";
-            if ($data['end_time'] != "")
-            {
-                $data['end_time'] = $data['end_time'] . " 00:00:00";
-            }
-
-            if (is_array($data["products"]["_ids"]))
-            {
-                if(!$this->isApi())
-                {
-                    $image = $data['image'];
-                    if($image['tmp_name'] != '')
-                    {
-                        $imageData  = file_get_contents($image['tmp_name']);
-                        $b64   = base64_encode($imageData);
-                        $data['image'] = $b64;
-                    }
-                }
-                $licence = $this->Licences->patchEntity($licence, $data);
-
-                if ($this->Licences->save($licence))
-                {
-                    if($this->isApi())
-                    {
-                        $success = true;
-                    }
-                    else
-                    {
-                        $this->Flash->success(__('The licence has been saved.'));
-                        return $this->redirect(['action' => 'index']);
-                    }
-                }
-                else if($this->isApi())
-                {
-                    $success = false;
-                }
-                else
-                {
-                    $this->Flash->error(__('The licence could not be saved. Please, try again.'));
-                }
-            }
-            else
-            {
-                $this->Flash->error(__('At least one Product is required. Please, try again.'));
-            }
-        }
-
-        if($this->isApi())
-        {
-            $this->set(compact('success'));
-            $this->set('_serialize', ['success']);
-        } 
-        else
-        {
-            $this->set(compact('licence'));
-        }
-    }*/
-
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
     public function add()
     {
         $licence = $this->Licences->newEntity();
@@ -115,17 +45,28 @@ class LicencesController extends AppController
             $data = $this->request->getData();
 
             if (is_array($data["products"]["_ids"])){
-                $data['start_time'] = $data['start_time'] . " 00:00:00";
-                if ($data['end_time'] != ""){
-                    $data['end_time'] = $data['end_time'] . " 00:00:00";
-                }
-
                 if(!$this->isApi()){
+                    $data['start_time'] = $data['start_time'] . " 00:00:00";
+                    if ($data['end_time'] != ""){
+                        $data['end_time'] = $data['end_time'] . " 00:00:00";
+                    }
+
                     $image = $data['image'];
                     if($image['tmp_name'] != '') {
                         $imageData  = file_get_contents($image['tmp_name']);
                         $b64   = base64_encode($imageData);
                         $data['image'] = $b64;
+                    }
+                }
+                else
+                {
+                    $start_time_data = new Time($data["start_time"]);
+                    $data["start_time"] = $start_time_data->i18nFormat();
+
+                    if ($data['end_time'] != "")
+                    {
+                        $end_time_data = new Time($data["end_time"]);
+                        $data["end_time"] = $end_time_data->i18nFormat();
                     }
                 }
                 $licence = $this->Licences->patchEntity($licence, $data);
@@ -162,13 +103,13 @@ class LicencesController extends AppController
         if($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
 
-            $data['start_time'] = $data['start_time'] . " 00:00:00";
-            if ($data['end_time'] != "")
-            {
-                $data['end_time'] = $data['end_time'] . " 00:00:00";
-            }
-
             if(!$this->isApi()){
+                $data['start_time'] = $data['start_time'] . " 00:00:00";
+                if ($data['end_time'] != "")
+                {
+                    $data['end_time'] = $data['end_time'] . " 00:00:00";
+                }
+            
                 $image = $data['image'];
                 if($image['tmp_name'] != '') {
                     $imageData  = file_get_contents($image['tmp_name']);
@@ -176,6 +117,17 @@ class LicencesController extends AppController
                     $data['image'] = $b64;
                 } else {
                     $data['image'] = $licence->image;
+                }
+            }
+            else
+            {
+                $start_time_data = new Time($data["start_time"]);
+                $data["start_time"] = $start_time_data->i18nFormat();
+
+                if ($data['end_time'] != "")
+                {
+                    $end_time_data = new Time($data["end_time"]);
+                    $data["end_time"] = $end_time_data->i18nFormat();
                 }
             }
             $licence = $this->Licences->patchEntity($licence, $data);
