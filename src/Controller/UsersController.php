@@ -83,10 +83,6 @@ class UsersController extends AppController
             'contain' => ['Loans']
         ]);
 
-        foreach($user->loans as $loan) {
-            $loan['overtime_string'] = money_format('%.2n', $loan['overtime_fee']) . "$";
-        }
-
         $this->set('user', $user);
         $this->set('_serialize', ['user']);
     }
