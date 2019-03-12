@@ -70,6 +70,7 @@ class UsersController extends AppController
         $users = $this->paginate($this->Users);
 
         $this->set(compact('users'));
+        $this->set('_serialize', ['users']);
     }
 
     /**
@@ -223,7 +224,7 @@ class UsersController extends AppController
 
         $loans = $this->Users->Loans->find('list', ['limit' => 200]);
         $this->set(compact('user', 'loans', 'success'));
-        $this->set('_serialize', ['success']);
+        $this->set('_serialize', ['user', 'success']);
     }
 
     /**

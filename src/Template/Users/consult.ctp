@@ -147,48 +147,50 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
 
                         $.each(loansArray, function(idx, elem){
 
-                            var labels_list = "";
-                            var three_labels = elem.item.labels.slice(0,3);
-                            if (elem.item.labels.length > 3) {
-                                labels_list = three_labels.join("; ") + "...";
-                            } else {
-                                labels_list = three_labels.join("; ");
-                            }
+                            if(elem.user.id == "<?=$user->id?>"){
+                                var labels_list = "";
+                                var three_labels = elem.item.labels.slice(0,3);
+                                if (elem.item.labels.length > 3) {
+                                    labels_list = three_labels.join("; ") + "...";
+                                } else {
+                                    labels_list = three_labels.join("; ");
+                                }
 
-                            var link = "";
-                            if(elem.returned == null){
-                                link = link.concat('<?= $this->Html->link(__('Return'), ['action' => 'return', -1]) ?> ');
-                            }
-                            link = link.replace(/-1/g, elem.id);
+                                var link = "";
+                                if(elem.returned == null){
+                                    link = link.concat('<?= $this->Html->link(__('Return'), ['action' => 'return', -1]) ?> ');
+                                }
+                                link = link.replace(/-1/g, elem.id);
 
-                            if(body_name == "body_current"){
-                                body.append(`
-                                    <tr` + (new Date(elem.end_time) < new Date() && elem.returned == null ? " class='late'" : "") + `>
-                                        <td><img src='data:image/png;base64,` + elem.item.image + `' width=100/></td>
-                                        <td>` + elem.item.identifier + `</td>
-                                        <td>` + elem.item.description + `</td>
-                                        <td>` + labels_list + `</td>
-                                        <td>` + elem.user.identifier + `</td>
-                                        <td>` + moment(elem.start_time).format("YYYY-MM-DD HH:mm") + `</td>
-                                        <td>` + moment(elem.end_time).format("YYYY-MM-DD HH:mm") + `</td>
-                                        <td class='actions'>
-                                            ` + link + `
-                                        </td>
-                                    </tr>
-                                `);
-                            } else if (body_name == "body_returned"){
-                                body.append(`
-                                    <tr` + (new Date(elem.end_time) < new Date() && elem.returned == null ? " class='late'" : "") + `>
-                                        <td><img src='data:image/png;base64,` + elem.item.image + `' width=100/></td>
-                                        <td>` + elem.item.identifier + `</td>
-                                        <td>` + elem.item.description + `</td>
-                                        <td>` + labels_list + `</td>
-                                        <td>` + elem.user.identifier + `</td>
-                                        <td>` + moment(elem.start_time).format("YYYY-MM-DD HH:mm") + `</td>
-                                        <td>` + moment(elem.end_time).format("YYYY-MM-DD HH:mm") + `</td>
-                                        <td>` + moment(elem.returned).format("YYYY-MM-DD HH:mm") + `</td>
-                                    </tr>
-                                `);
+                                if(body_name == "body_current"){
+                                    body.append(`
+                                        <tr` + (new Date(elem.end_time) < new Date() && elem.returned == null ? " class='late'" : "") + `>
+                                            <td><img src='data:image/png;base64,` + elem.item.image + `' width=100/></td>
+                                            <td>` + elem.item.identifier + `</td>
+                                            <td>` + elem.item.description + `</td>
+                                            <td>` + labels_list + `</td>
+                                            <td>` + elem.user.identifier + `</td>
+                                            <td>` + moment(elem.start_time).format("YYYY-MM-DD HH:mm") + `</td>
+                                            <td>` + moment(elem.end_time).format("YYYY-MM-DD HH:mm") + `</td>
+                                            <td class='actions'>
+                                                ` + link + `
+                                            </td>
+                                        </tr>
+                                    `);
+                                } else if (body_name == "body_returned"){
+                                    body.append(`
+                                        <tr` + (new Date(elem.end_time) < new Date() && elem.returned == null ? " class='late'" : "") + `>
+                                            <td><img src='data:image/png;base64,` + elem.item.image + `' width=100/></td>
+                                            <td>` + elem.item.identifier + `</td>
+                                            <td>` + elem.item.description + `</td>
+                                            <td>` + labels_list + `</td>
+                                            <td>` + elem.user.identifier + `</td>
+                                            <td>` + moment(elem.start_time).format("YYYY-MM-DD HH:mm") + `</td>
+                                            <td>` + moment(elem.end_time).format("YYYY-MM-DD HH:mm") + `</td>
+                                            <td>` + moment(elem.returned).format("YYYY-MM-DD HH:mm") + `</td>
+                                        </tr>
+                                    `);
+                                }
                             }
                         });
                     }
