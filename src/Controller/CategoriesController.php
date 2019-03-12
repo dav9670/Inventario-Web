@@ -46,7 +46,9 @@ class CategoriesController extends AppController
                 $success = true;
                 
                 $this->Flash->success(__('The category has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                if (!$this->isApi()) {
+                    return $this->redirect(['action' => 'index']);
+                }
             } else {
                 $success = false;
                 $this->Flash->error(__('The category could not be saved. Please, try again.'));
@@ -66,7 +68,6 @@ class CategoriesController extends AppController
      */
     public function consult($id = null)
     {
-        $data ='';
         $category = $this->Categories->get($id, [
             'contain' => ['Equipments']
         ]);
@@ -76,20 +77,20 @@ class CategoriesController extends AppController
             $category = $this->Categories->patchEntity($category, $this->getRequest()->getData());
             if ($this->Categories->save($category)) {
                 $success = true;
-                $data = 'view';
                 
                 $this->Flash->success(__('The category has been saved.'));
-                return $this->redirect(['action' => 'consult', $category->id]);
+                if (!$this->isApi()) {
+                    return $this->redirect(['action' => 'consult', $category->id]);
+                }
             } else {
                 $success = false;
-                $data = 'edit';
 
                 $this->Flash->error(__('The category could not be saved. Please, try again.'));
             }
         }
         
-        $this->set(compact('category','data', 'success'));
-        $this->set('_serialize', ['success']);
+        $this->set(compact('category', 'success'));
+        $this->set('_serialize', ['category', 'success']);
     }
     
 

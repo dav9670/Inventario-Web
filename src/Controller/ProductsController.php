@@ -44,7 +44,9 @@ class ProductsController extends AppController
                 $success = true;
                     
                 $this->Flash->success(__('The product has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                if (!$this->isApi()) {
+                    return $this->redirect(['action' => 'index']);
+                }
             } else {
                 $success = false;
                 $this->Flash->error(__('The product could not be saved. Please, try again.'));
@@ -75,7 +77,9 @@ class ProductsController extends AppController
                 $success = true;
 
                 $this->Flash->success(__('The product has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                if (!$this->isApi()) {
+                    return $this->redirect(['action' => 'consult', $product->id]);
+                }
             } else {
                 $success = false;
 
@@ -83,6 +87,7 @@ class ProductsController extends AppController
             }
         }
         $this->set(compact('product', 'success'));
+        $this->set('_serialize', ['product', 'success']);
     }
 
 

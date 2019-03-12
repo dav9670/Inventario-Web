@@ -44,7 +44,9 @@ class ServicesController extends AppController
                 $success = true;
 
                 $this->Flash->success(__('The service has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                if (!$this->isApi()) {
+                    return $this->redirect(['action' => 'index']);
+                }
             } else {
                 $success = false;
 
@@ -75,7 +77,9 @@ class ServicesController extends AppController
                 $success = true;
 
                 $this->Flash->success(__('The service has been saved.'));
-                return $this->redirect(['action' => 'consult', $service->id]);
+                if (!$this->isApi()) {
+                    return $this->redirect(['action' => 'consult', $service->id]);
+                }
             } else {
                 $success = false;
 
@@ -83,7 +87,7 @@ class ServicesController extends AppController
             }
         }
         $this->set(compact('service', 'success'));
-        $this->set('_serialize', ['success']);
+        $this->set('_serialize', ['service', 'success']);
     }
 
     /**

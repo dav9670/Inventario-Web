@@ -57,7 +57,9 @@ class EquipmentsController extends AppController
                 $success = true;
 
                 $this->Flash->success(__('The equipment has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                if (!$this->isApi()) {
+                    return $this->redirect(['action' => 'index']);
+                }
             } else {
                 $success = false;
 
@@ -98,7 +100,9 @@ class EquipmentsController extends AppController
                 $success = true;
 
                 $this->Flash->success(__('The equipment has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                if (!$this->isApi()) {
+                    return $this->redirect(['action' => 'consult', $equipment->id]);
+                }
             } else {
                 $success = false;
 
@@ -108,7 +112,7 @@ class EquipmentsController extends AppController
         }
 
         $this->set(compact('equipment', 'success'));
-        $this->set('_serialize', ['success']);
+        $this->set('_serialize', ['equipment', 'success']);
     }
 
     /**

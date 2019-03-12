@@ -133,7 +133,9 @@ class LicencesController extends AppController
                     $success = true;
 
                     $this->Flash->success(__('The licence has been saved.'));
-                    return $this->redirect(['action' => 'index']);
+                    if (!$this->isApi()) {
+                        return $this->redirect(['action' => 'index']);
+                    }
                 } else {
                     $success = false;
 
@@ -149,48 +151,6 @@ class LicencesController extends AppController
         $this->set(compact('licence', 'success'));
         $this->set('_serialize', ['success']);
     }
-
-    /*public function consult($id = null)
-    {
-        $licence = $this->Licences->get($id, [
-            'contain' => ['Products']
-        ]);
-        if($this->request->is(['patch', 'post', 'put']))
-        {
-            $data = $this->request->getData();
-            $data['start_time'] = $data['start_time'] . " 00:00:00";
-            if ($data['end_time'] != "")
-            {
-                $data['end_time'] = $data['end_time'] . " 00:00:00";
-            }
-
-            $image = $data['image'];
-            if($image['tmp_name'] != '')
-            {
-                $imageData  = file_get_contents($image['tmp_name']);
-                $b64   = base64_encode($imageData);
-                $data['image'] = $b64;
-            }
-            else
-            {
-                $data['image'] = $licence->image;
-            }
-
-            $licence = $this->Licences->patchEntity($licence, $data);
-            if ($this->Licences->save($licence))
-            {
-                $this->Flash->success(__('The licence has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            else
-            {
-                $this->Flash->error(__('The licence could not be saved. Please, try again.'));
-            }
-        }
-        $products = $this->Licences->Products->find('list', ['limit' => 200]);
-        $this->set(compact('licence', 'products'));
-    }*/
 
     public function consult($id = null)
     {
@@ -224,7 +184,9 @@ class LicencesController extends AppController
                 $success = true;
 
                 $this->Flash->success(__('The licence has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                if (!$this->isApi()) {
+                    return $this->redirect(['action' => 'consult', $licence->id]);
+                }
             } else {
                 $success = false;
 
@@ -234,7 +196,7 @@ class LicencesController extends AppController
         }
 
         $this->set(compact('licence', 'success'));
-        $this->set('_serialize', ['success']);
+        $this->set('_serialize', ['licence', 'success']);
     }
 
     /**
