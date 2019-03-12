@@ -44,7 +44,9 @@ class SkillsController extends AppController
                     $success = true;
 
                     $this->Flash->success(__('The skill has been saved.'));
-                    return $this->redirect(['action' => 'index']);
+                    if (!$this->isApi()) {
+                        return $this->redirect(['action' => 'index']);
+                    }
             } else {
                 $success = false;
 
@@ -75,7 +77,9 @@ class SkillsController extends AppController
                 $success = true;
 
                 $this->Flash->success(__('The skill has been saved.'));
-                return $this->redirect(['action' => 'consult', $skill->id]);
+                if (!$this->isApi()) {
+                    return $this->redirect(['action' => 'consult', $skill->id]);
+                }
             } else {
                 $success = false;
 
@@ -83,7 +87,7 @@ class SkillsController extends AppController
             }            
         }
         $this->set(compact('skill', 'success'));
-        $this->set('_serialize', ['success']);
+        $this->set('_serialize', ['skill', 'success']);
     }
     
 

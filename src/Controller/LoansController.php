@@ -88,7 +88,9 @@ class LoansController extends AppController
                     $success = true;
 
                     $this->Flash->success(__('The loan has been returned.'));
-                    return $this->redirect(['action' => 'index']);
+                    if (!$this->isApi()) {
+                        return $this->redirect(['action' => 'index']);
+                    }
                 } else {
                     $success = false;
 
@@ -104,8 +106,7 @@ class LoansController extends AppController
         }
                     
         $this->set(compact('loan', 'success'));
-        $this->set('_serialize', 'loan');
-        $this->set('_serialize', ['success']);
+        $this->set('_serialize', ['loan', 'success']);
     }
 
     /**

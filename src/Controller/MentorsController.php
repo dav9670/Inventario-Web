@@ -57,7 +57,9 @@ class MentorsController extends AppController
                 $success = true;
 
                 $this->Flash->success(__('The mentor has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                if (!$this->isApi()) {
+                    return $this->redirect(['action' => 'index']);
+                }
             } else {
                 $success = false;
 
@@ -89,12 +91,13 @@ class MentorsController extends AppController
                 }
             }
             $mentor = $this->Mentors->patchEntity($mentor, $data);
-
             if ($this->Mentors->save($mentor)) {
                 $success = true;
 
                 $this->Flash->success(__('The mentor has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                if (!$this->isApi()) {
+                    return $this->redirect(['action' => 'consult', $mentor->id]);
+                }
             } else {
                 $success = false;
 
@@ -104,7 +107,7 @@ class MentorsController extends AppController
         }
 
         $this->set(compact('mentor', 'success'));
-        $this->set('_serialize', ['success']);
+        $this->set('_serialize', ['mentor', 'success']);
     }
 
     /**
