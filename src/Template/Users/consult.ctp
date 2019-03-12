@@ -76,28 +76,28 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
     </div>
     <div class="tabcontent" style="overflow:auto; height:500px;">
         <table cellpadding="0" cellspacing="0">
-        <thead id="header_current">
+            <thead id="header_current">
                 <tr>
                     <th scope="col"></th>
-                    <th scope="col"><a id='current_item_sort' class='asc' onclick="sort_reload('item');"><?= __("Item") ?></a></th>
-                    <th scope="col" class="description-header"><a id='current_description_sort' onclick="sort_reload('description');"><?= __("Description") ?></a></th>
+                    <th scope="col"><a class='asc item_sort' onclick="sort_reload('item');"><?= __("Item") ?></a></th>
+                    <th scope="col" class="description-header"><a class='description_sort' onclick="sort_reload('description');"><?= __("Description") ?></a></th>
                     <th scope="col"><?= __("Labels") ?></th>
-                    <th scope="col"><a id='current_user_sort' onclick="sort_reload('user');"><?= __("User") ?></a></th>
-                    <th scope="col" class="date-header"><a id='current_start_time_sort' onclick="sort_reload('start_time');"><?= __("Start time") ?></a></th>
-                    <th scope="col" class="date-header"><a id='current_end_time_sort' onclick="sort_reload('end_time');"><?= __("End time") ?></a></th>
+                    <th scope="col"><a class='user_sort' onclick="sort_reload('user');"><?= __("User") ?></a></th>
+                    <th scope="col" class="date-header"><a class='start_time_sort' onclick="sort_reload('start_time');"><?= __("Start time") ?></a></th>
+                    <th scope="col" class="date-header"><a class='end_time_sort' onclick="sort_reload('end_time');"><?= __("End time") ?></a></th>
                     <th scope="col" class="actions"><?= __('Actions') ?></th>
                 </tr>
             </thead>
             <thead id="header_returned" hidden>
                 <tr>
                     <th scope="col"></th>
-                    <th scope="col"><a id='returned_item_sort' class='asc' onclick="sort_reload('item');"><?= __("Item") ?></a></th>
-                    <th scope="col" class="description-header"><a id='returned_description_sort' onclick="sort_reload('description');"><?= __("Description") ?></a></th>
+                    <th scope="col"><a class='asc item_sort' onclick="sort_reload('item');"><?= __("Item") ?></a></th>
+                    <th scope="col" class="description-header"><a class='description_sort' onclick="sort_reload('description');"><?= __("Description") ?></a></th>
                     <th scope="col"><?= __("Labels") ?></th>
-                    <th scope="col"><a id='returned_user_sort' onclick="sort_reload('user');"><?= __("User") ?></a></th>
-                    <th scope="col" class="date-header"><a id='returned_start_time_sort' onclick="sort_reload('start_time');"><?= __("Start time") ?></a></th>
-                    <th scope="col" class="date-header"><a id='returned_end_time_sort' onclick="sort_reload('end_time');"><?= __("End time") ?></a></th>
-                    <th scope="col" class="date-header"><a id='returned_returned_sort' onclick="sort_reload('returned');"><?= __('Returned time') ?></a></th>
+                    <th scope="col"><a class="user_sort" onclick="sort_reload('user');"><?= __("User") ?></a></th>
+                    <th scope="col" class="date-header"><a class='start_time_sort' onclick="sort_reload('start_time');"><?= __("Start time") ?></a></th>
+                    <th scope="col" class="date-header"><a class='end_time_sort' onclick="sort_reload('end_time');"><?= __("End time") ?></a></th>
+                    <th scope="col" class="date-header"><a class='returned_sort' onclick="sort_reload('returned');"><?= __('Returned time') ?></a></th>
                 </tr>
             </thead>
             <tbody id="body_current">
@@ -109,14 +109,8 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
 </div>
 <script>
      var sort = {
-        current: {
-            field: "item",
-            dir: "asc"
-        },
-        returned: {
-            field: "item",
-            dir: "asc"
-        }
+        field: "item",
+        dir: "asc"
     };
 
     var current_table = "current";
@@ -133,7 +127,7 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
         $.ajax({
                 method: 'get',
                 url : "/loans/search.json",
-                data: {keyword:keyword, sort_field:sort[current_table].field, sort_dir:sort[current_table].dir, filters: filters},
+                data: {keyword:keyword, sort_field:sort.field, sort_dir:sort.dir, filters: filters},
                 success: function( response ){
 
                     for(var i=0; i<2; i++){
@@ -215,23 +209,22 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
         $('#body_' + current_table).show();
         $('#header_' + current_table).show();
         $('#' + current_table + '_button').addClass('active');
-        $('#search').keyup();
     }
 
     
     function sort_setter( sort_field ){
-        var oldHtmlFieldId = '#' + current_table + '_' + sort[current_table].field +'_sort';
-        var newHtmlFieldId = '#' + current_table + '_' + sort_field +'_sort';
+        var oldHtmlFieldId = '.' + sort.field +'_sort';
+        var newHtmlFieldId = '.' + sort_field +'_sort';
         
         $(oldHtmlFieldId).removeClass('asc');
         $(oldHtmlFieldId).removeClass('desc');
         $(newHtmlFieldId).removeClass('asc');
         $(newHtmlFieldId).removeClass('desc');
 
-        sort[current_table].dir = sort[current_table].field != sort_field ? "asc" : sort[current_table].dir == "asc" ? "desc" : "asc";
-        sort[current_table].field = sort_field;
+        sort.dir = sort.field != sort_field ? "asc" : sort.dir == "asc" ? "desc" : "asc";
+        sort.field = sort_field;
 
-        $(newHtmlFieldId).addClass(sort[current_table].dir);
+        $(newHtmlFieldId).addClass(sort.dir);
     }
 
     function sort_reload(sort_field){
