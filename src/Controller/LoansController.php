@@ -77,8 +77,7 @@ class LoansController extends AppController
             $success = false;
             $returned = $this->request->getData()['returned'];
 
-            if ($returned != null)
-            {
+            if ($returned != null) {
                 $returned_data = new Time($returned);
                 $data["returned"] = $returned_data->i18nFormat();
 
@@ -94,9 +93,7 @@ class LoansController extends AppController
 
                     $this->Flash->error(__('The loan could not be returned. Please, try again.'));
                 }
-            }
-            else
-            {
+            } else {
                 $success = false;
 
                 $this->Flash->error(__('The loan could not be returned. Please, try again.'));
@@ -115,13 +112,11 @@ class LoansController extends AppController
     {
         $whereQuery = '';
         $whereQuery .= 'match (';
-        for($i = 0, $size = count($searchFields); $i < $size; ++$i)
-        {
+        for($i = 0, $size = count($searchFields); $i < $size; ++$i) {
             $whereQuery .= $table . '.' . $searchFields[$i] . ($i < $size - 1 ? ', ' : ')');
         }
         $whereQuery .= ' against(:search in boolean mode) or ';
-        for($i = 0, $size = count($searchFields); $i < $size; ++$i)
-        {
+        for($i = 0, $size = count($searchFields); $i < $size; ++$i) {
             $whereQuery .= $table . '.' . $searchFields[$i] . ' like :like_search' . ($i < $size - 1 ? ' or ' : '');
         }
 
@@ -132,11 +127,7 @@ class LoansController extends AppController
     {
         ini_set('memory_limit', '-1');
 
-        if($this->isApi()){
-            $this->getRequest()->allowMethod(['get', 'post']);
-        }else {
-            $this->getRequest()->allowMethod(['get', 'ajax']);
-        }
+        $this->getRequest()->allowMethod(['get', 'post', 'ajax']);
    
         $keyword = "";
         $sort_field = "item";
@@ -211,36 +202,13 @@ class LoansController extends AppController
 
         $query = null;
 
-        if($keyword == '' || ($search_items == false && $search_labels == false && $search_users == false))
-        {
+        if($keyword == '' || ($search_items == false && $search_labels == false && $search_users == false)) {
             $query = $this->Loans->find('all', $options);
-
-            if($item_type != 'all')
-            {
-                $query
-                    ->where('Loans.item_type like :item_type')
-                    ->bind(':item_type', $item_type, 'string');
-            }
-            if($start_time != '')
-            {
-                $query
-                    ->where('Loans.start_time > :start_time')
-                    ->bind(':start_time', $start_time);
-            }
-            if($end_time != '')
-            {
-                $query
-                    ->where('Loans.end_time < :end_time')
-                    ->bind(':end_time', $end_time);
-            }
-        }
-        else
-        {
+        } else {
             $needs_union = false;
             $union_query = null;
 
-            if($search_items)
-            {
+            if($search_items) {
                 $searchFieldsType = [
                     'mentors' => [
                         'email',
@@ -264,11 +232,9 @@ class LoansController extends AppController
 
                 $whereQuery = '';
 
-                if($item_type == 'all')
-                {
+                if($item_type == 'all') {
                     $i = 0;
-                    foreach($searchFieldsType as $type => $searchFields)
-                    {
+                    foreach($searchFieldsType as $type => $searchFields) {
                         $table = ucfirst($type);
 
                         $subQuery = $this->makeStringSearch($table, $searchFields);
@@ -276,9 +242,7 @@ class LoansController extends AppController
                         
                         ++$i;
                     }
-                }
-                else
-                {
+                } else {
                     $table = ucfirst($item_type);
                     $searchFields = $searchFieldsType[$item_type];
 
@@ -289,28 +253,9 @@ class LoansController extends AppController
                     ->where($whereQuery)
                     ->bind(":search", $keyword, 'string')
                     ->bind(":like_search", '%' . $keyword . '%', 'string');
-
-                if($item_type != 'all')
-                {
-                    $query
-                        ->where('Loans.item_type like :item_type')
-                        ->bind(':item_type', $item_type, 'string');
-                }
-                if($start_time != '')
-                {
-                    $query
-                        ->where('Loans.start_time > :start_time')
-                        ->bind(':start_time', $start_time);
-                }
-                if($end_time != '')
-                {
-                    $query
-                        ->where('Loans.end_time < :end_time')
-                        ->bind(':end_time', $end_time);
-                }
             }
-            if($search_labels)
-            {
+
+            if($search_labels) {
                 /*if($query != null){
                     $union_query = $query;
                 }   
@@ -384,9 +329,9 @@ class LoansController extends AppController
                     $query->union($union_query);
                 }*/
             }
-            if($search_users)
-            {
-                if($query != null){
+            
+            if($search_users) {
+                if($query != null) {
                     $union_query = $query;
                 }   
 
@@ -394,35 +339,31 @@ class LoansController extends AppController
                     ->where('Users.email like :like_search')
                     ->bind(":like_search", '%' . $keyword . '%', 'string');
 
-                if($item_type != 'all')
-                {
-                    $query
-                        ->where('Loans.item_type like :item_type')
-                        ->bind(':item_type', $item_type, 'string');
-                }
-                if($start_time != '')
-                {
-                    $query
-                        ->where('Loans.start_time > :start_time')
-                        ->bind(':start_time', $start_time);
-                }
-                if($end_time != '')
-                {
-                    $query
-                        ->where('Loans.end_time < :end_time')
-                        ->bind(':end_time', $end_time);
-                }
-
-                if($union_query != null){
+                if($union_query != null) {
                     $query->union($union_query);
                 }
             }
         }
 
+        if($item_type != 'all') {
+            $query
+                ->where('Loans.item_type like :item_type')
+                ->bind(':item_type', $item_type, 'string');
+        }
+        if($start_time != '') {
+            $query
+                ->where('Loans.start_time > :start_time')
+                ->bind(':start_time', $start_time);
+        }
+        if($end_time != '') {
+            $query
+                ->where('Loans.end_time < :end_time')
+                ->bind(':end_time', $end_time);
+        }
+
         $sqlSorted = false;
 
-        if($item_type != 'all' || ($sort_field != 'item' && $sort_field != 'description'))
-        {
+        if($item_type != 'all' || ($sort_field != 'item' && $sort_field != 'description')) {
             //Sort by sql
             $table = null;
             switch($sort_field)
@@ -457,7 +398,7 @@ class LoansController extends AppController
         $returnedLoans = [];
         $allLoans = $query->toList();
 
-        foreach ($allLoans as $loan){
+        foreach ($allLoans as $loan) {
 
             $formattedLoan = [
                 'item' => [
@@ -480,28 +421,22 @@ class LoansController extends AppController
             ];
 
             if ($formattedLoan['returned'] != null) {
-                if (!in_array($formattedLoan,$returnedLoans))
-                {
+                if (!in_array($formattedLoan,$returnedLoans)) {
                     array_push($returnedLoans, $formattedLoan);
                 }
             } else {
-                if (!in_array($formattedLoan,$loans))
-                {
+                if (!in_array($formattedLoan,$loans)) {
                     array_push($loans, $formattedLoan);
                 }
             }
         }
         
-        if(!$sqlSorted)
-        {
+        if(!$sqlSorted) {
             //description stays same
             $sort_field_local = '';
-            if($sort_field == 'item')
-            {
+            if($sort_field == 'item') {
                 $sort_field_local = 'identifier'; 
-            }
-            else
-            {
+            } else {
                 $sort_field_local = $sort_field;
             }
             
@@ -523,8 +458,7 @@ class LoansController extends AppController
     public function isAuthorized($user)
     {
         $action = $this->request->getParam('action');
-        if(in_array($action, ['search']))
-        {
+        if(in_array($action, ['search'])) {
             return true;
         }
 
