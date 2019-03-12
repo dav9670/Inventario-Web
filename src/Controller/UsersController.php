@@ -173,7 +173,7 @@ class UsersController extends AppController
         ]);
         $success = false;
 
-        if ($id != $this->Auth->user('id')){
+        if ($id != $this->Auth->user('id') || $this->isApi()){
             if($this->request->is(['patch', 'post', 'put'])) {
                 $data = $this->request->getData();
                 

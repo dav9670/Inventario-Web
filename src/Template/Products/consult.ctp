@@ -34,7 +34,7 @@
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
             <?php foreach ($product->licences as $licence): ?>
-            <tr class="clickable-row">
+            <tr id='licence_row_<?=$licence->id?>' class="clickable-row">
                 <td><a href='/licences/<?= h($licence->id) ?>'><img src="data:image/png;base64, <?= h($licence->image) ?>" alt="<?= h($licence->name) ?>" width=100/></a></td>
                 <td><a href='/licences/<?= h($licence->id) ?>'><?= h($licence->name) ?></a></td>
                 <td><a href='/licences/<?= h($licence->id) ?>'><?= h($licence->description) ?></a></td>
@@ -54,7 +54,7 @@
                 <?php endif; ?>
 
                 <td class="actions">
-                    <?= $this->Form->postLink(__('Unlink'), ['controller' => 'products', 'action' => 'unlink', '?' => ['product' => $product->id, 'licence' => $licence->id]], ['confirm' => __('Are you sure you want to delete the association between {0} and {1}?', $licence->name, $product->name . " for " . $product->platform), 'class' => 'unlink_link delete-link', 'hidden']) ?>
+                    <a onclick='if(confirm("<?=__('Are you sure you want to delete the association between {0} and {1}?', $licence->name, $product->name . " for " . $product->platform)?>")){removeLink(<?=$licence->id?>)}' class='unlink_link delete-link' hidden><?=__('Unlink')?></a>
                 </td>
             </tr>
             <?php endforeach; ?>
@@ -84,12 +84,28 @@
         }
     }
 
+    function removeLink(licence_id){
+        $.ajax({
+            method: 'post',
+            url : "/products/unlink.json?product=<?=$product->id?>&licence=" + licence_id,
+            headers: { 'X-CSRF-TOKEN': '<?=$this->getRequest()->getParam('_csrfToken');?>' },
+            success: function( response ){
+                $('#licence_row_' + licence_id).remove();
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                alert("The association could not be deleted");
+                console.log(jqXHR.responseText);
+            }
+        });
+    }
+
     function setReadOnly(readOnly){
+        $('#name').attr('readOnly', readOnly);
+        $('#platform').attr('readOnly', readOnly);
+        $('#description').attr('readOnly', readOnly);
+        
         if(readOnly){
             //View
-            $('#name').attr('readOnly', readOnly);
-            $('#platform').attr('readOnly', readOnly);
-            $('#description').attr('readOnly', readOnly);
 
             $('#doneButton').hide();
             $('.unlink_link').hide();
@@ -97,14 +113,10 @@
             $('#editButton').show();
         }else{
             //Edit
-            $('#name').attr('readOnly', readOnly);
-            $('#platform').attr('readOnly', readOnly);
-            $('#description').attr('readOnly', readOnly);
 
             $('#editButton').hide();
 
             $('#doneButton').show();
-            $('#submit').show();
             $('.unlink_link').show();
         }
     }

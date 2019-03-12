@@ -164,7 +164,7 @@ class ProductsController extends AppController
             $this->set('_serialize', ['success']);
         } else {
             $this->autoRender = false;
-            return /*$this->redirect(['action' => 'consult', $service->id])*/;
+            return /*$this->redirect(['action' => 'consult', $product->id])*/;
         }
     }
 
