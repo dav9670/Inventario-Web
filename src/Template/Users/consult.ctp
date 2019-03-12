@@ -30,17 +30,7 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
         </div>
         <div style="clear: both;"></div>
     </fieldset>
-    
-    <?php 
-        if($user->deleted == null){
-            echo $this->Html->link(__('Deactivate user'), ['controller' => 'Users', 'action' => 'deactivate', $user->id], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to deactivate {0}?', $user->email)]);
-        } else {
-            echo $this->Html->link(__('Reactivate user'), ['controller' => 'Users', 'action' => 'reactivate', $user->id], ['confirm' => __('Are you sure you want to reactivate {0}?', $user->email), 'style' => 'margin-right: 25px;']);  
-            if($user->loan_count == 0){
-                echo $this->Html->link(__('Delete user'), ['controller' => 'Users', 'action' => 'delete', $user->id], ['class' => 'delete-link', 'confirm' => __('Are you sure you want to PERMANENTLY delete {0}?', $user->email)]);
-            }
-        }
-    ?>
+
     <button type="button" class="right editdone" id="cancelButton" class='editdone' onClick='cancel()' hidden="hidden"><?=__('Cancel')?></button>
     <?= $this->Form->end() ?>
     
@@ -81,88 +71,122 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
         </form>
     </div>
     <div class="tab">
-        <button id='table_activated_button' class="tablinks active" onclick="show_table('table_activated')"><?= __("Current") ?></button>
-        <button id='table_returned_button' class="tablinks" onclick="show_table('table_returned')"><?= __("Returned") ?></button>
+        <button id='current_button' class="tablinks active" onclick="show_table('current')"><?= __("Current") ?></button>
+        <button id='returned_button' class="tablinks" onclick="show_table('returned')"><?= __("Returned Tab") ?></button>
     </div>
     <div class="tabcontent" style="overflow:auto; height:500px;">
         <table cellpadding="0" cellspacing="0">
-            <thead>
+            <thead id="header_current">
                 <tr>
                     <th scope="col"></th>
-                    <th scope="col"><a id='item_sort' class='asc'><?= __("Item") ?></a></th>
-                    <th scope="col" style="width:30%;"><a id='description_sort'><?= __("Description") ?></a></th>
+                    <th scope="col"><a class='asc item_sort' onclick="sort_reload('item');"><?= __("Item") ?></a></th>
+                    <th scope="col" class="description-header"><a class='description_sort' onclick="sort_reload('description');"><?= __("Description") ?></a></th>
                     <th scope="col"><?= __("Labels") ?></th>
-                    <th scope="col"><a id='start_time_sort'><?= __("Start time") ?></a></th>
-                    <th scope="col"><a id='end_time_sort'><?= __("End time") ?></a></th>
-                    <th scope="col"><a id='overtime_sort'><?= __("Overtime Fee") ?></a></th>
+                    <th scope="col"><a class='user_sort' onclick="sort_reload('user');"><?= __("User") ?></a></th>
+                    <th scope="col" class="date-header"><a class='start_time_sort' onclick="sort_reload('start_time');"><?= __("Start time") ?></a></th>
+                    <th scope="col" class="date-header"><a class='end_time_sort' onclick="sort_reload('end_time');"><?= __("End time") ?></a></th>
+                    <th scope="col" class="actions"><?= __('Actions') ?></th>
                 </tr>
             </thead>
-            <tbody id="table_activated">
+            <thead id="header_returned" hidden>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col"><a class='asc item_sort' onclick="sort_reload('item');"><?= __("Item") ?></a></th>
+                    <th scope="col" class="description-header"><a class='description_sort' onclick="sort_reload('description');"><?= __("Description") ?></a></th>
+                    <th scope="col"><?= __("Labels") ?></th>
+                    <th scope="col"><a class="user_sort" onclick="sort_reload('user');"><?= __("User") ?></a></th>
+                    <th scope="col" class="date-header"><a class='start_time_sort' onclick="sort_reload('start_time');"><?= __("Start time") ?></a></th>
+                    <th scope="col" class="date-header"><a class='end_time_sort' onclick="sort_reload('end_time');"><?= __("End time") ?></a></th>
+                    <th scope="col" class="date-header"><a class='returned_sort' onclick="sort_reload('returned');"><?= __('Returned time') ?></a></th>
+                </tr>
+            </thead>
+            <tbody id="body_current">
             </tbody>
-            <tbody id="table_returned" hidden>
+            <tbody id="body_returned" hidden>
             </tbody>
         </table>
     </div>
 </div>
 <script>
-    var sort_field = "item";
-    var sort_dir = "asc";
+     var sort = {
+        field: "item",
+        dir: "asc"
+    };
 
-    var current_table = "table_activated";
+    var current_table = "current";
 
     function searchLoans( keyword ){
         var filters = {
             search_items: $('#field_items').is(':checked'),
-            search_labels: $('#field_labels').is(':checked'),
             search_users: $('#field_users').is(':checked'),
             item_type: $('#item_type').children("option:selected").val(),
             start_time: $('#start_time').val(),
-            end_time: $('#end_time').val(),
+            end_time: $('#end_time').val()
         };
 
         $.ajax({
                 method: 'get',
                 url : "/loans/search.json",
-                data: {keyword:keyword, sort_field:sort_field, sort_dir:sort_dir, filters: filters},
+                data: {keyword:keyword, sort_field:sort.field, sort_dir:sort.dir, filters: filters},
                 success: function( response ){
 
                     for(var i=0; i<2; i++){
-                        var table_name = "";
+                        var body_name = "";
                         var array_name = "";
                         if(i == 0){
-                            table_name = "table_activated";
+                            body_name = "body_current";
                             array_name = "loans";
                         } else if(i == 1){
-                            table_name = "table_returned";
+                            body_name = "body_returned";
                             array_name = "returnedLoans";
                         }
-                        var table = $("#" + table_name);
-                        table.empty();
+                        var body = $("#" + body_name);
+                        body.empty();
 
                         loansArray = response[array_name];
-                        id = "<?php echo ($this->request->getSession()->read('Auth.User.id')); ?>";
 
                         $.each(loansArray, function(idx, elem){
-                        
-                            if(elem.user['id'] == id){
-                                
-                                var labels_list = "";
-                                var three_labels = elem.item.labels.slice(0,3);
-                                if (elem.item.labels.length > 3) {
-                                    labels_list = three_labels.join("; ") + "...";
-                                } else {
-                                    labels_list = three_labels.join("; ");
-                                }
 
-                                table.append(`
+                            var labels_list = "";
+                            var three_labels = elem.item.labels.slice(0,3);
+                            if (elem.item.labels.length > 3) {
+                                labels_list = three_labels.join("; ") + "...";
+                            } else {
+                                labels_list = three_labels.join("; ");
+                            }
+
+                            var link = "";
+                            if(elem.returned == null){
+                                link = link.concat('<?= $this->Html->link(__('Return'), ['action' => 'return', -1]) ?> ');
+                            }
+                            link = link.replace(/-1/g, elem.id);
+
+                            if(body_name == "body_current"){
+                                body.append(`
                                     <tr` + (new Date(elem.end_time) < new Date() && elem.returned == null ? " class='late'" : "") + `>
                                         <td><img src='data:image/png;base64,` + elem.item.image + `' width=100/></td>
                                         <td>` + elem.item.identifier + `</td>
                                         <td>` + elem.item.description + `</td>
                                         <td>` + labels_list + `</td>
+                                        <td>` + elem.user.identifier + `</td>
                                         <td>` + moment(elem.start_time).format("YYYY-MM-DD HH:mm") + `</td>
                                         <td>` + moment(elem.end_time).format("YYYY-MM-DD HH:mm") + `</td>
-                                        <td>` + parseFloat(elem.overtime_fee).toFixed(2) + "$" + `</td>
+                                        <td class='actions'>
+                                            ` + link + `
+                                        </td>
+                                    </tr>
+                                `);
+                            } else if (body_name == "body_returned"){
+                                body.append(`
+                                    <tr` + (new Date(elem.end_time) < new Date() && elem.returned == null ? " class='late'" : "") + `>
+                                        <td><img src='data:image/png;base64,` + elem.item.image + `' width=100/></td>
+                                        <td>` + elem.item.identifier + `</td>
+                                        <td>` + elem.item.description + `</td>
+                                        <td>` + labels_list + `</td>
+                                        <td>` + elem.user.identifier + `</td>
+                                        <td>` + moment(elem.start_time).format("YYYY-MM-DD HH:mm") + `</td>
+                                        <td>` + moment(elem.end_time).format("YYYY-MM-DD HH:mm") + `</td>
+                                        <td>` + moment(elem.returned).format("YYYY-MM-DD HH:mm") + `</td>
                                     </tr>
                                 `);
                             }
@@ -178,26 +202,34 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
     };
 
     function show_table(table_name){
-        $('#' + current_table).hide();
+        $('#body_' + current_table).hide();
+        $('#header_' + current_table).hide();
         $('#' + current_table + '_button').removeClass('active');
         current_table = table_name;
-        $('#' + current_table).show();
+        $('#body_' + current_table).show();
+        $('#header_' + current_table).show();
         $('#' + current_table + '_button').addClass('active');
     }
 
-    function sort_setter( sort_field_param ){
-        var oldHtmlFieldId = '#' + sort_field +'_sort';
-        var newHtmlFieldId = '#' + sort_field_param +'_sort';
+    
+    function sort_setter( sort_field ){
+        var oldHtmlFieldId = '.' + sort.field +'_sort';
+        var newHtmlFieldId = '.' + sort_field +'_sort';
         
         $(oldHtmlFieldId).removeClass('asc');
         $(oldHtmlFieldId).removeClass('desc');
         $(newHtmlFieldId).removeClass('asc');
         $(newHtmlFieldId).removeClass('desc');
 
-        sort_dir = sort_field != sort_field_param ? "asc" : sort_dir == "asc" ? "desc" : "asc";
-        sort_field = sort_field_param;
+        sort.dir = sort.field != sort_field ? "asc" : sort.dir == "asc" ? "desc" : "asc";
+        sort.field = sort_field;
 
-        $(newHtmlFieldId).addClass(sort_dir);
+        $(newHtmlFieldId).addClass(sort.dir);
+    }
+
+    function sort_reload(sort_field){
+        sort_setter(sort_field);
+        $('#search').keyup();
     }
 
     function loadFile(event) {
@@ -380,32 +412,6 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
          $('#item_type').change(function(){
             $('#search').keyup();
          });
-
-         $('#item_sort').click( function(e) {
-            sort_setter('item');
-            $('#search').keyup();
-         });
-         $('#description_sort').click( function(e) {
-            sort_setter('description');
-            $('#search').keyup();
-         });
-         $('#user_sort').click( function(e) {
-            sort_setter('user');
-            $('#search').keyup();
-         });
-         $('#start_time_sort').click( function(e) {
-            sort_setter('start_time');
-            $('#search').keyup();
-         });
-         $('#end_time_sort').click( function(e) {
-            sort_setter('end_time');
-            $('#search').keyup();
-         });
-         $('#overtime_sort').click( function(e) {
-            sort_setter('end_time');
-            $('#search').keyup();
-         });
-         
 
          $('#hid input').click( function(e) {
             $('#search').keyup();
