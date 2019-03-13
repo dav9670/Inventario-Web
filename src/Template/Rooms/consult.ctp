@@ -52,9 +52,9 @@
         <tbody id='services_table_body'>
             <?php foreach ($room->services as $service): ?>
             <tr id='service_row_<?=$service->id?>'>
-                <td><a href='services/<?=$service->id?>'><?= h($service->name) ?></a></td>
-                <td><a href='services/<?=$service->id?>'><?= h($service->description)?></a></td>
-                <td><a href='services/<?=$service->id?>'><?= h($service->room_count)?></a></td>
+                <td><a href='/services/<?=$service->id?>'><?= h($service->name) ?></a></td>
+                <td><a href='/services/<?=$service->id?>'><?= h($service->description)?></a></td>
+                <td><a href='/services/<?=$service->id?>'><?= h($service->room_count)?></a></td>
                 <td><a class='unlink_link delete-link' onclick='removeLink(<?=$service->id?>)' style="display:none;">Remove</a></td>
             </tr>
             <?php endforeach; ?>
@@ -166,8 +166,8 @@
                         let table = $('#services_table_body');
                         table.append(`
                             <tr>
-                                <td><a href='services/` + elem.id + `'>` + elem.name + `</a></td>
-                                <td><a href='services/` + elem.id + `'>` + elem.description + `</a></td>
+                                <td><a href='/services/` + elem.id + `'>` + elem.name + `</a></td>
+                                <td><a href='/services/` + elem.id + `'>` + elem.description + `</a></td>
                                 <td><a href='/services/` + elem.id + `'>` + elem.room_count + `</a></td>
                                 <td class='actions'>
                                     <a class='unlink_link delete-link' onclick='removeLink(` + elem.id + `)'><?=__('Remove')?></a>
