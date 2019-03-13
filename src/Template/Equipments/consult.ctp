@@ -14,7 +14,7 @@
         <div class="left twothirds-width">
             <?php
                 echo $this->Form->control('name', ['readOnly' => 'readOnly']);
-                echo $this->Form->control('description', ['readOnly' => 'readOnly']);
+                echo $this->Form->control('description', ['type' => 'textarea','readOnly' => 'readOnly']);
             ?>
         </div>
 
@@ -54,9 +54,9 @@
         <tbody id='categories_table_body'>
             <?php foreach ($equipment->categories as $category): ?>
             <tr id='category_row_<?=$category->id?>'>
-                <td><a href='categories/<?=$category->id?>'><?= h($category->name) ?></a></td>
-                <td><a href='categories/<?=$category->id?>'><?= h($category->description)?></a></td>
-                <td><a href='categories/<?=$category->id?>'><?= h($category->equipment_count)?></a></td>
+                <td><a href='/categories/<?=$category->id?>'><?= h($category->name) ?></a></td>
+                <td><a href='/categories/<?=$category->id?>'><?= h($category->description)?></a></td>
+                <td><a href='/categories/<?=$category->id?>'><?= h($category->equipment_count)?></a></td>
                 <td><a class='unlink_link delete-link' onclick='removeLink(<?=$category->id?>)' style="display:none;">Remove</a></td>
             </tr>
             <?php endforeach; ?>
