@@ -210,7 +210,7 @@
                     success: function( response ){
                         let table = $('#products_table_body');
                         table.append(`
-                            <tr>
+                            <tr id="product_row_` + elem.id + `">
                                 <td><a href='/products/` + elem.id + `'>` + elem.name + `</a></td>
                                 <td><a href='/products/` + elem.id + `'>` + elem.platform + `</a></td>
                                 <td><a href='/products/` + elem.id + `'>` + elem.description + `</a></td>

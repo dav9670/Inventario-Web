@@ -170,7 +170,7 @@
                     success: function( response ){
                         let table = $('#skills_table_body');
                         table.append(`
-                            <tr>
+                            <tr id="skill_row_` + elem.id + `">
                                 <td><a href='/skills/` + elem.id + `'>` + elem.name + `</a></td>
                                 <td><a href='/skills/` + elem.id + `'>` + elem.description + `</a></td>
                                 <td><a href='/skills/` + elem.id + `'>` + elem.mentor_count + `</a></td>

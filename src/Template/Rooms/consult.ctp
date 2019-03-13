@@ -165,7 +165,7 @@
                     success: function( response ){
                         let table = $('#services_table_body');
                         table.append(`
-                            <tr>
+                            <tr id="service_row_` + elem.id + `">
                                 <td><a href='/services/` + elem.id + `'>` + elem.name + `</a></td>
                                 <td><a href='/services/` + elem.id + `'>` + elem.description + `</a></td>
                                 <td><a href='/services/` + elem.id + `'>` + elem.room_count + `</a></td>
