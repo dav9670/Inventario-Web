@@ -115,6 +115,10 @@ class MentorsTable extends SanitizeTable
     {
         $rules->add($rules->isUnique(['email']));
 
+        $rules->addDelete(function($entity, $options) {
+            return $entity->loan_count == 0;
+        }, "loans_check");
+
         return $rules;
     }
 }

@@ -106,4 +106,20 @@ class LicencesTable extends SanitizeTable
 
         return $validator;
     }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules)
+    {
+        $rules->addDelete(function($entity, $options) {
+            return $entity->loan_count == 0;
+        }, "loans_check");
+
+        return $rules;
+    }
 }
