@@ -207,8 +207,10 @@ class ProductsController extends AppController
         else
         {
             $query = $this->Products->find('all')
-                ->where(["match (name, platform, description) against(:search in boolean mode)"])
-                ->bind(":search", $keyword . '*', 'string');
+                ->where(["match (name, platform, description) against(:search in boolean mode)
+                or name like :like_search or platform like :like_search or description like :like_search"])
+                ->bind(":search", $keyword, 'string')
+                ->bind(":like_search", '%' . $keyword . '%', 'string');
         }
 
         if($licence_id != '')

@@ -296,56 +296,46 @@ class LicencesController extends AppController
         }
         
         $query = null;
+
+        $options = [];
+        if($this->isApi())
+        {
+            $options = ['contain' => ['Products']];
+        }
+
         if($keyword == '')
         {
-            $query = $this->Licences->find('all');
+            $query = $this->Licences->find('all', $options);
         }
         else
         {
-            if ($this->isApi()){
-                $queryLicences = $this->Licences->find('all', [
-                    'contain' => ['Products']
-                ])
-                    ->where(["match (Licences.name, Licences.description) against(:search in boolean mode)"])
-                    ->bind(":search", $keyword . '*', 'string');
-                $queryProducts = $this->Licences->find('all', [
-                    'contain' => ['Products']
-                ])
-                    ->innerJoinWith('Products')
-                    ->where(["match (Products.name, Products.platform, Products.description) against(:search in boolean mode)"])
-                    ->bind(":search", $keyword . '*', 'string');
+            $union_query = null;
 
-                $queryLicences->union($queryProducts);
-                $query = $queryLicences;
-            }
-            else if($search_licences && $search_products)
+            if($search_licences)
             {
-                $queryLicences = $this->Licences->find('all')
-                    ->where(["match (Licences.name, Licences.description) against(:search in boolean mode)"])
-                    ->bind(":search", $keyword . '*', 'string');
-                $queryProducts = $this->Licences->find('all')
-                    ->innerJoinWith('Products')
-                    ->where(["match (Products.name, Products.platform, Products.description) against(:search in boolean mode)"])
-                    ->bind(":search", $keyword . '*', 'string');
+                $query = $this->Licences->find('all', $options)
+                    ->where(["match (Licences.name, Licences.description) against(:search in boolean mode)
+                        or Licences.name like :like_search or Licences.description like :like_search"])
+                    ->bind(":search", $keyword, 'string')
+                    ->bind(":like_search", '%' . $keyword . '%', 'string');
+            }
+            if($search_products)
+            {
+                if($query != null){
+                    $union_query = $query;
+                }   
 
-                $queryLicences->union($queryProducts);
-                $query = $queryLicences;
-            }
-            else if($search_licences)
-            {
-                $query = $this->Licences->find('all')
-                    ->where(["match (Licences.name, Licences.description) against(:search in boolean mode)"])
-                    ->bind(":search", $keyword . '*', 'string');
-            }
-            else if($search_products)
-            {
                 $query = $this->Licences->find('all')
                     ->innerJoinWith('Products')
-                    ->where(["match (Products.name, Products.platform, Products.description) against(:search in boolean mode)"])
-                    ->bind(":search", $keyword . '*', 'string');
+                    ->where(["match (Products.name, Products.platform, Products.description) against(:search in boolean mode)
+                        or Products.name like :like_search or Products.platform like :like_search or Products.description like :like_search"])
+                    ->bind(":search", $keyword, 'string')
+                    ->bind(":like_search", '%' . $keyword . '%', 'string');
+                
+                if($union_query != null){
+                    $query->union($union_query);
+                }
             }
-
-            
         }
 
         if(!is_null($query))
@@ -355,7 +345,7 @@ class LicencesController extends AppController
         
         $licences = [];
         $archivedLicences = [];
-        $allLicences = $this->paginate($query);
+        $allLicences = $query->toList();
         foreach ($allLicences as $licence){
             $withTime = (isset($start_time_available) && isset($end_time_available));
             $isValidAvailable = false;
