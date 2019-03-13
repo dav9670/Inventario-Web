@@ -57,7 +57,6 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
                     <th scope="col"><a class='user_sort' onclick="sort_reload('user');"><?= __("User") ?></a></th>
                     <th scope="col" class="date-header"><a class='start_time_sort' onclick="sort_reload('start_time');"><?= __("Start time") ?></a></th>
                     <th scope="col" class="date-header"><a class='end_time_sort' onclick="sort_reload('end_time');"><?= __("End time") ?></a></th>
-                    <th scope="col" class="actions"><?= __('Actions') ?></th>
                 </tr>
             </thead>
             <thead id="header_returned" hidden>
@@ -128,12 +127,6 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
                                     labels_list = three_labels.join("; ");
                                 }
 
-                                var link = "";
-                                if(elem.returned == null){
-                                    link = link.concat('<?= $this->Html->link(__('Return'), ['action' => 'return', -1]) ?> ');
-                                }
-                                link = link.replace(/-1/g, elem.id);
-
                                 if(body_name == "body_current"){
                                     body.append(`
                                         <tr` + (new Date(elem.end_time) < new Date() && elem.returned == null ? " class='late'" : "") + `>
@@ -144,9 +137,6 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
                                             <td>` + elem.user.identifier + `</td>
                                             <td>` + moment(elem.start_time).format("YYYY-MM-DD HH:mm") + `</td>
                                             <td>` + moment(elem.end_time).format("YYYY-MM-DD HH:mm") + `</td>
-                                            <td class='actions'>
-                                                ` + link + `
-                                            </td>
                                         </tr>
                                     `);
                                 } else if (body_name == "body_returned"){
