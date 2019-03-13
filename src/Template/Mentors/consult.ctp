@@ -55,9 +55,9 @@
         <tbody id='skills_table_body'>
             <?php foreach ($mentor->skills as $skill): ?>
             <tr id='skill_row_<?=$skill->id?>'>
-                <td><a href='skills/<?=$skill->id?>'><?= h($skill->name) ?></a></td>
-                <td><a href='skills/<?=$skill->id?>'><?= h($skill->description)?></a></td>
-                <td><a href='skills/<?=$skill->id?>'><?= h($skill->mentor_count)?></a></td>
+                <td><a href='/skills/<?=$skill->id?>'><?= h($skill->name) ?></a></td>
+                <td><a href='/skills/<?=$skill->id?>'><?= h($skill->description)?></a></td>
+                <td><a href='/skills/<?=$skill->id?>'><?= h($skill->mentor_count)?></a></td>
                 <td><a class='unlink_link delete-link' onclick='removeLink(<?=$skill->id?>)' style="display:none;">Remove</a></td>
             </tr>
             <?php endforeach; ?>
@@ -170,9 +170,9 @@
                     success: function( response ){
                         let table = $('#skills_table_body');
                         table.append(`
-                            <tr>
-                                <td><a href='skills/` + elem.id + `'>` + elem.name + `</a></td>
-                                <td><a href='skills/` + elem.id + `'>` + elem.description + `</a></td>
+                            <tr id="skill_row_` + elem.id + `">
+                                <td><a href='/skills/` + elem.id + `'>` + elem.name + `</a></td>
+                                <td><a href='/skills/` + elem.id + `'>` + elem.description + `</a></td>
                                 <td><a href='/skills/` + elem.id + `'>` + elem.mentor_count + `</a></td>
                                 <td class='actions'>
                                     <a class='unlink_link delete-link' onclick='removeLink(` + elem.id + `)'><?=__('Remove')?></a>
