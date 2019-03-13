@@ -234,7 +234,7 @@ class UsersController extends AppController
     public function isAuthorized($user)
     {
         $action = $this->request->getParam('action');
-        if(in_array($action, ['profile', 'login']))
+        if(in_array($action, ['profile', 'login', 'change_password']))
         {
             return true;
         }
@@ -243,8 +243,8 @@ class UsersController extends AppController
     }
 
     /**
-     * fonction search qui est appelée par la ajax request de la page users/index
-     * en fonction des requetes ajax retourne différentes liste de users
+     * fonction search qui est appel�e par la ajax request de la page users/index
+     * en fonction des requetes ajax retourne diff�rentes liste de users
      */
 
     public function search()
@@ -328,12 +328,18 @@ class UsersController extends AppController
     }
     
     public function changePassword(){
-        $user = $this->Users->get($this->request->getSession()->read('Auth.User.id'));
+        $user = null;
+        if (!$this->isApi()) {
+            $user = $this->Users->get($this->request->getSession()->read('Auth.User.id'));
+        }
         $success = false;
         $auth = array();
         if ($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
             $hasher = new DefaultPasswordHasher();
+            if ($this->isApi()) {
+                $user = $this->Users->get($data['user_id']);
+            }
             $password = $data['Old_password'];
             if($hasher->check($password,$user->password)){
                 if($data['New_password'] == $data['Confirm_your_new_password']){
@@ -355,21 +361,27 @@ class UsersController extends AppController
                             return $this->redirect(['action' => 'index']);
                         }
                     }
-                    else if($this->isApi())
-                    {
-                        $success = false;
-                    }
                     else
                     {
+                        if ($this->isApi()){
+                            $success = false;
+                        }
                         $this->Flash->error(__('Could not save your password. Please, try again.'));
                     }
                 }else {
+                    if ($this->isApi()){
+                        $success = false;
+                    }
                     $this->Flash->error(__('Make sure your new password is the same as the confirmation.'));
                 }
             }
             else if(!$hasher->check($password,$user->password)){
+                if ($this->isApi()){
+                    $success = false;
+                }
                 $this->Flash->error(__('Your old password is incorrect.'));
             }
         }
+        $this->set('_serialize', 'success');
     }
 }
