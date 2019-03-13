@@ -234,7 +234,7 @@ class UsersController extends AppController
     public function isAuthorized($user)
     {
         $action = $this->request->getParam('action');
-        if(in_array($action, ['profile', 'login']))
+        if(in_array($action, ['profile', 'login', 'change_password']))
         {
             return true;
         }
@@ -243,8 +243,8 @@ class UsersController extends AppController
     }
 
     /**
-     * fonction search qui est appelée par la ajax request de la page users/index
-     * en fonction des requetes ajax retourne différentes liste de users
+     * fonction search qui est appelï¿½e par la ajax request de la page users/index
+     * en fonction des requetes ajax retourne diffï¿½rentes liste de users
      */
 
     public function search()
