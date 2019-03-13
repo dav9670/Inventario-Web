@@ -26,10 +26,6 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
     <a href="#" onclick="$('#hid').toggle()"><?= __("Filters")?></a>
     <div id="hid" hidden>
         <form>
-            <input type="checkbox" id="field_items" checked><?=__('Search by Items') ?>
-            <input type="checkbox" id="field_labels"><?=__('Search by Labels') ?>
-            <input type="checkbox" id="field_users"><?=__('Search by Users') ?><br>
-
             <label for="item_type"><?= __('Item type') ?></label>
             <select id="item_type">
                 <option value="all"><?= __('All') ?></option>
@@ -94,8 +90,7 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
 
     function searchLoans( keyword ){
         var filters = {
-            search_items: $('#field_items').is(':checked'),
-            search_users: $('#field_users').is(':checked'),
+            search_items: true,
             item_type: $('#item_type').children("option:selected").val(),
             start_time: $('#start_time').val(),
             end_time: $('#end_time').val()
