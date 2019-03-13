@@ -108,7 +108,7 @@ begin
             inner join mentors m on l.item_id = m.id
         where 
             l.item_type like "mentors" and 
-            l.start_time <= "', end ,'" and l.end_time >= "', start ,'"
+            l.start_time <= "', end ,'" and l.end_time >= "', start ,'" and (l.returned is not null or l.end_time < now())
         group by m.id
         order by ', sort_field ,' ', sort_dir
     );

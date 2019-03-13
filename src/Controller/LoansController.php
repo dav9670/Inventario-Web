@@ -5,6 +5,7 @@ use App\Controller\AppController;
 use Cake\Utility\Inflector;
 use Cake\ORM\TableRegistry;
 use Cake\I18n\Time;
+use Cake\Core\Configure;
 
 /**
  * Loans Controller
@@ -40,8 +41,8 @@ class LoansController extends AppController
             
             $start_time_data = new Time($data["start_time"]);
             $end_time_data = new Time($data["end_time"]);
-            $data["start_time"] = $start_time_data->i18nFormat();
-            $data["end_time"] = $end_time_data->i18nFormat(); 
+            $data["start_time"] = $start_time_data->i18nFormat(null, Configure::read('App.defaultTimezone'));
+            $data["end_time"] = $end_time_data->i18nFormat(null, Configure::read('App.defaultTimezone'));
             
             $loan = $this->Loans->patchEntity($loan, $data);
 
@@ -81,7 +82,7 @@ class LoansController extends AppController
 
             if ($returned != null) {
                 $returned_data = new Time($returned);
-                $data["returned"] = $returned_data->i18nFormat();
+                $data["returned"] = $returned_data->i18nFormat(null, Configure::read('App.defaultTimezone'));
 
                 $loan = $this->Loans->patchEntity($loan, $data);
 

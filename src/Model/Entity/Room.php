@@ -2,7 +2,9 @@
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
+use Cake\Core\Configure;
 
 /**
  * Room Entity
@@ -81,12 +83,15 @@ class Room extends Entity
 
     public function isAvailableBetween($start_time, $end_time)
     {
+        $start_time = new Time($start_time);
+        $end_time = new Time($end_time);
+
         $loans = TableRegistry::get('Loans');
         $myloans = $loans->find('all', ['contains' => ['Rooms']])
             ->where('Loans.item_type like \'rooms\' and Loans.item_id = :id and (Loans.start_time <= :end_time and Loans.end_time >= :start_time)')
             ->bind(':id', $this->id)
-            ->bind(':end_time', $end_time)
-            ->bind(':start_time', $start_time);
+            ->bind(':start_time', $start_time->i18nFormat(null, Configure::read('App.defaultTimezone')))
+            ->bind(':end_time', $end_time->i18nFormat(null, Configure::read('App.defaultTimezone')));
         $nbloans = $myloans->count();
         
         return $nbloans == 0 && is_null($this->deleted);
