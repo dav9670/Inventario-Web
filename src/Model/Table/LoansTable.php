@@ -100,7 +100,14 @@ class LoansTable extends SanitizeTable
 
         $validator
             ->dateTime('returned')
-            ->allowEmptyDateTime('returned');
+            ->allowEmptyDateTime('returned')
+            ->add('returned',[
+                'returnOnce' => [
+                    'rule' => 'returnOnce',
+                    'provider' => 'table',
+                    'message' => __('The loan can only be returned once')
+                ]
+            ]);
 
         $validator
             ->integer('user_id')
@@ -154,5 +161,13 @@ class LoansTable extends SanitizeTable
         $table = TableRegistry::get(ucfirst($context['data']['item_type']));
         $item = $table->get($value);
         return $item->isAvailableBetween($context['data']['start_time'], $context['data']['end_time']);
+    }
+
+    public function returnOnce($value, $context)
+    {
+        $table = TableRegistry::get("Loans");
+        $loan = $table->get($context["data"]["id"]);
+        
+        return $loan["returned"] == null;
     }
 }
