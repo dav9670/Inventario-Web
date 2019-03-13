@@ -109,12 +109,15 @@ class Licence extends Entity
 
     public function isAvailableBetween($start_time, $end_time)
     {
+        $start_time = new Time($start_time);
+        $end_time = new Time($end_time);
+
         $loans = TableRegistry::get('Loans');
         $myloans = $loans->find('all', ['contains' => ['Licences']])
             ->where('Loans.item_type like \'licences\' and Loans.item_id = :id and (Loans.start_time <= :end_time and Loans.end_time >= :start_time)')
             ->bind(':id', $this->id)
-            ->bind(':end_time', $end_time)
-            ->bind(':start_time', $start_time);
+            ->bind(':start_time', $start_time->i18nFormat(null, "America/Toronto"))
+            ->bind(':end_time', $end_time->i18nFormat(null, "America/Toronto"));
         $nbloans = $myloans->count();
         
         return $nbloans == 0 && is_null($this->deleted);

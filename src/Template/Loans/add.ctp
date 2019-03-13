@@ -193,8 +193,8 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
             filters['search_unavailable'] = $('#item_unavailable').is(':checked');
             filters['search_' + itemType] = $('#item_check').is(':checked');
             filters['search_' + itemDict[itemType].labels] = $('#item_label_check').is(':checked');
-            filters['start_time_available'] = $('#start-time').val();
-            filters['end_time_available'] = $('#end-time').val();
+            filters['start_time_available'] = new Date($('#start-time').val()).toISOString();
+            filters['end_time_available'] = new Date($('#end-time').val()).toISOString();
 
             $.ajax({
                 method: 'get',

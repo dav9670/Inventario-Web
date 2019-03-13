@@ -40,8 +40,8 @@ class LoansController extends AppController
             
             $start_time_data = new Time($data["start_time"]);
             $end_time_data = new Time($data["end_time"]);
-            $data["start_time"] = $start_time_data->i18nFormat();
-            $data["end_time"] = $end_time_data->i18nFormat(); 
+            $data["start_time"] = $start_time_data->i18nFormat(null, "America/Toronto");
+            $data["end_time"] = $end_time_data->i18nFormat(null, "America/Toronto");
             
             $loan = $this->Loans->patchEntity($loan, $data);
 
@@ -81,7 +81,7 @@ class LoansController extends AppController
 
             if ($returned != null) {
                 $returned_data = new Time($returned);
-                $data["returned"] = $returned_data->i18nFormat();
+                $data["returned"] = $returned_data->i18nFormat(null, "America/Toronto");
 
                 $loan = $this->Loans->patchEntity($loan, $data);
 
