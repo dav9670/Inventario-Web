@@ -641,6 +641,10 @@ textarea {
     margin-left: 1%;
 }
 
+.fifth-width {
+    width: 19%;
+}
+
 img#output {
     max-width: 100%;
     max-height: 200px;
@@ -703,10 +707,31 @@ tr#highlight {
     float: none !important;
 }
 
+a:hover.centered-button {
+    background: #7d22bf;
+}
+
 .date-header {
     width: 150px;
 }
 
 .description-header{
     width: 25%;
+}
+
+.error-title {
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+.error-inventario {
+    display: block;
+    clear: both;
+    background-repeat: repeat-x;
+    margin-bottom: 18px;
+    padding: 7px 14px;
+    border-radius: 3px;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.24);
+    color: #fff;
+    background: #224870;
 }

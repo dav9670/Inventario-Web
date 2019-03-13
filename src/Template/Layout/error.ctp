@@ -30,9 +30,9 @@
     <?= $this->fetch('script') ?>
 </head>
 <body>
-    <div id="container">
+    <div id="container" class="content centered half-width">
         <div id="header">
-            <h1><?= __('Error') ?></h1>
+            <img class='centered-image fifth-width' src='/img/logo-rounded-square.png'/>
         </div>
         <div id="content">
             <?= $this->Flash->render() ?>
@@ -40,8 +40,14 @@
             <?= $this->fetch('content') ?>
         </div>
         <div id="footer">
-            <?= $this->Html->link(__('Back'), 'javascript:history.back()') ?>
+            <button onclick="back_to_profile()" class="centered-button"><?= __('Back to Profile') ?></button>
         </div>
     </div>
 </body>
+<script>
+    function back_to_profile()
+    {
+        window.location.href = '/users/profile';
+    }
+</script>
 </html>

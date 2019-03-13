@@ -36,8 +36,10 @@ if (Configure::read('debug')) :
     $this->end();
 endif;
 ?>
-<h2><?= __d('cake', 'An Internal Error Has Occurred') ?></h2>
-<p class="error">
+<fieldset class="error-title">
+    <legend><?= __d('cake', 'An Internal Error Has Occurred') ?></legend>
+</fieldset>
+<p class="error-inventario">
     <strong><?= __d('cake', 'Error') ?>: </strong>
     <?= h($message) ?>
 </p>

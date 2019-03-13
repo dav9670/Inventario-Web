@@ -1702,3 +1702,6 @@ msgstr "Key Text"
 
 msgid "Password"
 msgstr "Password"
+
+msgid "Back to Profile"
+msgstr "Back to Profile"
