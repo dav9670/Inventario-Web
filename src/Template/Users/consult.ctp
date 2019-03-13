@@ -280,7 +280,7 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
                     $('#user_form').submit();
                 }
                 else{
-                    showFlash("<strong>Alert:</strong> Wrong password");
+                    showFlash("<strong><?=__('Alert')?>:</strong><?=__('Wrong password')?>");
                 }
                 dialog.dialog( "close" );
             },
@@ -342,7 +342,6 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
                 }
             },
             close: function() {
-                form[0].reset();
                 dialog.dialog("close");
             }
         });
@@ -409,10 +408,10 @@ echo $this->Html->script('moment-with-locales.js', array('inline' => false));
 
 </script>
 
-<div id="dialog-prompt" title="Confirm">
+<div id="dialog-prompt" title="<?=__("Confirm")?>">
     <form>
         <fieldset>
-            <label for="password-test">Password</label>
+            <label for="password-test"><?=__("Password")?></label>
             <input type="password" name="password-test" id="password-test" value="" class="text ui-widget-content ui-corner-all">
 
             <!-- Allow form submission with keyboard without duplicating the dialog button -->

@@ -1705,3 +1705,12 @@ msgstr "Mot de passe"
 
 msgid "Back to Profile"
 msgstr "Retour au Profil"
+
+msgid "Alert"
+msgstr "Alerte"
+
+msgid "Wrong password"
+msgstr "Mot de passe incorrect"
+
+msgid "Confirm"
+msgstr "Confirmer"

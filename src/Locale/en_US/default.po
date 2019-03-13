@@ -276,11 +276,11 @@ msgstr "Infinite"
 
 #: Model/Entity/Licence.php:93
 msgid "Expired Status"
-msgstr "Expired Status"
+msgstr "Expired"
 
 #: Template/Reports/index.ctp:191
 msgid "Expired Report"
-msgstr "Expired Report"
+msgstr "Expired"
 
 #: Model/Table/CategoriesTable.php:61
 #: Model/Table/EquipmentsTable.php:71
@@ -1705,3 +1705,12 @@ msgstr "Password"
 
 msgid "Back to Profile"
 msgstr "Back to Profile"
+
+msgid "Alert"
+msgstr "Alert"
+
+msgid "Wrong password"
+msgstr "Wrong password"
+
+msgid "Confirm"
+msgstr "Confirm"
