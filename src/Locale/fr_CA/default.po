@@ -1702,3 +1702,6 @@ msgstr "Clé de licence"
 
 msgid "Password"
 msgstr "Mot de passe"
+
+msgid "Back to Profile"
+msgstr "Retour au Profil"
