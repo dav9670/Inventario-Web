@@ -234,7 +234,7 @@ class UsersController extends AppController
     public function isAuthorized($user)
     {
         $action = $this->request->getParam('action');
-        if(in_array($action, ['profile', 'login', 'change_password']))
+        if(in_array($action, ['profile', 'login', 'changePassword']))
         {
             return true;
         }
@@ -382,6 +382,7 @@ class UsersController extends AppController
                 $this->Flash->error(__('Your old password is incorrect.'));
             }
         }
-        $this->set('_serialize', 'success');
+        $this->set(compact('success'));
+        $this->set('_serialize', ['success']);
     }
 }
